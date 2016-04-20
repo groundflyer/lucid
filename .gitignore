@@ -1,0 +1,5 @@
+*~
+bin/*
+tests/*
+yapt
+.clang_complete
