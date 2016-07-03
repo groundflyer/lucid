@@ -7,7 +7,8 @@
 
 #include <math/vec.hpp>
 
-#include <algorithm> 		// next_permutation iota
+#include <algorithm> 		// next_permutation
+#include <numeric>		// iota
 
 
 namespace yapt
