@@ -3,3 +3,6 @@ bin/*
 tests/*
 yapt
 .clang_complete
+*.png
+*.jpg
+*.exr
