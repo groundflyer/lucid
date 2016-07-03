@@ -12,7 +12,7 @@ include_dir := $(src_dir)/templates
 bin_dir := bin
 objs = $(addprefix $(bin_dir)/, $(srcs:=.o))
 
-CXX = g++-5.3.0
+
 INCLUDE_FLAGS := -I"./$(include_dir)" -I"./$(src_dir)" -I"$(GFX)/include"
 LD_FLAGS := -lOpenImageIO $(shell pkg-config --libs OpenEXR)
 CXXFLAGS = -std=c++14 -Wall -Wpedantic -Wextra -fcilkplus $(INCLUDE_FLAGS) $(LD_FLAGS)
