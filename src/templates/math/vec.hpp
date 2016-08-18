@@ -341,12 +341,7 @@ namespace yapt
 	for (size_t i = 0; i < N; ++i)
 	    for (size_t j = 0; j < N; ++j)
 		for (size_t k = 0; k < N; ++k)
-		    {
-			std::array<size_t, 3> idxs {i,j,k};
-			T symbol = sgn(std::move(idxs));
-
-			ret[i] += symbol * a[j] * b[k];
-		    }
+		    ret[i] += sgn(std::forward<std::array<size_t, 3>>(std::array<size_t, 3>({i,j,k}))) * a[j] * b[k];
 
 	return ret;
     }
