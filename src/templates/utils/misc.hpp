@@ -100,12 +100,12 @@ namespace yapt
     // compute Levi-Civita symbol (signature of permutation)
     template <typename Iterable, typename RT = int>
     constexpr RT
-    sgn(const Iterable & numbers) noexcept
+    sgn(const Iterable && numbers) noexcept
     {
     	RT ret {};
 
-    	if (!has_equal(numbers))
-	    ret = minus_one_pow(inversion_number(numbers));
+    	if (!has_equal(std::forward<const Iterable>(numbers)))
+	    ret = minus_one_pow(inversion_number(std::forward<const Iterable>(numbers)));
 
     	return ret;
     }
