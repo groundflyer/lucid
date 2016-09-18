@@ -58,9 +58,9 @@ namespace yapt
 	}
 
 	template <class ... Types> explicit constexpr
-	Vector(const T & first,
-	       const Types & ... args) :
-	    _data({{first, (static_cast<T>(args))...}})
+	Vector(const T && first,
+	       const Types && ... args) :
+	    _data({{std::forward<const T>(first), (std::forward<const T>(args))...}})
 	{
 	    static_assert(sizeof...(args) == N - 1,
 	    		  "The number of elements doesn't match!");
@@ -395,21 +395,21 @@ namespace yapt
 
     template <typename T, size_t N>
     constexpr T
-    sum(Vector<T, N> & a) noexcept
+    sum(const Vector<T, N> & a) noexcept
     { return reduce(std::plus<T>(), a); }
 
     template <typename T, size_t N>
     constexpr T
-    avg(Vector<T, N> & a) noexcept
+    avg(const Vector<T, N> & a) noexcept
     { return sum(a) / T(N); }
 
     template <typename T, size_t N>
     constexpr T
-    max(Vector<T, N> & a) noexcept
+    max(const Vector<T, N> & a) noexcept
     { return reduce(max<T>, a); }
 
     template <typename T, size_t N>
     constexpr T
-    min(Vector<T, N> & a) noexcept
+    min(const Vector<T, N> & a) noexcept
     { return reduce(min<T>, a); }
 }
