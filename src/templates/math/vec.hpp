@@ -188,6 +188,23 @@ namespace yapt
 	operator!=(const Vector & rhs) const noexcept
 	{ return _data != rhs._data; }
 
+	constexpr bool
+	operator>(const Vector & rhs) const noexcept
+	{ return reduce(std::logical_and<T>(),
+			bmap(std::greater<T>(), *this, rhs)); }
+	constexpr bool
+	operator<(const Vector & rhs) const noexcept
+	{ return reduce(std::logical_and<T>(),
+			bmap(std::less<T>(), *this, rhs)); }
+	constexpr bool
+	operator>=(const Vector & rhs) const noexcept
+	{ return reduce(std::logical_and<T>(),
+			bmap(std::greater_equal<T>(), *this, rhs)); }
+	constexpr bool
+	operator<=(const Vector & rhs) const noexcept
+	{ return reduce(std::logical_and<T>(),
+			bmap(std::less_equal<T>(), *this, rhs)); }
+
 	static constexpr size_t
 	size() noexcept
 	{ return N; }
