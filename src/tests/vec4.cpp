@@ -15,6 +15,13 @@ int main()
     TEST_AND_COUT(sizeof((Vec4{})));
     TEST_AND_COUT(Vec4(1., -3., 2., 4.));
     TEST_AND_COUT((Vec4(1., -3., 2., 4.) == Vec4(-1., 3., -2., 4)));
+    TEST_AND_COUT((Vec4(1., -3., 2., 4.) == Vec4(1., -3., 2., 4.)));
+    TEST_AND_COUT((Vec4(1., 3., 2., 4.) > Vec4(-1., -3., -2., -4.)));
+    TEST_AND_COUT((Vec4(1., 3., 2., 4.) > Vec4(5., -3., -2., -4.)));
+    TEST_AND_COUT((Vec4(1., 3., 2., 4.) >= Vec4(-1., -3., -2., -4.)));
+    TEST_AND_COUT((Vec4(1., 3., 2., 4.) >= Vec4(1., 3., 2., 4.)));
+    TEST_AND_COUT((Vec4(1., 3., 2., 4.) <= Vec4(-1., -3., -2., -4.)));
+    TEST_AND_COUT((Vec4(1., 3., 2., 4.) <= Vec4(1., 3., 2., 4.)));
     TEST_AND_COUT((Vec4(1., -3., 2., 4.) * Vec4(-1., 3., -2., 4)));
     TEST_AND_COUT((Vec4(1., -3., 2., 4.) + Vec4(-1., 3., -2., 4)));
     TEST_AND_COUT((Vec4(1., -3., 2., 4.) - Vec4(-1., 3., -2., 4)));
