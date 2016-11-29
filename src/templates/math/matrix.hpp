@@ -267,16 +267,12 @@ namespace yapt
 	constexpr Matrix
 	operator*(const Matrix & rhs) const noexcept
 	{
-	    Matrix ret;
+	    Matrix ret(0);
 
 	    for (size_t i = 0; i < N; ++i)
 		for (size_t j = 0; j < N; ++j)
-		    {
-			ret._data[i][j] = 0;
-
-			for (size_t r = 0; r < N; ++r)
-			    ret._data[i][j] += _data[i][r] * rhs[r][j];
-		    }
+		    for (size_t r = 0; r < N; ++r)
+			ret._data[i][j] += _data[i][r] * rhs[r][j];
 
 	    return ret;
 	}
