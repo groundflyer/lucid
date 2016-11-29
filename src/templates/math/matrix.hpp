@@ -389,7 +389,7 @@ namespace yapt
 	    };
 
 	auto get_elem = [&]()
-	{ return sgn(idxs) * product(); };
+	    { return sgn(std::move(idxs)) * product(); };
 
 	const constexpr size_t rank = fac(N) - 1;
 	T ret = get_elem();
