@@ -16,7 +16,8 @@ namespace yapt
     template <typename T, size_t N>
     class Matrix
     {
-	using Data = std::array<std::array<T, N>, N>;
+	using SubData = std::array<T, N>;
+	using Data = std::array<SubData, N>;
 
 	// unit matrix generator
 	static const constexpr
@@ -75,27 +76,18 @@ namespace yapt
 	// single scalar construcor
     	explicit constexpr
     	Matrix(const T & rhs)
-    	{
-	    for (auto & elem : *this)
-		elem = rhs;
-	}
-
-    	explicit constexpr
-    	Matrix(const int & rhs)
-    	{
-	    for (auto & elem : *this)
-		elem = T(rhs);
-	}
+    	{ for (auto & elem : *this) elem = rhs;	}
 
     	explicit constexpr
     	Matrix(const Data & rhs) : _data(rhs) { }
 
-	// helper constructor for N-1 sized matrices
+	// other-rank matrix
+	template <size_t N2>
 	explicit constexpr
-	Matrix(const Matrix<T, (N-1)> & rhs)
+	Matrix(const Matrix<T, N2> & rhs)
 	{
-	    for (size_t i = 0; i < N-1; ++i)
-		for (size_t j = 0; j < N-1; ++j)
+	    for (size_t i = 0; i < std::min(N, N2); ++i)
+		for (size_t j = 0; j < std::min(N, N2); ++j)
 		    _data[i][j] = rhs[i][j];
 	}
 
@@ -104,17 +96,9 @@ namespace yapt
 	Matrix(const std::array<T, N*N> & rhs)
 	{ std::copy(rhs.begin(), rhs.end(), this->begin()); }
 
-	// unsafe helper constructor for c-arrays
-	explicit constexpr
-	Matrix(T * rhs)
-	{ std::copy(rhs, rhs+N*N, this->begin()); }
-
 	explicit constexpr
 	Matrix(std::initializer_list<T> l)
-	{
-	    std::copy(l.begin(), l.begin()+std::min(l.size(),N*N),
-		      this->begin());
-	}
+	{ std::copy(l.begin(), l.begin()+std::min(l.size(),N*N), this->begin()); }
 
 	// vector values constructor
 	// only same dimensions vector are acceptable
@@ -122,7 +106,7 @@ namespace yapt
 	Matrix(const Vector<T, N> & vector,
 	       const Vectors & ... vectors)
 	{
-	    static_assert(sizeof...(vectors) == N - 1,
+	    static_assert(sizeof...(vectors) <= N - 1,
 			  "The number of elements doesn't match!");
 
 	    unpack(0, vector, vectors...);
@@ -133,7 +117,7 @@ namespace yapt
 	Matrix(const T & first,
 	       const Types & ... rest)
 	{
-	    static_assert(sizeof...(rest) == N*N - 1,
+	    static_assert(sizeof...(rest) <= N*N - 1,
 			  "The number of elements doesn't match!");
 
 	    unpack(0, first, rest...);
@@ -144,12 +128,17 @@ namespace yapt
 	operator bool() const noexcept
 	{ return det(*this) != 0; }
 
+	// other type, same rank
 	template <typename T2>
 	explicit constexpr
 	operator Matrix<T2, N>() const noexcept
 	{
 	    Matrix<T2, N> ret;
-	    std::copy(this->cbegin(), this->cend(), ret.begin());
+
+	    for (size_t i = 0; i < N; i++)
+		for (size_t j = 0; j < N; i++)
+		    ret[i][j] = static_cast<T2>(_data[i][j]);
+
 	    return ret;
 	}
 
@@ -167,17 +156,17 @@ namespace yapt
 	    return _data[i];
 	}
 
-	constexpr T*
+	constexpr typename SubData::iterator
 	begin() noexcept
 	{ return _data.begin()->begin(); }
-	constexpr T*
+	constexpr typename SubData::iterator
 	end() noexcept
 	{ return _data.end()->end() - N; }
 
-	const constexpr T*
+	const constexpr typename SubData::const_iterator
 	cbegin() const noexcept
 	{ return _data.cbegin()->cbegin(); }
-	const constexpr T*
+	const constexpr typename SubData::const_iterator
 	cend() const noexcept
 	{ return _data.cend()->cend() - N; }
 
@@ -324,7 +313,7 @@ namespace yapt
 	    		std::swap(_data[i][j], _data[j][i]);
 	}
 
-	inline const constexpr Data&
+	const constexpr Data&
 	data() const noexcept
 	{ return _data; }
 
@@ -332,7 +321,7 @@ namespace yapt
     	friend std::ostream&
     	operator<<(std::ostream & os, const Matrix & rhs)
     	{
-    	    os << "[";
+    	    os << '[';
 	    for (size_t i = 0; i < N; ++i)
 		{
 		    for (size_t j = 0; j < N; ++j)
@@ -340,13 +329,13 @@ namespace yapt
 			    os << rhs._data[i][j];
 
 			    if (j < N - 1)
-				os << ",\t";
+				os << ',' << '\t';
 			}
 
 		    if (i < N - 1)
 			os << std::endl;
 		}
-    	    os << "]";
+    	    os << ']';
 
     	    return os;
     	}
@@ -446,12 +435,12 @@ namespace yapt
     constexpr Matrix<T, N>
     inverse(const Matrix<T, N> & a) noexcept
     {
-	Matrix<T, N> ret(T(0));
+	Matrix<T, N> ret(0);
 	T d = det(a);
 
-	if (d != 0)
+	if (d != static_cast<T>(0))
 	    {
-		T _d = 1 / d;
+		T _d = static_cast<T>(1) / d;
 		ret = transpose(cofactor(a)) * _d;
 	    }	    
 

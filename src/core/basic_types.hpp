@@ -29,5 +29,6 @@ namespace yapt
 
     using Vec3i = Vector<int, 3>;
 
+    using Vec2i = Vector<int, 2>;
     using Vec2u = Vector<unsigned, 2>;
 }

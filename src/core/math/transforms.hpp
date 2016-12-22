@@ -21,7 +21,7 @@ namespace yapt
 
     constexpr Vec3
     dehomogenize(const Vec4 & a) noexcept
-    { return Vec3(a.cbegin()) / (a.w() != 0 ? a.w() : 1); }
+    { return Vec3(a) / (a.w() != 0 ? a.w() : 1); }
 
     constexpr Vec3
     apply_transform_point(const Mat4 & t, const Vec3 & a) noexcept

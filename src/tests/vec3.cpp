@@ -38,6 +38,8 @@ int main()
     TEST_AND_COUT(avg(e));
     TEST_AND_COUT(min(e));
     TEST_AND_COUT(max(e));
+    TEST_AND_COUT(Vec3(Vec2(1, 2)));
+    TEST_AND_COUT(Vec3(Vec4(1, 2, 3, 4)));
 
     return 0;
 }

@@ -39,56 +39,52 @@ namespace yapt
 	Vector(const T & rhs) { for (T& i : _data) i = rhs; }
 
 	explicit constexpr
-	Vector(const int & rhs) { for (T& i : _data) i = T(rhs); }
-
-	// unsafe helper constructor for N-lingth c-arrays
-	explicit constexpr
-	Vector(const T* rhs)
-	{ std::copy(rhs, rhs+N, _data.begin());	}
-
-	explicit constexpr
-	Vector(const Vector<T,(N-1)> & rhs)
-	{ std::copy(rhs.cbegin(), rhs.cend(), _data.begin()); }
-
-	explicit constexpr
 	Vector(std::initializer_list<T> l)
-	{
-	    std::copy(l.begin(), l.begin()+std::min(l.size(),N),
-		      _data.begin());
-	}
+	{ std::copy(l.begin(), l.begin()+std::min(l.size(), N), _data.begin()); }
 
 	template <class ... Types> explicit constexpr
 	Vector(const T && first,
 	       const Types && ... args) :
 	    _data({{std::forward<const T>(first), (std::forward<const T>(args))...}})
 	{
-	    static_assert(sizeof...(args) == N - 1,
+	    static_assert(sizeof...(args) <= N - 1,
 	    		  "The number of elements doesn't match!");
 	}
 
+	// same type another dim
+	template <size_t N2>
+	explicit constexpr
+	Vector(const Vector<T, N2> & rhs)
+	{ for (size_t i = 0; i < std::min(N, N2); i++) _data[i] = rhs[i]; }
+
+	// bool converter
 	explicit constexpr
 	operator bool() const noexcept
-	{ return length(*this) > T(0); }
+	{ return length(*this) > static_cast<T>(0); }
 
+	// same dim, other type converter
 	template <typename T2>
 	explicit constexpr
 	operator Vector<T2, N>() const noexcept
 	{
 	    Vector<T2, N> ret;
-	    std::copy(_data.cbegin(), _data.cend(), ret.begin());
+
+	    for (size_t i = 0; i < N; ++i)
+		ret[i] = static_cast<T>(_data[i]);
+
 	    return ret;
 	}
 
-	constexpr T*
+	constexpr typename Data::iterator
 	begin() noexcept
 	{ return _data.begin(); }
-	constexpr T*
+	constexpr typename Data::iterator
 	end() noexcept
 	{ return _data.end(); }
-	const constexpr T*
+	const constexpr typename Data::const_iterator
 	cbegin() const noexcept
 	{ return _data.cbegin(); }
-	const constexpr T*
+	const constexpr typename Data::const_iterator
 	cend() const noexcept
 	{ return _data.cend(); }
 
@@ -218,7 +214,7 @@ namespace yapt
 	{
 	    T l = length(*this);
 
-	    if (l != T(1) || l != T(0))
+	    if (l != static_cast<T>(1) || l != static_cast<T>(0))
 		for (T & elem : _data)
 		    elem /= l;
 	}
@@ -322,15 +318,15 @@ namespace yapt
 	friend std::ostream&
 	operator<<(std::ostream & os, const Vector & rhs) noexcept
 	{
-	    os << "[";
+	    os << '[';
 	    for (size_t i = 0; i < N; ++i)
 		{
 		    os << rhs._data[i];
 
 		    if (i < N - 1)
-			os << ",\t";
+			os << ',' << '\t';
 		}
-	    os << "]";
+	    os << ']';
 
 	    return os;
 	}
@@ -404,7 +400,7 @@ namespace yapt
     {
 	T l = length(a);
 
-	if (l != T(1) || l != T(0))
+	if (l != static_cast<T>(1) || l != static_cast<T>(0))
 	    a /= l;
 
 	return a;
@@ -418,7 +414,7 @@ namespace yapt
     template <typename T, size_t N>
     constexpr T
     avg(const Vector<T, N> & a) noexcept
-    { return sum(a) / T(N); }
+    { return sum(a) / static_cast<T>(N); }
 
     template <typename T, size_t N>
     constexpr T
