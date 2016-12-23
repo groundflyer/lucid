@@ -24,7 +24,7 @@ MODE ?= release
 ifeq ($(MODE), release)
     CXXFLAGS += -DNDEBUG -march=native -O3
 else
-    CXXFLAGS += -g -O0
+    CXXFLAGS += -g -O0 -D_GLIBCXX_DEBUG
 endif
 
 
@@ -47,4 +47,4 @@ $(bin_dir)/%.o: $(src_dir)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	rm -r $(target) $(objs)
+	rm -r $(target) $(objs) $(type_tests) $(tests)
