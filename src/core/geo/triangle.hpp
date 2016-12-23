@@ -5,7 +5,7 @@
 #pragma once
 
 #include "primitive.hpp"
-#include <structures/triangle_mesh.h>
+#include <structures/triangle_mesh.hpp>
 
 
 namespace yapt

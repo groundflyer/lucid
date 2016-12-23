@@ -1,6 +1,6 @@
 // -*- C++ -*-
 
-#include "geometry_object.h"
+#include "geometry_pull.hpp"
 
 
 namespace yapt

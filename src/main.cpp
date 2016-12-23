@@ -3,8 +3,8 @@
 #include <cilk/cilk.h>
 #include <limits>
 
-#include <io/image.h>
-#include <cameras/perspective.h>
+#include <io/image.hpp>
+#include <cameras/perspective.hpp>
 #include <core/geo/sphere.hpp>
 #include <core/geo/triangle.hpp>
 #include <core/geo/plane.hpp>

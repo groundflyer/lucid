@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // image.cpp --
 
-#include "image.h"
+#include "image.hpp"
 #include <OpenImageIO/imageio.h>
 
 
