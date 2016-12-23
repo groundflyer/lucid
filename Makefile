@@ -1,6 +1,6 @@
 target := yapt
 
-srcs := cameras/perspective io/film io/image structures/triangle_mesh main
+srcs := cameras/perspective io/film io/image structures/triangle_mesh core/math/transforms core/geo/bbox core/geo/disk core/geo/plane core/geo/triangle core/geo/sphere main
 
 type_tests := tests/vec3 tests/vec4 tests/matrix tests/test_pi
 
@@ -39,8 +39,9 @@ $(type_tests): %: $(src_dir)/%.cpp
 	mkdir -p $(test_dir)
 	$(CXX) $(CXXFLAGS) -fopt-info-optimized=$@.opt -o $@ $<
 
-$(tests): %: $(src_dir)/%.cpp
-	$(CXX) $(CXXFLAGS) -o $@ $<
+
+$(tests): %: $(src_dir)/%.cpp $(bin_dir)/core/math/transforms.o
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 $(bin_dir)/%.o: $(src_dir)/%.cpp
 	mkdir -p $(@D)

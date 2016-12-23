@@ -38,7 +38,9 @@ int main()
     TEST_AND_COUT(Vec3((Vec4(1.,2.,3.,4))));
     TEST_AND_COUT(Vec4u(Vec4(1.5,2.8,3.6,4.1)));
     TEST_AND_COUT(Vec4(Vec3(1.,2.,3)));
-    TEST_AND_COUT(Vec2i(10 ,15));
+    TEST_AND_COUT(Vec2i(10,15));
+    TEST_AND_COUT(Vec2(1., 2.));
+    TEST_AND_COUT(Vec2(1, 2));
 
     return 0;
 }

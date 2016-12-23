@@ -47,7 +47,7 @@ namespace yapt
 
     void
     TriangleMesh::add_triangle(const size_t v0, const size_t v1, const size_t v2) noexcept
-    { triangles.push_back(TriangleID({v0, v1, v2})); }
+    { triangles.push_back(TriangleID({{v0, v1, v2}})); }
 
     void
     TriangleMesh::add_triangle(const TriangleID & id) noexcept

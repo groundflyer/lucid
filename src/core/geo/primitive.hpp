@@ -13,13 +13,12 @@ namespace yapt
     class Primitive
     {
     public:
-	constexpr
 	Primitive() {}
 	
-	virtual constexpr
+	virtual
 	Intersection
 	intersect(const Ray & ray,
-		  const real t_min, const real t_max) const noexcept = 0;
+		  const real & t_min, const real & t_max) const noexcept = 0;
     };
 
 }

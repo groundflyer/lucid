@@ -39,7 +39,7 @@ int main()
     real t_min = 0;
     real t_max = std::numeric_limits<real>::infinity();
 
-    cilk_for (size_t i = 0; i < res.x() * res.y(); ++i)
+    for (size_t i = 0; i < res.x() * res.y(); ++i)
 	{
 	    unsigned x = i % res.x();
 	    unsigned y = (i - x) / res.x();

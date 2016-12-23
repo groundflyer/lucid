@@ -36,11 +36,22 @@ namespace yapt
 	Vector(const Data & rhs) : _data(rhs) { }
 
 	explicit constexpr
+	Vector(const Data && rhs) : _data(std::forward<const Data>(rhs)) { }
+
+	explicit constexpr
 	Vector(const T & rhs) { for (T& i : _data) i = rhs; }
 
 	explicit constexpr
 	Vector(std::initializer_list<T> l)
 	{ std::copy(l.begin(), l.begin()+std::min(l.size(), N), _data.begin()); }
+
+	template <class ... Types> explicit constexpr
+	Vector(const T & first,
+	       const Types & ... args) : _data({{first, args...}})
+	{
+	    static_assert(sizeof...(args) <= N - 1,
+	    		  "The number of elements doesn't match!");
+	}
 
 	template <class ... Types> explicit constexpr
 	Vector(const T && first,
@@ -354,7 +365,7 @@ namespace yapt
 	for (size_t i = 0; i < N; ++i)
 	    for (size_t j = 0; j < N; ++j)
 		for (size_t k = 0; k < N; ++k)
-		    ret[i] += sgn(std::array<size_t, 3>({i,j,k})) * a[j] * b[k];
+		    ret[i] += sgn(std::array<size_t, 3>({{i,j,k}})) * a[j] * b[k];
 
 	return ret;
     }
