@@ -23,6 +23,6 @@ namespace yapt
 		  const real & t_min, const real & t_max) const noexcept;
 
 	Vec3
-	get_normal(const Vec3 & pos);
+	normal(const Intersection & isect) const noexcept;
     };
 }

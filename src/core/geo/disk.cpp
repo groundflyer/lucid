@@ -26,6 +26,12 @@ namespace yapt
 		length2((ray.origin() + ray.dir() * t) - _p) <= _r2 &&
 		in_range(t, t_min, t_max);
 
-	return Intersection(intersected, t, _n);
+	return Intersection(intersected, t, ray, this);
+    }
+
+    Vec3
+    Disk::normal(const Intersection &) const noexcept
+    {
+	return _n;
     }
 }

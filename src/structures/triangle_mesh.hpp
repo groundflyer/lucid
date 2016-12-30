@@ -34,8 +34,8 @@ namespace yapt
 
 	TriangleMesh(const size_t vertex_num,
 		     const size_t tri_num,
-		     const bool store_normals,
-		     const bool store_uv);
+		     const bool store_normals = false,
+		     const bool store_uv = false);
 
 	void
 	add_vertex(const Vec3 & p) noexcept;

@@ -5,6 +5,7 @@
 #pragma once
 
 #include <core/basic_types.hpp>
+#include <core/geo/intersection.hpp>
 
 
 namespace yapt
@@ -14,10 +15,13 @@ namespace yapt
 	RGB _diff;
 
     public:
-	Material() {};
+	Material();
 
-	void
-	set_diff(const RGB & clr) : _diff(clr) {};
+	explicit
+	Material(const RGB & clr);
+
+	RGB
+	eval(const Intersection & isect) const noexcept;
     };
 
 }

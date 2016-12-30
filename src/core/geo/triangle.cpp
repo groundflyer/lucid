@@ -57,6 +57,14 @@ namespace yapt
 			
 	    }
 
-	return Intersection(intersected, t, Vec2(u, v));
+	return Intersection(intersected, t, ray, this, Vec2(u, v));
+    }
+
+    Vec3
+    Triangle::normal(const Intersection &) const noexcept
+    {
+	const auto p0 = _mesh->get_vertex_pos(_id, 0);
+	return normalize((p0 -_mesh->get_vertex_pos(_id, 1))
+			 ^ (p0 - _mesh->get_vertex_pos(_id, 2)));
     }
 }

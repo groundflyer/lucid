@@ -19,8 +19,7 @@ namespace yapt
 
 	constexpr
 	Ray(const Vec3 & origin,
-	    const Vec3 & dir) : _origin(origin), _dir(dir)
-	{ }
+	    const Vec3 & dir) : _origin(origin), _dir(dir) { }
 
 	const constexpr Vec3&
 	origin() const noexcept

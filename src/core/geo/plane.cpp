@@ -23,6 +23,12 @@ namespace yapt
 	if (std::isnormal(t))
 	    intersected = in_range(t, t_min, t_max);
 
-	return Intersection(intersected, t, _n);
+	return Intersection(intersected, t, ray, this);
+    }
+
+    Vec3
+    Plane::normal(const Intersection &) const noexcept
+    {
+	return _n;
     }
 }

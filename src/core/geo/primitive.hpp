@@ -15,10 +15,12 @@ namespace yapt
     public:
 	Primitive() {}
 	
-	virtual
-	Intersection
-	intersect(const Ray & ray,
-		  const real & t_min, const real & t_max) const noexcept = 0;
+	virtual	Intersection
+	intersect(const Ray &,
+		  const real &, const real &) const noexcept = 0;
+
+	virtual Vec3
+	normal(const Intersection &) const noexcept = 0;
     };
 
 }

@@ -30,17 +30,8 @@ namespace yapt
 	const short signy = invdir.y() < 0;
 	const short signz = invdir.z() < 0;
 
-	// const short sign[3] {invdir.x() < 0, invdir.y() < 0, invdir.z() < 0};
 	const Vec3 bounds[2] {_vmin, _vmax};
 
-	// const constexpr auto func = [&](const size_t idx)
-	// 	{
-	// 	    return std::make_pair((bounds[sign[idx]][idx] - ray.origin()[idx]) * invdir[idx],
-	// 				  (bounds[1-sign[idx]][idx] - ray.origin()[idx]) * invdir[idx]);
-	// 	};
-
-	// std::tie(xmin, xmax) = func(0);
-	// std::tie(ymin, ymax) = func(1);
 	xmin = (bounds[signx].x() - ray.origin().x()) * invdir.x();
 	xmax = (bounds[1-signx].x() - ray.origin().x()) * invdir.x();
 
@@ -53,7 +44,6 @@ namespace yapt
 	if (ymin > xmin) xmin = ymin;
 	if (ymax < xmax) xmax = ymax;
 
-	// std::tie(zmin, zmax) = func(1);
 	zmin = (bounds[signz].z() - ray.origin().z()) * invdir.z();
 	zmax = (bounds[1-signz].z() - ray.origin().z()) * invdir.z();
 
@@ -64,6 +54,15 @@ namespace yapt
 	if (zmax < xmax) xmax = zmax;
 
 	bool intersected = in_range(xmin, t_min, t_max);
-	return Intersection(intersected, xmin);
+	return Intersection(intersected, xmin, ray, this);
+    }
+
+    Vec3
+    AABB::normal(const Intersection & isect) const noexcept
+    {
+	// TODO find normal
+	// it's just a mock
+	auto tmp = isect.pos() - _vmin;
+	return normalize(tmp);
     }
 }

@@ -50,10 +50,12 @@ namespace yapt
 		intersected = in_range(t, t_min, t_max);
 	    }
 
-	return Intersection(intersected, t);
+	return Intersection(intersected, t, ray, this);
     }
 
     Vec3
-    Sphere::get_normal(const Vec3 & pos)
-    { return normalize(pos - _p); }
+    Sphere::normal(const Intersection & isect) const noexcept
+    {
+	return normalize(isect.pos() - _p);
+    }
 }

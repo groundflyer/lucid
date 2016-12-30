@@ -419,6 +419,11 @@ namespace yapt
 
     template <typename T, size_t N>
     constexpr T
+    distance(const Vector<T, N> & a, const Vector<T, N> & b)
+    { return length(a-b); }
+
+    template <typename T, size_t N>
+    constexpr T
     sum(const Vector<T, N> & a) noexcept
     { return reduce(std::plus<T>(), a); }
 

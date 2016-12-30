@@ -22,6 +22,9 @@ namespace yapt
 	Intersection
 	intersect(const Ray & ray,
 		  const real & t_min, const real & t_max) const noexcept;
+
+	Vec3
+	normal(const Intersection & isect) const noexcept;
     };
 
 }

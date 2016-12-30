@@ -1,4 +1,5 @@
 // -*- C++ -*-
+// geometry_object.cpp --
 
 #include "geometry_object.hpp"
 
@@ -7,18 +8,12 @@ namespace yapt
 {
     GeometryObject::GeometryObject() {}
 
+    GeometryObject::GeometryObject(const Transform & transform, const Material& material) : _transform(transform), _material(&material) { }
+
     void
     GeometryObject::add_primitive(Primitive * prim) noexcept
     {
 	if (prim)
-	    _geo.push_back(prim);
+	    _geo.push_back(&prim);
     }
-
-    void
-    GeometryObject::set_material(const Material & material) noexcept
-    { _material = material; }
-
-    void
-    GeometryObject::set_transform(const Trasform & transform) noexcept
-    { _transform = transform; }
 }

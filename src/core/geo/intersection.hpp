@@ -5,16 +5,21 @@
 #pragma once
 
 #include "ray.hpp"
+#include "primitive.hpp"
 
 
 namespace yapt
 {
+    // forward declaration of Primitive
+    class Primitive;
+
     class Intersection
     {
 	bool _intersect = false;
 	real _t = 0;		// distance
+	Vec3 _pos;
 	Vec2 _st; 		// parametric coordinates
-	Vec3 _n;		// hit normal
+	Primitive const * hitprim = nullptr;
 
     public:
 	constexpr
@@ -25,26 +30,23 @@ namespace yapt
 
 	constexpr
 	Intersection(const bool i,
-		     const real t) : _intersect(i), _t(t) {}
+		     const real & t,
+		     const Ray & ray) : _intersect(i), _t(t), _pos(ray.origin()+ray.dir()*t) { }
 
 	constexpr
 	Intersection(const bool i,
-		     const real t,
-		     const Vec2 & st) noexcept
-	    : _intersect(i), _t(t), _st(st) {}
+		     const real & t,
+		     const Ray & ray,
+		     const Primitive * prim)
+	    : _intersect(i), _t(t), _pos(ray.origin()+ray.dir()*t), hitprim(prim) { }
 
 	constexpr
 	Intersection(const bool i,
-		     const real t,
-		     const Vec3 & n) noexcept
-	    : _intersect(i), _t(t), _n(n) {}
-
-	constexpr
-	Intersection(const bool i,
-		     const real t,
-		     const Vec3 & n,
-		     const Vec2 & st) noexcept
-	    : _intersect(i), _t(t), _st(st), _n(n) {}
+		     const real & t,
+		     const Ray & ray,
+		     const Primitive * prim,
+		     const Vec2 & st)
+	    : _intersect(i), _t(t), _pos(ray.origin()+ray.dir()*t), _st(st), hitprim(prim) { }
 
 	constexpr
 	operator bool() const noexcept
@@ -59,11 +61,11 @@ namespace yapt
 	{ return _t; }
 
 	constexpr Vec3
-	n() const noexcept
-	{ return _n; }
+	pos() const noexcept
+	{ return _pos; }
 
-	constexpr Vec3
-	pos(const Ray & ray) const noexcept
-	{ return ray.origin() + ray.dir() * _t; }
+	const constexpr Primitive *
+	prim() const noexcept
+	{ return hitprim; }
     };
 }

@@ -16,17 +16,17 @@ namespace yapt
     class GeometryObject : public AbstractObject
     {
 	Trasform _transform;
-	Material _material;
+	Material * _material = nullptr;
 
 	std::vector<Primitive*> _geo;
     public:
 	GeometryObject();
 
-	void
-	set_material(const Material & material) noexcept;
+	GeometryObject(const Transform & transform,
+		       const Material & material);
 
 	void
-	set_transform(const Trasform & transform) noexcept;
+	add_primitive(Primitive * prim) noexcept;
     };
 
 }
