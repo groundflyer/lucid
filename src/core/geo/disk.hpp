@@ -25,5 +25,8 @@ namespace yapt
 
 	Vec3
 	normal(const Intersection &) const noexcept;
+
+	Vec3
+	tangent(const Intersection &) const noexcept;
     };
 }

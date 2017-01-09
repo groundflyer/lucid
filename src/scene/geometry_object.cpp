@@ -14,6 +14,24 @@ namespace yapt
     GeometryObject::add_primitive(Primitive * prim) noexcept
     {
 	if (prim)
-	    _geo.push_back(&prim);
+	    _geo.push_back(prim);
+    }
+
+    const std::vector<Primitive*> &
+    GeometryObject::get_primitives() const noexcept
+    {
+	return _geo;
+    }
+
+    const Transform &
+    GeometryObject::get_transform() const noexcept
+    {
+	return _transform;
+    }
+
+    const Material &
+    GeometryObject::get_material() const noexcept
+    {
+	return *_material;
     }
 }

@@ -63,8 +63,14 @@ namespace yapt
     Vec3
     Triangle::normal(const Intersection &) const noexcept
     {
-	const auto p0 = _mesh->get_vertex_pos(_id, 0);
+	const Vec3 p0 = _mesh->get_vertex_pos(_id, 0);
 	return normalize((p0 -_mesh->get_vertex_pos(_id, 1))
 			 ^ (p0 - _mesh->get_vertex_pos(_id, 2)));
+    }
+
+    Vec3
+    Triangle::tangent(const Intersection &) const noexcept
+    {
+	return normalize(_mesh->get_vertex_pos(_id, 1) - _mesh->get_vertex_pos(_id, 2));
     }
 }

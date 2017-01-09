@@ -25,7 +25,10 @@ namespace yapt
 		  const real & t_min, const real & t_max) const noexcept;
 
 	Vec3
-	normal(const Intersection & isect) const noexcept;
+	normal(const Intersection &) const noexcept;
+
+	Vec3
+	tangent(const Intersection &) const noexcept;
     };
 
 

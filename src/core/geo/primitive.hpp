@@ -10,6 +10,9 @@
 
 namespace yapt
 {
+    class Intersection;
+
+
     class Primitive
     {
     public:
@@ -21,6 +24,9 @@ namespace yapt
 
 	virtual Vec3
 	normal(const Intersection &) const noexcept = 0;
+
+	virtual Vec3
+	tangent(const Intersection &) const noexcept = 0;
     };
 
 }

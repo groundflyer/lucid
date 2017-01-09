@@ -5,6 +5,7 @@
 #pragma once
 
 #include <core/basic_types.hpp>
+#include <core/geo/ray.hpp>
 #include <utility>
 #include <cmath>
 
@@ -35,6 +36,10 @@ namespace yapt
     apply_transform_normal(const Mat4 & t, const Vec3 & n) noexcept
     { return dehomogenize(transpose(inverse(t)) * Vec4(n)); }
 
+    constexpr Ray
+    apply_transform(const Mat4 & t, const Ray & ray) noexcept
+    { return Ray(apply_transform_point(t, ray.origin()), apply_transform_vector(t, ray.dir())); }
+
 
     class Transform
     {
@@ -53,15 +58,23 @@ namespace yapt
 	// default behavior is to transform as vector
 	constexpr Vec3
 	operator()(const Vec3 & v) const noexcept
-	{ return dehomogenize(_t * Vec4(v)); }
+	{ return apply_transform_vector(_t, v); }
+
+	constexpr Ray
+	operator()(const Ray & ray) const noexcept
+	{ return apply_transform(_t, ray); }
 
 	constexpr Vec3
 	as_point(const Vec3 & p) const noexcept
-	{ return dehomogenize(_t * homogenize_point(p)); }
+	{ return apply_transform_point(_t, p); }
 
 	constexpr Vec3
 	as_normal(const Vec3 & n) const noexcept
-	{ return dehomogenize(transpose(inverse(_t)) * Vec4(n)); }
+	{ return apply_transform_normal(_t, n); }
+
+	constexpr Transform
+	inverse() const noexcept
+	{ return Transform(yapt::inverse(_t)); }
     };
 
     constexpr Mat4

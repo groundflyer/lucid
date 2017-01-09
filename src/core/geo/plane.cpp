@@ -31,4 +31,11 @@ namespace yapt
     {
 	return _n;
     }
+
+    Vec3
+    Plane::tangent(const Intersection &) const noexcept
+    {
+	Vec3 tmp = _n ^ Vec3(1, 0, 0);
+	return _n ^ tmp;
+    }
 }

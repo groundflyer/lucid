@@ -58,4 +58,12 @@ namespace yapt
     {
 	return normalize(isect.pos() - _p);
     }
+
+    Vec3
+    Sphere::tangent(const Intersection & isect) const noexcept
+    {
+	Vec3 n = normal(isect);
+	Vec3 tmp1 = normalize(n ^ Vec3(0, 1, 0));
+	return normalize(n ^ tmp1);
+    }
 }

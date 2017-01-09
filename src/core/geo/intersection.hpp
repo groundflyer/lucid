@@ -6,6 +6,7 @@
 
 #include "ray.hpp"
 #include "primitive.hpp"
+#include <limits>
 
 
 namespace yapt
@@ -16,7 +17,7 @@ namespace yapt
     class Intersection
     {
 	bool _intersect = false;
-	real _t = 0;		// distance
+	real _t = std::numeric_limits<real>::infinity(); // distance
 	Vec3 _pos;
 	Vec2 _st; 		// parametric coordinates
 	Primitive const * hitprim = nullptr;
@@ -64,8 +65,8 @@ namespace yapt
 	pos() const noexcept
 	{ return _pos; }
 
-	const constexpr Primitive *
+	const constexpr Primitive &
 	prim() const noexcept
-	{ return hitprim; }
+	{ return *hitprim; }
     };
 }

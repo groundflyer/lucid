@@ -6,10 +6,14 @@
 
 #include <core/basic_types.hpp>
 #include <core/geo/intersection.hpp>
+#include "omni_light.hpp"
 
 
 namespace yapt
 {
+    // forward declaration
+    class Scene;
+
     class Material
     {
 	RGB _diff;
@@ -21,7 +25,6 @@ namespace yapt
 	Material(const RGB & clr);
 
 	RGB
-	eval(const Intersection & isect) const noexcept;
+	eval(const Intersection & isect, const Scene & scene) const noexcept;
     };
-
 }

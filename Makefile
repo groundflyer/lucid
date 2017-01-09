@@ -1,6 +1,22 @@
 target := yapt
 
-srcs := cameras/perspective io/film io/image structures/triangle_mesh core/math/transforms core/geo/bbox core/geo/disk core/geo/plane core/geo/triangle core/geo/sphere main
+srcs := cameras/perspective \
+	io/film \
+	io/image \
+	structures/triangle_mesh \
+	core/random/rng \
+	core/math/transforms \
+	core/geo/bbox \
+	core/geo/disk \
+	core/geo/plane \
+	core/geo/triangle \
+	core/geo/sphere \
+	scene/geometry_object \
+	scene/material \
+	scene/omni_light \
+	scene/traverser \
+	scene/scene \
+	main
 
 type_tests := tests/vec3 tests/vec4 tests/matrix tests/test_pi
 
@@ -13,9 +29,9 @@ bin_dir := bin
 objs = $(addprefix $(bin_dir)/, $(srcs:=.o))
 
 
-INCLUDE_FLAGS := -I"./$(include_dir)" -I"./$(src_dir)" -I"$(GFX)/include"
+INCLUDE_FLAGS := -I"./$(include_dir)" -I"./$(src_dir)"
 LD_FLAGS := -lOpenImageIO $(shell pkg-config --libs OpenEXR)
-CXXFLAGS = -std=c++14 -Wall -Wpedantic -Wextra -fcilkplus $(INCLUDE_FLAGS) $(LD_FLAGS)
+CXXFLAGS = -std=c++14 -Wall -Wpedantic -Wextra -fcilkplus -pipe $(INCLUDE_FLAGS) $(LD_FLAGS)
 
 hpps := $(src_dir)/include/*
 
@@ -48,4 +64,4 @@ $(bin_dir)/%.o: $(src_dir)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	rm -r $(target) $(objs) $(type_tests) $(tests)
+	rm -r $(target) bin/ tests/

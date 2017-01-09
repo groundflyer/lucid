@@ -25,7 +25,7 @@ namespace yapt
 
 	auto v3 = v1 ^ v2;
 
-	return std::make_pair(v2, v3);
+	return std::pair<Vec3, Vec3>(v2, v3);
     }
 
     Mat4

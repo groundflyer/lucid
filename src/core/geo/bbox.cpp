@@ -62,7 +62,13 @@ namespace yapt
     {
 	// TODO find normal
 	// it's just a mock
-	auto tmp = isect.pos() - _vmin;
+	auto tmp = isect.pos() - (_vmax - _vmin);
 	return normalize(tmp);
+    }
+
+    Vec3
+    AABB::tangent(const Intersection &) const noexcept
+    {
+	return Vec3(0,1,0);
     }
 }
