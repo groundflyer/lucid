@@ -31,7 +31,7 @@ objs = $(addprefix $(bin_dir)/, $(srcs:=.o))
 
 INCLUDE_FLAGS := -I"./$(include_dir)" -I"./$(src_dir)"
 LD_FLAGS := -lOpenImageIO $(shell pkg-config --libs OpenEXR)
-CXXFLAGS = -std=c++14 -Wall -Wpedantic -Wextra -fcilkplus -pipe $(INCLUDE_FLAGS) $(LD_FLAGS)
+CXXFLAGS = -std=c++14 -Wall -Wpedantic -Wextra -pipe $(INCLUDE_FLAGS) $(LD_FLAGS)
 
 hpps := $(src_dir)/include/*
 

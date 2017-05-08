@@ -1,6 +1,5 @@
 // -*- C++ -*-
 // yapt.cpp --
-#include <cilk/cilk.h>
 #include <limits>
 
 #include <io/image.hpp>
