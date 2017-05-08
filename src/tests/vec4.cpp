@@ -1,10 +1,14 @@
 #include "test_util.hpp"
-#include <core/basic_types.hpp>
+#include <templates/math/vec.hpp>
 
 
 using namespace std;
 using namespace yapt;
 
+using Vec2 = Vector<float, 2>;
+using Vec2i = Vector<int, 2>;
+using Vec3 = Vector<float, 3>;
+using Vec4 = Vector<float, 4>;
 using Vec3u = Vector<unsigned, 3>;
 using Vec4u = Vector<unsigned, 4>;
 

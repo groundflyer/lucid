@@ -11,7 +11,7 @@ int main()
     Vec3 a(1.633, -.15, 2.43), b(-.53, -1.6, 2.5);
     auto test = a + b;
     test *= b;
-    auto c = ((test / 4) ^ a) % b;
+    auto c = ((test / 4.f) ^ a) % b;
     Vec3 e = a * b;
     Vec3 n = Vec3(0);
     Vec3 equ_op;

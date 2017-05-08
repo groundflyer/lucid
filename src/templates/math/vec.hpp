@@ -30,16 +30,25 @@ namespace yapt
 
     public:
 	constexpr
-	Vector() { }
+	Vector() {}
+
+	constexpr
+	Vector(const Vector & rhs) : _data(rhs._data) {}
 
 	explicit constexpr
-	Vector(const Data & rhs) : _data(rhs) { }
-
-	explicit constexpr
-	Vector(const Data && rhs) : _data(std::forward<const Data>(rhs)) { }
+	Vector(const Data & rhs) : _data(rhs) {}
 
 	explicit constexpr
 	Vector(const T & rhs) { for (T& i : _data) i = rhs; }
+
+	constexpr
+	Vector(Vector && rhs) : _data(std::forward<Data>(rhs._data)) {}
+
+	explicit constexpr
+	Vector(Data && rhs) : _data(std::forward<Data>(rhs)) {}
+
+	explicit constexpr
+	Vector(T && rhs) { for (T& i : _data) i = rhs; }
 
 	explicit constexpr
 	Vector(std::initializer_list<T> l)
@@ -54,37 +63,37 @@ namespace yapt
 	}
 
 	template <class ... Types> explicit constexpr
-	Vector(const T && first,
-	       const Types && ... args) :
-	    _data({{std::forward<const T>(first), (std::forward<const T>(args))...}})
+	Vector(T && first,
+	       Types && ... args) :
+	_data({{std::forward<T>(first), (std::forward<T>(args))...}})
 	{
 	    static_assert(sizeof...(args) <= N - 1,
 	    		  "The number of elements doesn't match!");
 	}
 
+	// same dim other type
+	template <typename T2>
+	explicit constexpr
+	Vector(const Vector<T2, N> & rhs)
+	{ for (size_t i = 0; i < N; ++i) _data[i] = static_cast<T>(rhs[i]); }
+
 	// same type another dim
 	template <size_t N2>
 	explicit constexpr
 	Vector(const Vector<T, N2> & rhs)
-	{ for (size_t i = 0; i < std::min(N, N2); i++) _data[i] = rhs[i]; }
+	{ for (size_t i = 0; i < std::min(N, N2); ++i) _data[i] = rhs[i]; }
+
+	constexpr Vector&
+	operator=(const Vector & rhs)
+	{
+	    _data = rhs._data;
+	    return *this;
+	}
 
 	// bool converter
-	explicit constexpr
+	constexpr
 	operator bool() const noexcept
 	{ return length(*this) > static_cast<T>(0); }
-
-	// same dim, other type converter
-	template <typename T2>
-	explicit constexpr
-	operator Vector<T2, N>() const noexcept
-	{
-	    Vector<T2, N> ret;
-
-	    for (size_t i = 0; i < N; ++i)
-		ret[i] = static_cast<T>(_data[i]);
-
-	    return ret;
-	}
 
 	constexpr typename Data::iterator
 	begin() noexcept
@@ -370,27 +379,27 @@ namespace yapt
 	return ret;
     }
 
-    // 3-dimensional cross product
-    template <typename T,
-	      template <typename, size_t> class Vector>
-    constexpr Vector<T, 3>
-    cross(const Vector<T, 3> & a,
-	  const Vector<T, 3> & b) noexcept
-    {
-	Vector<T, 3> ret;
+//     // 3-dimensional cross product
+//     template <typename T,
+// 	      template <typename, size_t> class Vector>
+//     constexpr Vector<T, 3>
+//     cross(const Vector<T, 3> & a,
+// 	  const Vector<T, 3> & b) noexcept
+//     {
+// 	Vector<T, 3> ret;
 
 // #ifdef LEFT			// Lefthanded coordinate system
 // 	ret.x() = a.z()*b.y() - a.y()*b.z();
 // 	ret.y() = a.x()*b.z() - a.z()*b.x();
 // 	ret.z() = a.y()*b.x() - a.x()*b.y();
-// #else  // Righthanded
-	ret.x() = a.y()*b.z() - a.z()*b.y();
-	ret.y() = a.z()*b.x() - a.x()*b.z();
-	ret.z() = a.x()*b.y() - a.y()*b.x();
+// #else			// Righthanded
+// 	ret.x() = a.y()*b.z() - a.z()*b.y();
+// 	ret.y() = a.z()*b.x() - a.x()*b.z();
+// 	ret.z() = a.x()*b.y() - a.y()*b.x();
 // #endif	// LEFT
 
-	return ret;
-    }
+// 	return ret;
+//     }
 
 
     template <typename T, size_t N>
