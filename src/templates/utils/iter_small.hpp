@@ -4,92 +4,72 @@
 
 #pragma once
 
-#include <algorithm>
+#include <utility>
+#include <functional>
+#include <type_traits>
 
 
 namespace yapt
 {
-    // functions for constant-sized array-like containers
-    // with random-access iterators
+    template <typename Vector>
+    struct vector_value
+    { typedef typename std::decay<decltype(std::declval<Vector>()[std::declval<size_t>()])>::type type; };
 
-    // binary transform
-    template <typename A, typename B, size_t N,
-	      template <typename, size_t> class Array,
-	      typename F>
-    constexpr decltype(auto)
-    bmap(const F & func,
-	 const Array<A, N> & a,
-	 const Array<B, N> & b) noexcept
-    {
-	Array<decltype(func(a[0],b[0])), N> ret {};
+    template <typename Vector>
+    using vector_value_t = typename vector_value<Vector>::type;
 
-	for (size_t i = 0; i < N; ++i)
-	    ret[i] = func(a[i], b[i]);
-
-	return ret;
-    }
-
-    // binary transform with one scalar arg
-    template <typename A, typename B, size_t N,
-	      template <typename, size_t> class Array,
-	      typename F>
-    constexpr decltype(auto)
-    bmap(const F & func,
-	 const Array<A, N> & a,
-	 const B & b) noexcept
-    {
-	Array<decltype(func(a[0], b)), N> ret {};
-
-	for (size_t i = 0; i < N; ++i)
-	    ret[i] = func(a[i], b);
-
-	return ret;
-    }
-
-
-    // unary transform
-    template <typename T, size_t N,
-	      template <typename, size_t> class Array,
-	      typename F>
-    constexpr decltype(auto)
-    umap(const F & func,
-	 const Array<T, N> & a) noexcept
-    {
-	Array<decltype(func(a[0])), N> ret {};
-
-	for (size_t i = 0; i < N; ++i)
-	    ret[i] = func(a[i]);
-
-	return ret;
-    }
-
+    template <typename Vector1, typename Vector2, typename BinaryOperation>
+    struct result_of_binary_op
+    { typedef typename std::result_of_t<BinaryOperation(vector_value_t<Vector1>, vector_value_t<Vector2>)> type; };
 
     template <typename T, size_t N,
-    	      template <typename, size_t> class Array,
-	      typename F>
-    constexpr decltype(auto)
-    reduce(const F func,
-	   const Array<T, N> & a) noexcept
+	      template <typename, size_t> typename Container,
+	      template <typename, size_t, template<typename,size_t> typename> typename Vector>
+    constexpr size_t vector_size(const Vector<T, N, Container>&)
+    { return N; }
+
+    template <typename Vector1, typename Vector2, typename BinaryOperation>
+    constexpr Vector1
+    transform(const Vector1 & a,
+	      const Vector2 & b,
+	      BinaryOperation binary_op) noexcept
     {
-	static_assert(N >= 2, "Container size is too small!");
+	static_assert(vector_size(a) == vector_size(b), "Vector sizes don't match!");
 
-	auto ret = func(a[0], a[1]);
+	Vector1 ret {};
 
-	for (size_t i = 2; i < N; ++i)
-	    ret = func(ret, a[i]);
+	for (size_t i = 0; i < a.size(); ++i)
+	    ret[i] = binary_op(a[i], b[i]);
 
 	return ret;
     }
 
-    template <typename T, size_t N,
-    	      template <typename, size_t> class Array>
-    constexpr void
-    fill_range(Array<T, N> & a, T start = 0, const T & step = 1) noexcept
+
+    template <typename Vector, typename UnaryOperation>
+    constexpr Vector
+    transform(const Vector & a,
+	      UnaryOperation unary_op) noexcept
     {
-	for (size_t i = 0; i < N; i++)
-	    {
-		a[i] = start;
-		start += step;
-	    }
+	Vector ret {};
+
+	for (size_t i = 0; i < a.size(); ++i)
+	    ret[i] = unary_op(a[i]);
+
+	return ret;
+    }
+
+
+    template <typename Vector,
+	      typename BinaryOperation = decltype(std::plus<vector_value_t<Vector>>()),
+	      typename Init = result_of_binary_op_t<Vector, Vector, BinaryOperation>>
+    constexpr auto
+    reduce(const Vector & a,
+    	   BinaryOperation binary_op = std::plus<vector_value_t<Vector>>(),
+    	   Init init = static_cast<Init>(0)) noexcept
+    {
+    	for (size_t i = 0; i < a.size(); ++i)
+    	    init = binary_op(init, a[i]);
+
+    	return init;
     }
 }

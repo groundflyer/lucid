@@ -6,6 +6,7 @@
 #define __TEST_UTIL__
 
 #include <iostream>
+#include <algorithm>
 
 #define TEST_AND_COUT(x)					\
     std::cout << "Performing " << #x << std::endl;		\
@@ -13,6 +14,10 @@
     std::cout << x << std::endl;				\
     std::cout << "______________________________________\n";
 
+#define COUT_ARRAY(x)						\
+    std::cout << "Printing array " << #x << std::endl;		\
+    for (const auto & i : x) std::cout << i << '\t';		\
+    std::cout << "\n______________________________________\n";
 
 
 #endif // __TEST_UTIL__

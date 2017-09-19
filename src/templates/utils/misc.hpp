@@ -5,6 +5,7 @@
 #pragma once
 
 #include <math/pi.hpp>
+#include <algorithm>
 
 
 namespace yapt
@@ -100,12 +101,12 @@ namespace yapt
     // compute Levi-Civita symbol (signature of permutation)
     template <typename Iterable, typename RT = int>
     constexpr RT
-    sgn(const Iterable && numbers) noexcept
+    sgn(const Iterable & numbers) noexcept
     {
     	RT ret {};
 
-    	if (!has_equal(std::forward<const Iterable>(numbers)))
-	    ret = minus_one_pow(inversion_number(std::forward<const Iterable>(numbers)));
+    	if (!has_equal(numbers))
+	    ret = minus_one_pow(inversion_number(numbers));
 
     	return ret;
     }
@@ -145,16 +146,4 @@ namespace yapt
     constexpr bool
     in_range(const T & val, const T & min, const T & max)
     { return (val >= min) && (val <= max); }
-
-    // returns a copy of the smaller of the given values
-    template <typename T>
-    constexpr T
-    min(const T & a, const T & b)
-    { return a < b ? a : b; }
-
-    // returns a copy of the greater of the given values
-    template <typename T>
-    constexpr T
-    max(const T & a, const T & b)
-    { return a > b ? a : b; }
 }

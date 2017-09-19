@@ -28,10 +28,10 @@ include_dir := $(src_dir)/templates
 bin_dir := bin
 objs = $(addprefix $(bin_dir)/, $(srcs:=.o))
 
-
+CXX := g++ -fopt-info-vec
 INCLUDE_FLAGS := -I"./$(include_dir)" -I"./$(src_dir)"
 LD_FLAGS := -lOpenImageIO $(shell pkg-config --libs OpenEXR)
-CXXFLAGS = -std=c++14 -Wall -Wpedantic -Wextra -pipe $(INCLUDE_FLAGS) $(LD_FLAGS)
+CXXFLAGS = -std=c++14 -Wall -Wpedantic -Wextra -pipe
 
 hpps := $(src_dir)/include/*
 
@@ -49,11 +49,11 @@ endif
 all: $(target)
 
 $(target): $(objs)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+	$(CXX) $(CXXFLAGS) $(LD_FLAGS) $(INCLUDE_FLAGS) -o $@ $^
 
 $(type_tests): %: $(src_dir)/%.cpp
 	mkdir -p $(test_dir)
-	$(CXX) $(CXXFLAGS) -fopt-info-optimized=$@.opt -o $@ $<
+	$(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) -o $@ $<
 
 
 $(tests): %: $(src_dir)/%.cpp $(bin_dir)/core/math/transforms.o

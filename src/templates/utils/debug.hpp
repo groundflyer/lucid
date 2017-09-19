@@ -7,7 +7,7 @@
 
 #ifndef NDEBUG
 	#include <cassert>
-	#define ASSERT(x) assert(x)
+	#define ASSERT(CONDITION, MESSAGE) assert((CONDITION )&& MESSAGE)
 #else
-	#define ASSERT(x)
+	#define ASSERT(CONDITION, MESSAGE)
 #endif

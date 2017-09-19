@@ -1,0 +1,224 @@
+// -*- C++ -*-
+// vec_ops.hpp --
+//
+
+#pragma once
+
+#include <cmath> 		// sqrt
+#include <array>
+#include <limits>
+#include <utility>
+#include <numeric>
+#include <algorithm>
+#include <functional>
+#include <type_traits>
+
+#include <utils/misc.hpp>
+
+
+namespace yapt
+{
+    // forward declaration
+    template <typename T, size_t N,
+	      template <typename, size_t> class Container>
+    class Vector;
+
+
+    template <typename T, size_t N,
+	      template <typename, size_t> class Container1,
+	      template <typename, size_t> class Container2,
+	      typename BinaryOperation>
+    constexpr auto
+    transform(const Vector<T, N, Container1> & a,
+	      const Vector<T, N, Container2> & b,
+	      BinaryOperation binary_op) noexcept
+    {
+	Vector<std::result_of_t<BinaryOperation(T, T)>, N, Container1> ret {};
+
+	for (size_t i = 0; i < N; ++i)
+	    ret[i] = binary_op(a[i], b[i]);
+
+	return ret;
+    }
+
+
+    template <typename T, size_t N,
+	      template <typename, size_t> class Container,
+	      typename UnaryOperation>
+    constexpr auto
+    transform(const Vector<T, N, Container> & a,
+	      UnaryOperation unary_op) noexcept
+    {
+	Vector<std::result_of_t<UnaryOperation(T)>, N, Container> ret {};
+
+	for (size_t i = 0; i < N; ++i)
+	    ret[i] = unary_op(a[i]);
+
+	return ret;
+    }
+
+
+    template <typename T, size_t N,
+	      template <typename, size_t> class Container,
+	      typename BinaryOperation = decltype(std::plus<T>()),
+	      typename Init = std::result_of_t<BinaryOperation(T, T)>>
+    constexpr auto
+    reduce(const Vector<T, N, Container> & a,
+    	   BinaryOperation binary_op = std::plus<T>(),
+    	   Init init = static_cast<Init>(0)) noexcept
+    {
+    	for (size_t i = 0; i < N; ++i)
+    	    init = binary_op(init, a[i]);
+
+    	return init;
+    }
+
+
+    template <typename T, size_t N,
+	      template <typename, size_t> class Container1,
+	      template <typename, size_t> class Container2,
+	      typename BinaryOperation1 = decltype(std::multiplies<T>()),
+	      typename BinaryOperation2 = decltype(std::plus<T>()),
+	      typename Init = std::result_of_t<BinaryOperation2(std::result_of_t<BinaryOperation1(T, T)>,std::result_of_t<BinaryOperation1(T, T)>)>>
+    constexpr auto
+    transform_reduce(const Vector<T, N, Container1> & a,
+		     const Vector<T, N, Container2> & b,
+    		     BinaryOperation1 binary_op1 = std::multiplies<T>(),
+    		     BinaryOperation2 binary_op2 = std::plus<T>(),
+		     Init init = static_cast<Init>(0)) noexcept
+    {
+    	for (size_t i = 0; i < N; ++i)
+    	    init = binary_op2(init, binary_op1(a[i], b[i]));
+
+    	return init;
+    }
+
+
+    template <typename T, size_t N,
+	      template <typename, size_t> class Container,
+	      typename UnaryOperation,
+	      typename BinaryOperation = decltype(std::plus<T>()),
+	      typename Init = std::result_of_t<BinaryOperation(std::result_of_t<UnaryOperation(T)>,std::result_of_t<UnaryOperation(T)>)>>
+    constexpr auto
+    transform_reduce(const Vector<T, N, Container> & a,
+		     UnaryOperation unary_op,
+		     BinaryOperation binary_op = std::plus<T>(),
+		     Init init = static_cast<Init>(0)) noexcept
+    {
+	for (size_t i = 0; i < N; ++i)
+	    init = binary_op(init, unary_op(a[i]));
+
+	return init;
+    }
+
+
+    // dot product
+    template <typename T, size_t N,
+	      template <typename, size_t> class Container1,
+	      template <typename, size_t> class Container2>
+    constexpr T
+    dot(const Vector<T, N, Container1> & a,
+    	const Vector<T, N, Container2> & b) noexcept
+    { return transform_reduce(a, b); }
+
+
+    // N-dimensional cross product
+    template <typename T, size_t N,
+	      template <typename, size_t> class Container1,
+	      template <typename, size_t> class Container2>
+    constexpr Vector<T, N, Container1>
+    cross(const Vector<T, N, Container1> & a,
+    	  const Vector<T, N, Container2> & b) noexcept
+    {
+    	Vector<T, N, Container1> ret;
+
+    	for (size_t i = 0; i < N; ++i)
+    	    for (size_t j = 0; j < N; ++j)
+    		for (size_t k = 0; k < N; ++k)
+    		    ret[i] += sgn(std::array<size_t, 3>({{i,j,k}})) * a[j] * b[k];
+
+    	return ret;
+    }
+
+//     // 3-dimensional cross product
+//     template <typename T,
+// 	      template <typename, size_t> class Container1,
+// 	      template <typename, size_t> class Container2>
+//     constexpr Vector<T, 3, Container1>
+//     cross(const Vector<T, 3, Container1> & a,
+// 	  const Vector<T, 3, Container2> & b) noexcept
+//     {
+// 	Vector<T, 3, Container1> ret;
+
+// #ifdef LEFT			// Lefthanded coordinate system
+// 	ret.x() = a.z()*b.y() - a.y()*b.z();
+// 	ret.y() = a.x()*b.z() - a.z()*b.x();
+// 	ret.z() = a.y()*b.x() - a.x()*b.y();
+// #else			// Righthanded
+// 	ret.x() = a.y()*b.z() - a.z()*b.y();
+// 	ret.y() = a.z()*b.x() - a.x()*b.z();
+// 	ret.z() = a.x()*b.y() - a.y()*b.x();
+// #endif	// LEFT
+
+// 	return ret;
+//     }
+
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr T
+    length2(const Vector<T, N, Container> & a) noexcept
+    { return transform_reduce(a, pow<T, 2>); }
+
+    template <typename T, size_t N,
+	      template <typename, size_t> class Container>
+    constexpr T
+    length(const Vector<T, N, Container> & a) noexcept
+    { return std::sqrt(length2(a)); }
+
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr Vector<T, N, Container>
+    normalize(const Vector<T, N, Container> & a) noexcept
+    {
+    	T l = length(a);
+
+    	if (l != static_cast<T>(1) || l != static_cast<T>(0))
+    	    a /= l;
+
+    	return a;
+    }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container1,
+	      template <typename, size_t> class Container2>
+    constexpr T
+    distance(const Vector<T, N, Container1> & a,
+	     const Vector<T, N, Container2> & b)
+    { return length(a-b); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr T
+    sum(const Vector<T, N, Container> & a) noexcept
+    { return reduce(a); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr T
+    avg(const Vector<T, N, Container> & a) noexcept
+    { return sum(a) / static_cast<T>(N); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr T
+    max(const Vector<T, N, Container> & a) noexcept
+    { return reduce(a, static_cast<const T&(*)(const T&, const T&)>(std::max), std::numeric_limits<T>::min()); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr T
+    min(const Vector<T, N, Container> & a) noexcept
+    { return reduce(a, static_cast<const T&(*)(const T&, const T&)>(std::min), std::numeric_limits<T>::max()); }
+}
