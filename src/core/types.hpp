@@ -20,7 +20,7 @@ namespace yapt
 
     // Temporal container for temporal variables
     template <typename T, size_t N>
-    using TempContainer = std::array<T, N>;
+    using StaticContainer = std::array<T, N>;
 
 
     template <template <typename, size_t> class Container>
@@ -127,4 +127,13 @@ namespace yapt
 	constexpr real&
 	at(const size_t i) noexcept = delete;
     };
+
+    using Vec2_ = Vec2<StaticContainer>;
+    using Vec3_ = Vec3<StaticContainer>;
+    using Vec4_ = Vec4<StaticContainer>;
+    using Point_ = Point<StaticContainer>;
+    using Normal_ = Normal<StaticContainer>;
+    using Mat2_ = Mat2<StaticContainer>;
+    using Mat3_ = Mat3<StaticContainer>;
+    using Mat4_ = Mat4<StaticContainer>;
 }

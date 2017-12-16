@@ -33,7 +33,7 @@ namespace yapt
     constexpr auto
     apply_transform(const Mat4<MatContainer> & t,
     		    const Vec3<VecContainer> & v) noexcept
-    { return dehomogenize(t * Vec4<TempContainer>(v)); }
+    { return dehomogenize(t * Vec4_(v)); }
 
 
     template <
@@ -50,7 +50,7 @@ namespace yapt
     constexpr auto
     apply_transform(const Mat4<MatContainer> & t,
     		    const Normal<NormalContainer> & n) noexcept
-    { return dehomogenize(transpose(inverse(t)) * Vec4<TempContainer>(n)); }
+    { return dehomogenize(transpose(inverse(t)) * Vec4_(n)); }
 
     template <
     	template <typename, size_t> class MatContainer,
@@ -60,77 +60,6 @@ namespace yapt
 		    const Ray<RayContainer> & ray)
     { return Ray<RayContainer>(apply_transform(t, ray.origin()), apply_transform(t, ray.dir())); }
 
-    // constexpr Vec3
-    // apply_transform_vector(const Mat4 & t, const Vec3 & a) noexcept
-    // { return dehomogenize(t * Vec4(a)); }
-
-    // constexpr Vec3
-    // apply_transform_normal(const Mat4 & t, const Vec3 & n) noexcept
-    // { return dehomogenize(transpose(inverse(t)) * Vec4(n)); }
-
-    // constexpr Ray
-    // apply_transform(const Mat4 & t, const Ray & ray) noexcept
-    // { return Ray(apply_transform_point(t, ray.origin()), apply_transform_vector(t, ray.dir())); }
-
-
-    // template <template <typename, size_t> class Container>
-    // class Transform
-    // {
-    // 	Mat4<Container> _t;
-
-    // public:
-    // 	constexpr
-    // 	Transform() = delete;
-
-    // 	template <template <typename, size_t> class Container1>
-    // 	explicit constexpr
-    // 	Transform(const Mat4<Container1> & t) : _t(t) {}
-
-    // 	template <template <typename, size_t> class Container1>
-    // 	constexpr Transform&
-    // 	push(const Mat4<Container1> & t) noexcept
-    // 	{
-    // 	    _t *= t;
-    // 	    return *this;
-    // 	}
-
-    // 	template <template <typename, size_t> class Container1>
-    // 	constexpr auto
-    // 	operator()(const Vec3<Container1> & v) const noexcept
-    // 	{ return dehomogenize(_t * Vec4<TempContainer>(v)); }
-
-    // 	template <template <typename, size_t> class Container1>
-    // 	constexpr auto
-    // 	operator()(const Point<Container1> & p) const noexcept
-    // 	{ return dehomogenize(_t * homogenize(a)); }
-
-    // 	template <template <typename, size_t> class Container1>
-    // 	constexpr auto
-    // 	operator()(const Normal<Container1> & n) const noexcept
-    // 	{ return dehomogenize(transpose(inverse(_t)) * Vec4<TempContainer>(n)); }
-
-    // 	template <template <typename, size_t> class Container1>
-    // 	constexpr auto
-    // 	operator()(const Ray<Container1> & ray) const noexcept
-    // 	{ return Ray<Container1>((*this)(t, ray.origin()),
-    // 				 (*this)(t, ray.dir())); }
-
-	// constexpr Vec3
-	// as_point(const Vec3 & p) const noexcept
-	// { return apply_transform_point(_t, p); }
-
-	// constexpr Vec3
-	// as_normal(const Vec3 & n) const noexcept
-	// { return apply_transform_normal(_t, n); }
-
-    // 	constexpr Transform
-    // 	inverse() const noexcept
-    // 	{ return Transform(yapt::inverse(_t)); }
-
-    // 	constexpr const auto&
-    // 	mat() const noexcept
-    // 	{ return _t; }
-    // };
 
     template <template <typename, size_t> class Container>
     constexpr auto
@@ -161,11 +90,11 @@ namespace yapt
 	    const Point<CenContainer> & center,
 	    const Normal<UpContainer> & up) noexcept
     {
-	const Vec3<TempContainer> f = normalize(center - eye);
+	const Vec3_ f = normalize(center - eye);
 	const auto s = normalize(f.cross(up));
 	const auto u = s.cross(f);
 
-	return Mat4<TempContainer>(s[0], s[1], s[2], 0,
+	return Mat4_(s[0], s[1], s[2], 0,
 				   u[0], u[1], u[2], 0,
 				   -f[0], -f[1], -f[2], 0,
 				   0, 0, 0, 1)
@@ -177,7 +106,7 @@ namespace yapt
     constexpr auto
     basis(const Vec3<Container> & v1) noexcept
     {
-	Vec3<TempContainer> v2(0);
+	Vec3_ v2(0);
 
 	if (std::abs(v1[0]) > std::abs(v1[1]))
 	{
@@ -205,7 +134,7 @@ namespace yapt
 	const auto cos_theta = std::cos(angle);
 	const auto sin_theta = std::sin(angle);
 
-	const Mat3<TempContainer> A(0, axis[2], -axis[1],
+	const Mat3_ A(0, axis[2], -axis[1],
 				    -axis[2], 0, axis[0],
 				    axis[1], -axis[0], 0);
 
@@ -213,14 +142,14 @@ namespace yapt
 	const auto xz = axis[0]*axis[2];
 	const auto yz = axis[1]*axis[2];
 
-	const Mat3<TempContainer> aa(axis[0]*axis[0], xy, xz,
+	const Mat3_ aa(axis[0]*axis[0], xy, xz,
 				     xy, axis[1]*axis[1], yz,
 				     xz, yz, axis[2]*axis[2]);
 
-	const auto rot = Mat3<TempContainer>{} * cos_theta
+	const auto rot = Mat3_{} * cos_theta
 						   + aa * (real(1) - cos_theta)
 						   + A * sin_theta;
 
-	return Mat4<TempContainer>(rot);
+	return Mat4_(rot);
     }
 }
