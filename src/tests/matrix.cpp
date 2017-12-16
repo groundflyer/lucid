@@ -1,4 +1,4 @@
-#include <templates/math/mat.hpp>
+#include <core/mat.hpp>
 #include "test_util.hpp"
 
 using namespace std;

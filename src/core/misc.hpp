@@ -4,8 +4,11 @@
 
 #pragma once
 
-#include <math/pi.hpp>
+#include "pi.hpp"
+
+#include <limits>
 #include <algorithm>
+#include <type_traits>
 
 
 namespace yapt
@@ -114,9 +117,9 @@ namespace yapt
 
     // return a sign of value
     template <typename T>
-    inline constexpr T
+    constexpr T
     sign(const T & val) noexcept
-    { return val > T(0) ? T(1) : T(-1); }
+    { return val > 0 ? 1 : -1; }
 
 
     // compute factorial of value
@@ -126,7 +129,7 @@ namespace yapt
 	size_t ret (1);
 
 	if (val != 0)
-	    for (size_t i = 1; i <= val; i++)
+	    for (size_t i = 1; i <= val; ++i)
 		ret *= i;
 
 	return ret;
@@ -135,15 +138,34 @@ namespace yapt
     template <typename T>
     constexpr T
     degrees(const T & _radians)
-    { return _radians * T(180) / PI<T>; }
+    { return _radians * static_cast<T>(180) / PI<T>; }
 
     template <typename T>
     constexpr T
     radians(const T & _degrees)
-    { return _degrees * PI<T> / T(180); }
+    { return _degrees * PI<T> / static_cast<T>(180); }
+
 
     template <typename T>
-    constexpr bool
-    in_range(const T & val, const T & min, const T & max)
-    { return (val >= min) && (val <= max); }
+    class Range
+    {
+	static_assert(std::is_arithmetic<T>::value, "T is not arithmetic");
+
+	const T _begin;
+	const T _end;
+
+    public:
+	constexpr
+	Range() = delete;
+
+	template <typename F>
+	constexpr
+	Range(const T & begin = std::numeric_limits<T>::lowest(),
+	      const T & end = std::numeric_limits<T>::max())
+	: _begin(std::min(begin, end)), _end(std::max(end, begin)) {}
+
+	constexpr bool
+	encloses(const T & val) const noexcept
+	{ return (val >= _begin) && (val <= _end); }
+    };
 }

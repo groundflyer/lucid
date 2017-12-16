@@ -1,0 +1,3 @@
+[submodule "static_math"]
+	path = ext/static_math
+	url = https://github.com/Morwenn/static_math.git

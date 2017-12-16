@@ -4,7 +4,8 @@
 
 #pragma once
 
-#include <templates/utils/debug.hpp>
+#include "misc.hpp"
+#include "debug.hpp"
 
 #include <array>
 #include <numeric>		// iota

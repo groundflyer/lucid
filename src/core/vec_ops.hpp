@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "misc.hpp"
+
 #include <cmath> 		// sqrt
 #include <array>
 #include <limits>
@@ -12,8 +14,6 @@
 #include <algorithm>
 #include <functional>
 #include <type_traits>
-
-#include <utils/misc.hpp>
 
 
 namespace yapt
@@ -116,7 +116,7 @@ namespace yapt
     template <typename T, size_t N,
 	      template <typename, size_t> class Container1,
 	      template <typename, size_t> class Container2>
-    constexpr T
+    constexpr auto
     dot(const Vector<T, N, Container1> & a,
     	const Vector<T, N, Container2> & b) noexcept
     { return transform_reduce(a, b); }
@@ -126,7 +126,7 @@ namespace yapt
     template <typename T, size_t N,
 	      template <typename, size_t> class Container1,
 	      template <typename, size_t> class Container2>
-    constexpr Vector<T, N, Container1>
+    constexpr auto
     cross(const Vector<T, N, Container1> & a,
     	  const Vector<T, N, Container2> & b) noexcept
     {
@@ -166,59 +166,56 @@ namespace yapt
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container>
-    constexpr T
+    constexpr auto
     length2(const Vector<T, N, Container> & a) noexcept
     { return transform_reduce(a, pow<T, 2>); }
 
     template <typename T, size_t N,
 	      template <typename, size_t> class Container>
-    constexpr T
+    constexpr auto
     length(const Vector<T, N, Container> & a) noexcept
     { return std::sqrt(length2(a)); }
 
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container>
-    constexpr Vector<T, N, Container>
+    constexpr auto
     normalize(const Vector<T, N, Container> & a) noexcept
     {
-    	T l = length(a);
+    	const auto l = length(a);
 
-    	if (l != static_cast<T>(1) || l != static_cast<T>(0))
-    	    a /= l;
-
-    	return a;
+    	return l != static_cast<T>(1) || l != static_cast<T>(0) ? a / l : a;
     }
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container1,
 	      template <typename, size_t> class Container2>
-    constexpr T
+    constexpr auto
     distance(const Vector<T, N, Container1> & a,
 	     const Vector<T, N, Container2> & b)
     { return length(a-b); }
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container>
-    constexpr T
+    constexpr auto
     sum(const Vector<T, N, Container> & a) noexcept
     { return reduce(a); }
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container>
-    constexpr T
+    constexpr auto
     avg(const Vector<T, N, Container> & a) noexcept
     { return sum(a) / static_cast<T>(N); }
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container>
-    constexpr T
+    constexpr auto
     max(const Vector<T, N, Container> & a) noexcept
     { return reduce(a, static_cast<const T&(*)(const T&, const T&)>(std::max), std::numeric_limits<T>::min()); }
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container>
-    constexpr T
+    constexpr auto
     min(const Vector<T, N, Container> & a) noexcept
     { return reduce(a, static_cast<const T&(*)(const T&, const T&)>(std::min), std::numeric_limits<T>::max()); }
 }

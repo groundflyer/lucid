@@ -4,13 +4,6 @@ srcs := cameras/perspective \
 	io/film \
 	io/image \
 	structures/triangle_mesh \
-	core/random/rng \
-	core/math/transforms \
-	core/geo/bbox \
-	core/geo/disk \
-	core/geo/plane \
-	core/geo/triangle \
-	core/geo/sphere \
 	scene/geometry_object \
 	scene/material \
 	scene/omni_light \
@@ -18,9 +11,12 @@ srcs := cameras/perspective \
 	scene/scene \
 	main
 
-type_tests := tests/vec3 tests/vec4 tests/matrix tests/test_pi
-
-tests := tests/transforms
+type_tests :=	tests/vec3 \
+		tests/vec4 \
+		tests/matrix \
+		tests/test_pi \
+		tests/normal \
+		tests/transforms
 
 test_dir := tests
 src_dir := src
@@ -55,9 +51,6 @@ $(type_tests): %: $(src_dir)/%.cpp
 	mkdir -p $(test_dir)
 	$(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) -o $@ $<
 
-
-$(tests): %: $(src_dir)/%.cpp $(bin_dir)/core/math/transforms.o
-	$(CXX) $(CXXFLAGS) -o $@ $^
 
 $(bin_dir)/%.o: $(src_dir)/%.cpp
 	mkdir -p $(@D)

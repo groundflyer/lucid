@@ -7,8 +7,7 @@
 
 #include "vec.hpp"
 #include "mat_ops.hpp"
-
-#include <utils/arrayview.hpp>
+#include "arrayview.hpp"
 
 
 namespace yapt
@@ -17,6 +16,8 @@ namespace yapt
 	      template <typename, size_t> class Container>
     class Matrix
     {
+	static_assert(std::is_arithmetic<T>::value, "T is not arithmetic type");
+
 	using Data = Container<T, N*N>;
 	Data _data {};
 

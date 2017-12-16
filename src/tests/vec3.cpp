@@ -1,5 +1,5 @@
-#include <math/vec.hpp>
-#include <utils/arrayview.hpp>
+#include <core/vec.hpp>
+#include <core/arrayview.hpp>
 
 #include "test_util.hpp"
 
@@ -75,6 +75,9 @@ int main()
     Vec4fe teste = Vec4fe(ExArr4f(a));
     teste = test;
     TEST_AND_COUT(teste);
+    teste /= 2.f;
+    TEST_AND_COUT(teste);
+    TEST_AND_COUT(normalize(Vec4f(1,2,3,4)));
 
     return 0;
 }

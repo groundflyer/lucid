@@ -4,10 +4,11 @@
 
 #pragma once
 
+#include "debug.hpp"
 #include "vec_ops.hpp"
-#include <templates/utils/debug.hpp>
 
 #include <iostream>		// operator <<
+#include <type_traits>
 #include <initializer_list>
 
 
@@ -17,10 +18,22 @@ namespace yapt
 	      template <typename, size_t> class Container>
     class Vector
     {
-	using Data = Container<T,N>;
-
+	static_assert(std::is_arithmetic<T>::value, "T is not arithmetic type");
     protected:
+	using Data = Container<T, N>;
+
 	Data _data {};
+
+	// inplace normalization
+	constexpr void
+	normalize() noexcept
+	{
+	    auto l = length();
+
+	    if (l != static_cast<T>(1) || l != static_cast<T>(0))
+		for (size_t i = 0; i < N; ++i)
+		    _data[i] /= l;
+	}
 
     public:
 	constexpr
@@ -237,6 +250,7 @@ namespace yapt
 
 	    return *this;
 	}
+
 	constexpr Vector&
 	operator/=(const T & rhs) noexcept
 	{
