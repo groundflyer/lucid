@@ -14,11 +14,6 @@
 
 namespace yapt
 {
-    template <typename T, size_t R, size_t C,
-	      template <typename, size_t> class Container>
-    class Matrix;
-
-
     template <typename T, size_t N,
 	      template <typename, size_t> class Container>
     class Vector
@@ -67,6 +62,11 @@ namespace yapt
 	Vector(std::initializer_list<T> l)
 	{ std::copy(l.begin(), l.begin()+std::min(l.size(), N), begin()); }
 
+	template <template <typename, size_t> class Container2>
+	explicit constexpr
+	Vector(const Container2<T, N> & rhs)
+	{ std::copy(rhs.cbegin(), rhs.cend(), begin());	}
+
 	template <class ... Types>
 	explicit constexpr
 	Vector(const T & first,
@@ -92,16 +92,6 @@ namespace yapt
 	explicit constexpr
 	Vector(const Vector<T2, N2, Container2> & rhs)
 	{ for (size_t i = 0; i < std::min(N, N2); ++i) _data[i] = static_cast<T>(rhs[i]); }
-
-	template <size_t R, size_t C,
-		  template <typename, size_t> class Container2>
-	explicit constexpr
-	Vector(const Matrix<T, R, C, Container2> & rhs)
-	{
-	    static_assert(N == R*C, "The number of elements doesn't match!");
-
-	    std::copy(rhs.cbegin(), rhs.cend(), begin());
-	}
 
 	constexpr Vector&
 	operator=(const Vector & rhs) noexcept

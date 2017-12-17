@@ -81,6 +81,13 @@ namespace yapt
 	Matrix(std::initializer_list<T> l)
 	{ std::copy(l.begin(), l.begin()+std::min(l.size(), N), begin()); }
 
+	// construct from a container
+	// GCC 5.4.0 throws an internal compiler error, if we will use N instead of R*C
+	template <template <typename, size_t> class Container2>
+	explicit constexpr
+	Matrix(const Container2<T, R*C> & rhs)
+	{ std::copy(rhs.cbegin(), rhs.cend(), begin()); }
+
 	// vector values constructor
 	// only same dimensions vector are acceptable
 	template <template <typename, size_t> class Container2, class ... Vectors>
@@ -93,12 +100,6 @@ namespace yapt
 
 	    unpack(0, vector, vectors...);
 	}
-
-	// construct from big vector
-	template <template <typename, size_t> class Container2>
-	explicit constexpr
-	Matrix(const Vector<T, N, Container2> & vector)
-	{ std::copy(vector.cbegin(), vector.cend(), begin()); }
 
 	// scalar values constructor
 	template <class ... Types>

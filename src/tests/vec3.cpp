@@ -79,8 +79,8 @@ int main()
     teste /= 2.f;
     TEST_AND_COUT(teste);
     TEST_AND_COUT(normalize(Vec4f(1,2,3,4)));
-    TEST_AND_COUT((Vector<float, 6, array>(Matrix<float, 2, 3, array>::unit())));
-    TEST_AND_COUT((Matrix<float, 2, 3, array>(Vector<float, 6, array>(Matrix<float, 2, 3, array>::unit()))));
+    TEST_AND_COUT((Vector<float, 6, array>(Matrix<float, 2, 3, array>::unit().data())));
+    TEST_AND_COUT((Matrix<float, 2, 3, array>(Vector<float, 6, array>(Matrix<float, 2, 3, array>::unit().data()).data())));
 
     return 0;
 }
