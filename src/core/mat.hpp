@@ -174,20 +174,12 @@ namespace yapt
 	    return _data[pos(i, j)];
 	}
 
-	constexpr typename Data::iterator
+	constexpr auto
 	begin() noexcept
 	{ return _data.begin(); }
-	constexpr typename Data::iterator
+	constexpr auto
 	end() noexcept
 	{ return _data.end(); }
-
-	constexpr typename Data::const_iterator
-	begin() const noexcept
-	{ return _data.begin(); }
-	constexpr typename Data::const_iterator
-	end() const noexcept
-	{ return _data.end(); }
-
 	constexpr decltype(auto)
 	cbegin() const noexcept
 	{ return _data.cbegin(); }

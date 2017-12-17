@@ -159,37 +159,37 @@ namespace yapt
 	{ return _data; }
 
 	template <template <typename, size_t> class Container2>
-	constexpr Vector
+	constexpr auto
 	operator+(const Vector<T, N, Container2> & rhs) const noexcept
 	{ return transform(*this, rhs, std::plus<T>()); }
-	constexpr Vector
+	constexpr auto
 	operator+(const T & rhs) const noexcept
 	{ return transform(*this, [&rhs](const T& a){ return a + rhs; }); }
 
 	template <template <typename, size_t> class Container2>
-	constexpr Vector
+	constexpr auto
 	operator-(const Vector<T, N, Container2> & rhs) const noexcept
 	{ return transform(*this, rhs, std::minus<T>()); }
-	constexpr Vector
+	constexpr auto
 	operator-(const T & rhs) const noexcept
 	{ return transform(*this, [&rhs](const T& a){ return a - rhs; }); }
-	constexpr Vector
+	constexpr auto
 	operator-() const noexcept
 	{ return transform(*this, std::negate<T>()); }
 
 	template <template <typename, size_t> class Container2>
-	constexpr Vector
+	constexpr auto
 	operator*(const Vector<T, N, Container2> & rhs) const noexcept
 	{ return transform(*this, rhs, std::multiplies<T>()); }
-	constexpr Vector
+	constexpr auto
 	operator*(const T & rhs) const noexcept
 	{ return transform(*this, [&rhs](const T& a){ return a * rhs; }); }
 
 	template <template <typename, size_t> class Container2>
-	constexpr Vector
+	constexpr auto
 	operator/(const Vector<T, N, Container2> & rhs) const noexcept
 	{ return transform(*this, rhs, std::divides<T>()); }
-	constexpr Vector
+	constexpr auto
 	operator/(const T & rhs) const noexcept
 	{ return transform(*this, [&rhs](const T& a){ return a / rhs; }); }
 
@@ -268,51 +268,51 @@ namespace yapt
 
 
 	template <template <typename, size_t> class Container2>
-	constexpr Vector<bool, N, Container>
+	constexpr auto
 	operator==(const Vector<T, N, Container2> & rhs) const noexcept
 	{ return transform(*this, rhs, std::equal_to<T>()); }
 
 	template <template <typename, size_t> class Container2>
-	constexpr Vector<bool, N, Container>
+	constexpr auto
 	operator!=(const Vector<T, N, Container2> & rhs) const noexcept
 	{ return transform(*this, rhs, std::not_equal_to<T>()); }
 
 	template <template <typename, size_t> class Container2>
-	constexpr Vector<bool, N, Container>
+	constexpr auto
 	operator>(const Vector<T, N, Container2> & rhs) const noexcept
 	{ return transform(*this, rhs, std::greater<T>()); }
 
 	template <template <typename, size_t> class Container2>
-	constexpr Vector<bool, N, Container>
+	constexpr auto
 	operator<(const Vector<T, N, Container2> & rhs) const noexcept
 	{ return transform(*this, rhs, std::less<T>()); }
 
 	template <template <typename, size_t> class Container2>
-	constexpr Vector<bool, N, Container>
+	constexpr auto
 	operator>=(const Vector<T, N, Container2> & rhs) const noexcept
 	{ return transform(*this, rhs, std::greater_equal<T>()); }
 
 	template <template <typename, size_t> class Container2>
-	constexpr Vector<bool, N, Container>
+	constexpr auto
 	operator<=(const Vector<T, N, Container2> & rhs) const noexcept
 	{ return transform(*this, rhs, std::less_equal<T>()); }
 
 
 	template <template <typename, size_t> class Container2>
-	constexpr T
+	constexpr auto
 	dot(const Vector<T, N, Container2> & rhs) const noexcept
 	{ return yapt::dot(*this, rhs); }
 
 	template <template <typename, size_t> class Container2>
-	constexpr Vector
+	constexpr auto
 	cross(const Vector<T, N, Container2> & rhs) const noexcept
 	{ return yapt::cross(*this, rhs); }
 
-	constexpr T
+	constexpr auto
 	length() const noexcept
 	{ return yapt::length(*this); }
 
-	constexpr size_t
+	constexpr auto
 	size() const noexcept
 	{ return N; }
 
