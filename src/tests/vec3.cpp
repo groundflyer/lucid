@@ -1,4 +1,5 @@
 #include <core/vec.hpp>
+#include <core/mat.hpp>
 #include <core/arrayview.hpp>
 
 #include "test_util.hpp"
@@ -7,26 +8,26 @@ using namespace std;
 using namespace yapt;
 
 
-using Vec2f = Vector<float, 2, std::array>;
-using Vec3f = Vector<float, 3, std::array>;
-using Vec4f = Vector<float, 4, std::array>;
+using Vec2f = Vector<float, 2, array>;
+using Vec3f = Vector<float, 3, array>;
+using Vec4f = Vector<float, 4, array>;
 
-using Vec2i = Vector<int, 2, std::array>;
-using Vec3i = Vector<int, 3, std::array>;
-using Vec4i = Vector<int, 4, std::array>;
+using Vec2i = Vector<int, 2, array>;
+using Vec3i = Vector<int, 3, array>;
+using Vec4i = Vector<int, 4, array>;
 
 using Vec2fe = Vector<float, 2, ArrayView>;
 using Vec3fe = Vector<float, 3, ArrayView>;
 using Vec4fe = Vector<float, 4, ArrayView>;
 
-using BigVec = Vector<double, 32, std::array>;
+using BigVec = Vector<double, 32, array>;
 
 using ExArr3f = ArrayView<float, 3>;
 using ExArr4f = ArrayView<float, 4>;
 
 int main()
 {
-    std::cout << std::boolalpha;
+    cout << boolalpha;
     TEST_AND_COUT((BigVec(0) + BigVec(10)));
     TEST_AND_COUT(-BigVec(10));
     TEST_AND_COUT((BigVec(10)/1));
@@ -78,6 +79,8 @@ int main()
     teste /= 2.f;
     TEST_AND_COUT(teste);
     TEST_AND_COUT(normalize(Vec4f(1,2,3,4)));
+    TEST_AND_COUT((Vector<float, 6, array>(Matrix<float, 2, 3, array>::unit())));
+    TEST_AND_COUT((Matrix<float, 2, 3, array>(Vector<float, 6, array>(Matrix<float, 2, 3, array>::unit()))));
 
     return 0;
 }

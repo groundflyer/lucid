@@ -40,13 +40,13 @@ namespace yapt
 
 
     template <template <typename, size_t> class Container>
-    using Mat2 = Matrix<real, 2, Container>;
+    using Mat2 = Matrix<real, 2, 2, Container>;
 
     template <template <typename, size_t> class Container>
-    using Mat3 = Matrix<real, 3, Container>;
+    using Mat3 = Matrix<real, 3, 3, Container>;
 
     template <template <typename, size_t> class Container>
-    using Mat4 = Matrix<real, 4, Container>;
+    using Mat4 = Matrix<real, 4, 4, Container>;
 
 
     template <template <typename, size_t> class Container>

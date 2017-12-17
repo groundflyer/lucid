@@ -33,7 +33,7 @@ namespace yapt
     constexpr auto
     apply_transform(const Mat4<MatContainer> & t,
     		    const Vec3<VecContainer> & v) noexcept
-    { return dehomogenize(t * Vec4_(v)); }
+    { return dehomogenize(t.dot(Vec4_(v))); }
 
 
     template <
@@ -42,7 +42,7 @@ namespace yapt
     constexpr auto
     apply_transform(const Mat4<MatContainer> & t,
     		    const Point<PointContainer> & p) noexcept
-    { return dehomogenize(t * homogenize(p)); }
+    { return dehomogenize(t.dot(homogenize(p))); }
 
     template <
     	template <typename, size_t> class MatContainer,
@@ -50,7 +50,7 @@ namespace yapt
     constexpr auto
     apply_transform(const Mat4<MatContainer> & t,
     		    const Normal<NormalContainer> & n) noexcept
-    { return dehomogenize(transpose(inverse(t)) * Vec4_(n)); }
+    { return dehomogenize(transpose(inverse(t)).dot(Vec4_(n))); }
 
     template <
     	template <typename, size_t> class MatContainer,
@@ -95,10 +95,9 @@ namespace yapt
 	const auto u = s.cross(f);
 
 	return Mat4_(s[0], s[1], s[2], 0,
-				   u[0], u[1], u[2], 0,
-				   -f[0], -f[1], -f[2], 0,
-				   0, 0, 0, 1)
-	    * translate(-eye);
+		     u[0], u[1], u[2], 0,
+		     -f[0], -f[1], -f[2], 0,
+		     0, 0, 0, 1).dot(translate(-eye));
     }
 
 
@@ -143,12 +142,12 @@ namespace yapt
 	const auto yz = axis[1]*axis[2];
 
 	const Mat3_ aa(axis[0]*axis[0], xy, xz,
-				     xy, axis[1]*axis[1], yz,
-				     xz, yz, axis[2]*axis[2]);
+		       xy, axis[1]*axis[1], yz,
+		       xz, yz, axis[2]*axis[2]);
 
 	const auto rot = Mat3_{} * cos_theta
-						   + aa * (real(1) - cos_theta)
-						   + A * sin_theta;
+				     + aa * (real(1) - cos_theta)
+				     + A * sin_theta;
 
 	return Mat4_(rot);
     }

@@ -183,7 +183,6 @@ namespace yapt
     normalize(const Vector<T, N, Container> & a) noexcept
     {
     	const auto l = length(a);
-
     	return l != static_cast<T>(1) || l != static_cast<T>(0) ? a / l : a;
     }
 

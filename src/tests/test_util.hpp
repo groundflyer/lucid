@@ -9,6 +9,7 @@
 #include <algorithm>
 
 #define TEST_AND_COUT(x)					\
+    std::cout << "LINE: " << __LINE__ << std::endl;		\
     std::cout << "Performing " << #x << std::endl;		\
     std::cout << "Result is:\n";				\
     std::cout << x << std::endl;				\

@@ -14,11 +14,17 @@
 
 namespace yapt
 {
+    template <typename T, size_t R, size_t C,
+	      template <typename, size_t> class Container>
+    class Matrix;
+
+
     template <typename T, size_t N,
 	      template <typename, size_t> class Container>
     class Vector
     {
-	static_assert(std::is_arithmetic<T>::value, "T is not arithmetic type");
+	static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");
+
     protected:
 	using Data = Container<T, N>;
 
@@ -59,7 +65,7 @@ namespace yapt
 
 	explicit constexpr
 	Vector(std::initializer_list<T> l)
-	{ std::copy(l.begin(), l.begin()+std::min(l.size(), N), _data.begin()); }
+	{ std::copy(l.begin(), l.begin()+std::min(l.size(), N), begin()); }
 
 	template <class ... Types>
 	explicit constexpr
@@ -87,6 +93,16 @@ namespace yapt
 	Vector(const Vector<T2, N2, Container2> & rhs)
 	{ for (size_t i = 0; i < std::min(N, N2); ++i) _data[i] = static_cast<T>(rhs[i]); }
 
+	template <size_t R, size_t C,
+		  template <typename, size_t> class Container2>
+	explicit constexpr
+	Vector(const Matrix<T, R, C, Container2> & rhs)
+	{
+	    static_assert(N == R*C, "The number of elements doesn't match!");
+
+	    std::copy(rhs.cbegin(), rhs.cend(), begin());
+	}
+
 	constexpr Vector&
 	operator=(const Vector & rhs) noexcept
 	{
@@ -98,7 +114,7 @@ namespace yapt
 	constexpr Vector&
 	operator=(const Vector<T, N, Container2> & rhs) noexcept
 	{
-	    std::copy(rhs.cbegin(), rhs.cend(), _data.begin());
+	    std::copy(rhs.cbegin(), rhs.cend(), begin());
 	    return *this;
 	}
 
@@ -125,26 +141,26 @@ namespace yapt
 	const constexpr T&
 	operator[](const size_t i) const noexcept
 	{
-	    ASSERT(i <= N, "Index out of range");
+	    ASSERT(i <= N, "Index out of range.");
 	    return _data[i];
 	}
 	constexpr T&
 	operator[](const size_t i) noexcept
 	{
-	    ASSERT(i <= N, "Index out of range");
+	    ASSERT(i <= N, "Index out of range.");
 	    return _data[i];
 	}
 
 	const constexpr T&
 	at(const size_t i) const noexcept
 	{
-	    ASSERT(i <= N, "Index out of range");
+	    ASSERT(i <= N, "Index out of range.");
 	    return _data[i];
 	}
 	constexpr T&
 	at(const size_t i) noexcept
 	{
-	    ASSERT(i <= N, "Index out of range");
+	    ASSERT(i <= N, "Index out of range.");
 	    return _data[i];
 	}
 
