@@ -16,7 +16,8 @@ type_tests :=	tests/vec3 \
 		tests/matrix \
 		tests/test_pi \
 		tests/normal \
-		tests/transforms
+		tests/transforms \
+		tests/rng
 
 test_dir := tests
 src_dir := src
@@ -24,10 +25,10 @@ include_dir := $(src_dir)/templates
 bin_dir := bin
 objs = $(addprefix $(bin_dir)/, $(srcs:=.o))
 
-CXX := g++ -fopt-info-vec
+CXX := g++-7.2.0 -fopt-info-vec
 INCLUDE_FLAGS := -I"./$(include_dir)" -I"./$(src_dir)"
 LD_FLAGS := -lOpenImageIO $(shell pkg-config --libs OpenEXR)
-CXXFLAGS = -std=c++14 -Wall -Wpedantic -Wextra -pipe
+CXXFLAGS = -std=c++17 -Wall -Wpedantic -Wextra -pipe
 
 hpps := $(src_dir)/include/*
 

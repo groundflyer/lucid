@@ -5,27 +5,46 @@
 #pragma once
 
 #include <random>
-#include <tuple>
-#include <core/basic_types.hpp>
-
+#include <limits>
+#include <type_traits>
 
 #ifndef RANDOM_BITS
-	#define RANDOM_BITS 10
+	#define RANDOM_BITS 8
 #endif
 
 
 namespace yapt
 {
     static thread_local std::random_device rd;
-    static thread_local std::default_random_engine gen(rd());
-    static thread_local std::uniform_real_distribution<real> rand11(-1, 1);
+    static thread_local std::default_random_engine default_gen(rd());
 
-    real rand();
+    template <typename T = real, long long a = -1, long long b = 1>
+    static thread_local std::uniform_real_distribution<T> rdist(static_cast<T>(a), static_cast<T>(b));
 
-    // zero-centered vector within range (-1, 1)
-    Vec3 rand_vec3();
+    template <typename T = int, T a = std::numeric_limits<T>::lowest(), T b = std::numeric_limits<T>::max()>
+    static thread_local std::uniform_int_distribution<T> idist(a, b);
 
-    Vec2 rand_vec2();
 
-    RGB rand_rgb();
+    template <typename T,
+	      T a = std::numeric_limits<T>::lowest(), T b = std::numeric_limits<T>::max(),
+	      typename Generator = std::default_random_engine,
+	      typename Distribution = std::uniform_int_distribution<T>>
+    typename std::enable_if_t<std::is_integral_v<T>, T>
+    rand(Generator& g = default_gen, Distribution& dist = idist<T, a, b>)
+    {
+	return dist(g);
+    }
+
+    template <typename T,
+	      long long a = 0, long long b = 1,
+	      typename Generator = std::default_random_engine,
+	      typename Distribution = std::uniform_real_distribution<T>>
+    typename std::enable_if_t<std::is_floating_point_v<T>, T>
+    rand(Generator& g = default_gen, Distribution& dist = rdist<T, a, b>)
+    {
+	if constexpr (a == 0 && b == 1)
+	    return std::generate_canonical<T, RANDOM_BITS>(g);
+	else
+	    return dist(g);
+    }
 }
