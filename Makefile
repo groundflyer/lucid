@@ -11,13 +11,12 @@ srcs := cameras/perspective \
 	scene/scene \
 	main
 
-type_tests :=	tests/vec3 \
-		tests/vec4 \
-		tests/matrix \
-		tests/test_pi \
-		tests/normal \
-		tests/transforms \
-		tests/rng
+type_tests :=	tests/vector \
+				tests/matrix \
+				tests/test_pi \
+				tests/normal \
+				tests/transforms \
+				tests/rng
 
 test_dir := tests
 src_dir := src

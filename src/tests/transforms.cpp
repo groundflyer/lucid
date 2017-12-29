@@ -48,19 +48,17 @@ int main()
 			    homogenize(yapt::Point_(0))));
 
     TEST_AND_COUT(yapt::apply_transform
-    		  (yapt::dot(yapt::rotate(yapt::PI<yapt::real>*0.5, yapt::normalize(yapt::Vec3_(0,1,0))),
+    		  (yapt::dot(yapt::rotate(yapt::PI<yapt::real>*0.5, yapt::Normal_(0,1,0)),
 			     yapt::translate(yapt::Vec3_(10,0,0))),
     		   yapt::Point_(10,0,0)));
 
     TEST_AND_COUT(yapt::apply_transform
-		  (yapt::dot(yapt::rotate(yapt::PI<yapt::real>*0.5, yapt::normalize(yapt::Vec3_(0,1,0))),
+		  (yapt::dot(yapt::rotate(yapt::PI<yapt::real>*0.5, yapt::Normal_(0,1,0)),
 			     yapt::translate(yapt::Vec3_(10,0,0))),
 		   yapt::Vec3_(10,0,0)));
 
-    TEST_AND_COUT(yapt::apply_transform
-		  (yapt::dot(yapt::rotate(yapt::PI<yapt::real>*0.5, yapt::normalize(yapt::Vec3_(0,1,0))),
-			     yapt::translate(yapt::Vec3_(10,0,0))),
-		   yapt::Normal_(10,0,0)));
+    TEST_AND_COUT(yapt::apply_transform(yapt::rotate(yapt::PI<yapt::real>*0.5, yapt::Normal_(0,1,0)),
+										yapt::Normal_(10,0,0)));
 
     glm::vec4 ver = glm::rotate(glm::mat4(1), yapt::PI<float>*0.5f, glm::normalize(glm::vec3(0,1,0)))
 	* glm::vec4(20,0,0,1);

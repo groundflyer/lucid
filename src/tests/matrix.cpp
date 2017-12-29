@@ -23,20 +23,33 @@ int main()
     TEST_AND_COUT(Mat4f(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16));
     auto m = Mat4f(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
     TEST_AND_COUT(m[0]);
-    TEST_AND_COUT(m[1]);
-    TEST_AND_COUT(m[2]);
-    TEST_AND_COUT(m[3]);
     TEST_AND_COUT(sizeof(Matrix<unsigned char,4,4,array>(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16)));
     TEST_AND_COUT(Mat4f::unit());
     auto u = m;
+
+	const auto cu = m;
+	TEST_AND_COUT(cu[0]);
+	TEST_AND_COUT((is_same_v<decltype(cu[0]), const Vector<float, 4, ArrayViewConst>>));
+	auto& [cu0, cu1, cu2, cu3] = cu;
+	TEST_AND_COUT((is_same_v<decltype(cu0), const Vector<float, 4, ArrayViewConst>>));
+	TEST_AND_COUT((cu0.cbegin() == cu.cbegin()));
+	
+	auto u00 = u[0];
+	TEST_AND_COUT((is_same_v<decltype(u00), Vector<float, 4, ArrayViewConst>>));
+	auto& [u0, u1, u2, u3] = u;
+	TEST_AND_COUT((u00.cbegin() == u0.cbegin()));
+	TEST_AND_COUT((is_same_v<decltype(u00), decltype(u0)>));
+
     u[0][0] = 10;
-    TEST_AND_COUT(u[0]);
+	u0 += 100;
+	u00 += 1000;
     u[0] += 2;
     u[1] = Vec4f(58,59,60,61);
     u[2][3] = 34;
     u[3] *= Vec4f(15, -5, 0.5, 31);
     TEST_AND_COUT(u);
     COUT_ARRAY(u.data());
+	TEST_AND_COUT(Mat4f(cu0, cu1, cu2, cu3));
     TEST_AND_COUT(Mat4f(Vec4f(1,0,-2,4), Vec4f(0,1,0,3), Vec4f(0,0,1,0), Vec4f(0,-5,0,1)));
     TEST_AND_COUT(Mat3f(Mat4f(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16)));
     TEST_AND_COUT(Mat4f(Mat3f(1,2,3,4,5,6,7,8,9)));

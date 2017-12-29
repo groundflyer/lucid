@@ -76,12 +76,17 @@ int main()
     TEST_AND_COUT(max(Vec4fe(ExArr4f(a))));
     TEST_AND_COUT(min(Vec4fe(ExArr4f(a))));
     Vec4f test(4,3,2,1);
+	const auto& [x, y, z, w] = test;
+	auto& [cx, cy, cz, cw] = test;
+	cx = 5;
+	TEST_AND_COUT((Vec4f(cx, cy, cz, cw)));
     test = Vec4f(100);
     Vec4fe teste = Vec4fe(ExArr4f(a));
     teste = test;
     TEST_AND_COUT(teste);
     teste /= 2.f;
     TEST_AND_COUT(teste);
+	TEST_AND_COUT((Vec4f(x, y, z, w)));
     TEST_AND_COUT(normalize(Vec4f(1,2,3,4)));
     TEST_AND_COUT((Vector<float, 6, array>(Matrix<float, 2, 3, array>::unit().data())));
     TEST_AND_COUT((Matrix<float, 2, 3, array>(Vector<float, 6, array>(Matrix<float, 2, 3, array>::unit().data()).data())));

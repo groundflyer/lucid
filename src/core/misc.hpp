@@ -18,30 +18,30 @@ namespace yapt
     constexpr T
     pow(const T & base) noexcept
     {
-	T ret = base;
+		T ret = base;
 
-	if (exp == 0)
-	    ret = 1;
-	else if (exp > 1)
-	    for (unsigned _ = 1; _ < exp; ++_)
-		ret *= base;
+		if (exp == 0)
+			ret = 1;
+		else if (exp > 1)
+			for (unsigned _ = 1; _ < exp; ++_)
+				ret *= base;
 
-	return ret;
+		return ret;
     }
 
     template <typename T>
     constexpr T
     pow(const T & base, const unsigned & exp) noexcept
     {
-	T ret = base;
+		T ret = base;
 
-	if (exp == 0)
-	    ret = 1;
-	else if (exp > 1)
-	    for (unsigned _ = 1; _ < exp; ++_)
-		ret *= base;
+		if (exp == 0)
+			ret = 1;
+		else if (exp > 1)
+			for (unsigned _ = 1; _ < exp; ++_)
+				ret *= base;
 
-	return ret;
+		return ret;
     }
 
 
@@ -56,14 +56,14 @@ namespace yapt
     constexpr unsigned
     inversion_number(const RandomIt first, const RandomIt last) noexcept
     {
-	unsigned ret = 0;
+		unsigned ret = 0;
 
-	for (auto i = first; i != last - 1; ++i)
-	    for (auto j = std::next(i); j != last; ++j)
-		if (*i > *j)
-		    ++ret;
+		for (auto i = first; i != last - 1; ++i)
+			for (auto j = std::next(i); j != last; ++j)
+				if (*i > *j)
+					++ret;
 
-	return ret;
+		return ret;
     }
 
     // const iterator version
@@ -77,14 +77,14 @@ namespace yapt
     constexpr bool
     has_equal(const RandomIt first, const RandomIt last) noexcept
     {
-	bool ret = false;
+		bool ret = false;
 
-	for (auto i = first; i != last - 1; ++i)
-	    for (auto j = std::next(i); j != last; ++j)
-		if (*i == *j)
-		    ret = true;
+		for (auto i = first; i != last - 1; ++i)
+			for (auto j = std::next(i); j != last; ++j)
+				if (*i == *j)
+					ret = true;
 
-	return ret;
+		return ret;
     }
 
     // const iterator version
@@ -109,7 +109,7 @@ namespace yapt
     	RT ret {};
 
     	if (!has_equal(numbers))
-	    ret = minus_one_pow(inversion_number(numbers));
+			ret = minus_one_pow(inversion_number(numbers));
 
     	return ret;
     }
@@ -126,13 +126,13 @@ namespace yapt
     constexpr size_t
     fac(const size_t & val) noexcept
     {
-	size_t ret (1);
+		size_t ret (1);
 
-	if (val != 0)
-	    for (size_t i = 1; i <= val; ++i)
-		ret *= i;
+		if (val != 0)
+			for (size_t i = 1; i <= val; ++i)
+				ret *= i;
 
-	return ret;
+		return ret;
     }
 
     template <typename T>
@@ -149,23 +149,22 @@ namespace yapt
     template <typename T>
     class Range
     {
-	static_assert(std::is_arithmetic<T>::value, "T is not arithmetic");
+		static_assert(std::is_arithmetic<T>::value, "T is not arithmetic");
 
-	const T _begin;
-	const T _end;
+		const T m_begin;
+		const T m_end;
 
     public:
-	constexpr
-	Range() = delete;
+		constexpr
+		Range() = delete;
 
-	template <typename F>
-	constexpr
-	Range(const T & begin = std::numeric_limits<T>::lowest(),
-	      const T & end = std::numeric_limits<T>::max())
-	: _begin(std::min(begin, end)), _end(std::max(end, begin)) {}
+		constexpr
+		Range(const T & begin = std::numeric_limits<T>::lowest(),
+			  const T & end = std::numeric_limits<T>::max())
+		: m_begin(std::min(begin, end)), m_end(std::max(end, begin)) {}
 
-	constexpr bool
-	encloses(const T & val) const noexcept
-	{ return (val >= _begin) && (val <= _end); }
+		constexpr bool
+		encloses(const T & val) const noexcept
+		{ return (val >= m_begin) && (val <= m_end); }
     };
 }
