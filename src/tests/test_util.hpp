@@ -6,7 +6,6 @@
 #define __TEST_UTIL__
 
 #include <iostream>
-#include <algorithm>
 
 #define TEST_AND_COUT(x)					\
     std::cout << "LINE: " << __LINE__ << std::endl;		\
