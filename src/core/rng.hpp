@@ -4,47 +4,82 @@
 
 #pragma once
 
+#include <array>
 #include <random>
 #include <limits>
 #include <type_traits>
 
 #ifndef RANDOM_BITS
-	#define RANDOM_BITS 8
+	#define RANDOM_BITS 10
 #endif
 
 
 namespace yapt
 {
-    static thread_local std::random_device rd;
-    static thread_local std::default_random_engine default_gen(rd());
-
-    template <typename T = real, long long a = -1, long long b = 1>
-    static thread_local std::uniform_real_distribution<T> rdist(static_cast<T>(a), static_cast<T>(b));
-
-    template <typename T = int, T a = std::numeric_limits<T>::lowest(), T b = std::numeric_limits<T>::max()>
-    static thread_local std::uniform_int_distribution<T> idist(a, b);
-
-
     template <typename T,
-	      T a = std::numeric_limits<T>::lowest(), T b = std::numeric_limits<T>::max(),
-	      typename Generator = std::default_random_engine,
-	      typename Distribution = std::uniform_int_distribution<T>>
-    typename std::enable_if_t<std::is_integral_v<T>, T>
-    rand(Generator& g = default_gen, Distribution& dist = idist<T, a, b>)
+			  typename RandomDevice = std::random_device,
+			  typename Generator = std::default_random_engine,
+			  typename Distribution = std::conditional_t<std::is_integral_v<T>,
+														 std::uniform_int_distribution<T>,
+														 std::uniform_real_distribution<T>>>
+    class RNG
     {
-	return dist(g);
+		RandomDevice	m_rd;
+		Generator		m_gen{m_rd()};
+		Distribution	m_dist{std::numeric_limits<T>::lowest(), std::numeric_limits<T>::max()};
+
+    public:
+		RNG(const T& a, const T& b) : m_dist(a, b) {}
+
+		RNG(const RNG&) = delete;
+
+		RNG&
+		operator=(const RNG&) = delete;
+
+		auto
+		operator()() noexcept
+		{ return m_dist(m_gen); }
+
+		template <size_t N,
+				  template <typename, size_t> typename Container = std::array>
+		auto
+		operator()() noexcept
+		{
+			Container<T, N> ret;
+
+			for (auto & v : ret)
+				v = m_dist(m_gen);
+
+			return ret;
+		}
+    };
+
+
+    // canonical real type random number generator
+    template <typename RealType,
+			  typename RandomDevice = std::random_device,
+    	      typename Generator = std::default_random_engine>
+    typename std::enable_if_t<std::is_floating_point_v<RealType>, RealType>
+    rand()
+    {
+		static thread_local RandomDevice rd;
+		static thread_local Generator gen(rd());
+
+		return std::generate_canonical<RealType, RANDOM_BITS>(gen);
     }
 
-    template <typename T,
-	      long long a = 0, long long b = 1,
-	      typename Generator = std::default_random_engine,
-	      typename Distribution = std::uniform_real_distribution<T>>
-    typename std::enable_if_t<std::is_floating_point_v<T>, T>
-    rand(Generator& g = default_gen, Distribution& dist = rdist<T, a, b>)
+    template <typename RealType, size_t N,
+			  template <typename, size_t> typename Container = std::array,
+    	      typename RandomDevice = std::random_device,
+    	      typename Generator = std::default_random_engine>
+    typename std::enable_if_t<std::is_floating_point_v<RealType>, Container<RealType, N>>
+    rand()
     {
-	if constexpr (a == 0 && b == 1)
-	    return std::generate_canonical<T, RANDOM_BITS>(g);
-	else
-	    return dist(g);
+    	Container<RealType, N> ret;
+
+    	for (auto & v : ret)
+    	    v = rand<std::decay_t<decltype(v)>, RandomDevice, Generator>();
+
+    	return ret;
     }
 }
