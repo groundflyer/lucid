@@ -25,7 +25,7 @@ include_dir := $(src_dir)/templates
 bin_dir := bin
 objs = $(addprefix $(bin_dir)/, $(srcs:=.o))
 
-CXX := g++-7.2.0 -fopt-info-vec
+CXX := g++-7.2.0
 INCLUDE_FLAGS := -I"./$(include_dir)" -I"./$(src_dir)"
 LD_FLAGS := -lOpenImageIO $(shell pkg-config --libs OpenEXR)
 CXXFLAGS = -std=c++17 -Wall -Wpedantic -Wextra -pipe
@@ -38,6 +38,12 @@ ifeq ($(MODE), release)
     CXXFLAGS += -DNDEBUG -march=native -O3
 else
     CXXFLAGS += -g -O0 -D_GLIBCXX_DEBUG
+endif
+
+ifeq ($(CXX), clang++)
+    CXXFLAGS += -stdlib=libc++ -Rpass=loop-vectorize -fcolor-diagnostics
+else
+    CXXFLAGS += -fopt-info-vec
 endif
 
 
