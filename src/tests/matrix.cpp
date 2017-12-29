@@ -17,6 +17,8 @@ using Vec4fe = Vector<float, 4, ArrayView>;
 int main()
 {
     std::cout << std::boolalpha;
+    TEST_AND_COUT((is_array_v<Mat4f>));
+    TEST_AND_COUT((is_scalar_v<Mat4f>));
     TEST_AND_COUT((Mat4f{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16}));
     TEST_AND_COUT(Mat4f(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16));
     auto m = Mat4f(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);

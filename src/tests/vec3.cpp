@@ -28,6 +28,10 @@ using ExArr4f = ArrayView<float, 4>;
 int main()
 {
     cout << boolalpha;
+    TEST_AND_COUT((is_array_v<Vec4f>));
+    TEST_AND_COUT((is_scalar_v<Vec4f>));
+    TEST_AND_COUT((is_array_v<ExArr4f>));
+    TEST_AND_COUT((is_array_v<array<float, 4>>));
     TEST_AND_COUT((BigVec(0) + BigVec(10)));
     TEST_AND_COUT(-BigVec(10));
     TEST_AND_COUT((BigVec(10)/1));
