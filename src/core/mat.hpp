@@ -83,10 +83,9 @@ namespace yapt
 		{ std::copy(l.begin(), l.begin()+std::min(l.size(), N), begin()); }
 
 		// construct from a container
-		// GCC 5.4.0 throws an internal compiler error, if we will use N instead of R*C
 		template <template <typename, size_t> class Container2>
 		explicit constexpr
-		Matrix(const Container2<T, R*C> & rhs)
+		Matrix(const Container2<T, N> & rhs)
 		{ std::copy(rhs.cbegin(), rhs.cend(), begin()); }
 
 		// vector values constructor
