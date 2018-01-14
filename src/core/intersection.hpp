@@ -5,76 +5,49 @@
 #pragma once
 
 #include "ray.hpp"
-#include "primitive.hpp"
-#include <limits>
+
+#include <optional>
 
 
 namespace yapt
 {
-    class Primitive;
-
-    template <template <typename, size_t> class Container>
-    class Intersection
+    template <template <typename, size_t> typename Container>
+    struct Intersection_
     {
-		bool m_intersect = false;
-		real m_t = std::numeric_limits<real>::infinity(); // distance
-		Vec3<Container> m_pos;
-		Vec2<Container> m_st; 		// parametric coordinates
-		Primitive const * hitprim = nullptr;
+		const bool intersect = false;
+		const std::optional<real> t;
+		const std::optional<size_t> primid;
+		const std::optional<Point_<Container>> pos;
+		const std::optional<Vec2_<Container>> st;	// parametric coordinates
+		const std::optional<Normal_<Container>> wi;	// incident direction
 
-    public:
 		constexpr
-		Intersection() {}
+		Intersection_() = delete
 
-		explicit constexpr
-		Intersection(const bool i) : m_intersect(i) {}
-
-		template <template <typename, size_t> class Container1>
+		template <template <typename, size_t> typename RayContainer,
+				  template <typename, size_t> typename Vec2Container>
 		constexpr
-		Intersection(const bool i,
-					 const real & t,
-					 const Ray<Container1> & ray) : m_intersect(i), m_t(t), m_pos(ray.origin()+ray.dir()*t) {}
-
-		template <
-			template <typename, size_t> class Container1,
-			template <typename, size_t> class Container2>
-		constexpr
-		Intersection(const bool i,
-					 const real & t,
-					 const Ray<Container1> & ray,
-					 const Primitive<Container2> * prim)
-	    : m_intersect(i), m_t(t), m_pos(ray.origin()+ray.dir()*t), hitprim(prim) {}
-
-		template <
-			template <typename, size_t> class Container1,
-			template <typename, size_t> class Container2,
-			template <typename, size_t> class Container3>
-		constexpr
-		Intersection(const bool i,
-					 const real & t,
-					 const Ray<Container1> & ray,
-					 const Primitive<Container2> * prim,
-					 const Vec2<Container3> & st)
-	    : m_intersect(i), m_t(t), m_pos(ray.origin()+ray.dir()*t), m_st(st), hitprim(prim) {}
+		Intersection_(const real arg_t,
+					  const Ray_<RayContainer>& ray,
+					  const std::optional<size_t> arg_primid = {},
+					  const std::optional<Vec2_<Vec2Container>> & arg_st = {}) :
+			intersect(true),
+			t(arg_t),
+			primid(arg_primid),
+			pos(ray.origin+ray.dir*t),
+			st(arg_st),
+			wi(ray.dir) {}
 
 		constexpr
 		operator bool() const noexcept
-		{ return m_intersect; }
-
-		constexpr const Vec2<Container>&
-		st() const noexcept
-		{ return m_st; }
-
-		constexpr real
-		t() const noexcept
-		{ return m_t; }
-
-		constexpr const Vec3<Container>&
-		pos() const noexcept
-		{ return m_pos; }
-
-		constexpr const Primitive &
-		prim() const noexcept
-		{ return *hitprim; }
+		{ return intersect; }
     };
+
+	template <template <typename, size_t> typename Container>
+	Intersection_(const real,
+				  const Ray_<Container>&,
+				  const std::optional<size_t>,
+				  const std::optional<Vec2_<Container>>) -> Intersection_<Container>;
+
+	using Intersection = Intersection_<StaticContainer>;
 }

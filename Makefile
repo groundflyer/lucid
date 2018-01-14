@@ -16,20 +16,21 @@ type_tests :=	tests/vector \
 				tests/test_pi \
 				tests/normal \
 				tests/transforms \
-				tests/rng
+				tests/rng \
+				tests/ray \
+				tests/literal
 
 test_dir := tests
 src_dir := src
-include_dir := $(src_dir)/templates
 bin_dir := bin
 objs = $(addprefix $(bin_dir)/, $(srcs:=.o))
 
 CXX := g++-7.2.0
-INCLUDE_FLAGS := -I"./$(include_dir)" -I"./$(src_dir)"
+INCLUDE_FLAGS := -I"./$(src_dir)"
 LD_FLAGS := -lOpenImageIO $(shell pkg-config --libs OpenEXR)
 CXXFLAGS = -std=c++17 -Wall -Wpedantic -Wextra -pipe
 
-hpps := $(src_dir)/include/*
+hpps := $(src_dir)/core/*.hpp
 
 MODE ?= release
 
@@ -53,7 +54,7 @@ all: $(target)
 $(target): $(objs)
 	$(CXX) $(CXXFLAGS) $(LD_FLAGS) $(INCLUDE_FLAGS) -o $@ $^
 
-$(type_tests): %: $(src_dir)/%.cpp
+$(type_tests): %: $(src_dir)/%.cpp $(hpps)
 	mkdir -p $(test_dir)
 	$(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) -o $@ $<
 

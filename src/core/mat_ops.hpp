@@ -116,21 +116,26 @@ namespace yapt
 		return ret;
     }
 
+    template <typename T, size_t R, size_t C,
+			  template <typename, size_t> class Container>
+    constexpr auto
+    is_invertible(const Matrix<T, R, C, Container> & a) noexcept
+	{ return det(a) != 0; }
+
     // returns inverse matrix if one exists else returs zeros matrix
     template <typename T, size_t R, size_t C,
 			  template <typename, size_t> class Container>
     constexpr auto
     inverse(const Matrix<T, R, C, Container> & a) noexcept
     {
-		Matrix<T, R, C, Container> ret;
-		T d = det(a);
+		auto d = det(a);
 
 		ASSERT(d != 0, "The matrix is non-invertible.");
 
-		if (d != static_cast<T>(0))
-			ret = transpose(cofactor(a)) / d;
-
-		return ret;
+		if (is_invertible(a))
+			return transpose(cofactor(a)) / d;
+		else
+			return a;
     }
 
     template <typename T, size_t R, size_t C,
@@ -150,8 +155,7 @@ namespace yapt
     }
 
     // Matrix-Matrix mupltiply
-    template <typename T, size_t R1, size_t C1,
-			  size_t R2, size_t C2,
+    template <typename T, size_t R1, size_t C1, size_t R2, size_t C2,
 			  template <typename, size_t> class Container1,
 			  template <typename, size_t> class Container2>
     constexpr typename std::enable_if_t<C1 == R2, Matrix<T, R1, C2, Container2>>

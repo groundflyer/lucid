@@ -16,62 +16,68 @@ namespace yapt
     typedef float real;
 #endif	// _DOUBLE_PRECISION
 
+	real
+	operator "" _r(long double d)
+	{ return static_cast<real>(d); }
 
+	real
+	operator "" _r(unsigned long long d)
+	{ return static_cast<real>(d); }
 
     // Temporal container for temporal variables
     template <typename T, size_t N>
     using StaticContainer = std::array<T, N>;
 
 
-    template <template <typename, size_t> class Container>
-    using Vec2 = Vector<real, 2, Container>;
+    template <template <typename, size_t> typename Container>
+    using Vec2_ = Vector<real, 2, Container>;
 
-    template <template <typename, size_t> class Container>
-    using Vec3 = Vector<real, 3, Container>;
+    template <template <typename, size_t> typename Container>
+    using Vec3_ = Vector<real, 3, Container>;
 
-    template <template <typename, size_t> class Container>
-    using Vec4 = Vector<real, 4, Container>;
+    template <template <typename, size_t> typename Container>
+    using Vec4_ = Vector<real, 4, Container>;
 
-    template <template <typename, size_t> class Container>
-    using RGB = Vector<float, 3, Container>;
+    template <template <typename, size_t> typename Container>
+    using RBG_ = Vector<float, 3, Container>;
 
-    template <template <typename, size_t> class Container>
-    using RGBA = Vector<float, 4, Container>;
-
-
-    template <template <typename, size_t> class Container>
-    using Mat2 = Matrix<real, 2, 2, Container>;
-
-    template <template <typename, size_t> class Container>
-    using Mat3 = Matrix<real, 3, 3, Container>;
-
-    template <template <typename, size_t> class Container>
-    using Mat4 = Matrix<real, 4, 4, Container>;
+    template <template <typename, size_t> typename Container>
+    using RGBA_ = Vector<float, 4, Container>;
 
 
-    template <template <typename, size_t> class Container>
-    class Point : public Vec3<Container>
+    template <template <typename, size_t> typename Container>
+    using Mat2_ = Matrix<real, 2, 2, Container>;
+
+    template <template <typename, size_t> typename Container>
+    using Mat3_ = Matrix<real, 3, 3, Container>;
+
+    template <template <typename, size_t> typename Container>
+    using Mat4_ = Matrix<real, 4, 4, Container>;
+
+
+    template <template <typename, size_t> typename Container>
+    class Point_ : public Vec3_<Container>
     {
-	using Super = Vec3<Container>;
+	using Super = Vec3_<Container>;
 
     public:
 	using Super::Super;
     };
 
 
-    template <template <typename, size_t> class Container>
-    class Normal : public Vec3<Container>
+    template <template <typename, size_t> typename Container>
+    class Normal_ : public Vec3_<Container>
     {
-	using Super = Vec3<Container>;
+	using Super = Vec3_<Container>;
 
     public:
 	template <class ... Types>
 	explicit constexpr
-	Normal(Types && ... args) : Super(std::forward<Types>(args)...)
+	Normal_(Types && ... args) : Super(std::forward<Types>(args)...)
 	{ Super::normalize(); }
 
 	template <class ... Types>
-	constexpr Normal&
+	constexpr Normal_&
 	operator=(Types && ... rhs) noexcept
 	{
 	    Super::operator=(std::forward<Types>(rhs)...);
@@ -80,7 +86,7 @@ namespace yapt
 	}
 
 	template <class ... Types>
-	constexpr Normal&
+	constexpr Normal_&
 	operator+=(Types && ... rhs) noexcept
 	{
 	    Super::operator+=(std::forward<Types>(rhs)...);
@@ -89,7 +95,7 @@ namespace yapt
 	}
 
 	template <class ... Types>
-	constexpr Normal&
+	constexpr Normal_&
 	operator-=(Types && ... rhs) noexcept
 	{
 	    Super::operator-=(std::forward<Types>(rhs)...);
@@ -98,7 +104,7 @@ namespace yapt
 	}
 
 	template <class ... Types>
-	constexpr Normal&
+	constexpr Normal_&
 	operator*=(Types && ... rhs) noexcept
 	{
 	    Super::operator*=(std::forward<Types>(rhs)...);
@@ -107,7 +113,7 @@ namespace yapt
 	}
 
 	template <class ... Types>
-	constexpr Normal&
+	constexpr Normal_&
 	operator/=(Types && ... rhs) noexcept
 	{
 	    Super::operator/=(std::forward<Types>(rhs)...);
@@ -128,12 +134,12 @@ namespace yapt
 	at(const size_t i) noexcept = delete;
     };
 
-    using Vec2_ = Vec2<StaticContainer>;
-    using Vec3_ = Vec3<StaticContainer>;
-    using Vec4_ = Vec4<StaticContainer>;
-    using Point_ = Point<StaticContainer>;
-    using Normal_ = Normal<StaticContainer>;
-    using Mat2_ = Mat2<StaticContainer>;
-    using Mat3_ = Mat3<StaticContainer>;
-    using Mat4_ = Mat4<StaticContainer>;
+    using Vec2 = Vec2_<StaticContainer>;
+    using Vec3 = Vec3_<StaticContainer>;
+    using Vec4 = Vec4_<StaticContainer>;
+    using Point = Point_<StaticContainer>;
+    using Normal = Normal_<StaticContainer>;
+    using Mat2 = Mat2_<StaticContainer>;
+    using Mat3 = Mat3_<StaticContainer>;
+    using Mat4 = Mat4_<StaticContainer>;
 }

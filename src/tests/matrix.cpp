@@ -86,6 +86,7 @@ int main()
     if (invertible)
     {
     	TEST_AND_COUT(inverse((Mat4f::unit() + 1) * 2));
+    	TEST_AND_COUT(transpose((Mat4f::unit() + 1) * 2));
     	TEST_AND_COUT((((Mat4f::unit() + 1) * 2).dot(inverse((Mat4f::unit() + 1) * 2))));
     	TEST_AND_COUT(det((((Mat4f::unit() + 1) * 2).dot(inverse((Mat4f::unit() + 1) * 2)))));
     }

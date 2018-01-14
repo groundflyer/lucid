@@ -13,7 +13,7 @@
 namespace yapt
 {
     template <typename T, size_t R, size_t C,
-			  template <typename, size_t> class Container>
+			  template <typename, size_t> typename Container>
     class Matrix
     {
 		static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");
@@ -33,7 +33,7 @@ namespace yapt
 		void unpack(const size_t) {}
 
 		// unpack vector arguments
-		template <template <typename, size_t> class Container2,
+		template <template <typename, size_t> typename Container2,
 				  class ... Vectors>
 		constexpr
 		void unpack(size_t idx,
@@ -69,7 +69,7 @@ namespace yapt
 
 		// conversion/copy constructor
 		template <typename T2, size_t R2, size_t C2,
-				  template <typename, size_t> class Container2>
+				  template <typename, size_t> typename Container2>
 		explicit constexpr
 		Matrix(const Matrix<T2, R2, C2, Container2> & rhs)
 		{
@@ -83,14 +83,14 @@ namespace yapt
 		{ std::copy(l.begin(), l.begin()+std::min(l.size(), N), begin()); }
 
 		// construct from a container
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		explicit constexpr
 		Matrix(const Container2<T, N> & rhs)
 		{ std::copy(rhs.cbegin(), rhs.cend(), begin()); }
 
 		// vector values constructor
 		// only same dimensions vector are acceptable
-		template <template <typename, size_t> class Container2, class ... Vectors>
+		template <template <typename, size_t> typename Container2, class ... Vectors>
 		explicit constexpr
 		Matrix(const Vector<T, C, Container2> & vector,
 			   const Vectors & ... vectors)
@@ -120,7 +120,7 @@ namespace yapt
 			return *this;
 		}
 
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr Matrix&
 		operator=(const Matrix<T, R, C, Container2> & rhs) noexcept
 		{
@@ -197,7 +197,7 @@ namespace yapt
 		cend() const noexcept
 		{ return m_data.cend(); }
 
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr Matrix
 		operator+(const Matrix<T, R, C, Container2> & rhs)
 		{
@@ -218,7 +218,7 @@ namespace yapt
 
 			return ret;
 		}
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr Matrix&
 		operator+=(const Matrix<T, R, C, Container2> & rhs)
 		{
@@ -237,7 +237,7 @@ namespace yapt
 		}
 
 
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr Matrix
 		operator-(const Matrix<T, R, C, Container2> & rhs)
 		{
@@ -268,7 +268,7 @@ namespace yapt
 
 			return ret;
 		}
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr Matrix&
 		operator-=(const Matrix<T, R, C, Container2> & rhs)
 		{
@@ -287,7 +287,7 @@ namespace yapt
 		}
 
 		// element-wise product
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr Matrix
 		operator*(const Matrix<T, R, C, Container2> & rhs)
 		{
@@ -308,7 +308,7 @@ namespace yapt
 
 			return ret;
 		}
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr Matrix&
 		operator*=(const Matrix<T, R, C, Container2> & rhs)
 		{
@@ -326,7 +326,7 @@ namespace yapt
 			return *this;
 		}
 
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr Matrix
 		operator/(const Matrix<T, R, C, Container2> & rhs)
 		{
@@ -347,7 +347,7 @@ namespace yapt
 
 			return ret;
 		}
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr Matrix&
 		operator/=(const Matrix<T, R, C, Container2> & rhs)
 		{
@@ -365,7 +365,7 @@ namespace yapt
 			return *this;
 		}
 
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator==(const Matrix<T, R, C, Container2> & rhs)
 		{
@@ -387,7 +387,7 @@ namespace yapt
 			return ret;
 		}
 
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator!=(const Matrix<T, R, C, Container2> & rhs)
 		{
@@ -409,7 +409,7 @@ namespace yapt
 			return ret;
 		}
 
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator<(const Matrix<T, R, C, Container2> & rhs)
 		{
@@ -431,7 +431,7 @@ namespace yapt
 			return ret;
 		}
 
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator<=(const Matrix<T, R, C, Container2> & rhs)
 		{
@@ -453,7 +453,7 @@ namespace yapt
 			return ret;
 		}
 
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator>(const Matrix<T, R, C, Container2> & rhs)
 		{
@@ -475,7 +475,7 @@ namespace yapt
 			return ret;
 		}
 
-		template <template <typename, size_t> class Container2>
+		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator>=(const Matrix<T, R, C, Container2> & rhs)
 		{
@@ -562,13 +562,13 @@ namespace std
 			  template <typename, size_t> typename Container>
 	struct tuple_element<I, yapt::Matrix<T, R, C, Container>>
 	{
-		using type = yapt::Vector<T, C, yapt::ArrayView>;
+		using type = decltype(declval<yapt::Matrix<T, R, C, Container>>().template get<I>());
 	};
 
 	template <size_t I, typename T, size_t R, size_t C,
 			  template <typename, size_t> typename Container>
 	struct tuple_element<I, const yapt::Matrix<T, R, C, Container>>
 	{
-		using type = const yapt::Vector<T, C, yapt::ArrayViewConst>;
+		using type = decltype(declval<const yapt::Matrix<T, R, C, Container>>().template get<I>());
 	};
 }
