@@ -18,7 +18,9 @@ type_tests :=	tests/vector \
 				tests/transforms \
 				tests/rng \
 				tests/ray \
-				tests/literal
+				tests/literal \
+				tests/sphere \
+				tests/aabb
 
 test_dir := tests
 src_dir := src

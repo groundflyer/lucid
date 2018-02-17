@@ -52,6 +52,13 @@ namespace yapt
 		constexpr
 		Vector(Vector && rhs) : m_data(std::forward<Data>(rhs.m_data)) {}
 
+		// conversion constructor
+		template <typename T2, size_t N2,
+				  template <typename, size_t> typename Container2>
+		constexpr
+		Vector(const Vector<T2, N2, Container2> & rhs)
+		{ for (size_t i = 0; i < std::min(N, N2); ++i) m_data[i] = static_cast<T>(rhs[i]); }
+
 		explicit constexpr
 		Vector(Data && rhs) : m_data(std::forward<Data>(rhs)) {}
 
@@ -85,13 +92,6 @@ namespace yapt
 			static_assert(sizeof...(args) <= N - 1,
 						  "The number of elements doesn't match!");
 		}
-
-		// conversion constructor
-		template <typename T2, size_t N2,
-				  template <typename, size_t> typename Container2>
-		explicit constexpr
-		Vector(const Vector<T2, N2, Container2> & rhs)
-		{ for (size_t i = 0; i < std::min(N, N2); ++i) m_data[i] = static_cast<T>(rhs[i]); }
 
 		constexpr Vector&
 		operator=(const Vector & rhs) noexcept
@@ -282,32 +282,49 @@ namespace yapt
 		constexpr auto
 		operator==(const Vector<T, N, Container2> & rhs) const noexcept
 		{ return transform(*this, rhs, std::equal_to<T>()); }
+		constexpr auto
+		operator==(const T& rhs) const noexcept
+		{ return transform(*this, [&rhs](const T& elem){ return elem == rhs; }); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator!=(const Vector<T, N, Container2> & rhs) const noexcept
 		{ return transform(*this, rhs, std::not_equal_to<T>()); }
+		constexpr auto
+		operator!=(const T& rhs) const noexcept
+		{ return transform(*this, [&rhs](const T& elem){ return elem != rhs; }); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator>(const Vector<T, N, Container2> & rhs) const noexcept
 		{ return transform(*this, rhs, std::greater<T>()); }
+		constexpr auto
+		operator>(const T& rhs) const noexcept
+		{ return transform(*this, [&rhs](const T& elem){ return elem > rhs; }); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator<(const Vector<T, N, Container2> & rhs) const noexcept
 		{ return transform(*this, rhs, std::less<T>()); }
+		constexpr auto
+		operator<(const T& rhs) const noexcept
+		{ return transform(*this, [&rhs](const T& elem){ return elem < rhs; }); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator>=(const Vector<T, N, Container2> & rhs) const noexcept
 		{ return transform(*this, rhs, std::greater_equal<T>()); }
+		constexpr auto
+		operator>=(const T& rhs) const noexcept
+		{ return transform(*this, [&rhs](const T& elem){ return elem >= rhs; }); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator<=(const Vector<T, N, Container2> & rhs) const noexcept
 		{ return transform(*this, rhs, std::less_equal<T>()); }
-
+		constexpr auto
+		operator<=(const T& rhs) const noexcept
+		{ return transform(*this, [&rhs](const T& elem){ return elem <= rhs; }); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto

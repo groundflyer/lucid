@@ -19,7 +19,7 @@ namespace yapt
 		static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");
 		static_assert(R > 1 || C > 1, "One-dimensional matrices are not supported.");
 
-		static inline const constexpr size_t N = R * C;
+		static const constexpr size_t N = R * C;
 
 		using Data = Container<T, N>;
 		Data m_data {};
@@ -70,7 +70,7 @@ namespace yapt
 		// conversion/copy constructor
 		template <typename T2, size_t R2, size_t C2,
 				  template <typename, size_t> typename Container2>
-		explicit constexpr
+		constexpr
 		Matrix(const Matrix<T2, R2, C2, Container2> & rhs)
 		{
 			for (size_t i = 0; i < std::min(R, R2); ++i)

@@ -6,8 +6,6 @@
 
 #include "ray.hpp"
 
-#include <optional>
-
 
 namespace yapt
 {
@@ -15,28 +13,21 @@ namespace yapt
     struct Intersection_
     {
 		const bool intersect = false;
-		const std::optional<real> t;
-		const std::optional<size_t> primid;
-		const std::optional<Point_<Container>> pos;
-		const std::optional<Vec2_<Container>> st;	// parametric coordinates
-		const std::optional<Normal_<Container>> wi;	// incident direction
+		const real t = -1_r;
+		const Vec2_<Container> st {};	// parametric coordinates
 
 		constexpr
-		Intersection_() = delete
+		Intersection_() {}
 
-		template <template <typename, size_t> typename RayContainer,
-				  template <typename, size_t> typename Vec2Container>
+		template <template <typename, size_t> typename Container2>
 		constexpr
-		Intersection_(const real arg_t,
-					  const Ray_<RayContainer>& ray,
-					  const std::optional<size_t> arg_primid = {},
-					  const std::optional<Vec2_<Vec2Container>> & arg_st = {}) :
-			intersect(true),
-			t(arg_t),
-			primid(arg_primid),
-			pos(ray.origin+ray.dir*t),
-			st(arg_st),
-			wi(ray.dir) {}
+		Intersection_(const bool _i,
+					  const real& _t,
+					  const Vec2_<Container2>& _st) :
+			intersect(_i),
+			t(_t),
+			st(_st)
+		{}
 
 		constexpr
 		operator bool() const noexcept
@@ -44,10 +35,9 @@ namespace yapt
     };
 
 	template <template <typename, size_t> typename Container>
-	Intersection_(const real,
-				  const Ray_<Container>&,
-				  const std::optional<size_t>,
-				  const std::optional<Vec2_<Container>>) -> Intersection_<Container>;
+	Intersection_(const bool,
+				  const real&,
+				  const Vec2_<Container>&) -> Intersection_<Container>;
 
-	using Intersection = Intersection_<StaticContainer>;
+	using Intersection = Intersection_<std::array>;
 }

@@ -7,7 +7,6 @@
 #include "types.hpp"
 
 #include <utility>
-#include <cmath>
 
 
 namespace yapt
@@ -101,15 +100,15 @@ namespace yapt
 		Vec3 v2;
 		auto& [v2x, v2y, v2z] = v2;
 
-		if(std::abs(v1x) > std::abs(v1y))
+		if(math::abs(v1x) > math::abs(v1y))
 		{
-			const auto il = real(1) / (std::sqrt(v1x*v1x + v1z*v1z));
+			const auto il = real(1) / (math::sqrt(v1x*v1x + v1z*v1z));
 			v2x = -v1z * il;
 			v2z = v1x * il;
 		}
 		else
 		{
-			const auto il = real(1) / (std::sqrt(v1y*v1y + v1z*v1z));
+			const auto il = real(1) / (math::sqrt(v1y*v1y + v1z*v1z));
 			v2y = v1z * il;
 			v2z = -v1y * il;
 		}
@@ -137,9 +136,9 @@ namespace yapt
 					  xy, y*y, yz,
 					  xz, yz, z*z);
 
-		const auto cos_theta = std::cos(angle);
+		const auto cos_theta = math::cos(angle);
 		const auto rot = Mat3::unit() * cos_theta +
-			aa * (1 - cos_theta) + A * std::sin(angle);
+			aa * (1 - cos_theta) + A * math::sin(angle);
 
 		return Mat4_<Container>(rot);
     }

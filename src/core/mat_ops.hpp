@@ -4,13 +4,12 @@
 
 #pragma once
 
-#include "misc.hpp"
+#include "math.hpp"
 #include "debug.hpp"
 
 #include <array>
 #include <numeric>		// iota
 #include <algorithm> 		// next_permutation
-#include <type_traits>
 
 
 namespace yapt
@@ -58,11 +57,11 @@ namespace yapt
 			};
 
 		auto get_elem = [&]()
-			{ return sgn(idxs) * product(); };
+			{ return math::sgn(idxs) * product(); };
 
 		T ret = get_elem();
 
-		const constexpr size_t rank = fac(R) - 1;
+		const constexpr size_t rank = math::fac(R) - 1;
 		for (size_t _ = 0; _ < rank; ++_)
 		{
 			std::next_permutation(idxs.begin(), idxs.end());
@@ -111,7 +110,7 @@ namespace yapt
 
 		for (size_t i = 0; i < R; ++i)
 			for(size_t j = 0; j < C; ++j)
-				ret[i][j] = minus_one_pow(i+j) * det(minor_matrix(a, i, j));
+				ret[i][j] = math::minus_one_pow(i+j) * det(minor_matrix(a, i, j));
 
 		return ret;
     }
@@ -122,7 +121,7 @@ namespace yapt
     is_invertible(const Matrix<T, R, C, Container> & a) noexcept
 	{ return det(a) != 0; }
 
-    // returns inverse matrix if one exists else returs zeros matrix
+    // returns inverse matrix
     template <typename T, size_t R, size_t C,
 			  template <typename, size_t> class Container>
     constexpr auto
@@ -130,9 +129,7 @@ namespace yapt
     {
 		auto d = det(a);
 
-		ASSERT(d != 0, "The matrix is non-invertible.");
-
-		if (is_invertible(a))
+		if (d != 0)
 			return transpose(cofactor(a)) / d;
 		else
 			return a;

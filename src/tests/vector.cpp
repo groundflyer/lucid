@@ -41,6 +41,7 @@ int main()
     TEST_AND_COUT(Vec2f(2));
     TEST_AND_COUT(Vec3f(3));
     TEST_AND_COUT(Vec4f(4));
+    TEST_AND_COUT((Vec4f(1) < 0.f));
     TEST_AND_COUT(Vec4i(Vec2i(1,2)));
     TEST_AND_COUT(Vec4i(Vec4f(1.5,2.5,3.5)));
     TEST_AND_COUT(Vec2i(Vec4f(1.5,2.5,3.5)));
