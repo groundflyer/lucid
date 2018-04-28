@@ -11,58 +11,39 @@
 
 namespace yapt
 {
-    template <template <typename, size_t> typename PointContainer,
-			  template <typename, size_t> typename NormalContainer>
+    template <template <typename, size_t> typename Container>
     struct Sphere_
     {
-		const Point_<PointContainer> center;
-		const Normal_<NormalContainer> pole;
-		const Normal_<NormalContainer> meridian;
-		const real radius;
+		Point_<Container> center;
+		real radius;
 
-		Sphere_() = delete;
+        constexpr
+		Sphere_() {}
 
-		template <template <typename, size_t> typename Container1,
-				  template <typename, size_t> typename Container2 = std::array,
-				  template <typename, size_t> typename Container3 = std::array>
+		template <template <typename, size_t> typename Container1>
 		constexpr
 		Sphere_(const Point_<Container1>& _center,
-				const real& _radius,
-				const Normal_<Container2>& _pole = Normal(0,1,0),
-				const Normal_<Container3>& _meridian = Normal(0,0,1)) :
+				const real& _radius) :
 		center(_center),
-			pole(_pole),
-			meridian(_meridian),
 			radius(_radius)
 		{}
-
-		// template <template <typename, size_t> typename Container1>
-		// constexpr auto
-		// normal(const Vec2_<Container1>& st) const noexcept
-		// {
-		// 	// const Normal_<Container> n(isect - center);
-		// 	// return std::pair(n, Normal_<Container>(n.cross(n.cross(pole))));
-		// }
 	};
 
 	template <template <typename, size_t> typename Container>
 	Sphere_(const Point_<Container>&,
-			const real&,
-			const Normal_<Container>&,
-			const Normal_<Container>&) -> Sphere_<Container, Container>;
+			const real&) -> Sphere_<Container>;
 
-	using Sphere = Sphere_<std::array, std::array>;
+	using Sphere = Sphere_<std::array>;
 
-	template <template <typename, size_t> typename SpherePContainer,
-			  template <typename, size_t> typename SphereNContainer,
+	template <template <typename, size_t> typename SphereContainer,
 			  template <typename, size_t> typename RayPContainer,
 			  template <typename, size_t> typename RayNContainer>
 	constexpr auto
 	intersect(const Ray_<RayPContainer, RayNContainer>& ray,
-              const Sphere_<SpherePContainer, SphereNContainer>& prim,
+              const Sphere_<SphereContainer>& prim,
 			  const Range<real>& range = Range<real>()) noexcept
 	{
-		const auto [o, d] = ray;
+		const auto& [o, d] = ray;
 		const auto a = d.dot(d);
 		const auto pc = o - prim.center;
 		const auto b = d.dot(pc * 2);

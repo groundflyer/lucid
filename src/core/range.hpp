@@ -13,9 +13,9 @@ namespace yapt
     template <typename T>
     class Range
     {
-		static_assert(std::is_arithmetic<T>::value, "T is not arithmetic");
+		static_assert(std::is_arithmetic<T>::value, "T is not arithmetic!");
 
-		const T m_begin = std::numeric_limits<T>::lowest();
+		const T m_begin = std::numeric_limits<T>::min();
 		const T m_end = std::numeric_limits<T>::max();
 
     public:

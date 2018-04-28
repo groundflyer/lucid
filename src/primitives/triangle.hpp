@@ -4,37 +4,77 @@
 
 #pragma once
 
-#include "primitive.hpp"
-#include <structures/triangle_mesh.hpp>
+#include <core/intersection.hpp>
+#include <core/range.hpp>
+#include <core/ray.hpp>
 
 
 namespace yapt
 {
-    class Triangle : public Primitive
+    template <template <typename, size_t> typename Container>
+    struct Triangle_
     {
-	TriangleMesh * _mesh = nullptr;
-	size_t _id;
+        Point_<Container> p0;
+        Point_<Container> p1;
+        Point_<Container> p2;
 
-    public:
-	Triangle();
+        constexpr
+        Triangle_() {}
 
-	Triangle(TriangleMesh * mesh, const size_t id);
-
-	Intersection
-	intersect(const Ray & ray,
-		  const real & t_min, const real & t_max) const noexcept;
-
-	Vec3
-	normal(const Intersection &) const noexcept;
-
-	Vec3
-	tangent(const Intersection &) const noexcept;
+		template <template <typename, size_t> typename Container1,
+                  template <typename, size_t> typename Container2,
+                  template <typename, size_t> typename Container3>
+        constexpr
+        Triangle_(const Point_<Container1>& _p0,
+                  const Point_<Container2>& _p1,
+                  const Point_<Container3>& _p2) :
+        p0(_p0), p1(_p1), p2(_p2)
+        {}
     };
 
 
-    // interpolated normal
-    constexpr Vec3
-    phong_normal(const Vec3 & n0, const Vec3 & n1, const Vec3 & n2,
-		 const Vec3 & uvw)
-    { return (n0 * uvw.x() + n1 * uvw.y() + n2 * uvw.z()); }
+    template <template <typename, size_t> typename Container>
+    Triangle_(const Point_<Container>&,
+              const Point_<Container>&,
+              const Point_<Container>&) -> Triangle_<Container>;
+
+    using Triangle = Triangle_<std::array>;
+
+
+	template <template <typename, size_t> typename TriangleContainer,
+			  template <typename, size_t> typename RayPContainer,
+			  template <typename, size_t> typename RayNContainer>
+	constexpr auto
+	intersect(const Ray_<RayPContainer, RayNContainer>& ray,
+              const Triangle_<TriangleContainer>& prim,
+			  const Range<real>& range = Range<real>()) noexcept
+    {
+        const auto& [o, d] = ray;
+        const auto& [p0, p1, p2] = prim;
+        const auto edge1 = p1 - p0;
+        const auto edge2 = p2 - p0;
+        const auto pvec = d.cross(edge2);
+        const auto D = edge1.dot(pvec);
+
+        if (D > 0)
+        {
+            const auto tvec = o - p0;
+            const auto u = tvec.dot(pvec);
+
+            if (Range(0_r, D).encloses(u))
+            {
+                const auto qvec = tvec.cross(edge1);
+                const auto v = d.dot(qvec);
+
+                if (v >= 0 && (u + v) <= D)
+                {
+                    const auto invD = 1_r / D;
+                    const auto t = edge2.dot(qvec) * invD;
+                    return Intersection(range.encloses(t), t, Vec2(u, v) * invD);
+                }
+            }
+        }
+
+        return Intersection();
+    }
 }

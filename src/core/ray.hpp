@@ -13,11 +13,11 @@ namespace yapt
 			  template <typename, size_t> typename NormalContainer>
     struct Ray_
     {
-		const Point_<PointContainer> origin;
-		const Normal_<NormalContainer> dir;
+		Point_<PointContainer> origin;
+		Normal_<NormalContainer> dir;
 
 		constexpr
-		Ray_() = delete;
+		Ray_() {};
 
 		template <template <typename, size_t> typename Container1,
 				  template <typename, size_t> typename Container2>

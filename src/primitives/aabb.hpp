@@ -15,9 +15,10 @@ namespace yapt
     template <template <typename, size_t> typename Container>
     struct AABB_
     {
-		const std::array<Point_<Container>, 2> bounds;
+		std::array<Point_<Container>, 2> bounds;
 
-		AABB_() = delete;
+        constexpr
+		AABB_() {};
 
 		template <template <typename, size_t> typename Container1,
 				  template <typename, size_t> typename Container2>
@@ -42,7 +43,7 @@ namespace yapt
               const AABB_<AABBContainer>& prim,
 			  const Range<real>& range = Range<real>()) noexcept
 	{
-		const auto bounds = prim.bounds;
+		const auto& bounds = prim.bounds;
 		const auto& [o, d] = ray;
 		const auto& [ox, oy, oz] = o;
 		const auto inv_d = Vec3(1) / d;

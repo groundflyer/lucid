@@ -13,6 +13,7 @@ int main()
     const Normal dir(0,0,1);
     const Ray tohit(Point(0), dir);
     const Ray tomiss(Point(1.1,0,0), dir);
+    TEST_AND_COUT(sizeof(aabb));
     TEST_AND_COUT(intersect(tohit, aabb, Range<real>()));
     TEST_AND_COUT(intersect(tomiss, aabb, Range<real>()));
     return 0;

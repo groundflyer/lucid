@@ -4,34 +4,53 @@
 
 #pragma once
 
-#include "primitive.hpp"
-
+#include <core/intersection.hpp>
+#include <core/range.hpp>
+#include <core/ray.hpp>
 
 namespace yapt
 {
-    // also used in disk
-    constexpr real
-    intersect_plane(const Ray & ray, const Vec3 & p, const Vec3 & n)
-    { return ((p - ray.origin()) % n) / (ray.dir() % n); }
-
-    // an infinite plane
-    class Plane : public Primitive
+    template <template <typename, size_t> typename PointContainer,
+              template <typename, size_t> typename NormalContainer>
+    struct Plane_
     {
-	Vec3 _p;		// position
-	Vec3 _n;		// normal
-    public:
-	Plane();
+        Point_<PointContainer> position;
+        Normal_<NormalContainer> normal;
 
-	Plane(const Vec3 & p, const Vec3 & n);
+        constexpr
+        Plane_ () {}
 
-	Intersection
-	intersect(const Ray & ray,
-		  const real & t_min, const real & t_max) const noexcept;
-
-	Vec3
-	normal(const Intersection &) const noexcept;
-
-	Vec3
-	tangent(const Intersection &) const noexcept;
+		template <template <typename, size_t> typename Container1,
+                  template <typename, size_t> typename Container2>
+        constexpr
+        Plane_(const Point_<Container1>& _position,
+               const Normal_<Container2>& _normal) :
+        position(_position),
+            normal(_normal)
+        {}
     };
+
+
+    template <template <typename, size_t> typename Container>
+    Plane_(const Point_<Container>&,
+           const Normal_<Container>&) -> Plane_<Container, Container>;
+
+    using Plane = Plane_<std::array, std::array>;
+
+
+	template <template <typename, size_t> typename PlanePContainer,
+              template <typename, size_t> typename PlaneNContainer,
+			  template <typename, size_t> typename RayPContainer,
+			  template <typename, size_t> typename RayNContainer>
+	constexpr auto
+	intersect(const Ray_<RayPContainer, RayNContainer>& ray,
+              const Plane_<PlanePContainer, PlaneNContainer>& prim,
+			  const Range<real>& range = Range<real>()) noexcept
+    {
+        const auto& [o, d] = ray;
+        const auto& [p, n] = prim;
+        const auto t = ((p - o).dot(n) / (d.dot(n)));
+
+        return Intersection(range.encloses(t), t, Vec2(0));
+    }
 }

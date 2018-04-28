@@ -12,9 +12,9 @@ namespace yapt
     template <template <typename, size_t> typename Container>
     struct Intersection_
     {
-		const bool intersect = false;
-		const real t = -1_r;
-		const Vec2_<Container> st {};	// parametric coordinates
+		bool intersect = false;
+		real t = -1_r;
+		Vec2_<Container> st {};	// parametric coordinates
 
 		constexpr
 		Intersection_() {}

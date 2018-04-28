@@ -19,7 +19,7 @@ namespace yapt
 {
     // forward declaration
     template <typename T, size_t N,
-	      template <typename, size_t> class Container>
+              template <typename, size_t> class Container>
     class Vector;
 
 

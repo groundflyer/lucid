@@ -20,15 +20,19 @@ type_tests :=	tests/vector \
 				tests/ray \
 				tests/literal \
 				tests/sphere \
-				tests/aabb
+				tests/aabb \
+				tests/plane \
+				tests/disk \
+				tests/triangle \
+				tests/generic_primitive
 
 test_dir := tests
 src_dir := src
 bin_dir := bin
 objs = $(addprefix $(bin_dir)/, $(srcs:=.o))
 
-CXX := g++-7.2.0
-INCLUDE_FLAGS := -I"./$(src_dir)"
+CXX := g++-7.3.0
+INCLUDE_FLAGS := -I"./$(src_dir)" -I"./tinytimer"
 LD_FLAGS := -lOpenImageIO $(shell pkg-config --libs OpenEXR)
 CXXFLAGS = -std=c++17 -Wall -Wpedantic -Wextra -pipe
 
@@ -37,7 +41,7 @@ hpps := $(src_dir)/core/*.hpp
 MODE ?= release
 
 ifeq ($(MODE), release)
-    CXXFLAGS += -DNDEBUG -march=native -O3
+    CXXFLAGS += -DNDEBUG -march=native -O3 -ffast-math
 else
     CXXFLAGS += -g -O0 -D_GLIBCXX_DEBUG
 endif

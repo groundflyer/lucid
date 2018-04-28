@@ -9,24 +9,48 @@
 
 namespace yapt
 {
-    class Disk : public Primitive
+    template <template <typename, size_t> typename PointContainer,
+              template <typename, size_t> typename NormalContainer>
+    struct Disk_ : public Plane_<PointContainer, NormalContainer>
     {
-	Vec3 _p;		// position
-	Vec3 _n; 		// normal
-	real _r2 = 1;		// square of radius
-    public:
-	Disk();
+        real radius2;
 
-	Disk(const Vec3 & p, const Vec3 & n, const real & r);
+        constexpr
+        Disk_() {}
 
-	Intersection
-	intersect(const Ray & ray,
-		  const real & t_min, const real & t_max) const noexcept;
-
-	Vec3
-	normal(const Intersection &) const noexcept;
-
-	Vec3
-	tangent(const Intersection &) const noexcept;
+		template <template <typename, size_t> typename Container1,
+                  template <typename, size_t> typename Container2>
+        constexpr
+        Disk_(const Point_<Container1>& _position,
+              const Normal_<Container2>& _normal,
+              const real _radius) :
+        Plane_<PointContainer, NormalContainer>(_position, _normal),
+            radius2(_radius * _radius)
+        {}
     };
+
+
+    template <template <typename, size_t> typename Container>
+    Disk_(const Point_<Container>&,
+          const Normal_<Container>&,
+          const real) -> Disk_<Container, Container>;
+
+    using Disk = Disk_<std::array, std::array>;
+
+
+	template <template <typename, size_t> typename DiskPContainer,
+              template <typename, size_t> typename DiskNContainer,
+			  template <typename, size_t> typename RayPContainer,
+			  template <typename, size_t> typename RayNContainer>
+	constexpr auto
+	intersect(const Ray_<RayPContainer, RayNContainer>& ray,
+              const Disk_<DiskPContainer, DiskNContainer>& prim,
+			  const Range<real>& range = Range<real>()) noexcept
+    {
+        auto ret = intersect(ray, static_cast<Plane_<DiskPContainer, DiskNContainer>>(prim), range);
+
+        const auto& [o, d] = ray;
+        ret.intersect &= length2((o + d * ret.t) - prim.position) <= prim.radius2;
+        return ret;
+    }
 }

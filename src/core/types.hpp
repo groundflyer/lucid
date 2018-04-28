@@ -54,10 +54,72 @@ namespace yapt
     template <template <typename, size_t> typename Container>
     class Point_ : public Vec3_<Container>
     {
-	using Super = Vec3_<Container>;
+        using Super = Vec3_<Container>;
 
     public:
-	using Super::Super;
+        using Super::Super;
+
+        explicit constexpr
+        Point_(const Super& sup) : Super::Vector(sup) {}
+
+        constexpr Point_&
+        operator=(const Super& sup) noexcept
+        {
+            Super::operator=(sup);
+            return *this;
+        }
+
+        template <typename T>
+        constexpr auto
+        operator+(T&& rhs) const noexcept
+        { return Point_(Super::operator+(std::forward<T>(rhs))); }
+
+        template <typename ... Ts>
+        constexpr auto
+        operator-(Ts && ... rhs) const noexcept
+        { return Point_(Super::operator-(std::forward<Ts>(rhs)...)); }
+
+        template <typename T>
+        constexpr auto
+        operator*(T&& rhs) const noexcept
+        { return Point_(Super::operator*(std::forward<T>(rhs))); }
+
+        template <typename T>
+        constexpr auto
+        operator/(T&& rhs) const noexcept
+        { return Point_(Super::operator/(std::forward<T>(rhs))); }
+
+        template <typename T>
+        constexpr Point_&
+        operator+=(T&& rhs) noexcept
+        {
+            Super::operator+=(std::forward<T>(rhs));
+            return *this;
+        }
+
+        template <typename T>
+        constexpr Point_&
+        operator-=(T&& rhs) noexcept
+        {
+            Super::operator-=(std::forward<T>(rhs));
+            return *this;
+        }
+
+        template <typename T>
+        constexpr Point_&
+        operator*=(T&& rhs) noexcept
+        {
+            Super::operator*=(std::forward<T>(rhs));
+            return *this;
+        }
+
+        template <typename T>
+        constexpr Point_&
+        operator/=(T&& rhs) noexcept
+        {
+            Super::operator/=(std::forward<T>(rhs));
+            return *this;
+        }
     };
 
 
@@ -67,52 +129,63 @@ namespace yapt
 		using Super = Vec3_<Container>;
 
     public:
-		template <class ... Types>
+		template <typename ... Ts>
 		explicit constexpr
-		Normal_(Types && ... args) : Super(std::forward<Types>(args)...)
+		Normal_(Ts && ... args) : Super(std::forward<Ts>(args)...)
 		{ Super::normalize(); }
 
-		template <class ... Types>
+		template <typename T>
 		constexpr Normal_&
-		operator=(Types && ... rhs) noexcept
+		operator=(T&& rhs) noexcept
 		{
-			Super::operator=(std::forward<Types>(rhs)...);
+			Super::operator=(std::forward<T>(rhs));
 			Super::normalize();
 			return *this;
 		}
 
-		template <class ... Types>
-		constexpr Normal_&
-		operator+=(Types && ... rhs) noexcept
+        constexpr Normal_
+        operator-() const noexcept
+        { return Normal_(Super::operator-()); }
+
+		template <typename T>
+		constexpr auto
+		operator-(T&& rhs) const noexcept
 		{
-			Super::operator+=(std::forward<Types>(rhs)...);
+			return Super::operator-(std::forward<T>(rhs));
+		}
+
+		template <typename T>
+		constexpr Normal_&
+		operator+=(T&& rhs) noexcept
+		{
+			Super::operator+=(std::forward<T>(rhs));
 			Super::normalize();
 			return *this;
 		}
 
-		template <class ... Types>
+		template <typename T>
 		constexpr Normal_&
-		operator-=(Types && ... rhs) noexcept
+		operator-=(T&& rhs) noexcept
 		{
-			Super::operator-=(std::forward<Types>(rhs)...);
+			Super::operator-=(std::forward<T>(rhs));
 			Super::normalize();
 			return *this;
 		}
 
-		template <class ... Types>
+		template <typename T>
 		constexpr Normal_&
-		operator*=(Types && ... rhs) noexcept
+		operator*=(T&& rhs) noexcept
 		{
-			Super::operator*=(std::forward<Types>(rhs)...);
+			Super::operator*=(std::forward<T>(rhs));
 			Super::normalize();
 			return *this;
 		}
 
-		template <class ... Types>
+		template <typename T>
 		constexpr Normal_&
-		operator/=(Types && ... rhs) noexcept
+		operator/=(T&& rhs) noexcept
 		{
-			Super::operator/=(std::forward<Types>(rhs)...);
+			Super::operator/=(std::forward<T>(rhs));
 			Super::normalize();
 			return *this;
 		}
