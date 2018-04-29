@@ -10,12 +10,11 @@
 
 namespace yapt
 {
-    template <template <typename, size_t> typename PointContainer,
-              template <typename, size_t> typename NormalContainer>
+    template <template <typename, size_t> typename Container>
     struct Plane_
     {
-        Point_<PointContainer> position;
-        Normal_<NormalContainer> normal;
+        Point_<Container> position;
+        Normal_<Container> normal;
 
         constexpr
         Plane_ () {}
@@ -33,18 +32,16 @@ namespace yapt
 
     template <template <typename, size_t> typename Container>
     Plane_(const Point_<Container>&,
-           const Normal_<Container>&) -> Plane_<Container, Container>;
+           const Normal_<Container>&) -> Plane_<Container>;
 
-    using Plane = Plane_<std::array, std::array>;
+    using Plane = Plane_<std::array>;
 
 
-	template <template <typename, size_t> typename PlanePContainer,
-              template <typename, size_t> typename PlaneNContainer,
-			  template <typename, size_t> typename RayPContainer,
-			  template <typename, size_t> typename RayNContainer>
+	template <template <typename, size_t> typename PlaneContainer,
+			  template <typename, size_t> typename RayContainer>
 	constexpr auto
-	intersect(const Ray_<RayPContainer, RayNContainer>& ray,
-              const Plane_<PlanePContainer, PlaneNContainer>& prim,
+	intersect(const Ray_<RayContainer>& ray,
+              const Plane_<PlaneContainer>& prim,
 			  const Range<real>& range = Range<real>()) noexcept
     {
         const auto& [o, d] = ray;

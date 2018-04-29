@@ -9,12 +9,11 @@
 
 namespace yapt
 {
-    template <template <typename, size_t> typename PointContainer,
-			  template <typename, size_t> typename NormalContainer>
+    template <template <typename, size_t> typename Container>
     struct Ray_
     {
-		Point_<PointContainer> origin;
-		Normal_<NormalContainer> dir;
+		Point_<Container> origin;
+		Normal_<Container> dir;
 
 		constexpr
 		Ray_() {};
@@ -27,16 +26,15 @@ namespace yapt
     };
 
 	template <template <typename, size_t> typename Container>
-	Ray_(const Point_<Container>&, const Normal_<Container>&) -> Ray_<Container, Container>;
+	Ray_(const Point_<Container>&, const Normal_<Container>&) -> Ray_<Container>;
 
-	using Ray = Ray_<std::array, std::array>;
+	using Ray = Ray_<std::array>;
 
 
     template <template <typename, size_t> typename MatContainer,
-			  template <typename, size_t> typename RayPContainer,
-			  template <typename, size_t> typename RayNContainer>
+			  template <typename, size_t> typename RayContainer>
     constexpr auto
     apply_transform(const Mat4_<MatContainer>& t,
-					const Ray_<RayPContainer, RayNContainer>& ray)
-    { return Ray_<RayPContainer, RayNContainer>(apply_transform(t, ray.origin), apply_transform(t, ray.dir)); }
+					const Ray_<RayContainer>& ray)
+    { return Ray_<RayContainer>(apply_transform(t, ray.origin), apply_transform(t, ray.dir)); }
 }

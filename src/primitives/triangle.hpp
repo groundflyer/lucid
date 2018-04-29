@@ -42,10 +42,9 @@ namespace yapt
 
 
 	template <template <typename, size_t> typename TriangleContainer,
-			  template <typename, size_t> typename RayPContainer,
-			  template <typename, size_t> typename RayNContainer>
+			  template <typename, size_t> typename RayContainer>
 	constexpr auto
-	intersect(const Ray_<RayPContainer, RayNContainer>& ray,
+	intersect(const Ray_<RayContainer>& ray,
               const Triangle_<TriangleContainer>& prim,
 			  const Range<real>& range = Range<real>()) noexcept
     {

@@ -36,10 +36,9 @@ namespace yapt
 	using Sphere = Sphere_<std::array>;
 
 	template <template <typename, size_t> typename SphereContainer,
-			  template <typename, size_t> typename RayPContainer,
-			  template <typename, size_t> typename RayNContainer>
+			  template <typename, size_t> typename RayContainer>
 	constexpr auto
-	intersect(const Ray_<RayPContainer, RayNContainer>& ray,
+	intersect(const Ray_<RayContainer>& ray,
               const Sphere_<SphereContainer>& prim,
 			  const Range<real>& range = Range<real>()) noexcept
 	{

@@ -9,9 +9,8 @@
 
 namespace yapt
 {
-    template <template <typename, size_t> typename PointContainer,
-              template <typename, size_t> typename NormalContainer>
-    struct Disk_ : public Plane_<PointContainer, NormalContainer>
+    template <template <typename, size_t> typename Container>
+    struct Disk_ : public Plane_<Container>
     {
         real radius2;
 
@@ -24,7 +23,7 @@ namespace yapt
         Disk_(const Point_<Container1>& _position,
               const Normal_<Container2>& _normal,
               const real _radius) :
-        Plane_<PointContainer, NormalContainer>(_position, _normal),
+        Plane_<Container>(_position, _normal),
             radius2(_radius * _radius)
         {}
     };
@@ -33,21 +32,19 @@ namespace yapt
     template <template <typename, size_t> typename Container>
     Disk_(const Point_<Container>&,
           const Normal_<Container>&,
-          const real) -> Disk_<Container, Container>;
+          const real) -> Disk_<Container>;
 
-    using Disk = Disk_<std::array, std::array>;
+    using Disk = Disk_<std::array>;
 
 
-	template <template <typename, size_t> typename DiskPContainer,
-              template <typename, size_t> typename DiskNContainer,
-			  template <typename, size_t> typename RayPContainer,
-			  template <typename, size_t> typename RayNContainer>
+	template <template <typename, size_t> typename DiskContainer,
+			  template <typename, size_t> typename RayContainer>
 	constexpr auto
-	intersect(const Ray_<RayPContainer, RayNContainer>& ray,
-              const Disk_<DiskPContainer, DiskNContainer>& prim,
+	intersect(const Ray_<RayContainer>& ray,
+              const Disk_<DiskContainer>& prim,
 			  const Range<real>& range = Range<real>()) noexcept
     {
-        auto ret = intersect(ray, static_cast<Plane_<DiskPContainer, DiskNContainer>>(prim), range);
+        auto ret = intersect(ray, static_cast<Plane_<DiskContainer>>(prim), range);
 
         const auto& [o, d] = ray;
         ret.intersect &= length2((o + d * ret.t) - prim.position) <= prim.radius2;
