@@ -16,11 +16,11 @@ namespace yapt
     typedef float real;
 #endif	// _DOUBLE_PRECISION
 
-	real
+	constexpr real
 	operator "" _r(long double d)
 	{ return static_cast<real>(d); }
 
-	real
+	constexpr real
 	operator "" _r(unsigned long long d)
 	{ return static_cast<real>(d); }
 
@@ -260,5 +260,13 @@ namespace std
 	template<size_t I,
 			 template <typename, size_t> typename Container>
     struct tuple_element<I, yapt::Normal_<Container>>
+	{ using type = yapt::real; };
+
+	template <template <typename, size_t> typename Container>
+	struct tuple_size<yapt::NDC_<Container>> : integral_constant<size_t, 2> {};
+
+	template<size_t I,
+			 template <typename, size_t> typename Container>
+    struct tuple_element<I, yapt::NDC_<Container>>
 	{ using type = yapt::real; };
 }

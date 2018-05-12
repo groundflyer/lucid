@@ -1,45 +1,42 @@
 // -*- C++ -*-
-// perspective.h
-//
+// perspective.hpp -- 
 
-#ifndef __PERSPECTIVE_CAMERA__
-#define __PERSPECTIVE_CAMERA__
-
-
-#include "abstract_camera.hpp"
-#include <core/math/transforms.hpp>
+#include <core/ray.hpp>
 
 
 namespace yapt
 {
-    class PerspectiveCamera : public AbstractCamera
+    class PerspectiveCamera
     {
-	Vec3 p = Vec3(0);	// position
-	Vec3 dir = Vec3(0,0,1); // direction
-	real tan_fovx_half = 1;
-	real tan_fovy_half = 1;
+        real m_tan_fovx_half{1_r};
+        real m_tan_fovy_half{1_r};
+        Mat4 m_transform{Mat4::unit()};
 
     public:
-	PerspectiveCamera();
+        constexpr
+        PerspectiveCamera() {}
 
-	// the angles are in radians
-	PerspectiveCamera(const real & fovx,
-			  const real & fovy);
+        template <template <typename, size_t> typename Container>
+        constexpr
+        PerspectiveCamera(const real& fovx,
+                          const real& fovy,
+                          const Mat4_<Container>& transform) :
+            m_tan_fovx_half(math::tan(fovx * 0.5_r)),
+            m_tan_fovy_half(math::tan(fovy * 0.5_r)),
+            m_transform(transform)
+        {}
 
-	PerspectiveCamera(const Transform & transform,
-			  const real & fovx,
-			  const real & fovy);
+        template <template <typename, size_t> typename Container>
+        constexpr auto
+        operator()(const NDC_<Container>& ndc) const noexcept
+        {
+            const auto& [x, y] = ndc;
 
-	void
-	set_transform(const Transform & transform) noexcept;
+            const Normal d((x - 0.5_r) * m_tan_fovx_half,
+                          (0.5_r - y) * m_tan_fovy_half,
+                          1);
 
-	void
-	push_transform(const Transform & transform) noexcept;
-
-	Ray
-	generate_ray(const Vec2 & ndc) const noexcept;
+            return apply_transform(m_transform, Ray(Point(0), d));
+        }
     };
 }
-
-
-#endif // __PERSPECTIVE_CAMERA__

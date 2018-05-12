@@ -39,14 +39,14 @@ namespace yapt
     constexpr auto
     apply_transform(const Mat4_<MatContainer> & t,
 					const Point_<PointContainer> & p) noexcept
-    { return dehomogenize(t.dot(homogenize(p))); }
+    { return Point_<PointContainer>(dehomogenize(t.dot(homogenize(p)))); }
 
     template <template <typename, size_t> typename MatContainer,
 			  template <typename, size_t> typename NormalContainer>
     constexpr auto
     apply_transform(const Mat4_<MatContainer> & t,
 					const Normal_<NormalContainer> & n) noexcept
-    { return dehomogenize(transpose(inverse(t)).dot(Vec4(n))); }
+    { return Normal_<NormalContainer>(dehomogenize(transpose(inverse(t)).dot(Vec4(n)))); }
 
 
     template <template <typename, size_t> typename Container>
@@ -75,9 +75,9 @@ namespace yapt
 			  template <typename, size_t> typename CenContainer,
 			  template <typename, size_t> typename UpContainer>
     constexpr auto
-    look_at(const Point_<EyeContainer> & eye,
-			const Point_<CenContainer> & center,
-			const Normal_<UpContainer> & up) noexcept
+    look_at(const Point_<EyeContainer>& eye,
+			const Point_<CenContainer>& center,
+			const Normal_<UpContainer>& up = Normal_<UpContainer>(0, 1, 0)) noexcept
     {
 		const auto f = normalize(center - eye);
 		const auto s = normalize(f.cross(up));

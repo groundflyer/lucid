@@ -24,7 +24,8 @@ type_tests :=	tests/vector \
 				tests/plane \
 				tests/disk \
 				tests/triangle \
-				tests/generic_primitive
+				tests/generic_primitive \
+				tests/perspective_camera
 
 test_dir := tests
 src_dir := src
