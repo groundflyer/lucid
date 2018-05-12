@@ -25,17 +25,6 @@ namespace yapt
 
 		Data m_data {};
 
-		// inplace normalization
-		constexpr void
-		normalize() noexcept
-		{
-			auto l = length();
-
-			if (l != static_cast<T>(1) || l != static_cast<T>(0))
-				for (size_t i = 0; i < N; ++i)
-					m_data[i] /= l;
-		}
-
     public:
 		constexpr
 		Vector() {}

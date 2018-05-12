@@ -128,18 +128,29 @@ namespace yapt
     {
 		using Super = Vec3_<Container>;
 
+		// inplace normalization
+		constexpr void
+		normalize() noexcept
+		{
+			auto l = Super::length();
+
+			if (l != 1_r || l != 0_r)
+				for (auto& elem : Super::m_data)
+                    elem /= l;
+		}
+
     public:
 		template <typename ... Ts>
 		explicit constexpr
 		Normal_(Ts && ... args) : Super(std::forward<Ts>(args)...)
-		{ Super::normalize(); }
+		{ normalize(); }
 
 		template <typename T>
 		constexpr Normal_&
 		operator=(T&& rhs) noexcept
 		{
 			Super::operator=(std::forward<T>(rhs));
-			Super::normalize();
+			normalize();
 			return *this;
 		}
 
@@ -150,16 +161,14 @@ namespace yapt
 		template <typename T>
 		constexpr auto
 		operator-(T&& rhs) const noexcept
-		{
-			return Super::operator-(std::forward<T>(rhs));
-		}
+		{ return Super::operator-(std::forward<T>(rhs)); }
 
 		template <typename T>
 		constexpr Normal_&
 		operator+=(T&& rhs) noexcept
 		{
 			Super::operator+=(std::forward<T>(rhs));
-			Super::normalize();
+			normalize();
 			return *this;
 		}
 
@@ -168,7 +177,7 @@ namespace yapt
 		operator-=(T&& rhs) noexcept
 		{
 			Super::operator-=(std::forward<T>(rhs));
-			Super::normalize();
+			normalize();
 			return *this;
 		}
 
@@ -177,7 +186,7 @@ namespace yapt
 		operator*=(T&& rhs) noexcept
 		{
 			Super::operator*=(std::forward<T>(rhs));
-			Super::normalize();
+			normalize();
 			return *this;
 		}
 
@@ -186,7 +195,7 @@ namespace yapt
 		operator/=(T&& rhs) noexcept
 		{
 			Super::operator/=(std::forward<T>(rhs));
-			Super::normalize();
+			normalize();
 			return *this;
 		}
 
@@ -203,6 +212,27 @@ namespace yapt
 		at(const size_t i) noexcept = delete;
     };
 
+
+    template <template <typename, size_t> typename Container>
+    class NDC_ : public Vec2_<Container>
+    {
+        using Super = Vec2_<Container>;
+
+        // inplace modulo 1
+        constexpr void
+        mod() noexcept
+        {
+            for (auto& elem : Super::m_data)
+                elem = math::fmod(math::abs(elem), 1_r);
+        }
+
+    public:
+        template <typename ... Ts>
+		explicit constexpr
+		NDC_(Ts && ... args) : Super(std::forward<Ts>(args)...)
+		{ mod(); }
+    };
+
     using Vec2 = Vec2_<std::array>;
     using Vec3 = Vec3_<std::array>;
     using Vec4 = Vec4_<std::array>;
@@ -211,6 +241,7 @@ namespace yapt
     using Mat2 = Mat2_<std::array>;
     using Mat3 = Mat3_<std::array>;
     using Mat4 = Mat4_<std::array>;
+    using NDC = NDC_<std::array>;
 }
 
 namespace std

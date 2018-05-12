@@ -16,6 +16,8 @@ namespace yapt::math
 	using std::sqrt;
 	using std::cos;
 	using std::sin;
+    using std::tan;
+    using std::fmod;
 
     template <typename T>
     const constexpr T PI = static_cast<T>(3.141592653589793);

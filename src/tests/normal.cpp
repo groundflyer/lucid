@@ -55,5 +55,6 @@ int main()
     TEST_AND_COUT((pt -= 1));
     TEST_AND_COUT((pt *= 1));
     TEST_AND_COUT((pt /= 1));
+    TEST_AND_COUT(NDC(14.575, -4234.9634));
     return 0;
 }
