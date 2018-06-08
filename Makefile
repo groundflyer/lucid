@@ -1,15 +1,6 @@
 target := yapt
 
-srcs := cameras/perspective \
-	io/film \
-	io/image \
-	structures/triangle_mesh \
-	scene/geometry_object \
-	scene/material \
-	scene/omni_light \
-	scene/traverser \
-	scene/scene \
-	main
+srcs := main
 
 type_tests :=	tests/vector \
 				tests/matrix \
@@ -25,7 +16,10 @@ type_tests :=	tests/vector \
 				tests/disk \
 				tests/triangle \
 				tests/generic_primitive \
-				tests/perspective_camera
+				tests/perspective_camera \
+				tests/struct_binding
+
+tests := tests/image
 
 test_dir := tests
 src_dir := src
@@ -34,7 +28,6 @@ objs = $(addprefix $(bin_dir)/, $(srcs:=.o))
 
 CXX := g++-7.3.0
 INCLUDE_FLAGS := -I"./$(src_dir)" -I"./tinytimer"
-LD_FLAGS := -lOpenImageIO $(shell pkg-config --libs OpenEXR)
 CXXFLAGS = -std=c++17 -Wall -Wpedantic -Wextra -pipe
 
 hpps := $(src_dir)/core/*.hpp
@@ -65,6 +58,9 @@ $(type_tests): %: $(src_dir)/%.cpp $(hpps)
 	mkdir -p $(test_dir)
 	$(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) -o $@ $<
 
+$(tests): %: $(src_dir)/%.cpp $(hpps)
+	mkdir -p $(test_dir)
+	$(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) $(LD_FLAGS) -o $@ $<
 
 $(bin_dir)/%.o: $(src_dir)/%.cpp
 	mkdir -p $(@D)

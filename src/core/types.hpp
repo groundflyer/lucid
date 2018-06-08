@@ -29,13 +29,16 @@ namespace yapt
     using Vec2_ = Vector<real, 2, Container>;
 
     template <template <typename, size_t> typename Container>
+    using Vec2u_ = Vector<unsigned, 2, Container>;
+
+    template <template <typename, size_t> typename Container>
     using Vec3_ = Vector<real, 3, Container>;
 
     template <template <typename, size_t> typename Container>
     using Vec4_ = Vector<real, 4, Container>;
 
     template <template <typename, size_t> typename Container>
-    using RBG_ = Vector<float, 3, Container>;
+    using RGB_ = Vector<float, 3, Container>;
 
     template <template <typename, size_t> typename Container>
     using RGBA_ = Vector<float, 4, Container>;
@@ -231,17 +234,30 @@ namespace yapt
 		explicit constexpr
 		NDC_(Ts && ... args) : Super(std::forward<Ts>(args)...)
 		{ mod(); }
+
+        template <typename T>
+        constexpr NDC_&
+        operator=(T&& rhs) noexcept
+        {
+            Super::operator=(std::forward<T>(rhs));
+            mod();
+            return *this;
+        }
     };
 
     using Vec2 = Vec2_<std::array>;
     using Vec3 = Vec3_<std::array>;
     using Vec4 = Vec4_<std::array>;
+    using Vec2u = Vec2u_<std::array>;
     using Point = Point_<std::array>;
     using Normal = Normal_<std::array>;
     using Mat2 = Mat2_<std::array>;
     using Mat3 = Mat3_<std::array>;
     using Mat4 = Mat4_<std::array>;
+    using RGB = RGB_<std::array>;
+    using RGBA = RGBA_<std::array>;
     using NDC = NDC_<std::array>;
+    using Res = Vector<size_t, 2, std::array>;
 }
 
 namespace std

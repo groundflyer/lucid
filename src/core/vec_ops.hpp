@@ -62,7 +62,7 @@ namespace yapt
 			  typename BinaryOperation = decltype(std::plus<T>()),
 			  typename Init = std::result_of_t<BinaryOperation(T, T)>>
     constexpr auto
-    reduce(const Vector<T, N, Container> & a,
+    reduce(const Vector<T, N, Container>& a,
     	   BinaryOperation binary_op = std::plus<T>(),
     	   Init init = static_cast<Init>(0)) noexcept
     {
@@ -197,7 +197,25 @@ namespace yapt
     	      template <typename, size_t> class Container>
     constexpr auto
     sum(const Vector<T, N, Container> & a) noexcept
-    { return reduce(a); }
+    { return reduce(a, std::plus<T>()); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    product(const Vector<T, N, Container> & a) noexcept
+    { return reduce(a, std::multiplies<T>(), static_cast<T>(1)); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    all(const Vector<T, N, Container> & a) noexcept
+    { return reduce(a, std::logical_and<bool>(), true); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    any(const Vector<T, N, Container> & a) noexcept
+    { return reduce(a, std::logical_or<bool>()); }
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container>

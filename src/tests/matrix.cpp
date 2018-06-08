@@ -29,16 +29,21 @@ int main()
 
 	const auto cu = m;
 	TEST_AND_COUT(cu[0]);
-	TEST_AND_COUT((is_same_v<decltype(cu[0]), const Vector<float, 4, ArrayViewConst>>));
+	TEST_AND_COUT((is_same_v<decltype(cu[0]), const Vector<float, 4, ArrayView>>));
+
 	auto& [cu0, cu1, cu2, cu3] = cu;
-	TEST_AND_COUT((is_same_v<decltype(cu0), const Vector<float, 4, ArrayViewConst>>));
+	TEST_AND_COUT((is_same_v<decltype(cu0), const Vector<float, 4, ArrayView>>));
 	TEST_AND_COUT((cu0.cbegin() == cu.cbegin()));
 	
 	auto u00 = u[0];
-	TEST_AND_COUT((is_same_v<decltype(u00), Vector<float, 4, ArrayViewConst>>));
+	TEST_AND_COUT((is_same_v<decltype(u00), Vector<float, 4, ArrayView>>));
 	auto& [u0, u1, u2, u3] = u;
 	TEST_AND_COUT((u00.cbegin() == u0.cbegin()));
 	TEST_AND_COUT((is_same_v<decltype(u00), decltype(u0)>));
+
+	auto [v0, v1, v2, v3] = u;
+	TEST_AND_COUT((u00.cbegin() == v0.cbegin()));
+	TEST_AND_COUT((is_same_v<decltype(u00), decltype(v0)>));
 
     u[0][0] = 10;
 	u0 += 100;

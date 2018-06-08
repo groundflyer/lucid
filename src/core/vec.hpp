@@ -336,19 +336,15 @@ namespace yapt
 		friend std::ostream&
 		operator<<(std::ostream & os, const Vector & rhs) noexcept
 		{
-			os << '[';
-			for (size_t i = 0; i < N; ++i)
-			{
-				os << rhs.m_data[i];
-
-				if (i < N - 1)
-					os << ',' << '\t';
-			}
-			os << ']';
-
+            for (const auto& elem : rhs.m_data)
+                os << elem << ' ';
 			return os;
 		}
     };
+
+    template <typename T, size_t N,
+			  template <typename, size_t> typename Container>
+    Vector(Container<T, N> &&) -> Vector<T, N, Container>;
 }
 
 namespace std

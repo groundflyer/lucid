@@ -139,22 +139,22 @@ namespace yapt
 		operator[](const size_t i) const noexcept
 		{
 			ASSERT(i <= R, "Index out of range.");
-			return Vector<T, C, ArrayViewConst>(ArrayViewConst<T, C>(&(at(i,0))));
+			return Vector(ArrayView<T, C>(const_cast<T*>(&(at(i,0)))));
 		}
 		constexpr auto
 		operator[](const size_t i) noexcept
 		{
 			ASSERT(i <= R, "Index out of range.");
-			return Vector<T, C, ArrayView>(ArrayView<T, C>(&(at(i,0))));
+			return Vector(ArrayView<T, C>(&(at(i,0))));
 		}
 
 		template <size_t I>
-		const constexpr auto
+		constexpr decltype(auto)
 		get() const noexcept
 		{ return (*this)[I]; }
 
 		template <size_t I>
-		constexpr auto
+		constexpr decltype(auto)
 		get() noexcept
 		{ return (*this)[I]; }
 
@@ -529,24 +529,8 @@ namespace yapt
     	friend std::ostream&
     	operator<<(std::ostream & os, const Matrix & rhs)
     	{
-    	    os << '[';
-			for (size_t i = 0; i < R; ++i)
-			{
-				for (size_t j = 0; j < C; ++j)
-				{
-					os << rhs.at(i, j);
-
-					if (i != R-1 || j != C-1)
-						os << ',';
-					if (j < C - 1)
-						os << '\t';
-				}
-
-				if (i < R - 1)
-					os << std::endl;
-			}
-    	    os << ']';
-
+            for (const auto& elem : rhs.m_data)
+                os << elem << ' ';
     	    return os;
     	}
     };
@@ -563,12 +547,5 @@ namespace std
 	struct tuple_element<I, yapt::Matrix<T, R, C, Container>>
 	{
 		using type = decltype(declval<yapt::Matrix<T, R, C, Container>>().template get<I>());
-	};
-
-	template <size_t I, typename T, size_t R, size_t C,
-			  template <typename, size_t> typename Container>
-	struct tuple_element<I, const yapt::Matrix<T, R, C, Container>>
-	{
-		using type = decltype(declval<const yapt::Matrix<T, R, C, Container>>().template get<I>());
 	};
 }

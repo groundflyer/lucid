@@ -91,6 +91,8 @@ int main()
     TEST_AND_COUT(normalize(Vec4f(1,2,3,4)));
     TEST_AND_COUT((Vector<float, 6, array>(Matrix<float, 2, 3, array>::unit().data())));
     TEST_AND_COUT((Matrix<float, 2, 3, array>(Vector<float, 6, array>(Matrix<float, 2, 3, array>::unit().data()).data())));
+    TEST_AND_COUT(product(Vec2f(2, 10)));
+    TEST_AND_COUT(product(Vec2i(2, 10)));
 
     return 0;
 }
