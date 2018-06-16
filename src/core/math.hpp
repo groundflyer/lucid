@@ -120,4 +120,11 @@ namespace yapt::math
     constexpr T
     radians(const T & _degrees)
     { return _degrees * PI<T> / static_cast<T>(180); }
+
+    template <typename T>
+    constexpr auto
+    fit(const T& source,
+        const T& sourcemin, const T& sourcemax,
+        const T& targetmin, const T& targetmax)
+    {}
 }

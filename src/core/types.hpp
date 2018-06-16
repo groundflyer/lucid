@@ -7,6 +7,8 @@
 #include "vec.hpp"
 #include "mat.hpp"
 
+#include <cstdint>
+
 
 namespace yapt
 {
@@ -38,13 +40,6 @@ namespace yapt
     using Vec4_ = Vector<real, 4, Container>;
 
     template <template <typename, size_t> typename Container>
-    using RGB_ = Vector<float, 3, Container>;
-
-    template <template <typename, size_t> typename Container>
-    using RGBA_ = Vector<float, 4, Container>;
-
-
-    template <template <typename, size_t> typename Container>
     using Mat2_ = Matrix<real, 2, 2, Container>;
 
     template <template <typename, size_t> typename Container>
@@ -53,6 +48,17 @@ namespace yapt
     template <template <typename, size_t> typename Container>
     using Mat4_ = Matrix<real, 4, 4, Container>;
 
+    template <template <typename, size_t> typename Container>
+    using RGB32_ = Vector<float, 3, Container>;
+
+    template <template <typename, size_t> typename Container>
+    using RGBA32_ = Vector<float, 4, Container>;
+
+    template <template <typename, size_t> typename Container>
+    using RGB8_ = Vector<std::uint8_t, 3, Container>;
+
+    template <template <typename, size_t> typename Container>
+    using RGBA8_ = Vector<std::uint8_t, 4, Container>;
 
     template <template <typename, size_t> typename Container>
     class Point_ : public Vec3_<Container>
@@ -168,39 +174,19 @@ namespace yapt
 
 		template <typename T>
 		constexpr Normal_&
-		operator+=(T&& rhs) noexcept
-		{
-			Super::operator+=(std::forward<T>(rhs));
-			normalize();
-			return *this;
-		}
+		operator+=(T&& rhs) = delete;
 
 		template <typename T>
 		constexpr Normal_&
-		operator-=(T&& rhs) noexcept
-		{
-			Super::operator-=(std::forward<T>(rhs));
-			normalize();
-			return *this;
-		}
+		operator-=(T&& rhs) = delete;
 
 		template <typename T>
 		constexpr Normal_&
-		operator*=(T&& rhs) noexcept
-		{
-			Super::operator*=(std::forward<T>(rhs));
-			normalize();
-			return *this;
-		}
+		operator*=(T&& rhs) = delete;
 
 		template <typename T>
 		constexpr Normal_&
-		operator/=(T&& rhs) noexcept
-		{
-			Super::operator/=(std::forward<T>(rhs));
-			normalize();
-			return *this;
-		}
+		operator/=(T&& rhs) = delete;
 
 		constexpr auto
 		begin() noexcept = delete;
@@ -254,10 +240,12 @@ namespace yapt
     using Mat2 = Mat2_<std::array>;
     using Mat3 = Mat3_<std::array>;
     using Mat4 = Mat4_<std::array>;
-    using RGB = RGB_<std::array>;
-    using RGBA = RGBA_<std::array>;
     using NDC = NDC_<std::array>;
     using Res = Vector<size_t, 2, std::array>;
+    using RGB32 = RGB32_<std::array>;
+    using RGBA32 = RGBA32_<std::array>;
+    using RGB8 = RGB8_<std::array>;
+    using RGBA8 = RGBA8_<std::array>;
 }
 
 namespace std

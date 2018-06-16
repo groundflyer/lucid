@@ -21,9 +21,6 @@ namespace yapt
 		constexpr
 		ArrayView(T* rhs) : p_data(rhs) {}
 
-        ArrayView&
-        operator=(const ArrayView& rhs) = delete;
-
 		constexpr iterator
 		begin() const noexcept
 		{ return p_data; }

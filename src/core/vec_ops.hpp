@@ -234,4 +234,20 @@ namespace yapt
     constexpr auto
     min(const Vector<T, N, Container> & a) noexcept
     { return reduce(a, static_cast<const T&(*)(const T&, const T&)>(std::min), std::numeric_limits<T>::max()); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container1,
+			  template <typename, size_t> class Container2>
+    constexpr auto
+    max(const Vector<T, N, Container1>& a,
+        const Vector<T, N, Container2>& b) noexcept
+    { return transform(a, b, static_cast<const T&(*)(const T&, const T&)>(std::max)); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container1,
+			  template <typename, size_t> class Container2>
+    constexpr auto
+    min(const Vector<T, N, Container1>& a,
+        const Vector<T, N, Container2>& b) noexcept
+    { return transform(a, b, static_cast<const T&(*)(const T&, const T&)>(std::min)); }
 }
