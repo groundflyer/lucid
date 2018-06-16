@@ -223,6 +223,14 @@ namespace yapt
         { return iterator(p_data, num_pixels(), num_pixels()); }
 
         auto
+        begin() const noexcept
+        { return const_iterator(p_data, num_pixels()); }
+
+        auto
+        end() const noexcept
+        { return const_iterator(p_data, num_pixels(), num_pixels()); }
+
+        auto
         cbegin() const noexcept
         { return const_iterator(p_data, num_pixels()); }
 

@@ -1,6 +1,6 @@
 target := yapt
 
-srcs := main
+srcs := tests/image io/image
 
 type_tests :=	tests/vector \
 				tests/matrix \
@@ -18,8 +18,6 @@ type_tests :=	tests/vector \
 				tests/generic_primitive \
 				tests/perspective_camera \
 				tests/struct_binding
-
-tests := tests/image
 
 test_dir := tests
 src_dir := src
@@ -58,13 +56,13 @@ $(type_tests): %: $(src_dir)/%.cpp $(hpps)
 	mkdir -p $(test_dir)
 	$(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) -o $@ $<
 
-$(tests): %: $(src_dir)/%.cpp $(hpps)
-	mkdir -p $(test_dir)
-	$(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) $(LD_FLAGS) -o $@ $<
-
 $(bin_dir)/%.o: $(src_dir)/%.cpp
 	mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) -c -o $@ $<
+
+tests/image: $(objs)
+	mkdir -p tests
+	$(CXX) -o $@ $^
 
 clean:
 	rm -r $(target) bin/ tests/

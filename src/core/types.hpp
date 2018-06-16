@@ -49,10 +49,10 @@ namespace yapt
     using Mat4_ = Matrix<real, 4, 4, Container>;
 
     template <template <typename, size_t> typename Container>
-    using RGB32_ = Vector<float, 3, Container>;
+    using RGB_ = Vector<float, 3, Container>;
 
     template <template <typename, size_t> typename Container>
-    using RGBA32_ = Vector<float, 4, Container>;
+    using RGBA_ = Vector<float, 4, Container>;
 
     template <template <typename, size_t> typename Container>
     using RGB8_ = Vector<std::uint8_t, 3, Container>;
@@ -242,8 +242,8 @@ namespace yapt
     using Mat4 = Mat4_<std::array>;
     using NDC = NDC_<std::array>;
     using Res = Vector<size_t, 2, std::array>;
-    using RGB32 = RGB32_<std::array>;
-    using RGBA32 = RGBA32_<std::array>;
+    using RGB = RGB_<std::array>;
+    using RGBA = RGBA_<std::array>;
     using RGB8 = RGB8_<std::array>;
     using RGBA8 = RGBA8_<std::array>;
 }

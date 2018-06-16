@@ -529,8 +529,10 @@ namespace yapt
     	friend std::ostream&
     	operator<<(std::ostream & os, const Matrix & rhs)
     	{
-            for (const auto& elem : rhs.m_data)
-                os << elem << ' ';
+            for (size_t i = 0; i < N - 1; ++i)
+                os << rhs.m_data[i] << ' ';
+            os << rhs.m_data[N-1];
+
     	    return os;
     	}
     };
