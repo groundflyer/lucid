@@ -3,7 +3,8 @@
 #include <iostream>
 #include <iomanip>
 #include <limits>
-#include <templates/math/pi.hpp>
+
+#include <core/pi.hpp>
 
 
 using namespace std;

@@ -17,7 +17,6 @@ int main()
     TEST_AND_COUT(t.length());
     t = Vec3(15,-12.5, 1);
     TEST_AND_COUT(t.length());
-    t += 1;
     TEST_AND_COUT(t.length());
     TEST_AND_COUT((std::is_same<decltype(Normal(-t)), decltype(t)>::value));
     // const real & t0 = t[0];

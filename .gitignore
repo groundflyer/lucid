@@ -1,8 +1,10 @@
 *~
 bin/*
 tests/*
+build
 yapt
 .clang_complete
 *.png
 *.jpg
 *.exr
+*.ppm
