@@ -4,6 +4,10 @@ project(lucid CXX)
 
 # Compiler with C++17 support is required
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Check some C++17 features
+include(cmake/Checks.cmake)
 
 # Default Build Type is Release
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -14,7 +18,7 @@ message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
 
 # Options
 option(USE_DOUBLE_PRECISION "Use double precision floating-point format" OFF)
-option(BUILD_TESTS "Build and run tests" OFF)
+option(BUILD_TESTS "Build tests" OFF)
 
 # Use GCC/Clang pipe
 set(CMAKE_CXX_FLAGS "-Wall -Wpedantic -Wextra -pipe")
@@ -24,31 +28,15 @@ set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -O3 -march=native -ffast-math")
 
 # Print vectorization statistics
 if(CMAKE_VERBOSE_MAKEFILE)
-  if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fopt-info-vec")
-  elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Rpass=loop-vectorize")
   endif()
 endif()
 
-# Link-time optimization
-include(CheckIPOSupported)
-check_ipo_supported(RESULT do_lto OUTPUT lto_error LANGUAGES CXX)
-if(do_lto)
-  message(STATUS "Interprocedural optimization enabled")
-  set_property(GLOBAL PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-else()
-  message(STATUS "Interprocedural optimization is not supported: ${lto_error}")
-endif()
-
 # Don't optimize Debug build
 set(CMAKE_CXX_FLAGS_DEBUG -g -O0 -D_GLIBCXX_DEBUG)
-
-# Use Clang with libc++ and colorize output
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-  set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -stlib=libc++ -fcolor-diagnostics)
-  set(CMAKE_EXE_LINKER_FLAGS -lc++abi)
-endif()
 
 # Set floating point precision
 set(_precision "single")
