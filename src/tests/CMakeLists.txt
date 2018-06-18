@@ -11,6 +11,6 @@ foreach(src ${test_srcs})
     add_executable(${name} ${src})
   endif()
 
-  add_test(NAME ${name} COMMAND ${name})
-  message(STATUS "Test ${name} added")
+  add_test(NAME ${name} COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${name})
+  message(STATUS "Added test: ${name}")
 endforeach()
