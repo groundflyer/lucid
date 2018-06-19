@@ -36,7 +36,7 @@ if(CMAKE_VERBOSE_MAKEFILE)
 endif()
 
 # Don't optimize Debug build
-set(CMAKE_CXX_FLAGS_DEBUG -g -O0 -D_GLIBCXX_DEBUG)
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 
 # Set floating point precision
 set(_precision "single")
