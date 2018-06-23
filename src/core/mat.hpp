@@ -138,13 +138,13 @@ namespace yapt
 		const constexpr auto
 		operator[](const size_t i) const noexcept
 		{
-			ASSERT(i <= R, "Index out of range.");
+            CHECK_INDEX(i, R);
 			return Vector(ArrayView<T, C>(const_cast<T*>(&(at(i,0)))));
 		}
 		constexpr auto
 		operator[](const size_t i) noexcept
 		{
-			ASSERT(i <= R, "Index out of range.");
+            CHECK_INDEX(i, R);
 			return Vector(ArrayView<T, C>(&(at(i,0))));
 		}
 
@@ -161,26 +161,28 @@ namespace yapt
 		const constexpr T&
 		at(const size_t i) const noexcept
 		{
-			ASSERT(i <= N, "Index out of range.");
+            CHECK_INDEX(i, N);
 			return m_data[i];
 		}
 		constexpr T&
 		at(const size_t i) noexcept
 		{
-			ASSERT(i <= N, "Index out of range.");
+            CHECK_INDEX(i, N);
 			return m_data[i];
 		}
 
 		const constexpr T&
 		at(const size_t i, const size_t j) const noexcept
 		{
-			ASSERT(i <= R && j <= C, "Index out of range.");
+            CHECK_INDEX(i, R);
+            CHECK_INDEX(j, C);
 			return m_data[pos(i, j)];
 		}
 		constexpr T&
 		at(const size_t i, const size_t j) noexcept
 		{
-			ASSERT(i <= R && j <= C, "Index out of range.");
+            CHECK_INDEX(i, R);
+            CHECK_INDEX(j, C);
 			return m_data[pos(i, j)];
 		}
 

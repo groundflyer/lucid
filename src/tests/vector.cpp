@@ -93,6 +93,8 @@ int main()
     TEST_AND_COUT((Matrix<float, 2, 3, array>(Vector<float, 6, array>(Matrix<float, 2, 3, array>::unit().data()).data())));
     TEST_AND_COUT(product(Vec2f(2, 10)));
     TEST_AND_COUT(product(Vec2i(2, 10)));
+    TEST_AND_COUT(!Vec3i(1,0,0));
+    TEST_AND_COUT(!Vec3f(1,0.01132,0.323));
 
     return 0;
 }

@@ -61,7 +61,7 @@ namespace yapt
 			  template <typename, size_t> class Container,
 			  typename BinaryOperation = decltype(std::plus<T>()),
 			  typename Init = std::result_of_t<BinaryOperation(T, T)>>
-    constexpr auto
+    constexpr decltype(auto)
     reduce(const Vector<T, N, Container>& a,
     	   BinaryOperation binary_op = std::plus<T>(),
     	   Init init = static_cast<Init>(0)) noexcept
@@ -79,7 +79,7 @@ namespace yapt
 			  typename BinaryOperation1 = decltype(std::multiplies<T>()),
 			  typename BinaryOperation2 = decltype(std::plus<T>()),
 			  typename Init = std::result_of_t<BinaryOperation2(std::result_of_t<BinaryOperation1(T, T)>,std::result_of_t<BinaryOperation1(T, T)>)>>
-    constexpr auto
+    constexpr decltype(auto)
     transform_reduce(const Vector<T, N, Container1> & a,
 					 const Vector<T, N, Container2> & b,
 					 BinaryOperation1 binary_op1 = std::multiplies<T>(),
@@ -98,7 +98,7 @@ namespace yapt
 			  typename UnaryOperation,
 			  typename BinaryOperation = decltype(std::plus<T>()),
 			  typename Init = std::result_of_t<BinaryOperation(std::result_of_t<UnaryOperation(T)>,std::result_of_t<UnaryOperation(T)>)>>
-    constexpr auto
+    constexpr decltype(auto)
     transform_reduce(const Vector<T, N, Container> & a,
 					 UnaryOperation unary_op,
 					 BinaryOperation binary_op = std::plus<T>(),
@@ -225,20 +225,20 @@ namespace yapt
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container>
-    constexpr auto
+    constexpr decltype(auto)
     max(const Vector<T, N, Container> & a) noexcept
     { return reduce(a, static_cast<const T&(*)(const T&, const T&)>(std::max), std::numeric_limits<T>::min()); }
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container>
-    constexpr auto
+    constexpr decltype(auto)
     min(const Vector<T, N, Container> & a) noexcept
     { return reduce(a, static_cast<const T&(*)(const T&, const T&)>(std::min), std::numeric_limits<T>::max()); }
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container1,
 			  template <typename, size_t> class Container2>
-    constexpr auto
+    constexpr decltype(auto)
     max(const Vector<T, N, Container1>& a,
         const Vector<T, N, Container2>& b) noexcept
     { return transform(a, b, static_cast<const T&(*)(const T&, const T&)>(std::max)); }
@@ -246,7 +246,7 @@ namespace yapt
     template <typename T, size_t N,
     	      template <typename, size_t> class Container1,
 			  template <typename, size_t> class Container2>
-    constexpr auto
+    constexpr decltype(auto)
     min(const Vector<T, N, Container1>& a,
         const Vector<T, N, Container2>& b) noexcept
     { return transform(a, b, static_cast<const T&(*)(const T&, const T&)>(std::min)); }

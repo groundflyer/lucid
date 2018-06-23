@@ -13,19 +13,50 @@ namespace yapt
 {
     // axis-aligned bounding box
     template <template <typename, size_t> typename Container>
-    struct AABB_
+    class AABB_
     {
-		std::array<Point_<Container>, 2> bounds;
+        Container<real, 6> m_data;
 
+    public:
         constexpr
 		AABB_() {};
+
+        constexpr
+        AABB_(Container<real, 6>&& cont) : m_data(cont) {}
 
 		template <template <typename, size_t> typename Container1,
 				  template <typename, size_t> typename Container2>
 		constexpr
 		AABB_(const Point_<Container1>& vmin,
-			  const Point_<Container2>& vmax) :
-		bounds({vmin, vmax}) {}
+			  const Point_<Container2>& vmax)
+        {
+            Vector(ArrayView<real, 3>(&m_data[0])) = vmin;
+            Vector(ArrayView<real, 3>(&m_data[3])) = vmax;
+        }
+
+        const constexpr auto
+        operator[](const size_t i) const noexcept
+        {
+            CHECK_INDEX(i, 2);
+            return Vector(ArrayView<real, 3>(const_cast<real*>(&m_data[i * 3])));
+        }
+
+        constexpr auto
+        operator[](const size_t i) noexcept
+        {
+            CHECK_INDEX(i, 2);
+            return Vector(ArrayView<real, 3>(&m_data[i * 3]));
+        }
+
+        template <template <typename, size_t> typename Container1>
+        constexpr auto
+        operator[](const Vector<bool, 3, Container1>& idxs) const noexcept
+        {
+            Vec3 ret;
+            for(size_t i = 0; i < 3; ++i)
+                ret[i] = m_data[idxs[i] * 3];
+            return ret;
+        }
 	};
 
 	template <template <typename, size_t> typename Container>
@@ -42,33 +73,21 @@ namespace yapt
               const AABB_<AABBContainer>& prim,
 			  const Range<real>& range = Range<real>()) noexcept
 	{
-		const auto& bounds = prim.bounds;
 		const auto& [o, d] = ray;
-		const auto& [ox, oy, oz] = o;
 		const auto inv_d = Vec3(1) / d;
-		const auto [signx, signy, signz] = inv_d < 0;
-		const auto& [ix, iy, iz] = inv_d;
+		const auto sign = inv_d < 0;
+        const auto vmin = inv_d * (prim[sign] - o);
+        const auto vmax = inv_d * (prim[!sign] - o);
+        const auto& [xmin, ymin, zmin] = vmin;
+        const auto& [xmax, ymax, zmax] = vmax;
 
-		auto xmin = ix * (bounds[signx][0] - ox);
-		auto xmax = ix * (bounds[!signx][0] - ox);
+        if(xmin > ymax ||
+           ymin > xmax ||
+           std::max(xmin, ymin) > zmax ||
+           zmin > std::min(ymax, xmax))
+            return Intersection();
 
-		auto ymin = iy * (bounds[signy][1] - oy);
-		auto ymax = iy * (bounds[!signy][1] - oy);
-
-		if ((xmin > ymax) || (ymin > xmax))
-			return Intersection();
-
-		if (ymin > xmin) xmin = ymin;
-		if (ymax < xmax) xmax = ymax;
-
-		auto zmin = iz * (bounds[signz][2] - oz);
-		auto zmax = iz * (bounds[!signz][2] - oz);
-
-		if ((xmin > zmax) || (zmin > xmax))
-			return Intersection();
-
-		if (zmin > xmin) xmin = zmin;
-
-		return Intersection(range.encloses(xmin), xmin, Vec2());
+        decltype(auto) mm = max(vmin);
+        return Intersection(range.encloses(mm), mm, Vec2());
 	}
 }

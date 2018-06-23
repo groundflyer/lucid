@@ -121,13 +121,13 @@ namespace yapt
 		const constexpr T&
 		operator[](const size_t i) const noexcept
 		{
-			ASSERT(i <= N, "Index out of range.");
+            CHECK_INDEX(i, N);
 			return m_data[i];
 		}
 		constexpr T&
 		operator[](const size_t i) noexcept
 		{
-			ASSERT(i <= N, "Index out of range.");
+            CHECK_INDEX(i, N);
 			return m_data[i];
 		}
 
@@ -144,13 +144,13 @@ namespace yapt
 		const constexpr T&
 		at(const size_t i) const noexcept
 		{
-			ASSERT(i <= N, "Index out of range.");
+            CHECK_INDEX(i, N);
 			return m_data[i];
 		}
 		constexpr T&
 		at(const size_t i) noexcept
 		{
-			ASSERT(i <= N, "Index out of range.");
+            CHECK_INDEX(i, N);
 			return m_data[i];
 		}
 
@@ -314,6 +314,10 @@ namespace yapt
 		constexpr auto
 		operator<=(const T& rhs) const noexcept
 		{ return transform(*this, [&rhs](const T& elem){ return elem <= rhs; }); }
+
+        constexpr auto
+        operator!() const noexcept
+        { return transform(*this, std::logical_not<T>()); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto

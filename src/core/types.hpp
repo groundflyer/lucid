@@ -68,13 +68,15 @@ namespace yapt
     public:
         using Super::Super;
 
-        explicit constexpr
-        Point_(const Super& sup) : Super::Vector(sup) {}
+		template <typename ... Ts>
+		explicit constexpr
+		Point_(Ts && ... args) : Super(std::forward<Ts>(args)...) {}
 
+        template <typename T>
         constexpr Point_&
-        operator=(const Super& sup) noexcept
+        operator=(T&& rhs) noexcept
         {
-            Super::operator=(sup);
+            Super::operator=(std::forward<T>(rhs));
             return *this;
         }
 
@@ -130,6 +132,9 @@ namespace yapt
             return *this;
         }
     };
+
+    template <template <typename, size_t> typename Container>
+    Point_(Container<real, 3> &&) -> Point_<Container>;
 
 
     template <template <typename, size_t> typename Container>
@@ -201,6 +206,9 @@ namespace yapt
 		at(const size_t i) noexcept = delete;
     };
 
+    template <template <typename, size_t> typename Container>
+    Normal_(Container<real, 3> &&) -> Normal_<Container>;
+
 
     template <template <typename, size_t> typename Container>
     class NDC_ : public Vec2_<Container>
@@ -230,6 +238,10 @@ namespace yapt
             return *this;
         }
     };
+
+    template <template <typename, size_t> typename Container>
+    NDC_(Container<real, 2> &&) -> NDC_<Container>;
+
 
     using Vec2 = Vec2_<std::array>;
     using Vec3 = Vec3_<std::array>;
