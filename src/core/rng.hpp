@@ -9,76 +9,59 @@
 #include <limits>
 #include <type_traits>
 
-#ifndef RANDOM_BITS
-	#define RANDOM_BITS 10
-#endif
-
 
 namespace yapt
 {
     template <typename T,
-			  typename RandomDevice = std::random_device,
-			  typename Generator = std::default_random_engine,
 			  typename Distribution = std::conditional_t<std::is_integral_v<T>,
 														 std::uniform_int_distribution<T>,
 														 std::uniform_real_distribution<T>>>
-    class RNG
+    class RandomDistribution
     {
-		RandomDevice	m_rd;
-		Generator		m_gen{m_rd()};
-		Distribution	m_dist{std::numeric_limits<T>::lowest(), std::numeric_limits<T>::max()};
+		Distribution m_dist;
 
     public:
-		RNG(const T& a, const T& b) : m_dist(a, b) {}
+		RandomDistribution(const T& a, const T& b) : m_dist(a, b) {}
 
-		RNG(const RNG&) = delete;
-
-		RNG&
-		operator=(const RNG&) = delete;
-
+        template <typename Generator>
 		auto
-		operator()() noexcept
-		{ return m_dist(m_gen); }
+		operator()(Generator&& gen) noexcept
+		{ return m_dist(std::forward<Generator>(gen)); }
 
 		template <size_t N,
+                  typename Generator,
 				  template <typename, size_t> typename Container = std::array>
 		auto
-		operator()() noexcept
+		operator()(Generator&& gen) noexcept
 		{
 			Container<T, N> ret;
 
 			for (auto & v : ret)
-				v = m_dist(m_gen);
+				v = m_dist(std::forward<Generator>(gen));
 
 			return ret;
 		}
     };
 
-
-    // canonical real type random number generator
     template <typename RealType,
-			  typename RandomDevice = std::random_device,
-    	      typename Generator = std::default_random_engine>
-    typename std::enable_if_t<std::is_floating_point_v<RealType>, RealType>
-    rand()
-    {
-		static thread_local RandomDevice rd;
-		static thread_local Generator gen(rd());
+              typename Generator,
+              size_t bits = 8>
+    auto
+    rand(Generator&& gen)
+    { return std::generate_canonical<RealType, bits>(gen); }
 
-		return std::generate_canonical<RealType, RANDOM_BITS>(gen);
-    }
-
-    template <typename RealType, size_t N,
-			  template <typename, size_t> typename Container = std::array,
-    	      typename RandomDevice = std::random_device,
-    	      typename Generator = std::default_random_engine>
-    typename std::enable_if_t<std::is_floating_point_v<RealType>, Container<RealType, N>>
-    rand()
+    template <typename RealType,
+              size_t N,
+              typename Generator,
+              size_t bits = 8,
+			  template <typename, size_t> typename Container = std::array>
+    auto
+    rand(Generator&& gen)
     {
     	Container<RealType, N> ret;
 
-    	for (auto & v : ret)
-    	    v = rand<std::decay_t<decltype(v)>, RandomDevice, Generator>();
+    	for (auto &v : ret)
+    	    v = std::generate_canonical<RealType, bits>(std::forward<Generator>(gen));
 
     	return ret;
     }
