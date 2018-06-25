@@ -28,11 +28,8 @@ namespace yapt
 				  template <typename, size_t> typename Container2>
 		constexpr
 		AABB_(const Point_<Container1>& vmin,
-			  const Point_<Container2>& vmax)
-        {
-            Vector(ArrayView<real, 3>(&m_data[0])) = vmin;
-            Vector(ArrayView<real, 3>(&m_data[3])) = vmax;
-        }
+			  const Point_<Container2>& vmax) :
+        m_data({vmin[0], vmin[1], vmin[2], vmax[0], vmax[1], vmax[2]}) {}
 
         const constexpr auto
         operator[](const size_t i) const noexcept
