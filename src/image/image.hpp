@@ -34,15 +34,27 @@ namespace yapt
         {
         protected:
             T* p_data;
-            size_t m_num_pixels;
+            Res m_res;
             size_t m_pos = 0;
+
+            auto
+            num_pixels() const noexcept
+            { return product(m_res); }
 
         public:
             base_iterator() = delete;
 
             explicit
-            base_iterator(T* data, size_t num_pixels, size_t pos = 0) :
-                p_data(data), m_num_pixels(num_pixels), m_pos(pos) {}
+            base_iterator(T* data, const Res& res, size_t pos = 0) :
+                p_data(data), m_res(res), m_pos(pos) {}
+
+            auto
+            pos() const noexcept
+            {
+                const auto x = m_pos % m_res[0];
+                const auto y = (m_pos - x) / m_res[0];
+                return Res(x, y);
+            }
 
             Iterator&
             operator++() noexcept
@@ -60,11 +72,11 @@ namespace yapt
 
             Iterator
             operator+(const size_t rhs) const noexcept
-            { return Iterator(p_data, m_num_pixels, m_pos + rhs); }
+            { return Iterator(p_data, m_res, m_pos + rhs); }
 
             Iterator
             operator-(const size_t rhs) const noexcept
-            { return Iterator(p_data, m_num_pixels, m_pos - rhs); }
+            { return Iterator(p_data, m_res, m_pos - rhs); }
 
             Iterator&
             operator+=(const size_t rhs) noexcept
@@ -86,11 +98,11 @@ namespace yapt
 
             bool
             operator==(const base_iterator& rhs) const noexcept
-            { return p_data == rhs.p_data && m_num_pixels == rhs.m_num_pixels && m_pos == rhs.m_pos; }
+            { return p_data == rhs.p_data && num_pixels() == rhs.num_pixels() && m_pos == rhs.m_pos; }
 
             bool
             operator!=(const base_iterator& rhs) const noexcept
-            { return p_data != rhs.p_data || m_num_pixels != rhs.m_num_pixels || m_pos != rhs.m_pos; }
+            { return p_data != rhs.p_data || num_pixels() != rhs.num_pixels() || m_pos != rhs.m_pos; }
         };
 
     public:
@@ -104,7 +116,7 @@ namespace yapt
             auto
             operator*() const noexcept
             {
-                CHECK_INDEX(Super::m_pos, Super::m_num_pixels);
+                CHECK_INDEX(Super::m_pos, Super::num_pixels());
                 return Vector(ArrayView<T, NC>(Super::p_data + Super::m_pos * NC));
             }
         };
@@ -119,7 +131,7 @@ namespace yapt
             const auto
             operator*() const noexcept
             {
-                CHECK_INDEX(Super::m_pos, Super::m_num_pixels);
+                CHECK_INDEX(Super::m_pos, Super::num_pixels());
                 return Vector(ArrayView<T, NC>(const_cast<T*>(Super::p_data + Super::m_pos * NC)));
             }
         };
@@ -127,28 +139,29 @@ namespace yapt
         class view
         {
             T* p_data;
-            size_t m_num_pixels;
+            Res m_res;
 
         public:
             view() = delete;
 
-            view(T* data, size_t num_pixels) : p_data(data), m_num_pixels(num_pixels) {}
+            view(T* data, const Res& res) :
+                p_data(data), m_res(Res(res[0], 1)) {}
 
             iterator
             begin() const noexcept
-            { return iterator(p_data, m_num_pixels); }
+            { return iterator(p_data, m_res); }
 
             iterator
             end() const noexcept
-            { return iterator(p_data, m_num_pixels, m_num_pixels); }
+            { return iterator(p_data, m_res, m_res[0]); }
 
             const_iterator
             cbegin() const noexcept
-            { return iterator(p_data, m_num_pixels); }
+            { return iterator(p_data, m_res); }
 
             const_iterator
             cend() const noexcept
-            { return iterator(p_data, m_num_pixels, m_num_pixels); }
+            { return iterator(p_data, m_res, m_res[0]); }
 
             auto
             operator[](const size_t i) noexcept
@@ -216,35 +229,35 @@ namespace yapt
 
         auto
         begin() noexcept
-        { return iterator(p_data, num_pixels()); }
+        { return iterator(p_data, m_res); }
 
         auto
         end() noexcept
-        { return iterator(p_data, num_pixels(), num_pixels()); }
+        { return iterator(p_data, m_res, num_pixels()); }
 
         auto
         begin() const noexcept
-        { return const_iterator(p_data, num_pixels()); }
+        { return const_iterator(p_data, m_res); }
 
         auto
         end() const noexcept
-        { return const_iterator(p_data, num_pixels(), num_pixels()); }
+        { return const_iterator(p_data, m_res, num_pixels()); }
 
         auto
         cbegin() const noexcept
-        { return const_iterator(p_data, num_pixels()); }
+        { return const_iterator(p_data, m_res); }
 
         auto
         cend() const noexcept
-        { return const_iterator(p_data, num_pixels(), num_pixels()); }
+        { return const_iterator(p_data, m_res, num_pixels()); }
 
         auto
         operator[](const size_t i) noexcept
-        { return view(p_data + pos(i, 0), width()); }
+        { return view(p_data + pos(i, 0), m_res); }
 
         const auto
         operator[](const size_t i) const noexcept
-        { return view(p_data + pos(i, 0), width()); }
+        { return view(p_data + pos(i, 0), m_res); }
 
         auto
         at(const size_t i) noexcept

@@ -15,5 +15,5 @@ yapt::write_ppm(const yapt::Image<float, 3>& img,
         << 255 << '\n';
 
     for (auto color : img)
-        out << Vector<unsigned int, 3, std::array>(color) * 255 << ' ';
+        out << Vector<int, 3, std::array>(RGB(color) * 255) << ' ';
 }
