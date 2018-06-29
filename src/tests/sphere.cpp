@@ -14,7 +14,12 @@ int main()
     Ray tohit(Point(-raydir*10), raydir);
     Ray tomiss(Point(-raydir*10) + Point(1.1,0,0), raydir);
     TEST_AND_COUT(sizeof(sphere));
-    TEST_AND_COUT(intersect(tohit, sphere));
-    TEST_AND_COUT(intersect(tomiss, sphere));
-    return 0;
+    const auto hit_isect = intersect(tohit, sphere);
+    int ret = 0;
+    if(!hit_isect)
+        ret++;
+    if(intersect(tomiss, sphere))
+        ret++;
+    TEST_AND_COUT(compute_normal(tohit, hit_isect, sphere));
+    return ret;
 }

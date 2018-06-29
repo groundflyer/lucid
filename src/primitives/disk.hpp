@@ -44,10 +44,19 @@ namespace yapt
               const Disk_<DiskContainer>& prim,
 			  const Range<real>& range = Range<real>()) noexcept
     {
-        auto ret = intersect(ray, static_cast<Plane_<DiskContainer>>(prim), range);
-
+        auto plane_isect = intersect(ray, static_cast<Plane_<DiskContainer>>(prim), range);
         const auto& [o, d] = ray;
-        ret.intersect &= length2((o + d * ret.t) - prim.position) <= prim.radius2;
-        return ret;
+        return Intersection(plane_isect && length2((o + d * plane_isect.distance()) - prim.position) <= prim.radius2,
+                            plane_isect.distance(),
+                            plane_isect.coords());
     }
+
+	template <template <typename, size_t> typename DiskContainer,
+			  template <typename, size_t> typename RayContainer,
+              template <typename, size_t> typename IsectContainer>
+    constexpr auto
+    compute_normal(const Ray_<RayContainer>& ray,
+                   const Intersection_<IsectContainer>& isect,
+                   const Disk_<DiskContainer>& prim) noexcept
+    { return compute_normal(ray, isect, static_cast<Plane_<DiskContainer>>(prim)); }
 }

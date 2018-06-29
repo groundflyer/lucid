@@ -79,4 +79,17 @@ namespace yapt
 
         return Intersection();
 	}
+
+	template <template <typename, size_t> typename SphereContainer,
+			  template <typename, size_t> typename RayContainer,
+              template <typename, size_t> typename IsectContainer>
+    constexpr auto
+    compute_normal(const Ray_<RayContainer>& ray,
+                   const Intersection_<IsectContainer>& isect,
+                   const Sphere_<SphereContainer>& prim) noexcept
+    {
+        const auto& [o, d] = ray;
+        const auto pos = o + d * isect.distance();
+        return Normal(pos - prim.center);
+    }
 }

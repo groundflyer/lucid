@@ -76,4 +76,18 @@ namespace yapt
 
         return Intersection();
     }
+
+	template <template <typename, size_t> typename TriangleContainer,
+			  template <typename, size_t> typename RayContainer,
+              template <typename, size_t> typename IsectContainer>
+    constexpr auto
+    compute_normal(const Ray_<RayContainer>&,
+                   const Intersection_<IsectContainer>&,
+                   const Triangle_<TriangleContainer>& prim) noexcept
+    {
+        const auto& [p0, p1, p2] = prim;
+        const auto edge1 = p1 - p0;
+        const auto edge2 = p2 - p0;
+        return Normal(edge1.cross(edge2));
+    }
 }

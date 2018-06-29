@@ -14,5 +14,6 @@ int main()
     const Ray tomiss(Point(0,1,0), Normal(0,1,0));
     TEST_AND_COUT(intersect(tohit, plane));
     TEST_AND_COUT(intersect(tomiss, plane));
+    TEST_AND_COUT(compute_normal(tohit, intersect(tohit, plane), plane));
     return 0;
 }

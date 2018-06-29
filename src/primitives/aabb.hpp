@@ -87,4 +87,18 @@ namespace yapt
         decltype(auto) mm = max(vmin);
         return Intersection(range.encloses(mm), mm, Vec2());
 	}
+
+	template <template <typename, size_t> typename AABBContainer,
+			  template <typename, size_t> typename RayContainer,
+              template <typename, size_t> typename IsectContainer>
+    constexpr auto
+    compute_normal(const Ray_<RayContainer>& ray,
+                   const Intersection_<IsectContainer>& isect,
+                   const AABB_<AABBContainer>& prim) noexcept
+    {
+        const auto center = math::lerp(Vec3(prim[0]), Vec3(prim[1]), 0.5_r);
+        const auto& [o, d] = ray;
+        const auto pos = o + d * isect.distance();
+        return Normal(pos - center);
+    }
 }

@@ -50,4 +50,13 @@ namespace yapt
 
         return Intersection(range.encloses(t), t, Vec2(0));
     }
+
+	template <template <typename, size_t> typename PlaneContainer,
+			  template <typename, size_t> typename RayContainer,
+              template <typename, size_t> typename IsectContainer>
+    constexpr auto
+    compute_normal(const Ray_<RayContainer>&,
+                   const Intersection_<IsectContainer>&,
+                   const Plane_<PlaneContainer>& prim) noexcept
+    { return Normal(prim.normal); }
 }

@@ -17,7 +17,8 @@ int main()
     const Ray tomiss(Point(1.1,0,0), dir);
     int ret = 0;
     TEST_AND_COUT(sizeof(aabb));
-    if(!intersect(tohit, aabb, Range<real>()))
+    const auto hit_isect = intersect(tohit, aabb);
+    if(!hit_isect)
     {
         cout << "Hit failed\n";
         ret++;
@@ -52,6 +53,8 @@ int main()
     }
     else
         cout << "View Miss OK\n";
+
+    TEST_AND_COUT(compute_normal(tohit, hit_isect, aabb));
 
     return ret;
 }

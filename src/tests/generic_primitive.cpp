@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // variant_primitive.cpp
 #include "test_util.hpp"
-#include <primitives/generic_primitive.hpp>
+#include <primitives/generic.hpp>
 
 using namespace std;
 using namespace yapt;
@@ -33,5 +33,7 @@ int main()
     prim = Plane(Point(0), -raydir);
     TEST_AND_COUT(intersect(tohit, prim));
     TEST_AND_COUT(intersect(Ray(Point(0), Normal(0,1,0)), prim));
+
+    TEST_AND_COUT(compute_normal(tohit, intersect(tohit, prim), prim));
     return 0;
 }

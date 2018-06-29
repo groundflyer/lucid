@@ -13,8 +13,14 @@ int main()
     const Ray tohit(Point(0,1,0), Normal(0,-1,0));
     const Ray tomiss1(Point(0,1,0), Normal(0,1,0));
     const Ray tomiss2(Point(1.1,1,0), Normal(0,-1,0));
-    TEST_AND_COUT(intersect(tohit, disk));
-    TEST_AND_COUT(intersect(tomiss1, disk));
-    TEST_AND_COUT(intersect(tomiss2, disk));
-    return 0;
+    const auto hit_isect = intersect(tohit, disk);
+    int ret = 0;
+    if(!hit_isect)
+        ret++;
+    if(intersect(tomiss1, disk))
+        ret++;
+    if(intersect(tomiss2, disk))
+        ret++;
+    TEST_AND_COUT(compute_normal(tohit, intersect(tohit, disk), disk));
+    return ret;
 }

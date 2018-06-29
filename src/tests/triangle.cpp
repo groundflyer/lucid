@@ -16,5 +16,6 @@ int main()
     TEST_AND_COUT(sizeof(triangle));
     TEST_AND_COUT(intersect(tohit, triangle));
     TEST_AND_COUT(intersect(tomiss, triangle));
+    TEST_AND_COUT(compute_normal(tohit, intersect(tohit, triangle), triangle));
     return 0;
 }

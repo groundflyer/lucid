@@ -30,8 +30,23 @@ namespace yapt
     constexpr auto
     intersect(const Ray_<RayContainer>& ray,
               const GenericPrimitive_<PrimContainer>& prim,
-              const Range<real>& range = Range<real>())
+              const Range<real>& range = Range<real>()) noexcept
     {
-        return std::visit([&](const auto& held_prim) { return intersect(ray, held_prim, range); }, prim);
+        return std::visit([&](const auto& held_prim)
+                          { return intersect(ray, held_prim, range); },
+                          prim);
+    }
+
+	template <template <typename, size_t> typename PrimContainer,
+			  template <typename, size_t> typename RayContainer,
+              template <typename, size_t> typename IsectContainer>
+    constexpr auto
+    compute_normal(const Ray_<RayContainer>& ray,
+                   const Intersection_<IsectContainer>& isect,
+                   const GenericPrimitive_<PrimContainer>& prim) noexcept
+    {
+        return std::visit([&](const auto& held_prim)
+                          { return compute_normal(ray, isect, held_prim); },
+                          prim);
     }
 }
