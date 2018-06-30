@@ -14,16 +14,17 @@ namespace yapt
     template <template <typename, size_t> typename Container>
     constexpr Vec4_<Container>
     homogenize(const Point_<Container> & a) noexcept
-    {
-		Vec4_<Container> ret(a);
-		ret[3] = 1;
-		return ret;
-    }
+    { return Vec4(a[0], a[1], a[2], 1); }
 
     template <template <typename, size_t> typename Container>
     constexpr Vec3_<Container>
     dehomogenize(const Vec4_<Container> & a) noexcept
-    { return Vec3_<Container>(a) / (a[3] != 0 ? a[3] : 1); }
+    {
+        Vec3 ret(a);
+        if(a[3] != 0 && a[3] != 1)
+            ret /= a[3];
+        return ret;
+    }
 
 
     template <template <typename, size_t> typename MatContainer,
@@ -39,14 +40,14 @@ namespace yapt
     constexpr auto
     apply_transform(const Mat4_<MatContainer> & t,
 					const Point_<PointContainer> & p) noexcept
-    { return Point_<PointContainer>(dehomogenize(t.dot(homogenize(p)))); }
+    { return Point(dehomogenize(t.dot(homogenize(p)))); }
 
     template <template <typename, size_t> typename MatContainer,
 			  template <typename, size_t> typename NormalContainer>
     constexpr auto
     apply_transform(const Mat4_<MatContainer> & t,
 					const Normal_<NormalContainer> & n) noexcept
-    { return Normal_<NormalContainer>(dehomogenize(transpose(inverse(t)).dot(Vec4(n)))); }
+    { return Normal(dehomogenize(transpose(inverse(t)).dot(Vec4(n)))); }
 
 
     template <template <typename, size_t> typename Container>
@@ -54,10 +55,10 @@ namespace yapt
     translate(const Vec3_<Container> & delta) noexcept
     {
 		const auto& [x, y, z] = delta;
-		return Mat4_<Container>(1, 0, 0, x,
-								0, 1, 0, y,
-								0, 0, 1, z,
-								0, 0, 0, 1);
+		return Mat4(1, 0, 0, x,
+                    0, 1, 0, y,
+                    0, 0, 1, z,
+                    0, 0, 0, 1);
     }
 
     template <template <typename, size_t> typename Container>
@@ -65,30 +66,51 @@ namespace yapt
     scale(const Vec3_<Container> & delta) noexcept
     {
 		const auto& [x, y, z] = delta;
-		return Mat4_<Container>(x, 0, 0, 0,
-								0, y, 0, 0,
-								0, 0, z, 0,
-								0, 0, 0, 1);
+		return Mat4(x, 0, 0, 0,
+                    0, y, 0, 0,
+                    0, 0, z, 0,
+                    0, 0, 0, 1);
+    }
+
+    // rotate around an arbitary axis clockwise
+    // angle in radians
+    template <template <typename, size_t> typename Container>
+    constexpr auto
+    rotate(const real angle, const Vec3_<Container> & axis) noexcept
+    {
+		const auto& [x, y, z] = axis;
+
+		const Mat3 A(0, z, -y,
+					 -z, 0, -x,
+					 y, x, 0);
+
+		const auto xy = x*y;
+		const auto xz = x*z;
+		const auto yz = y*z;
+
+		const Mat3 aa(x*x, xy, xz,
+					  xy, y*y, yz,
+					  xz, yz, z*z);
+
+		const auto cos_theta = math::cos(angle);
+		const auto rot = Mat3::unit() * cos_theta +
+			aa * (1_r - cos_theta) + A * math::sin(angle);
+
+		return Mat4(rot);
     }
 
     template <template <typename, size_t> typename EyeContainer,
 			  template <typename, size_t> typename CenContainer,
-			  template <typename, size_t> typename UpContainer>
+			  template <typename, size_t> typename UpContainer = std::array>
     constexpr auto
     look_at(const Point_<EyeContainer>& eye,
-			const Point_<CenContainer>& center,
+			const Point_<CenContainer>& target,
 			const Normal_<UpContainer>& up = Normal_<UpContainer>(0, 1, 0)) noexcept
     {
-		const auto f = normalize(center - eye);
-		const auto s = normalize(f.cross(up));
-		const auto [ux, uy, uz] = s.cross(f);
-		const auto& [sx, sy, sz] = s;
-		const auto& [fx, fy, fz] = f;
-
-		return Mat4(sx, sy, sz, 0,
-					ux, uy, uz, 0,
-					-fx, -fy, -fz, 0,
-					0, 0, 0, 1).dot(translate(-eye));
+		const auto f = normalize(eye - target);
+		const auto s = normalize(up.cross(f));
+        const auto u = f.cross(s);
+		return inverse(Mat4(Vec4(s), Vec4(u), Vec4(f), Vec4(0,0,0,1)).dot(translate(-eye)));
     }
 
 
@@ -114,32 +136,5 @@ namespace yapt
 		}
 
 		return std::pair(v2, v1.cross(v2));
-    }
-
-    // rotate around an arbitary axis clockwise
-    // angle in radians
-    template <template <typename, size_t> typename Container>
-    constexpr auto
-    rotate(const real angle, const Vec3_<Container> & axis) noexcept
-    {
-		const auto& [x, y, z] = axis;
-
-		const Mat3 A(0, -z, y,
-					 z, 0, -x,
-					 -y, x, 0);
-
-		const auto xy = x*y;
-		const auto xz = x*z;
-		const auto yz = y*z;
-
-		const Mat3 aa(x*x, xy, xz,
-					  xy, y*y, yz,
-					  xz, yz, z*z);
-
-		const auto cos_theta = math::cos(angle);
-		const auto rot = Mat3::unit() * cos_theta +
-			aa * (1 - cos_theta) + A * math::sin(angle);
-
-		return Mat4_<Container>(rot);
     }
 }
