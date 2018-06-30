@@ -4,38 +4,42 @@
 
 #pragma once
 
-#include <core/math/transforms.hpp>
-#include <core/geo/primitive.hpp>
-#include "material.hpp"
+#include <primitives/generic.hpp>
 
 #include <vector>
 
-
 namespace yapt
 {
-    class GeometryObject
+    // class Material
+    // {
+    //     RGB m_color{1,1,1};
+
+    // public:
+    //     constexpr
+    //     Material(const RGB& color) : m_color(color) {}
+
+    //     constexpr auto
+    //     eval(const Normal& n,
+    //          const Normal& l) const noexcept
+    //     { return m_color * n.dot(l); }
+    // };
+
+    struct Object
     {
-	Transform _transform;
-	const Material * _material = nullptr;
+        std::vector<GenericPrimitive> prims;
+        // Mat4 transform;
 
-	std::vector<Primitive*> _geo;
-    public:
-	GeometryObject();
-
-	GeometryObject(const Transform & transform,
-		       const Material & material);
-
-	void
-	add_primitive(Primitive * prim) noexcept;
-
-	const std::vector<Primitive*> &
-	get_primitives() const noexcept;
-
-	const Transform &
-	get_transform() const noexcept;
-
-	const Material &
-	get_material() const noexcept;
+        // constexpr
+        // Object() : transform(Mat4::unit()) {}
     };
 
+    auto
+    traverse(const Ray& ray, const std::vector<GenericPrimitive>& prims)
+    {
+        auto iter = prims.cbegin();
+        auto isect = intersect(ray, *(iter++));
+        for(; iter != prims.cend(); ++iter)
+            isect = std::min(isect, intersect(ray, *iter));
+        return isect;
+    }
 }

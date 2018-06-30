@@ -4,8 +4,7 @@
 
 #pragma once
 
-#include <core/basic_types.hpp>
-#include <core/geo/intersection.hpp>
+#include <core/types.hpp>
 #include "omni_light.hpp"
 
 

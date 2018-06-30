@@ -210,39 +210,6 @@ namespace yapt
     Normal_(Container<real, 3> &&) -> Normal_<Container>;
 
 
-    template <template <typename, size_t> typename Container>
-    class NDC_ : public Vec2_<Container>
-    {
-        using Super = Vec2_<Container>;
-
-        // inplace modulo 1
-        constexpr void
-        mod() noexcept
-        {
-            for (auto& elem : Super::m_data)
-                elem = math::fmod(math::abs(elem), 1_r);
-        }
-
-    public:
-        template <typename ... Ts>
-		explicit constexpr
-		NDC_(Ts && ... args) : Super(std::forward<Ts>(args)...)
-		{ mod(); }
-
-        template <typename T>
-        constexpr NDC_&
-        operator=(T&& rhs) noexcept
-        {
-            Super::operator=(std::forward<T>(rhs));
-            mod();
-            return *this;
-        }
-    };
-
-    template <template <typename, size_t> typename Container>
-    NDC_(Container<real, 2> &&) -> NDC_<Container>;
-
-
     using Vec2 = Vec2_<std::array>;
     using Vec3 = Vec3_<std::array>;
     using Vec4 = Vec4_<std::array>;
@@ -252,8 +219,6 @@ namespace yapt
     using Mat2 = Mat2_<std::array>;
     using Mat3 = Mat3_<std::array>;
     using Mat4 = Mat4_<std::array>;
-    using NDC = NDC_<std::array>;
-    using Res = Vector<size_t, 2, std::array>;
     using RGB = RGB_<std::array>;
     using RGBA = RGBA_<std::array>;
     using RGB8 = RGB8_<std::array>;
@@ -276,13 +241,5 @@ namespace std
 	template<size_t I,
 			 template <typename, size_t> typename Container>
     struct tuple_element<I, yapt::Normal_<Container>>
-	{ using type = yapt::real; };
-
-	template <template <typename, size_t> typename Container>
-	struct tuple_size<yapt::NDC_<Container>> : integral_constant<size_t, 2> {};
-
-	template<size_t I,
-			 template <typename, size_t> typename Container>
-    struct tuple_element<I, yapt::NDC_<Container>>
 	{ using type = yapt::real; };
 }

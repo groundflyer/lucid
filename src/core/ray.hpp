@@ -37,5 +37,5 @@ namespace yapt
     constexpr auto
     apply_transform(const Mat4_<MatContainer>& t,
 					const Ray_<RayContainer>& ray)
-    { return Ray_<RayContainer>(apply_transform(t, ray.origin), apply_transform(t, ray.dir)); }
+    { return Ray(apply_transform(t, ray.origin), apply_transform(t, ray.dir)); }
 }

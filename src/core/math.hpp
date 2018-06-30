@@ -5,6 +5,7 @@
 #pragma once
 
 #include <cmath>
+#include <limits>
 #include <iterator>
 #include <type_traits>
 
@@ -121,10 +122,21 @@ namespace yapt::math
     radians(const T & _degrees)
     { return _degrees * PI<T> / static_cast<T>(180); }
 
-    template <typename T>
+    template <typename Bias, typename T>
     constexpr auto
-    fit(const T& source,
-        const T& sourcemin, const T& sourcemax,
-        const T& targetmin, const T& targetmax)
-    {}
+    lerp(const T& a, const T& b, const Bias& bias)
+    { return b * bias + a * (T(1) - bias); }
+
+    template <typename T>
+    constexpr typename std::enable_if_t<std::is_floating_point_v<T>, bool>
+    almost_equal(const T a, const T b, const int ulp = 2)
+    {
+        // the machine epsilon has to be scaled to the magnitude of the values used
+        // and multiplied by the desired precision in ULPs (units in the last place)
+        // unless the result is subnormal
+        const auto amb = abs(a - b);
+        return amb <= std::numeric_limits<T>::epsilon() *
+            abs(a + b) * ulp ||
+            amb < std::numeric_limits<T>::min();
+    }
 }

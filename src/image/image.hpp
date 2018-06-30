@@ -17,7 +17,7 @@ namespace yapt
               typename Allocator = std::allocator<T>>
     class Image
     {
-        Res m_res;
+        Vec2u m_res;
         Allocator m_alloc = Allocator();
         T* p_data = nullptr;
 
@@ -34,7 +34,7 @@ namespace yapt
         {
         protected:
             T* p_data;
-            Res m_res;
+            Vec2u m_res;
             size_t m_pos = 0;
 
             auto
@@ -45,7 +45,7 @@ namespace yapt
             base_iterator() = delete;
 
             explicit
-            base_iterator(T* data, const Res& res, size_t pos = 0) :
+            base_iterator(T* data, const Vec2u& res, size_t pos = 0) :
                 p_data(data), m_res(res), m_pos(pos) {}
 
             auto
@@ -53,7 +53,7 @@ namespace yapt
             {
                 const auto x = m_pos % m_res[0];
                 const auto y = (m_pos - x) / m_res[0];
-                return Res(x, y);
+                return Vec2u(x, y);
             }
 
             Iterator&
@@ -139,13 +139,13 @@ namespace yapt
         class view
         {
             T* p_data;
-            Res m_res;
+            Vec2u m_res;
 
         public:
             view() = delete;
 
-            view(T* data, const Res& res) :
-                p_data(data), m_res(Res(res[0], 1)) {}
+            view(T* data, const Vec2u& res) :
+                p_data(data), m_res(Vec2u(res[0], 1)) {}
 
             iterator
             begin() const noexcept
@@ -181,7 +181,7 @@ namespace yapt
         explicit
         Image(const Allocator& alloc) : m_alloc(alloc) {}
 
-        Image(const Res& res,
+        Image(const Vec2u& res,
               const Allocator& alloc = Allocator()) : m_res(res), m_alloc(alloc)
         {
             p_data = std::allocator_traits<Allocator>::allocate(m_alloc, size());
@@ -199,7 +199,7 @@ namespace yapt
         Image(Image&& rhs) : m_alloc(std::move(rhs.m_alloc)), m_res(rhs.m_res), p_data(rhs.p_data)
         {
             rhs.p_data = nullptr;
-            rhs.m_res = Res(0);
+            rhs.m_res = Vec2u(0);
         }
 
         Image&
@@ -297,7 +297,7 @@ namespace yapt
         size() const noexcept
         { return num_pixels() * NC; }
 
-        const Res&
+        const Vec2u&
         res() const noexcept
         { return m_res; }
     };

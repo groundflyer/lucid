@@ -50,7 +50,7 @@ namespace yapt
         { return Vector(ArrayView<real, 2>(&m_data[1])); }
 
         template <size_t I>
-        decltype(auto)
+        constexpr decltype(auto)
         get() const noexcept
         {
             if constexpr (I == 0)
@@ -60,13 +60,22 @@ namespace yapt
         }
 
         template <size_t I>
-        decltype(auto)
+        constexpr decltype(auto)
         get() noexcept
         {
             if constexpr (I == 0)
                 return distance();
             else
                 return coords();
+        }
+
+        constexpr auto
+        operator<(const Intersection_& rhs) const noexcept
+        {
+            const auto dist_lhs = m_intersect ? distance() : std::numeric_limits<real>::infinity();
+            const auto dist_rhs = rhs.m_intersect ? rhs.distance() : std::numeric_limits<real>::infinity();
+            return dist_lhs < dist_rhs;
+            
         }
     };
 
