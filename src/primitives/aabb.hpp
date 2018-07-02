@@ -51,7 +51,7 @@ namespace yapt
         {
             Vec3 ret;
             for(size_t i = 0; i < 3; ++i)
-                ret[i] = m_data[idxs[i] * 3];
+                ret[i] = (*this)[idxs[i]][i];
             return ret;
         }
 	};
@@ -84,7 +84,7 @@ namespace yapt
            zmin > std::min(ymax, xmax))
             return Intersection();
 
-        decltype(auto) mm = max(vmin);
+        const auto mm = max(vmin);
         return Intersection(range.encloses(mm), mm, Vec2());
 	}
 
