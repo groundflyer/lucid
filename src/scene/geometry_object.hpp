@@ -7,6 +7,7 @@
 #include <primitives/generic.hpp>
 
 #include <vector>
+#include <utility>
 
 namespace yapt
 {
@@ -34,12 +35,41 @@ namespace yapt
     };
 
     auto
-    traverse(const Ray& ray, const std::vector<GenericPrimitive>& prims)
+    tracked_intersect(const Ray& ray,
+                      const GenericPrimitive& prim,
+                      const Range<real>& range = Range<real>())
+    { return std::pair(intersect(ray, prim, range), &prim); }
+
+    auto
+    traverse(const Ray& ray,
+             const std::vector<GenericPrimitive>& prims,
+             const Range<real>& range = Range<real>())
     {
         auto iter = prims.cbegin();
-        auto isect = intersect(ray, *(iter++));
-        for(; iter != prims.cend(); ++iter)
-            isect = std::min(isect, intersect(ray, *iter));
+        auto isect = tracked_intersect(ray, *iter, range);
+        for(++iter; iter != prims.cend(); ++iter)
+            isect = std::min(isect, tracked_intersect(ray, *iter, range),
+                             [](const auto& a, const auto& b)
+                             { return a.first < b.first; });
         return isect;
+    }
+
+    auto
+    occlusion(const Ray& ray,
+              const std::vector<GenericPrimitive>& prims,
+              const Range<real>& range = Range<real>())
+    {
+        auto iter = prims.cbegin();
+        auto isect = intersect(ray, *iter, range);
+        for(++iter; iter != prims.cend(); ++iter)
+            isect = std::min(isect, intersect(ray, *iter, range));
+        return bool(isect);
+    }
+
+    constexpr auto
+    get_intersection_pos(const Ray& ray, const Intersection& isect)
+    {
+        const auto& [o, d] = ray;
+        return o + d * isect.distance();
     }
 }

@@ -24,7 +24,7 @@ namespace yapt::math
     const constexpr T PI = static_cast<T>(3.141592653589793);
 
     // simple power function
-    template <typename T, unsigned exp>
+    template <unsigned exp, typename T>
     constexpr T
     pow(const T& base) noexcept
     {

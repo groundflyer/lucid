@@ -139,6 +139,13 @@ namespace yapt
     	return ret;
     }
 
+    template <typename T, size_t N,
+			  template <typename, size_t> class Container>
+    constexpr auto
+    frontface(const Vector<T, N, Container> & a,
+              const Vector<T, N, Container> & b) noexcept
+    { return dot(a, b) < 0 ? -a : a; }
+
 //     // 3-dimensional cross product
 //     template <typename T,
 // 	      template <typename, size_t> class Container1,
@@ -167,7 +174,7 @@ namespace yapt
     	      template <typename, size_t> class Container>
     constexpr auto
     length2(const Vector<T, N, Container> & a) noexcept
-    { return transform_reduce(a, math::pow<T, 2>); }
+    { return transform_reduce(a, math::pow<2, T>); }
 
     template <typename T, size_t N,
 			  template <typename, size_t> class Container>
