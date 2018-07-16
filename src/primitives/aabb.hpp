@@ -15,34 +15,31 @@ namespace yapt
     template <template <typename, size_t> typename Container>
     class AABB_
     {
-        Container<real, 6> m_data;
+        Point_<Container> m_vmin;
+        Point_<Container> m_vmax;
 
     public:
         constexpr
 		AABB_() {};
 
-        constexpr
-        AABB_(Container<real, 6>&& cont) : m_data(cont) {}
-
 		template <template <typename, size_t> typename Container1,
 				  template <typename, size_t> typename Container2>
 		constexpr
 		AABB_(const Point_<Container1>& vmin,
-			  const Point_<Container2>& vmax) :
-        m_data({vmin[0], vmin[1], vmin[2], vmax[0], vmax[1], vmax[2]}) {}
+			  const Point_<Container2>& vmax) : m_vmin(vmin), m_vmax(vmax) {}
 
-        const constexpr auto
+        constexpr const auto&
         operator[](const size_t i) const noexcept
         {
             CHECK_INDEX(i, 2);
-            return Vector(ArrayView<real, 3>(const_cast<real*>(&m_data[i * 3])));
+            return i ? m_vmax : m_vmin;
         }
 
-        constexpr auto
+        constexpr auto&
         operator[](const size_t i) noexcept
         {
             CHECK_INDEX(i, 2);
-            return Vector(ArrayView<real, 3>(&m_data[i * 3]));
+            return i ? m_vmax : m_vmin;
         }
 
         template <template <typename, size_t> typename Container1>

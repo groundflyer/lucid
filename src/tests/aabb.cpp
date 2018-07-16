@@ -34,27 +34,5 @@ int main()
     else
         cout << "Miss OK\n";
 
-    real data[6];
-    auto aabb_view = AABB_(ArrayView<real, 6>(data));
-    aabb_view[0] = b0;
-    aabb_view[1] = b1;
-    if(!intersect(tohit, aabb_view, Range<real>()))
-    {
-        cout << "View Hit failed\n";
-        ret++;
-    }
-    else
-        cout << "View Hit OK\n";
-
-    if(intersect(tomiss, aabb_view, Range<real>()))
-    {
-        cout << "View Miss failed\n";
-        ret++;
-    }
-    else
-        cout << "View Miss OK\n";
-
-    TEST_AND_COUT(compute_normal(tohit, hit_isect, aabb));
-
     return ret;
 }
