@@ -40,6 +40,9 @@ namespace yapt
     using Vec4_ = Vector<real, 4, Container>;
 
     template <template <typename, size_t> typename Container>
+    using Vec3i_ = Vector<int, 3, Container>;
+
+    template <template <typename, size_t> typename Container>
     using Mat2_ = Matrix<real, 2, 2, Container>;
 
     template <template <typename, size_t> typename Container>
@@ -213,6 +216,7 @@ namespace yapt
     using Vec2 = Vec2_<std::array>;
     using Vec3 = Vec3_<std::array>;
     using Vec4 = Vec4_<std::array>;
+    using Vec3i = Vec3i_<std::array>;
     using Vec2u = Vec2u_<std::array>;
     using Point = Point_<std::array>;
     using Normal = Normal_<std::array>;

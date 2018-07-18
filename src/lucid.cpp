@@ -29,12 +29,12 @@ int main(int argc, char *argv[])
     prims.push_back(sphere);
     prims.push_back(plane);
     prims.push_back(Disk(disk_pos, Normal(sphere_pos - disk_pos), 1_r));
-    prims.push_back(AABB(Point(-5,0,1), Point(-2,4,3)));
+    prims.push_back(AABB(Point(-6,0,1), Point(-3,4,3)));
 
-    const Point lp(5, 3, -2);
+    const Point lp(-2, 5, -3);
 
     PerspectiveCamera cam(math::radians(120_r),
-                          look_at(Point(0,1,-5), sphere_pos));
+                          look_at(Point(-10,6,-5), sphere_pos));
     Image<float, 3> img(res);
 
     for(auto it = img.begin(); it != img.end(); ++it)
@@ -44,13 +44,14 @@ int main(int argc, char *argv[])
         const auto isect = traverse(ray, prims);
         const auto p = get_intersection_pos(ray, isect.first);
         const auto i = -ray.dir;
-        const auto n = frontface(compute_normal(ray, isect.first, *isect.second), i);
+        const auto n = compute_normal(ray, isect.first, *isect.second);
         const auto L = lp - p;
         const auto Ld = length(L);
         const Normal l(L / Ld);
         const auto shadow = occlusion(Ray(p, l), prims, Range<real>(std::numeric_limits<real>::min() + std::numeric_limits<real>::epsilon() * 1000, Ld));
-        const RGB c(std::max(n.dot(l), 0_r) * !shadow);
+        const RGB c(std::max(n.dot(l), 0_r) / (math::pow<3>(Ld)) * 20 * !shadow);
         *it = c;
+        // *it = fit(n, min(n), max(n));
     }
 
     write_ppm(img, "render.ppm");

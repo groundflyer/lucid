@@ -19,6 +19,9 @@ namespace yapt::math
 	using std::sin;
     using std::tan;
     using std::fmod;
+    using std::floor;
+    using std::ceil;
+    using std::round;
 
     template <typename T>
     const constexpr T PI = static_cast<T>(3.141592653589793);
@@ -138,5 +141,13 @@ namespace yapt::math
         return amb <= std::numeric_limits<T>::epsilon() *
             abs(a + b) * ulp ||
             amb < std::numeric_limits<T>::min();
+    }
+
+    template <typename T>
+    constexpr auto
+    fit(const T& val, const T& bottom = T(0), const T& top = T(1))
+    {
+        const auto range = (top - bottom);
+        return (val - bottom) / range;
     }
 }

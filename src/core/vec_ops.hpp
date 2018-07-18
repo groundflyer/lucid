@@ -267,4 +267,19 @@ namespace yapt
                  const int ulp = N)
     { return transform(va, vb, [&](const T a, const T b)
                        { return math::almost_equal(a, b, ulp); }); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    fit(const Vector<T, N, Container>& v,
+        const T& bottom = T(0),
+        const T& top = T(1)) noexcept
+    { return transform(v, [&](const T& val)
+                       { return math::fit(val, bottom, top); }); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    abs(const Vector<T, N, Container>& v) noexcept
+    { return transform(v, static_cast<T(*)(T)>(math::abs)); }
 }

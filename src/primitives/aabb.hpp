@@ -29,14 +29,14 @@ namespace yapt
 			  const Point_<Container2>& vmax) : m_vmin(vmin), m_vmax(vmax) {}
 
         constexpr const auto&
-        operator[](const size_t i) const noexcept
+        operator[](const std::uint8_t i) const noexcept
         {
             CHECK_INDEX(i, 2);
             return i ? m_vmax : m_vmin;
         }
 
         constexpr auto&
-        operator[](const size_t i) noexcept
+        operator[](const std::uint8_t i) noexcept
         {
             CHECK_INDEX(i, 2);
             return i ? m_vmax : m_vmin;
@@ -47,7 +47,7 @@ namespace yapt
         operator[](const Vector<bool, 3, Container1>& idxs) const noexcept
         {
             Vec3 ret;
-            for(size_t i = 0; i < 3; ++i)
+            for(std::uint8_t i = 0; i < 3; ++i)
                 ret[i] = (*this)[idxs[i]][i];
             return ret;
         }
@@ -93,9 +93,19 @@ namespace yapt
                    const Intersection_<IsectContainer>& isect,
                    const AABB_<AABBContainer>& prim) noexcept
     {
-        const auto center = math::lerp(Vec3(prim[0]), Vec3(prim[1]), 0.5_r);
         const auto& [o, d] = ray;
         const auto pos = o + d * isect.distance();
-        return Normal(pos - center);
+        const real nsign[2] {-1_r, 1_r};
+        const auto dd0 = pos - prim[0];
+        const auto dd1 = pos - prim[1];
+        const auto ad0 = abs(dd0);
+        const auto ad1 = abs(dd1);
+        const auto md0 = min(ad0);
+        const auto md1 = min(ad1);
+        const auto vd0 = Vec3(ad0 == md0);
+        const auto vd1 = Vec3(ad1 == md1);
+        const auto pp = md0 > md1;
+        const auto& dd = pp ? vd1 : vd0;
+        return Normal(dd * nsign[pp]);
     }
 }
