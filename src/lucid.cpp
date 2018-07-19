@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     const Point lp(-2, 5, -3);
 
     PerspectiveCamera cam(math::radians(120_r),
-                          look_at(Point(-10,6,-5), sphere_pos));
+                          look_at(Point(0,4,-6), sphere_pos));
     Image<float, 3> img(res);
 
     for(auto it = img.begin(); it != img.end(); ++it)
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         const auto Ld = length(L);
         const Normal l(L / Ld);
         const auto shadow = occlusion(Ray(p, l), prims, Range<real>(std::numeric_limits<real>::min() + std::numeric_limits<real>::epsilon() * 1000, Ld));
-        const RGB c(std::max(n.dot(l), 0_r) / (math::pow<3>(Ld)) * 20 * !shadow);
+        const RGB c(std::max(n.dot(l), 0_r) / (math::pow<3>(Ld)) * 30 * !shadow);
         *it = c;
         // *it = fit(n, min(n), max(n));
     }

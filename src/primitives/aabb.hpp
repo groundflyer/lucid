@@ -96,16 +96,15 @@ namespace yapt
         const auto& [o, d] = ray;
         const auto pos = o + d * isect.distance();
         const real nsign[2] {-1_r, 1_r};
-        const auto dd0 = pos - prim[0];
-        const auto dd1 = pos - prim[1];
-        const auto ad0 = abs(dd0);
-        const auto ad1 = abs(dd1);
-        const auto md0 = min(ad0);
-        const auto md1 = min(ad1);
-        const auto vd0 = Vec3(ad0 == md0);
-        const auto vd1 = Vec3(ad1 == md1);
-        const auto pp = md0 > md1;
-        const auto& dd = pp ? vd1 : vd0;
-        return Normal(dd * nsign[pp]);
+        Vec3 vd[2] {};
+        real md[2] {};
+        for(unsigned i = 0; i < 2; ++i)
+        {
+            const auto ad = abs(pos - prim[i]);
+            md[i] = min(ad);
+            vd[i] = Vec3(ad == md[i]);
+        }
+        const auto pp = md[0] > md[1];
+        return Normal(vd[pp] * nsign[pp]);
     }
 }
