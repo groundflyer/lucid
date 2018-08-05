@@ -282,4 +282,13 @@ namespace yapt
     constexpr auto
     abs(const Vector<T, N, Container>& v) noexcept
     { return transform(v, static_cast<T(*)(T)>(math::abs)); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    clamp(const Vector<T, N, Container>& v,
+          const T& minval,
+          const T& maxval) noexcept
+    { return transform(v, [&](const int& val)
+                       { return std::clamp(val, minval, maxval); }); }
 }

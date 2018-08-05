@@ -25,15 +25,16 @@ namespace yapt
 
         template <template <typename, size_t> typename Container>
         constexpr auto
-        operator()(const Vec2_<Container>& coords) const noexcept
+        operator()(const Vec2_<Container>& ndc) const noexcept
         {
-            const auto& [x, y] = coords;
+            const auto& [x, y] = ndc;
             const Normal d(x * m_tan_fov_half, y * m_tan_fov_half, 1);
             return apply_transform(m_transform, Ray(Point(0), d));
         }
     };
 
+    // convert image coordinates to device coordinates
     constexpr auto
-    to_camera_coords(const Vec2& pos, const Vec2& res) noexcept
+    to_device_coords(const Vec2& pos, const Vec2& res) noexcept
     { return (pos - res * 0.5_r) / res[0]; }
 }

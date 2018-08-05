@@ -7,7 +7,7 @@
 #include <algorithm>
 
 void
-yapt::write_ppm(const yapt::Image<float, 3>& img,
+yapt::write_ppm(const yapt::Image<unsigned char, 3>& img,
                 const std::string& filename)
 {
     std::ofstream out(filename);
@@ -16,7 +16,5 @@ yapt::write_ppm(const yapt::Image<float, 3>& img,
         << 255 << '\n';
 
     for (auto color : img)
-        out << transform(Vector<int, 3, std::array>(RGB(color) * 255),
-                         [](const int& val)
-                         { return std::clamp(val, 0, 255); }) << ' ';
+        out << Vector<int, 3, std::array>(color) << ' ';
 }

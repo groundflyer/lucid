@@ -16,6 +16,23 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
 
+# External dependencies
+# Threads
+set(CMAKE_THREAD_PREFER_PTHREAD 1)
+set(THREADS_PREFER_PTHREAD_FLAG 1)
+find_package(Threads REQUIRED)
+link_libraries(Threads::Threads)
+
+# OpenGL
+find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIR})
+link_libraries(${OPENGL_gl_LIBRARY})
+
+# GLFW3
+find_package(glfw3 3.2 REQUIRED)
+link_libraries(glfw)
+add_definitions(-DGLFW_INCLUDE_GLCOREARB -DGLFW_INCLUDE_GLEXT -DGL_GLEXT_PROTOTYPES)
+
 # Options
 option(USE_DOUBLE_PRECISION "Use double precision floating-point format" OFF)
 option(BUILD_TESTS "Build tests" OFF)

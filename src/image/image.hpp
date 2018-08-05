@@ -207,10 +207,13 @@ namespace yapt
         {
             if (size() != rhs.size())
             {
-                for (size_t i = 0; i < size(); ++i)
-                    std::allocator_traits<Allocator>::destroy(m_alloc, p_data + i);
+                if(p_data)
+                {
+                    for (size_t i = 0; i < size(); ++i)
+                        std::allocator_traits<Allocator>::destroy(m_alloc, p_data + i);
 
-                std::allocator_traits<Allocator>::deallocate(m_alloc, p_data, size());
+                    std::allocator_traits<Allocator>::deallocate(m_alloc, p_data, size());
+                }
 
                 m_res = rhs.m_res;
                 p_data = std::allocator_traits<Allocator>::allocate(m_alloc, size());
@@ -300,5 +303,9 @@ namespace yapt
         const Vec2u&
         res() const noexcept
         { return m_res; }
+
+        const T*
+        data() const noexcept
+        { return p_data; }
     };
 }

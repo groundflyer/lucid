@@ -11,6 +11,6 @@
 namespace yapt
 {
     void
-    write_ppm(const Image<float, 3>&,
+    write_ppm(const Image<unsigned char, 3>&,
               const std::string& filename);
 }
