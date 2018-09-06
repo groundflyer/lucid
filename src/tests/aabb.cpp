@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // sphere.cpp
 #include "test_util.hpp"
-#include <primitives/aabb.hpp>
+#include <traversal/aabb.hpp>
 
 using namespace std;
 using namespace yapt;

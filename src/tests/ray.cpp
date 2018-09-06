@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // ray.cpp --
 #include "test_util.hpp"
-#include <core/ray.hpp>
+#include <traversal/ray.hpp>
 
 using namespace std;
 using namespace yapt;

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // triangle.cpp
 #include "test_util.hpp"
-#include <primitives/triangle.hpp>
+#include <traversal/triangle.hpp>
 
 using namespace std;
 using namespace yapt;

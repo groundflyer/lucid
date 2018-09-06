@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include <image/image.hpp>
-#include <io/image.hpp>
+#include <image/io.hpp>
 
 using namespace std;
 using namespace yapt;
@@ -12,7 +12,7 @@ int main()
 {
     cout << boolalpha;
 
-    Image<float, 3> rgb_img(Vec2u(640, 480));
+    Image<unsigned char, 3> rgb_img(Vec2u(640, 480));
 
     cout << "Res: " << rgb_img.res() << endl;
     cout << "Num pixels: " << rgb_img.num_pixels() << endl;
@@ -25,7 +25,7 @@ int main()
             cout << vv << ':' << it.pos() << endl;
         const Vec2 ndc(vv);
         const RGB color(ndc);
-        *it = RGB(color);
+        *it = Vector<unsigned char, 3, std::array>(RGB(color) * 255);
     }
 
     write_ppm(rgb_img, "image.ppm");

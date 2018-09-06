@@ -5,8 +5,8 @@
 #pragma once
 
 
-#include "vec.hpp"
-#include "mat_ops.hpp"
+#include "vector.hpp"
+#include "matrix_ops.hpp"
 #include "arrayview.hpp"
 
 

@@ -1,6 +1,6 @@
 // -*- C++ -*-
 // struct_binding.cpp
-#include <core/mat.hpp>
+#include <base/matrix.hpp>
 #include <iostream>
 
 using namespace std;

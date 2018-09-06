@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // transforms.cpp -- 
 #include "test_util.hpp"
-#include <core/transforms.hpp>
+#include <base/transforms.hpp>
 
 using namespace yapt;
 using namespace std;

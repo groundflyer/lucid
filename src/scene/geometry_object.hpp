@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <primitives/generic.hpp>
+#include <traversal/generic.hpp>
 
 #include <vector>
 #include <utility>

@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include <core/intersection.hpp>
-#include <core/range.hpp>
-#include <core/ray.hpp>
+#include "intersection.hpp"
+#include "ray.hpp"
+#include <base/range.hpp>
 
 
 namespace yapt

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // disk.cpp
 #include "test_util.hpp"
-#include <primitives/disk.hpp>
+#include <traversal/disk.hpp>
 
 using namespace std;
 using namespace yapt;

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // perspective.hpp -- 
 
-#include <core/ray.hpp>
+#include <traversal/ray.hpp>
 
 
 namespace yapt

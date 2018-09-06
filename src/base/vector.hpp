@@ -1,11 +1,11 @@
 // -*- C++ -*-
-// vec.hpp --
+// vector.hpp --
 //
 
 #pragma once
 
 #include "debug.hpp"
-#include "vec_ops.hpp"
+#include "vector_ops.hpp"
 
 #include <iostream>		// operator <<
 #include <type_traits>

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // plane.cpp
 #include "test_util.hpp"
-#include <primitives/plane.hpp>
+#include <traversal/plane.hpp>
 
 using namespace std;
 using namespace yapt;

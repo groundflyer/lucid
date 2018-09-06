@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "vec.hpp"
-#include "mat.hpp"
+#include "vector.hpp"
+#include "matrix.hpp"
 
 #include <cstdint>
 

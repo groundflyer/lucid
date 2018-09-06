@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // image.cpp
 
-#include "image.hpp"
+#include "io.hpp"
 
 #include <fstream>
 #include <algorithm>

@@ -3,13 +3,15 @@
 
 #include <scene/geometry_object.hpp>
 #include <cameras/perspective.hpp>
-#include <io/image.hpp>
+#include <image/io.hpp>
 
 #include <GLFW/glfw3.h>
 
 #include <string>
 #include <stdexcept>
 
+// #define STB_IMAGE_IMPLEMENTATION
+// #include "stb_image.h"
 
 using namespace yapt;
 
@@ -30,18 +32,19 @@ namespace vp
         "in vec2 UV;"
         "uniform sampler2D img;"
         "void main(){Cf = texture(img, UV);}";
+        // "void main(){Cf = vec4(UV, 0, 1);}";
 
     static const constexpr float vertex_data[] = {
         // positions    // texture coordinates
-        0.9f,  -0.9f, 0,       1, 1,
-        -0.9f, -0.9f, 0,       1, 0,
-        -0.9f, 0.9f, 0,      0, 0,
-        0.9f,  0.9f, 0,      0, 1
+        -1.f,  1.f, 0,       0, 0,
+        1.f, 1.f, 0,       1.f, 0,
+        1.f, -1.f, 0,      1.f, 1.f,
+        -1.f, -1.f, 0,      0, 1.f
     };
 
     static const constexpr unsigned indices[] = {
-        0, 1, 3, // first triangle
-        1, 2, 3  // second triangle
+        0, 1, 2, // first triangle
+        2, 3, 0  // second triangle
     };
 
     static GLFWwindow* window;
@@ -71,8 +74,7 @@ namespace vp
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        window = glfwCreateWindow(640, 480, "Lucid", nullptr, nullptr);
-        res = Vec2u(640, 480);
+        window = glfwCreateWindow(1280, 720, "Lucid", nullptr, nullptr);
 
         if(!window)
         {
@@ -141,7 +143,7 @@ namespace vp
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
         // position
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), nullptr);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), static_cast<void*>(0));
         glEnableVertexAttribArray(0);
 
         // uv
@@ -161,7 +163,14 @@ namespace vp
     load_img(const Image<unsigned char, 3>& img) noexcept
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img.res()[0], img.res()[1], 0, GL_RGB, GL_UNSIGNED_BYTE, img.data());
-        glGenerateMipmap(GL_TEXTURE_2D);
+        // glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
+    static void
+    load_img(const unsigned char* data, int width, int height) noexcept
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        // glGenerateMipmap(GL_TEXTURE_2D);
     }
 
     static bool
@@ -212,7 +221,6 @@ int main(int argc, char *argv[])
     // }
     // const Vec2u res(resx, resy);
     // std::cout << "Res: " << resx << ' ' << resy << std::endl;
-
     const Point sphere_pos(0,1,0);
     const Point disk_pos(-1,1,1);
     const Sphere sphere(sphere_pos, 1);
@@ -242,7 +250,7 @@ int main(int argc, char *argv[])
 
     for(auto it = img.begin(); it != img.end(); ++it)
     {
-        const auto dc = to_device_coords(it.pos(), vp::res);
+        const auto dc = to_device_coords(it.pos(), img.res());
         const auto ray = cam(dc);
         const auto isect = traverse(ray, prims);
         const auto p = get_intersection_pos(ray, isect.first);
@@ -259,6 +267,12 @@ int main(int argc, char *argv[])
     }
 
     vp::load_img(img);
+    std::cout << "Image res: " << img.res() << std::endl;
+    // const char* img_path = argv[1];
+    // int img_w, img_h, nch;
+    // auto img_data = stbi_load(img_path, &img_w, &img_h, &nch, 0);
+    // vp::load_img(img_data, img_w, img_h);
+    // stbi_image_free(img_data);
 
     while(vp::active())
         vp::draw();

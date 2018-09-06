@@ -1,6 +1,6 @@
-#include <core/vec.hpp>
-#include <core/mat.hpp>
-#include <core/arrayview.hpp>
+#include <base/vector.hpp>
+#include <base/matrix.hpp>
+#include <base/arrayview.hpp>
 
 #include "test_util.hpp"
 

@@ -1,8 +1,8 @@
 // -*- C++ -*-
 // rng.cpp -- 
 #include "test_util.hpp"
-#include <core/types.hpp>
-#include <core/rng.hpp>
+#include <base/types.hpp>
+#include <base/rng.hpp>
 
 using namespace std;
 using namespace yapt;

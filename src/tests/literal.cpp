@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // literal.cpp --
 #include "test_util.hpp"
-#include <core/types.hpp>
+#include <base/types.hpp>
 #include <type_traits>
 
 using namespace std;

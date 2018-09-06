@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // variant_primitive.cpp
 #include "test_util.hpp"
-#include <primitives/generic.hpp>
+#include <traversal/generic.hpp>
 
 using namespace std;
 using namespace yapt;

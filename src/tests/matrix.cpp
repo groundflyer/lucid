@@ -1,4 +1,4 @@
-#include <core/mat.hpp>
+#include <base/matrix.hpp>
 #include "test_util.hpp"
 
 using namespace std;

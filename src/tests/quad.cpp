@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // quad.cpp
 #include "test_util.hpp"
-#include <primitives/quad.hpp>
+#include <traversal/quad.hpp>
 
 using namespace std;
 using namespace yapt;
