@@ -25,62 +25,71 @@ namespace yapt
 
 		Data m_data {};
 
+        template <size_t idx>
+        constexpr void
+        unpack()
+        {
+            if constexpr (idx < N)
+                for (auto i = idx; i < N; ++i)
+                    m_data[i] = 0;
+        }
+
+        template <size_t idx, typename ... Ts>
+        constexpr void
+        unpack(const T& first, Ts && ... other)
+        {
+            static_assert(idx < N, "Too many elements.");
+            m_data[idx] = first;
+            unpack<idx+1>(std::forward<Ts>(other)...);
+        }
+
+		template <size_t idx, typename T1, size_t N1,
+                  template <typename, size_t> typename Container1,
+                  typename ... Ts>
+        constexpr void
+        unpack(const Vector<T1, N1, Container1>& first, Ts && ... other)
+        {
+            static_assert(idx < N, "Too many elements.");
+            for(size_t i = 0; i < std::min(N - idx, N1); ++i)
+                m_data[idx + i] = static_cast<T>(first[i]);
+            unpack<idx + N1>(std::forward<Ts>(other)...);
+        }
+
+        template <size_t idx, typename T1, size_t N1,
+                  typename ... Ts>
+        constexpr void
+        unpack(const Container<T1, N1>& first, Ts && ... other)
+        {
+            static_assert(idx < N, "Too many elements.");
+            for(size_t i = 0; i < std::min(N - idx, N1); ++i)
+                m_data[idx + i] = static_cast<T>(first[i]);
+            unpack<idx + N1>(std::forward<Ts>(other)...);
+        }
+
     public:
 		constexpr
 		Vector() {}
 
 		constexpr
-		Vector(const Vector & rhs) : m_data(rhs.m_data) {}
-
-		explicit constexpr
-		Vector(const Data & rhs) : m_data(rhs) {}
-
-		explicit constexpr
-		Vector(const T & rhs) { for (T& i : m_data) i = rhs; }
-
-		constexpr
-		Vector(Vector && rhs) : m_data(std::forward<Data>(rhs.m_data)) {}
-
-		// conversion constructor
-		template <typename T2, size_t N2,
-				  template <typename, size_t> typename Container2>
-		constexpr
-		Vector(const Vector<T2, N2, Container2> & rhs)
-		{ for (size_t i = 0; i < std::min(N, N2); ++i) m_data[i] = static_cast<T>(rhs[i]); }
+		Vector(const Vector& rhs) : m_data(rhs.m_data) {}
 
 		explicit constexpr
 		Vector(Data && rhs) : m_data(std::forward<Data>(rhs)) {}
 
 		explicit constexpr
-		Vector(T && rhs) { for (T& i : m_data) i = rhs; }
+		Vector(T && rhs) { for (auto& i : m_data) i = rhs; }
 
-		explicit constexpr
-		Vector(std::initializer_list<T> l)
-		{ std::copy(l.begin(), l.begin()+std::min(l.size(), N), begin()); }
+        template <typename ... Ts>
+        explicit constexpr
+        Vector(Ts && ... rhs)
+        { unpack<0>(std::forward<Ts>(rhs)...); }
 
-		template <template <typename, size_t> typename Container2>
-		explicit constexpr
-		Vector(const Container2<T, N> & rhs)
-		{ std::copy(rhs.cbegin(), rhs.cend(), begin());	}
-
-		template <class ... Types>
-		explicit constexpr
-		Vector(const T & first,
-			   const Types & ... args) : m_data({{first, args...}})
-		{
-			static_assert(sizeof...(args) <= N - 1,
-						  "The number of elements doesn't match!");
-		}
-
-		template <class ... Types>
-		explicit constexpr
-		Vector(T && first,
-			   Types && ... args) :
-		m_data({{std::forward<T>(first), (std::forward<T>(args))...}})
-		{
-			static_assert(sizeof...(args) <= N - 1,
-						  "The number of elements doesn't match!");
-		}
+		// // conversion constructor
+		template <typename T2, size_t N2,
+				  template <typename, size_t> typename Container2>
+		constexpr
+		Vector(const Vector<T2, N2, Container2> & rhs)
+		{ for (size_t i = 0; i < std::min(N, N2); ++i) m_data[i] = static_cast<T>(rhs[i]); }
 
 		constexpr Vector&
 		operator=(const Vector & rhs) noexcept

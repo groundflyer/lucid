@@ -32,6 +32,15 @@ int main()
     TEST_AND_COUT((is_scalar_v<Vec4f>));
     TEST_AND_COUT((is_array_v<ExArr4f>));
     TEST_AND_COUT((is_array_v<array<float, 4>>));
+    TEST_AND_COUT(Vec4f(10));
+    TEST_AND_COUT(Vec4f(0.5));
+    TEST_AND_COUT(Vec4f(0.1f));
+    TEST_AND_COUT(Vec3f(Vec2f(4.4f), 5.5f));
+    TEST_AND_COUT(Vec4f(Vec2f(6.4f), Vec2f(7.5f)));
+    TEST_AND_COUT(Vec4f(10, 3.0, Vec2f(10)));
+    TEST_AND_COUT(Vec4f(Vec2f(0.1, 0.2)));
+    TEST_AND_COUT(Vec4f(array<float, 4>({1,2,3,4})));
+    TEST_AND_COUT(Vec2f(Vec4f(4.9f)));
     TEST_AND_COUT((BigVec(0) + BigVec(10)));
     TEST_AND_COUT(-BigVec(10));
     TEST_AND_COUT((BigVec(10)/1));
@@ -44,7 +53,6 @@ int main()
     TEST_AND_COUT((Vec4f(1) < 0.f));
     TEST_AND_COUT(Vec4i(Vec2i(1,2)));
     TEST_AND_COUT(Vec4i(Vec4f(1.5,2.5,3.5)));
-    TEST_AND_COUT(Vec2i(Vec4f(1.5,2.5,3.5)));
     float a[4] = {1,2,3,4};
     COUT_ARRAY(a);
     TEST_AND_COUT(Vec3fe(ExArr3f(a)));
