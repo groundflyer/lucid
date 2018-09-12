@@ -25,35 +25,65 @@ namespace yapt
 		Data m_data {};
 
 		static constexpr size_t
-		pos(const size_t row, const size_t column)
-		{ return row * C + column; }
+		pos(const size_t i, const size_t j, const size_t J = C)
+		{ return i * J + j; }
 
 		// variyng template sink
-		constexpr
-		void unpack(const size_t) {}
+        template <size_t>
+		constexpr void
+        unpack() const {}
+
+        template <size_t idx, typename ... Ts>
+        constexpr void
+        unpack(const T& first, Ts && ... other)
+        {
+            static_assert(idx < N, "Too many elements.");
+            m_data[idx] = first;
+            if constexpr (sizeof...(other) == 0 && idx < N-1)
+                unpack<idx+1>(first);
+            else
+                unpack<idx+1>(std::forward<Ts>(other)...);
+        }
 
 		// unpack vector arguments
-		template <template <typename, size_t> typename Container2,
-				  class ... Vectors>
-		constexpr
-		void unpack(size_t idx,
-					const Vector<T, C, Container2> & first,
-					const Vectors & ... vectors)
+		template <size_t idx,
+                  typename T1, size_t N1,
+                  template <typename, size_t> typename Container2,
+				  typename ... Ts>
+		constexpr void
+        unpack(const Vector<T1, N1, Container2>& first,
+               Ts&& ... other)
 		{
-			std::copy(first.cbegin(), first.cend(), begin() + idx*C);
-			unpack(++idx, vectors...);
+            static_assert(idx < N, "Too many elements.");
+            for(size_t i = 0; i < std::min(N - idx, N1); ++i)
+                m_data[idx + 1] = static_cast<T>(first[i]);
+			unpack<idx + N1>(std::forward<Ts>(other)...);
 		}
 
-		// unpack scalar arguments
-		template <class ... Types>
-		constexpr
-		void unpack(size_t idx,
-					const T & first,
-					const Types & ... rest)
-		{
-			m_data[idx] = first;
-			unpack(++idx, rest...);
-		}
+        template <size_t idx, typename T1, size_t N1,
+                  typename ... Ts>
+        constexpr void
+        unpack(const Container<T1, N1>& first, Ts && ... other)
+        {
+            static_assert(idx < N, "Too many elements.");
+            for(size_t i = 0; i < std::min(N - idx, N1); ++i)
+                m_data[idx + i] = static_cast<T>(first[i]);
+            unpack<idx + N1>(std::forward<Ts>(other)...);
+        }
+
+		template <size_t idx, typename T1, size_t R1, size_t C1,
+				  template <typename, size_t> typename Container1,
+                  typename ... Ts>
+        constexpr void
+        unpack(const Matrix<T1, R1, C1, Container1>& first, Ts&& ... other)
+        {
+            const constexpr auto I = std::min(R, R1);
+            const constexpr auto J = std::min(C, C1);
+            for (size_t i = idx % R; i < I; ++i)
+                for (size_t j = idx / C; j < J; ++j)
+                    m_data[pos(i, j)] = static_cast<T>(first[i][j]);
+            unpack<pos(I, J, J) + 1>(std::forward<Ts>(other)...);
+        }
 
     public:
 		constexpr
@@ -61,57 +91,16 @@ namespace yapt
 
 		// single scalar construcor
     	explicit constexpr
-    	Matrix(const T & rhs)
+    	Matrix(T&& rhs)
     	{ for (auto & elem : *this) elem = rhs;	}
 
     	explicit constexpr
-    	Matrix(const Data & rhs) : m_data(rhs) {}
+    	Matrix(Data&& rhs) : m_data(rhs) {}
 
-		// conversion/copy constructor
-		template <typename T2, size_t R2, size_t C2,
-				  template <typename, size_t> typename Container2>
-		constexpr
-		Matrix(const Matrix<T2, R2, C2, Container2> & rhs)
-		{
-			for (size_t i = 0; i < std::min(R, R2); ++i)
-				for (size_t j = 0; j < std::min(C, C2); ++j)
-					m_data[pos(i, j)] = static_cast<T>(rhs[i][j]);
-		}
-
+		template <typename ... Ts>
 		explicit constexpr
-		Matrix(std::initializer_list<T> l)
-		{ std::copy(l.begin(), l.begin()+std::min(l.size(), N), begin()); }
-
-		// construct from a container
-		template <template <typename, size_t> typename Container2>
-		explicit constexpr
-		Matrix(const Container2<T, N> & rhs)
-		{ std::copy(rhs.cbegin(), rhs.cend(), begin()); }
-
-		// vector values constructor
-		// only same dimensions vector are acceptable
-		template <template <typename, size_t> typename Container2, class ... Vectors>
-		explicit constexpr
-		Matrix(const Vector<T, C, Container2> & vector,
-			   const Vectors & ... vectors)
-		{
-			static_assert(sizeof...(vectors) <= R - 1,
-						  "The number of elements doesn't match!");
-
-			unpack(0, vector, vectors...);
-		}
-
-		// scalar values constructor
-		template <class ... Types>
-		explicit constexpr
-		Matrix(const T & first,
-			   const Types & ... rest)
-		{
-			static_assert(sizeof...(rest) <= N - 1,
-						  "The number of elements doesn't match");
-
-			unpack(0, first, rest...);
-		}
+		Matrix(Ts&& ... rhs)
+		{ unpack<0>(std::forward<Ts>(rhs)...); }
 
 		constexpr Matrix&
 		operator=(const Matrix& rhs) noexcept

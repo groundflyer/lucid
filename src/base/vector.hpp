@@ -9,7 +9,6 @@
 
 #include <iostream>		// operator <<
 #include <type_traits>
-#include <initializer_list>
 
 
 namespace yapt
@@ -36,18 +35,21 @@ namespace yapt
 
         template <size_t idx, typename ... Ts>
         constexpr void
-        unpack(const T& first, Ts && ... other)
+        unpack(const T& first, Ts&& ... other)
         {
             static_assert(idx < N, "Too many elements.");
             m_data[idx] = first;
-            unpack<idx+1>(std::forward<Ts>(other)...);
+            if constexpr (sizeof...(other) == 0 && idx < N-1)
+                unpack<idx+1>(first);
+            else
+                unpack<idx+1>(std::forward<Ts>(other)...);
         }
 
 		template <size_t idx, typename T1, size_t N1,
                   template <typename, size_t> typename Container1,
                   typename ... Ts>
         constexpr void
-        unpack(const Vector<T1, N1, Container1>& first, Ts && ... other)
+        unpack(const Vector<T1, N1, Container1>& first, Ts&& ... other)
         {
             static_assert(idx < N, "Too many elements.");
             for(size_t i = 0; i < std::min(N - idx, N1); ++i)
@@ -58,7 +60,7 @@ namespace yapt
         template <size_t idx, typename T1, size_t N1,
                   typename ... Ts>
         constexpr void
-        unpack(const Container<T1, N1>& first, Ts && ... other)
+        unpack(const Container<T1, N1>& first, Ts&& ... other)
         {
             static_assert(idx < N, "Too many elements.");
             for(size_t i = 0; i < std::min(N - idx, N1); ++i)
