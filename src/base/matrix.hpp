@@ -13,7 +13,7 @@
 namespace yapt
 {
     template <typename T, size_t R, size_t C,
-			  template <typename, size_t> typename Container>
+			  template <typename, size_t> typename Container = std::array>
     class Matrix
     {
 		static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");

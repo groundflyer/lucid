@@ -21,7 +21,7 @@ namespace yapt
 		Distribution m_dist;
 
     public:
-		RandomDistribution(const T& a, const T& b) : m_dist(a, b) {}
+		RandomDistribution(const T a, const T b) : m_dist(a, b) {}
 
         template <typename Generator>
 		auto
@@ -42,6 +42,9 @@ namespace yapt
 			return ret;
 		}
     };
+
+    // template <typename T>
+    // RandomDistribution(const T, const T) -> RandomDistribution<T>;
 
     template <typename RealType,
               typename Generator,

@@ -1,107 +1,166 @@
+#include "property_test.hpp"
+
 #include <base/vector.hpp>
 #include <base/arrayview.hpp>
+#include <base/rng.hpp>
 
-#include "test_util.hpp"
+#include <string>
+#include <limits>
+#include <numeric>
 
 using namespace std;
 using namespace yapt;
 
+template <typename T>
+RandomDistribution full_dist(numeric_limits<T>::lowest(), numeric_limits<T>::max());
 
-using Vec2f = Vector<float, 2, array>;
-using Vec3f = Vector<float, 3, array>;
-using Vec4f = Vector<float, 4, array>;
-
-using Vec2i = Vector<int, 2, array>;
-using Vec3i = Vector<int, 3, array>;
-using Vec4i = Vector<int, 4, array>;
-
-using Vec2fe = Vector<float, 2, ArrayView>;
-using Vec3fe = Vector<float, 3, ArrayView>;
-using Vec4fe = Vector<float, 4, ArrayView>;
-
-using BigVec = Vector<double, 32, array>;
-
-using ExArr3f = ArrayView<float, 3>;
-using ExArr4f = ArrayView<float, 4>;
-
-int main()
+int main(int argc, char* argv[])
 {
-    cout << boolalpha;
-    TEST_AND_COUT((is_array_v<Vec4f>));
-    TEST_AND_COUT((is_scalar_v<Vec4f>));
-    TEST_AND_COUT((is_array_v<ExArr4f>));
-    TEST_AND_COUT((is_array_v<array<float, 4>>));
-    TEST_AND_COUT(Vec4f(10));
-    TEST_AND_COUT(Vec4f(0.5));
-    TEST_AND_COUT(Vec4f(0.1f));
-    TEST_AND_COUT(Vec3f(Vec2f(4.4f), 5.5f));
-    TEST_AND_COUT(Vec4f(Vec2f(6.4f), Vec2f(7.5f)));
-    TEST_AND_COUT(Vec4f(10, 3.0, Vec2f(10)));
-    TEST_AND_COUT(Vec4f(Vec2f(0.1, 0.2)));
-    TEST_AND_COUT(Vec4f(array<float, 4>({1,2,3,4})));
-    TEST_AND_COUT(Vec2f(Vec4f(4.9f)));
-    TEST_AND_COUT((BigVec(0) + BigVec(10)));
-    TEST_AND_COUT(-BigVec(10));
-    TEST_AND_COUT((BigVec(10)/1));
-    TEST_AND_COUT(reduce(BigVec(1)));
-    TEST_AND_COUT((BigVec(2).dot(BigVec(4))));
-    TEST_AND_COUT((BigVec(-2).cross(BigVec(4))));
-    TEST_AND_COUT(Vec2f(2));
-    TEST_AND_COUT(Vec3f(3));
-    TEST_AND_COUT(Vec4f(4));
-    TEST_AND_COUT((Vec4f(1) < 0.f));
-    TEST_AND_COUT(Vec4i(Vec2i(1,2)));
-    TEST_AND_COUT(Vec4i(Vec4f(1.5,2.5,3.5)));
-    float a[4] = {1,2,3,4};
-    COUT_ARRAY(a);
-    TEST_AND_COUT(Vec3fe(ExArr3f(a)));
-    TEST_AND_COUT(Vec3f(Vec3fe(ExArr3f(a))));
-    TEST_AND_COUT(Vec4f(Vec3fe(ExArr3f(a))));
-    TEST_AND_COUT(Vec2f(Vec3fe(ExArr3f(a))));
-    TEST_AND_COUT(Vec3i(Vec3fe(ExArr3f(a))));
-    TEST_AND_COUT(Vec2i(Vec3fe(ExArr3f(a))));
-    TEST_AND_COUT(Vec4i(Vec3fe(ExArr3f(a))));
-    TEST_AND_COUT((Vec4f(1) + Vec4f(2)));
-    TEST_AND_COUT((Vec4f(1) + Vec4fe(ExArr4f(a))));
-    TEST_AND_COUT((Vec4f(9) - Vec4fe(ExArr4f(a))));
-    TEST_AND_COUT((Vec4i(1) + 2));
-    TEST_AND_COUT(reduce(Vec4f(1)));
-    COUT_ARRAY(a);
-    TEST_AND_COUT((Vec4f(1) == Vec4fe(ExArr4f(a))));
-    TEST_AND_COUT((Vec4f(1) != Vec4fe(ExArr4f(a))));
-    TEST_AND_COUT((Vec4f(0) == Vec4fe(ExArr4f(a))));
-    TEST_AND_COUT((Vec4f(0) != Vec4fe(ExArr4f(a))));
-    TEST_AND_COUT((Vec4f(1) < Vec4fe(ExArr4f(a))));
-    TEST_AND_COUT((Vec4f(1) <= Vec4fe(ExArr4f(a))));
-    TEST_AND_COUT((Vec4f(0) > Vec4fe(ExArr4f(a))));
-    TEST_AND_COUT((Vec4f(0) >= Vec4fe(ExArr4f(a))));
-    TEST_AND_COUT((Vec4f(0).dot(Vec4fe(ExArr4f(a)))));
-    TEST_AND_COUT((Vec4f(0).cross(Vec4fe(ExArr4f(a)))));
-    TEST_AND_COUT(length(Vec4f(10)));
-    TEST_AND_COUT(distance(Vec4f(1), Vec4fe(ExArr4f(a))));
-    TEST_AND_COUT(sum(Vec4fe(ExArr4f(a))));
-    TEST_AND_COUT(avg(Vec4fe(ExArr4f(a))));
-    TEST_AND_COUT(max(Vec4fe(ExArr4f(a))));
-    TEST_AND_COUT(min(Vec4fe(ExArr4f(a))));
-    Vec4f test(4,3,2,1);
-	const auto& [x, y, z, w] = test;
-	auto& [cx, cy, cz, cw] = test;
-	cx = 5;
-	TEST_AND_COUT((Vec4f(cx, cy, cz, cw)));
-    test = Vec4f(100);
-    Vec4fe teste = Vec4fe(ExArr4f(a));
-    teste = test;
-    TEST_AND_COUT(teste);
-    teste /= 2.f;
-    TEST_AND_COUT(teste);
-	TEST_AND_COUT((Vec4f(x, y, z, w)));
-    TEST_AND_COUT(normalize(Vec4f(1,2,3,4)));
-    // TEST_AND_COUT((Vector<float, 6, array>(Matrix<float, 2, 3, array>::unit().data())));
-    // TEST_AND_COUT((Matrix<float, 2, 3, array>(Vector<float, 6, array>(Matrix<float, 2, 3, array>::unit().data()).data())));
-    TEST_AND_COUT(product(Vec2f(2, 10)));
-    TEST_AND_COUT(product(Vec2i(2, 10)));
-    TEST_AND_COUT(!Vec3i(1,0,0));
-    TEST_AND_COUT(!Vec3f(1,0.01132,0.323));
+    const size_t num_tests = argc == 2 ? std::stoll(argv[1]) : 10000;
 
-    return 0;
+    int ret = 0;
+
+    random_device rd;
+    default_random_engine g(rd());
+    RandomDistribution float_dist(-10000.f, 10000.f);
+    RandomDistribution int_dist(-10000, 10000);
+    RandomDistribution unsigned_dist(0u, 10000u);
+    RandomDistribution double_dist(-1e+10, 1e+10);
+
+    const static constexpr size_t N = 4;
+
+    auto log_ok = spdlog::stdout_color_st("ok");
+    auto log_fail = spdlog::stderr_color_st("fail");
+    auto log_debug = spdlog::stdout_logger_st("debug");
+    log_ok->set_pattern("%v: %^OK%$");
+    log_fail->set_pattern("%v: %^FAIL%$");
+    log_debug->set_pattern("%v");
+
+    ret += test_property("Vector<float, N>(float)",
+                         [](const float feed) { return Vector<float, N>(feed); },
+                         [](const Vector<float, N> property, const float feed) { return any(property != feed); },
+                         [&](){ return float_dist(g); },
+                         num_tests);
+
+    ret += test_property("Vector<float, N>(int)",
+                         [](const int feed) { return Vector<float, N>(feed); },
+                         [](auto&& property, auto&& feed) { return any(property != static_cast<float>(feed)); },
+                         [&](){ return int_dist(g); },
+                         num_tests);
+
+    ret += test_property("Vector<float, N>(float, float, float, float)",
+                         [](auto&& feed) { return construct<Vector<float, 4>>(forward<decltype(feed)>(feed)); },
+                         [](auto&& property, auto&& feed)
+                         {
+                             return sum(property) != apply([](auto... vals) { return (0 + ... + vals); },
+                                                           forward<decltype(feed)>(feed));
+                         },
+                         [&]() { return tuple(float_dist(g), float_dist(g), float_dist(g), float_dist(g)); },
+                         num_tests);
+
+    ret += test_property("Vector<double, N>(double, float, int, unsigned)",
+                         [](auto&& feed) { return construct<Vector<double, 4>>(forward<decltype(feed)>(feed)); },
+                         [](auto&& property, auto&& feed)
+                         {
+                             return sum(property) != apply([](auto... vals) { return (0 + ... + vals); },
+                                                           forward<decltype(feed)>(feed));
+                         },
+                         [&]() { return tuple(double_dist(g), float_dist(g), int_dist(g), unsigned_dist(g)); },
+                         num_tests);
+
+    // ret += test_property("any(Vector<bool, N>)",
+    //                      [](const Vector<bool, N> feed) { return any(feed); },
+    //                      [](const bool property, const Vector<bool, N> feed)
+    //                      {
+    //                          return property != apply([](auto... vals) { return (true && ... && vals); },
+    //                                                   feed);
+    //                      },
+    //                      [&]() { return Vector(bool_dist.operator()<N>(g)); },
+    //                      num_tests);
+
+    ret += test_property("Vector<float, N> +- float",
+                         [](const auto feed)
+                         {
+                             const auto& [vec, val] = feed;
+                             return vec + val;
+                         },
+                         [](const auto property, const auto feed)
+                         {
+                             const auto& [vec, val] = feed;
+                             return any(property - val != vec);
+                         },
+                         [&]() { return pair(Vector(float_dist.operator()<N>(g)), float_dist(g)); },
+                         num_tests);
+
+    ret += test_property("Vector<float, N> +- int",
+                         [](const auto feed)
+                         {
+                             const auto& [vec, val] = feed;
+                             return vec + val;
+                         },
+                         [](const auto property, const auto feed)
+                         {
+                             const auto& [vec, val] = feed;
+                             return any(property - val != vec);
+                         },
+                         [&]() { return pair(Vector(float_dist.operator()<N>(g)), int_dist(g)); },
+                         num_tests);
+
+    ret += test_property("Vector<float, N> +- Vector<float, N>",
+                         [](const auto feed)
+                         {
+                             const auto& [vec1, vec2] = feed;
+                             return vec1 + vec2;
+                         },
+                         [](const auto property, const auto feed)
+                         {
+                             const auto& [vec1, vec2] = feed;
+                             return any(property - vec1 != vec2);
+                         },
+                         [&]() { return pair(Vector(float_dist.operator()<N>(g)), Vector(float_dist.operator()<N>(g))); },
+                         num_tests);
+
+    ret += test_property("Vector<float, N> */ int",
+                         [](const auto feed)
+                         {
+                             const auto& [vec, val] = feed;
+                             return vec * val;
+                         },
+                         [](const auto property, const auto feed)
+                         {
+                             const auto& [vec, val] = feed;
+                             return any(!almost_equal(property / val, vec));
+                         },
+                         [&]() { return pair(Vector(float_dist.operator()<N>(g)), int_dist(g)); },
+                         num_tests);
+
+    ret += test_property("Vector<float, N> */ float",
+                         [](const auto feed)
+                         {
+                             const auto& [vec, val] = feed;
+                             return vec * val;
+                         },
+                         [](const auto property, const auto feed)
+                         {
+                             const auto& [vec, val] = feed;
+                             return any(!almost_equal(property / val, vec));
+                         },
+                         [&]() { return pair(Vector(float_dist.operator()<N>(g)), float_dist(g)); },
+                         num_tests);
+
+    ret += test_property("Vector<float, N> */ Vector<float, N>",
+                         [](const auto feed)
+                         {
+                             const auto& [vec1, vec2] = feed;
+                             return vec1 * vec2;
+                         },
+                         [](const auto property, const auto feed)
+                         {
+                             const auto& [vec1, vec2] = feed;
+                             return any(!almost_equal(property / vec2, vec1));
+                         },
+                         [&]() { return pair(Vector(float_dist.operator()<N>(g)), float_dist(g)); },
+                         num_tests);
+
+    return ret;
 }

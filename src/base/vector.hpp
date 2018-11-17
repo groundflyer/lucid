@@ -7,14 +7,14 @@
 #include "debug.hpp"
 #include "vector_ops.hpp"
 
-#include <iostream>		// operator <<
+#include <array>
 #include <type_traits>
 
 
 namespace yapt
 {
     template <typename T, size_t N,
-			  template <typename, size_t> typename Container>
+			  template <typename, size_t> typename Container = std::array>
     class Vector
     {
 		static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");
@@ -347,16 +347,6 @@ namespace yapt
 		constexpr auto
 		size() const noexcept
 		{ return N; }
-
-		friend std::ostream&
-		operator<<(std::ostream & os, const Vector & rhs) noexcept
-		{
-            for (size_t i = 0; i < N - 1; ++i)
-                os << rhs.m_data[i] << ' ';
-            os << rhs.m_data[N-1];
-
-			return os;
-		}
     };
 
     template <typename T, size_t N,
@@ -374,4 +364,10 @@ namespace std
 			 template <typename, size_t> typename Container>
     struct tuple_element<I, yapt::Vector<T, N, Container>>
 	{ using type = T; };
+
+	template<size_t I, typename T, size_t N,
+			 template <typename, size_t> typename Container>
+    constexpr decltype(auto)
+    get(const yapt::Vector<T, N, Container>& vec) noexcept
+    { return vec.template get<I>(); }
 }
