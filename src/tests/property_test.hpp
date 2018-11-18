@@ -35,20 +35,39 @@ operator<<(std::ostream& os, const yapt::Vector<T, N, Container>& rhs) noexcept
     return os;
 }
 
-template <typename ... Args>
+template<typename Tuple, size_t... I>
 std::ostream&
-operator<<(std::ostream& os, std::tuple<Args...> args)
+print_tuple(std::ostream& os, const Tuple& t, std::index_sequence<I...>)
 {
-    std::apply([&os](auto&&... vals){ ((os << ' ' << vals), ...); }, args);
+    os << '(';
+    (..., (os << (I == 0? "" : ", ") << std::get<I>(t)));
+    os << ')';
     return os;
+}
+
+template<typename... Ts>
+std::ostream&
+operator<<(std::ostream& os, const std::tuple<Ts...>& t)
+{
+    return print_tuple(os, t, std::make_index_sequence<sizeof...(Ts)>());
 }
 
 template <typename T1, typename T2>
 std::ostream&
 operator<<(std::ostream& os, std::pair<T1, T2> arg)
 {
-    os << arg.first << ' ' << arg.second;
+    os << '(' << arg.first << ", " << arg.second << ')';
     return os;
+}
+
+void init_log()
+{
+    auto log_ok = spdlog::stdout_color_st("ok");
+    auto log_fail = spdlog::stderr_color_st("fail");
+    auto log_debug = spdlog::stdout_logger_st("debug");
+    log_ok->set_pattern("%v: %^OK%$");
+    log_fail->set_pattern("%v: %^FAIL%$");
+    log_debug->set_pattern("%v");
 }
 
 template <typename Property, typename Assertion, typename Generator>
@@ -70,10 +89,8 @@ auto test_property(std::string_view property_name,
         decltype(auto) result = assertion(prop, feed);
         if(result)
         {
-            log_debug->debug("Test '{}'\n"
-                             "failed with feed: {}\n"
-                             "and property value: {}",
-                             property_name, feed, prop);
+            log_debug->debug("Test '{}' failed with values:\n"
+                            "{}\n{}", property_name, feed, prop);
         }
 
         ret += result;

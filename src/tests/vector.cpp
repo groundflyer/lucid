@@ -29,12 +29,7 @@ int main(int argc, char* argv[])
 
     const static constexpr size_t N = 4;
 
-    auto log_ok = spdlog::stdout_color_st("ok");
-    auto log_fail = spdlog::stderr_color_st("fail");
-    auto log_debug = spdlog::stdout_logger_st("debug");
-    log_ok->set_pattern("%v: %^OK%$");
-    log_fail->set_pattern("%v: %^FAIL%$");
-    log_debug->set_pattern("%v");
+    init_log();
 
     ret += test_property("Vector<float, N>(float)",
                          [](const float feed) { return Vector<float, N>(feed); },
