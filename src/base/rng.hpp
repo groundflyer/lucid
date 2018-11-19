@@ -7,6 +7,7 @@
 #include <array>
 #include <random>
 #include <limits>
+#include <algorithm>
 #include <type_traits>
 
 
@@ -21,7 +22,7 @@ namespace yapt
 		Distribution m_dist;
 
     public:
-		RandomDistribution(const T a, const T b) : m_dist(a, b) {}
+		RandomDistribution(const T a, const T b) : m_dist(std::min(a, b), std::max(a, b)) {}
 
         template <typename Generator>
 		auto
