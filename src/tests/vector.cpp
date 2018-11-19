@@ -96,6 +96,7 @@ single_value_constructor_test(std::string_view type_string,
 { return (0 + ... + _single_value_constructor_test<Vec, Ts>(type_string, g, num_tests)); }
 
 using test_types = typelist<int, bool, char, long, float, double, size_t, long double, unsigned, unsigned char>;
+static const constexpr size_t MaxN = 4;
 
 template <typename T, size_t N, typename RandomEngine>
 auto
@@ -110,6 +111,14 @@ vector_test(RandomEngine& g, size_t num_tests) noexcept
 
     return ret;
 }
+
+template <typename T, typename RandomEngine, size_t... Ns>
+auto vector_test_n(RandomEngine& g, size_t num_tests, std::index_sequence<Ns...>) noexcept
+{ return (0 + ... + vector_test<T, Ns + 2>(g, num_tests)); }
+
+template <typename RandomEngine, typename... Ts>
+auto vector_test_t(RandomEngine& g, size_t num_tests, typelist<Ts...>) noexcept
+{ return (0 + ... + vector_test_n<Ts>(g, num_tests, std::make_index_sequence<MaxN - 1>{})); }
 
 int main(int argc, char* argv[])
 {
@@ -128,7 +137,7 @@ int main(int argc, char* argv[])
 
     init_log();
 
-    ret += vector_test<float, 3>(g, num_tests);
+    ret += vector_test_t(g, num_tests, test_types{});
 
     ret += test_property("Vector<float, N>(float, float, float, float)",
                          [](auto&& feed) { return construct<Vector<float, 4>>(forward<decltype(feed)>(feed)); },
