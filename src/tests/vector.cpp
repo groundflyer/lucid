@@ -13,8 +13,23 @@ using namespace std;
 using namespace yapt;
 using namespace fmt::literals;
 
+
 template <typename T>
-RandomDistribution<T> dist(static_cast<T>(-10000), static_cast<T>(10000));
+RandomDistribution<T>&
+get_dist() noexcept
+{
+    static const constexpr T bound = static_cast<T>(10000);
+    static RandomDistribution<T> dist(is_unsigned_v<T> ? 0 : -bound, bound);
+    return dist;
+}
+
+template <>
+RandomDistribution<bool>&
+get_dist() noexcept
+{
+    static RandomDistribution<bool> dist(0.5);
+    return dist;
+}
 
 template <typename T>
 struct typeinfo;
@@ -68,7 +83,7 @@ _single_value_constructor_test(std::string_view type_string,
     return test_property("{}({})"_format(type_string, typeinfo<T>::string),
                          [](const auto feed) { return Vec(feed); },
                          [](const auto property, const auto feed) { return any(property != feed); },
-                         [&](){ return dist<T>(g); },
+                         [&](){ return get_dist<T>()(g); },
                          num_tests);
 }
 
@@ -80,7 +95,7 @@ single_value_constructor_test(std::string_view type_string,
                               typelist<Ts...>) noexcept
 { return (0 + ... + _single_value_constructor_test<Vec, Ts>(type_string, g, num_tests)); }
 
-using test_types = typelist<int, char, long, float, double, size_t, long double, unsigned, unsigned char>;
+using test_types = typelist<int, bool, char, long, float, double, size_t, long double, unsigned, unsigned char>;
 
 template <typename T, size_t N, typename RandomEngine>
 auto
