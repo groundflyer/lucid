@@ -18,8 +18,9 @@ template <typename T>
 RandomDistribution<T>&
 get_dist() noexcept
 {
-    static const constexpr T bound = static_cast<T>(10000);
-    static RandomDistribution<T> dist(is_unsigned_v<T> ? 0 : -bound, bound);
+    static const constexpr T a = std::is_floating_point_v<T> ? -static_cast<T>(10000) : std::numeric_limits<T>::lowest();
+    static const constexpr T b = std::is_floating_point_v<T> ? static_cast<T>(10000) : std::numeric_limits<T>::max();
+    static RandomDistribution<T> dist(a, b);
     return dist;
 }
 
@@ -108,6 +109,19 @@ vector_test(RandomEngine& g, size_t num_tests) noexcept
     unsigned ret = 0;
 
     ret += single_value_constructor_test<Vec>(type_string, g, num_tests, test_types{});
+
+    ret += test_property("{}(std::array<{}, {}>)"_format(type_string, typeinfo<T>::string, N),
+                         [](const std::array<T, N>& feed) { return Vec(feed); },
+                         [](const Vec& property, const std::array<T, N>& feed)
+                         {
+                             bool ret = false;
+                             for(size_t i = 0; i < N; ++i)
+                                 ret |= property[i] != feed[i];
+                             return ret;
+                         },
+                         [&]()
+                         { return get_dist<T>().template operator()<N>(g); },
+                         num_tests);
 
     return ret;
 }

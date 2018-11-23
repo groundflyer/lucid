@@ -22,6 +22,17 @@ auto construct(std::tuple<Args...> args)
     return apply([](auto&&... args){ return T(args...); }, args);
 }
 
+template <typename T, size_t N>
+std::ostream&
+operator<<(std::ostream& os, const std::array<T, N>& rhs) noexcept
+{
+    os << '[';
+    for (size_t i = 0; i < N - 1; ++i)
+        os << rhs[i] << ", ";
+    os << rhs[N-1] << ']';
+    return os;
+}
+
 template <typename T, size_t N,
           template <typename, size_t> typename Container>
 std::ostream&
