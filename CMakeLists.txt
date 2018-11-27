@@ -14,17 +14,12 @@ include(cmake/Checks.cmake)
 set(CMAKE_THREAD_PREFER_PTHREAD 1)
 set(THREADS_PREFER_PTHREAD_FLAG 1)
 find_package(Threads REQUIRED)
-link_libraries(Threads::Threads)
 
 # OpenGL
 find_package(OpenGL REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIR})
-link_libraries(${OPENGL_gl_LIBRARY})
 
 # GLFW3
 find_package(glfw3 3.2 REQUIRED)
-link_libraries(glfw)
-add_definitions(-DGLFW_INCLUDE_GLCOREARB -DGLFW_INCLUDE_GLEXT -DGL_GLEXT_PROTOTYPES)
 
 # Default Build Type is Release
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
