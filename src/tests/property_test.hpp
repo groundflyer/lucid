@@ -83,9 +83,9 @@ void init_log()
 
 template <typename Property, typename Assertion, typename Generator>
 auto test_property(std::string_view property_name,
+                   Generator&& generator,
                    Property&& property,
                    Assertion&& assertion,
-                   Generator&& generator,
                    size_t n = 10000) noexcept
 {
     auto log_ok = spdlog::get("ok");

@@ -54,29 +54,31 @@ constexpr auto get_typeinfo_string(std::tuple<Ts...>) noexcept
 
 template <size_t TupleSize, size_t Start,
           typename RandomEngine, typename Typelist, size_t... I>
-auto _random_cycled_tuple(RandomEngine& g, Typelist, std::index_sequence<I...>)
+constexpr auto
+_random_cycled_tuple(RandomEngine& g, Typelist, std::index_sequence<I...>)
 { return std::tuple(get_dist<typename typelist_element<(Start + I) % TupleSize, Typelist>::type>()(g)...); }
 
 template <size_t TupleSize, size_t Start,
           typename RandomEngine, typename... Ts>
-auto random_cycled_tuple(RandomEngine& g, typelist<Ts...> tl)
+constexpr auto
+random_cycled_tuple(RandomEngine& g, typelist<Ts...> tl)
 { return _random_cycled_tuple<sizeof...(Ts), Start>(g, tl, std::make_index_sequence<TupleSize>{}); }
 
 template <typename Vec, typename T, typename RandomEngine>
-auto
+constexpr auto
 _single_value_constructor_test(std::string_view type_string,
                                RandomEngine& g,
                                const size_t num_tests) noexcept
 {
     return test_property("{}({})"_format(type_string, get_typeinfo_string(T{})),
+                         [&g](){ return get_dist<T>()(g); },
                          [](const auto feed) { return Vec(feed); },
                          [](const auto property, const auto feed) { return any(property != feed); },
-                         [&](){ return get_dist<T>()(g); },
                          num_tests);
 }
 
 template <typename Vec, typename RandomEngine, typename... Ts>
-auto
+constexpr auto
 single_value_constructor_test(std::string_view type_string,
                               RandomEngine& g,
                               const size_t num_tests,
@@ -84,36 +86,32 @@ single_value_constructor_test(std::string_view type_string,
 { return (0 + ... + _single_value_constructor_test<Vec, Ts>(type_string, g, num_tests)); }
 
 template <size_t I, typename A, typename B>
-bool
+constexpr bool
 not_equal(const A& a, const B& b)
 { return std::get<I>(a) != static_cast<std::decay_t<decltype(std::get<I>(a))>>(std::get<I>(b)); }
 
 template <typename A, typename B, size_t... I>
-bool
+constexpr bool
 assert_tuples(const A& a, const B& b, std::index_sequence<I...>)
-{
-    static_assert(std::tuple_size_v<A> == std::tuple_size_v<B>, "Tuples must have the same size");
-
-    return (false || ... || not_equal<I>(a, b));
-}
+{ return (false || ... || not_equal<I>(a, b)); }
 
 template <typename Vec, size_t N, size_t Shift, typename RandomEngine, typename GenTypes>
-auto
+constexpr auto
 __multi_value_constructor_test(std::string_view type_string,
                               RandomEngine& g,
                               const size_t num_tests,
                               GenTypes tl)
 {
-    auto tg = [&](){ return random_cycled_tuple<N, Shift>(g, tl); };
+    auto tg = [&g, tl](){ return random_cycled_tuple<N, Shift>(g, tl); };
     return test_property("{}{}"_format(type_string, get_typeinfo_string(tg())),
-                         [](const auto& feed){ return construct<Vec>(feed); },
-                         [](const Vec& property, const auto& feed) { return assert_tuples(property, feed, std::make_index_sequence<N>{}); },
                          tg,
+                         [](const auto feed){ return construct<Vec>(feed); },
+                         [](const Vec property, const auto feed) { return assert_tuples(property, feed, std::make_index_sequence<N>{}); },
                          num_tests);
 }
 
 template <typename Vec, size_t N, typename RandomEngine, typename GenTypes, size_t... I>
-auto
+constexpr auto
 _multi_value_constructor_test(std::string_view type_string,
                              RandomEngine& g,
                              const size_t num_tests,
@@ -122,7 +120,7 @@ _multi_value_constructor_test(std::string_view type_string,
 { return (0u + ... + __multi_value_constructor_test<Vec, N, I>(type_string, g, num_tests, tl)); }
 
 template <typename Vec, size_t N, typename RandomEngine, typename... GenTypes>
-auto
+constexpr auto
 multi_value_constructor_test(std::string_view type_string,
                              RandomEngine& g,
                              const size_t num_tests,
@@ -133,31 +131,43 @@ using test_types = typelist<int, bool, char, long, float, double, size_t, long d
 
 template <typename T, size_t N, typename RandomEngine>
 auto
-vector_test(RandomEngine& g, const size_t num_tests) noexcept
+__constructor_test(RandomEngine& g, const size_t num_tests) noexcept
 {
     using Vec = Vector<T, N>;
-    const auto type_string = "Vector<{}, {}>"_format(get_typeinfo_string(T{}), N);
+    const auto t_ts = get_typeinfo_string(T{});
+    const auto vec_ts = "Vector<{}, {}>"_format(t_ts, N);
 
     unsigned ret = 0;
 
     auto tts = test_types{};
 
-    ret += single_value_constructor_test<Vec>(type_string, g, num_tests, tts);
+    ret += single_value_constructor_test<Vec>(vec_ts, g, num_tests, tts);
 
-    ret += test_property("{}(std::array<{}, {}>)"_format(type_string, get_typeinfo_string(T{}), N),
-                         [](const std::array<T, N>& feed) { return Vec(feed); },
-                         [](const Vec& property, const std::array<T, N>& feed)
-                         {
-                             bool ret = false;
-                             for(size_t i = 0; i < N; ++i)
-                                 ret |= property[i] != feed[i];
-                             return ret;
-                         },
-                         [&]()
-                         { return get_dist<T>().template operator()<N>(g); },
+    ret += multi_value_constructor_test<Vec, N>(vec_ts, g, num_tests, tts);
+
+    ret += test_property("{}(std::array<{}, {}>)"_format(vec_ts, get_typeinfo_string(T{}), N),
+                         [&g]() { return get_dist<T>().template operator()<N>(g); },
+                         [](const std::array<T, N> feed) { return Vec(feed); },
+                         [](const Vec property, const std::array<T, N> feed) { return assert_tuples(property, feed, std::make_index_sequence<N>{}); },
                          num_tests);
 
-    ret += multi_value_constructor_test<Vec, N>(type_string, g, num_tests, tts);
+    if constexpr (N > 2)
+    {
+        decltype(auto) dist_t = get_dist<T>();
+        const constexpr auto N1 = N - 1;
+        ret += test_property("{0}({1}, Vector<{1}, {2}>)"_format(vec_ts, t_ts, N1),
+                             [&]() { return std::tuple(dist_t(g), Vector<T, N1>(dist_t.template operator()<N1>(g))); },
+                             [](const auto feed) { return construct<Vec>(feed); },
+                             [](const Vec property, const auto feed)
+                             {
+                                 const auto& [v0, vv] = feed;
+                                 bool ret = property[0] != v0;
+                                 for(size_t i = 0; i < N1; ++i)
+                                     ret |= vv[i] != property[i + 1];
+                                 return ret;
+                             },
+                             num_tests);
+    }
 
     return ret;
 }
@@ -165,14 +175,17 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
 static const constexpr size_t MaxN = 4;
 
 template <typename T, typename RandomEngine, size_t... Ns>
-auto vector_test_n(RandomEngine& g, size_t num_tests, std::index_sequence<Ns...>) noexcept
-{ return (0 + ... + vector_test<T, Ns + 2>(g, num_tests)); }
+auto
+_constructor_test(RandomEngine& g, size_t num_tests, std::index_sequence<Ns...>) noexcept
+{ return (0 + ... + __constructor_test<T, Ns + 2>(g, num_tests)); }
 
 template <typename RandomEngine, typename... Ts>
-auto vector_test_t(RandomEngine& g, size_t num_tests, typelist<Ts...>) noexcept
-{ return (0 + ... + vector_test_n<Ts>(g, num_tests, std::make_index_sequence<MaxN - 1>{})); }
+auto
+constructor_test(RandomEngine& g, size_t num_tests, typelist<Ts...>) noexcept
+{ return (0 + ... + _constructor_test<Ts>(g, num_tests, std::make_index_sequence<MaxN - 1>{})); }
 
-int main(int argc, char* argv[])
+int
+main(int argc, char* argv[])
 {
     const size_t num_tests = argc == 2 ? std::stoll(argv[1]) : 1000000;
 
@@ -180,34 +193,10 @@ int main(int argc, char* argv[])
 
     random_device rd;
     default_random_engine g(rd());
-    RandomDistribution float_dist(-10000.f, 10000.f);
-    RandomDistribution int_dist(-10000, 10000);
-    RandomDistribution unsigned_dist(0u, 10000u);
-    RandomDistribution double_dist(-1e+10, 1e+10);
 
     init_log();
 
-    ret += vector_test_t(g, num_tests, test_types{});
-
-    // ret += test_property("Vector<float, N>(float, float, float, float)",
-    //                      [](auto&& feed) { return construct<Vector<float, 4>>(forward<decltype(feed)>(feed)); },
-    //                      [](auto&& property, auto&& feed)
-    //                      {
-    //                          return sum(property) != apply([](auto... vals) { return (0 + ... + vals); },
-    //                                                        forward<decltype(feed)>(feed));
-    //                      },
-    //                      [&]() { return tuple(float_dist(g), float_dist(g), float_dist(g), float_dist(g)); },
-    //                      num_tests);
-
-    // ret += test_property("Vector<double, N>(double, float, int, unsigned)",
-    //                      [](auto&& feed) { return construct<Vector<double, 4>>(forward<decltype(feed)>(feed)); },
-    //                      [](auto&& property, auto&& feed)
-    //                      {
-    //                          return sum(property) != apply([](auto... vals) { return (0 + ... + vals); },
-    //                                                        forward<decltype(feed)>(feed));
-    //                      },
-    //                      [&]() { return tuple(double_dist(g), float_dist(g), int_dist(g), unsigned_dist(g)); },
-    //                      num_tests);
+    ret += constructor_test(g, num_tests, test_types{});
 
     // // ret += test_property("any(Vector<bool, N>)",
     // //                      [](const Vector<bool, N>& feed) { return any(feed); },
