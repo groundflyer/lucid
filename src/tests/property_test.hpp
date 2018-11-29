@@ -22,53 +22,59 @@ auto construct(std::tuple<Args...> args)
     return apply([](auto&&... args){ return T(args...); }, args);
 }
 
-template <typename T, size_t N>
-std::ostream&
-operator<<(std::ostream& os, const std::array<T, N>& rhs) noexcept
+namespace yapt
 {
-    os << '[';
-    for (size_t i = 0; i < N - 1; ++i)
-        os << rhs[i] << ", ";
-    os << rhs[N-1] << ']';
-    return os;
-}
-
 template <typename T, size_t N,
           template <typename, size_t> typename Container>
 std::ostream&
-operator<<(std::ostream& os, const yapt::Vector<T, N, Container>& rhs) noexcept
+operator<<(std::ostream& os, const Vector<T, N, Container>& rhs) noexcept
 {
     os << '[';
     for (size_t i = 0; i < N - 1; ++i)
         os << rhs[i] << ", ";
     os << rhs[N-1] << ']';
 
+    return os;
+}
+}
+
+namespace std
+{
+template <typename T, size_t N>
+ostream&
+operator<<(std::ostream& os, const array<T, N>& rhs) noexcept
+{
+    os << '[';
+    for (size_t i = 0; i < N - 1; ++i)
+        os << rhs[i] << ", ";
+    os << rhs[N-1] << ']';
     return os;
 }
 
 template<typename Tuple, size_t... I>
-std::ostream&
-print_tuple(std::ostream& os, const Tuple& t, std::index_sequence<I...>)
+ostream&
+print_tuple(ostream& os, const Tuple& t, index_sequence<I...>)
 {
     os << '(';
-    (..., (os << (I == 0? "" : ", ") << std::get<I>(t)));
+    (..., (os << (I == 0? "" : ", ") << get<I>(t)));
     os << ')';
     return os;
 }
 
 template<typename... Ts>
-std::ostream&
-operator<<(std::ostream& os, const std::tuple<Ts...>& t)
+ostream&
+operator<<(ostream& os, const tuple<Ts...>& t)
 {
-    return print_tuple(os, t, std::make_index_sequence<sizeof...(Ts)>());
+    return print_tuple(os, t, make_index_sequence<sizeof...(Ts)>());
 }
 
 template <typename T1, typename T2>
-std::ostream&
-operator<<(std::ostream& os, std::pair<T1, T2> arg)
+ostream&
+operator<<(std::ostream& os, pair<T1, T2> arg)
 {
     os << '(' << arg.first << ", " << arg.second << ')';
     return os;
+}
 }
 
 void init_log()

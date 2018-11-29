@@ -58,9 +58,9 @@ namespace yapt
 namespace std
 {
 	template <typename T, size_t N>
-	struct tuple_size<yapt::ArrayView<T, N>> : integral_constant<size_t, N> {};
+	class tuple_size<yapt::ArrayView<T, N>> : integral_constant<size_t, N> {};
 
 	template <size_t I, typename T, size_t N>
-	struct tuple_element<I, yapt::ArrayView<T, N>>
+	class tuple_element<I, yapt::ArrayView<T, N>>
 	{ using type = T; };
 }

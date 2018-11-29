@@ -23,7 +23,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND USE_LIBCXX)
 
   if(LibCxx)
     add_compile_options(-stdlib=libc++)
-    set(CMAKE_EXE_LINKER_FLAGS "-lc++abi")
+    set(CMAKE_EXE_LINKER_FLAGS "-stdlib=libc++ -lc++abi")
     message(STATUS "Using LLVM libc++")
   endif()
 endif()

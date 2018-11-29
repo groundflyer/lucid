@@ -358,11 +358,11 @@ namespace std
 {
 	template <typename T, size_t N,
 			  template <typename, size_t> typename Container>
-	struct tuple_size<yapt::Vector<T, N, Container>> : integral_constant<size_t, N> {};
+	class tuple_size<yapt::Vector<T, N, Container>> : integral_constant<size_t, N> {};
 
 	template<size_t I, typename T, size_t N,
 			 template <typename, size_t> typename Container>
-    struct tuple_element<I, yapt::Vector<T, N, Container>>
+    class tuple_element<I, yapt::Vector<T, N, Container>>
 	{ using type = T; };
 
 	template<size_t I, typename T, size_t N,
