@@ -14,7 +14,7 @@
 namespace yapt
 {
     template <typename T, size_t N,
-			  template <typename, size_t> typename Container = std::array>
+			  template <typename, size_t> typename Container>
     class Vector
     {
 		static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");

@@ -19,7 +19,7 @@ namespace yapt
 {
     // forward declaration
     template <typename T, size_t N,
-              template <typename, size_t> class Container>
+              template <typename, size_t> class Container = std::array>
     class Vector;
 
 
@@ -32,7 +32,7 @@ namespace yapt
 			  const Vector<T, N, Container2> & b,
 			  BinaryOperation binary_op) noexcept
     {
-		Vector<std::decay_t<std::result_of_t<BinaryOperation(T, T)>>, N, Container1> ret {};
+		Vector<std::decay_t<std::result_of_t<BinaryOperation(T, T)>>, N> ret {};
 
 		for (size_t i = 0; i < N; ++i)
 			ret[i] = binary_op(a[i], b[i]);
@@ -48,7 +48,7 @@ namespace yapt
     transform(const Vector<T, N, Container> & a,
 			  UnaryOperation unary_op) noexcept
     {
-		Vector<std::result_of_t<UnaryOperation(T)>, N, Container> ret {};
+		Vector<std::result_of_t<UnaryOperation(T)>, N> ret {};
 
 		for (size_t i = 0; i < N; ++i)
 			ret[i] = unary_op(a[i]);
@@ -129,7 +129,7 @@ namespace yapt
     cross(const Vector<T, N, Container1> & a,
     	  const Vector<T, N, Container2> & b) noexcept
     {
-    	Vector<T, N, Container1> ret;
+    	Vector<T, N> ret;
 
     	for (size_t i = 0; i < N; ++i)
     	    for (size_t j = 0; j < N; ++j)
@@ -140,10 +140,11 @@ namespace yapt
     }
 
     template <typename T, size_t N,
-			  template <typename, size_t> class Container>
+			  template <typename, size_t> class Container1,
+              template <typename, size_t> class Container2>
     constexpr auto
-    frontface(const Vector<T, N, Container> & a,
-              const Vector<T, N, Container> & b) noexcept
+    frontface(const Vector<T, N, Container1> & a,
+              const Vector<T, N, Container2> & b) noexcept
     { return dot(a, b) < 0 ? -a : a; }
 
 //     // 3-dimensional cross product
