@@ -358,14 +358,21 @@ namespace std
 {
 	template <typename T, size_t N,
 			  template <typename, size_t> typename Container>
-	class tuple_size<yapt::Vector<T, N, Container>> : integral_constant<size_t, N> {};
+	class tuple_size<yapt::Vector<T, N, Container>>
+    {
+    public:
+        static const constexpr size_t value = N;
+    };
 
 	template<size_t I, typename T, size_t N,
 			 template <typename, size_t> typename Container>
     class tuple_element<I, yapt::Vector<T, N, Container>>
-	{ using type = T; };
+	{
+    public:
+        using type = T;
+    };
 
-	template<size_t I, typename T, size_t N,
+	template<auto I, typename T, size_t N,
 			 template <typename, size_t> typename Container>
     constexpr decltype(auto)
     get(const yapt::Vector<T, N, Container>& vec) noexcept
