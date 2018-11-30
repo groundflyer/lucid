@@ -83,17 +83,17 @@ single_value_constructor_test(std::string_view type_string,
                               RandomEngine& g,
                               const size_t num_tests,
                               typelist<Ts...>) noexcept
-{ return (0 + ... + _single_value_constructor_test<Vec, Ts>(type_string, g, num_tests)); }
+{ return (0u + ... + _single_value_constructor_test<Vec, Ts>(type_string, g, num_tests)); }
 
 template <size_t I, typename A, typename B>
 constexpr bool
-not_equal(const A& a, const B& b)
-{ return std::get<I>(a) != static_cast<std::decay_t<decltype(std::get<I>(a))>>(std::get<I>(b)); }
+not_equal(A&& a, B&& b)
+{ return std::get<I>(std::forward<A>(a)) != static_cast<std::decay_t<decltype(std::get<I>(std::forward<A>(a)))>>(std::get<I>(std::forward<B>(b))); }
 
 template <typename A, typename B, size_t... I>
 constexpr bool
-assert_tuples(const A& a, const B& b, std::index_sequence<I...>)
-{ return (false || ... || not_equal<I>(a, b)); }
+assert_tuples(A&& a, B&& b, std::index_sequence<I...>)
+{ return (false || ... || not_equal<I>(std::forward<A>(a), std::forward<B>(b))); }
 
 template <typename Vec, size_t N, size_t Shift, typename RandomEngine, typename GenTypes>
 constexpr auto
@@ -145,18 +145,19 @@ __constructor_test(RandomEngine& g, const size_t num_tests) noexcept
 
     ret += multi_value_constructor_test<Vec, N>(vec_ts, g, num_tests, tts);
 
+    decltype(auto) dist = get_dist<T>();
+
     ret += test_property("{}(std::array<{}, {}>)"_format(vec_ts, get_typeinfo_string(T{}), N),
-                         [&g]() { return get_dist<T>().template operator()<N>(g); },
+                         [&]() { return dist.template operator()<N>(g); },
                          [](const std::array<T, N> feed) { return Vec(feed); },
                          [](const Vec property, const std::array<T, N> feed) { return assert_tuples(property, feed, std::make_index_sequence<N>{}); },
                          num_tests);
 
     if constexpr (N > 2)
     {
-        decltype(auto) dist_t = get_dist<T>();
         const constexpr auto N1 = N - 1;
         ret += test_property("{0}({1}, Vector<{1}, {2}>)"_format(vec_ts, t_ts, N1),
-                             [&]() { return std::tuple(dist_t(g), Vector<T, N1>(dist_t.template operator()<N1>(g))); },
+                             [&]() { return std::tuple(dist(g), Vector<T, N1>(dist.template operator()<N1>(g))); },
                              [](const auto feed) { return construct<Vec>(feed); },
                              [](const Vec property, const auto feed)
                              {
@@ -173,19 +174,56 @@ __constructor_test(RandomEngine& g, const size_t num_tests) noexcept
 }
 
 static const constexpr size_t MaxN = 4;
+using Indicies = std::make_index_sequence<MaxN - 1>;
 
-template <typename T, typename RandomEngine, size_t... Ns>
+template <size_t N, typename RandomEngine, typename... Ts>
 auto
-_constructor_test(RandomEngine& g, size_t num_tests, std::index_sequence<Ns...>) noexcept
-{ return (0 + ... + __constructor_test<T, Ns + 2>(g, num_tests)); }
+_constructor_test(RandomEngine& g, size_t num_tests, typelist<Ts...>) noexcept
+{ return (0u + ... + __constructor_test<Ts, N>(g, num_tests)); }
 
-template <typename RandomEngine, typename... Ts>
+template <typename RandomEngine, size_t... Ns>
 auto
-constructor_test(RandomEngine& g, size_t num_tests, typelist<Ts...>) noexcept
-{ return (0 + ... + _constructor_test<Ts>(g, num_tests, std::make_index_sequence<MaxN - 1>{})); }
+constructor_test(RandomEngine& g, const size_t num_tests, std::index_sequence<Ns...>) noexcept
+{ return (0u + ... + _constructor_test<Ns + 2>(g, num_tests, test_types{})); }
 
-int
-main(int argc, char* argv[])
+
+template <size_t N, typename RandomEngine>
+auto
+__boolean_test(RandomEngine& g, const size_t num_tests) noexcept
+{
+    unsigned ret = 0;
+
+    decltype(auto) dist = get_dist<bool>();
+
+    ret += test_property("bool any(Vector<bool, {}>)"_format(N),
+                         [&]() { return Vector(dist.template operator()<N>(g)); },
+                         [](const Vector<bool, N> feed) { return any(feed); },
+                         [](const bool property, const Vector<bool, N> feed)
+                         {
+                             return property != apply([](auto... vals) { return (false || ... || vals); },
+                                                      feed.data());
+                         },
+                         num_tests);
+
+    ret += test_property("bool all(Vector<bool, {}>)"_format(N),
+                         [&]() { return Vector(dist.template operator()<N>(g)); },
+                         [](const Vector<bool, N> feed) { return all(feed); },
+                         [](const bool property, const Vector<bool, N> feed)
+                         {
+                             return property != apply([](auto... vals) { return (true && ... && vals); },
+                                                      feed.data());
+                         },
+                         num_tests);
+
+    return ret;
+}
+
+template <typename RandomEngine, size_t... Ns>
+auto
+boolean_test(RandomEngine& g, const size_t num_tests, std::index_sequence<Ns...>) noexcept
+{ return (0u + ... + __boolean_test<Ns + 2>(g, num_tests)); }
+
+int main(int argc, char* argv[])
 {
     const size_t num_tests = argc == 2 ? std::stoll(argv[1]) : 1000000;
 
@@ -196,14 +234,11 @@ main(int argc, char* argv[])
 
     init_log();
 
-    ret += constructor_test(g, num_tests, test_types{});
+    Indicies idxs;
 
-    // // ret += test_property("any(Vector<bool, N>)",
-    // //                      [](const Vector<bool, N>& feed) { return any(feed); },
-    // //                      [](const bool property, const Vector<bool, N>& feed)
-    // //                      { return property != apply([](auto... vals) { return (true && ... && vals); }, feed); },
-    // //                      [&]() { return Vector(get_dist<bool>().template operator()<N>(g)); },
-    // //                      num_tests);
+    ret += constructor_test(g, num_tests, idxs);
+
+    ret += boolean_test(g, num_tests, idxs);
 
     // ret += test_property("Vector<float, N> +- float",
     //                      [](const auto feed)
