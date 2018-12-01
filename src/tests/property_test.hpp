@@ -16,11 +16,13 @@
 #include <iostream>
 #include <string_view>
 
-template <typename T, typename ... Args>
+template <typename Construct, typename ... Args>
 auto construct(std::tuple<Args...> args)
-{
-    return apply([](auto&&... args){ return T(args...); }, args);
-}
+{ return apply([](auto&&... args){ return Construct(args...); }, args); }
+
+template <typename Construct, typename T, size_t N>
+auto construct(const std::array<T, N>& args)
+{ return apply([](auto&&... args){ return Construct(args...); }, args); }
 
 namespace yapt
 {
