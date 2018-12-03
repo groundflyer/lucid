@@ -15,25 +15,6 @@ using namespace std;
 using namespace yapt;
 using namespace fmt::literals;
 
-
-template <typename T>
-RandomDistribution<T>&
-get_dist() noexcept
-{
-    static const constexpr T a = is_floating_point_v<T> ? -static_cast<T>(10000) : numeric_limits<T>::lowest();
-    static const constexpr T b = is_floating_point_v<T> ? static_cast<T>(10000) : numeric_limits<T>::max();
-    static RandomDistribution<T> dist(a, b);
-    return dist;
-}
-
-template <>
-RandomDistribution<bool>&
-get_dist() noexcept
-{
-    static RandomDistribution<bool> dist(0.5);
-    return dist;
-}
-
 #define MAKE_TYPEINFO_STRING(TYPE)                    \
     constexpr auto get_typeinfo_string(TYPE) noexcept \
     { return #TYPE; }
@@ -75,9 +56,6 @@ constexpr bool
 assert_tuples(A&& a, B&& b, index_sequence<I...>)
 { return (false || ... || not_equal<I>(forward<A>(a), forward<B>(b))); }
 
-using FundamentalTypes = typelist<int, bool, char, long, float, double, size_t, long double, unsigned, unsigned char, unsigned short>;
-using ArithmeticTypes = typelist<int, long, float, double>;
-
 template <typename T, size_t N, typename RandomEngine>
 auto
 test_t_n(RandomEngine& g, const size_t num_tests) noexcept
@@ -85,7 +63,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
     using Vec = Vector<T, N>;
     const auto t_typestring = get_typeinfo_string(T{});
     const auto vec_typestring = "Vector<{}, {}>"_format(t_typestring, N);
-    decltype(auto) dist = get_dist<T>();
+    RandomDistribution<T> dist(T{-10000}, T{10000});
     unsigned ret = 0;
 
     ret += test_property("{}({})"_format(vec_typestring, t_typestring),
@@ -126,10 +104,15 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                              num_tests);
     }
 
-    auto valgen = [&]() { return pair(Vec(dist.template operator()<N>(g)), dist(g)); };
+    // distribution to generate divizor that is guaranteed to be non-equal zero
+    RandomDistribution<T> divdist(T{1}, T{10000});
+
+    // generate random sign
+    auto signgen = [&, bdist = RandomDistribution<bool>(0.5)]() mutable
+                   { return static_cast<T>(math::minus_one_pow(bdist(g))); };
 
     ret += test_property("{} +- {}"_format(vec_typestring, t_typestring),
-                         valgen,
+                         [&]() { return pair(Vec(dist.template operator()<N>(g)), dist(g)); },
                          [](const auto feed)
                          {
                              const auto& [vec, val] = feed;
@@ -143,7 +126,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                          num_tests);
 
     ret += test_property("{} */ {}"_format(vec_typestring, t_typestring),
-                         valgen,
+                         [&]() { return pair(Vec(dist.template operator()<N>(g)), divdist(g) * signgen()); },
                          [](const auto feed)
                          {
                              const auto& [vec, val] = feed;
@@ -159,6 +142,37 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                          },
                          num_tests);
 
+    ret += test_property("{} +- {}"_format(vec_typestring, vec_typestring),
+                         [&]() { return pair(Vec(dist.template operator()<N>(g)), Vec(dist.template operator()<N>(g))); },
+                         [](const auto feed)
+                         {
+                             const auto& [vec1, vec2] = feed;
+                             return vec1 + vec2;
+                         },
+                         [](const auto property, const auto feed)
+                         {
+                             const auto& [vec1, vec2] = feed;
+                             return any((property - vec2) != vec1);
+                         },
+                         num_tests);
+
+    ret += test_property("{0} */ {0}"_format(vec_typestring),
+                         [&]() { return pair(Vec(dist.template operator()<N>(g)), Vec(divdist.template operator()<N>(g)) * signgen()); },
+                         [](const auto feed)
+                         {
+                             const auto& [vec1, vec2] = feed;
+                             return vec1 * vec2;
+                         },
+                         [&](const auto property, const auto feed)
+                         {
+                             const auto& [vec1, vec2] = feed;
+                             if constexpr(is_floating_point_v<T>)
+                                 return any(!almost_equal(property / vec2, vec1));
+                             else
+                                 return any((property / vec2) != vec1);
+                         },
+                         num_tests);
+
     return ret;
 }
 
@@ -166,6 +180,8 @@ template <size_t N, typename RandomEngine, typename... Ts>
 auto
 test_t(RandomEngine& g, size_t num_tests, typelist<Ts...>) noexcept
 { return (0u + ... + test_t_n<Ts, N>(g, num_tests)); }
+
+using ArithmeticTypes = typelist<int, long, float, double>;
 
 template <typename RandomEngine, size_t... Ns>
 auto
@@ -177,7 +193,7 @@ template <size_t N, typename RandomEngine>
 auto
 __boolean_test(RandomEngine& g, const size_t num_tests) noexcept
 {
-    decltype(auto) dist = get_dist<bool>();
+    RandomDistribution<bool> dist(0.5);
     unsigned ret = 0;
 
     ret += test_property("any(Vector<bool, {}>)"_format(N),
@@ -213,7 +229,7 @@ using Indicies = make_index_sequence<MaxN - 1>;
 
 int main(int argc, char* argv[])
 {
-    const size_t num_tests = argc == 2 ? stoll(argv[1]) : 1000000;
+    const size_t num_tests = argc == 2 ? stoul(argv[1]) : 1000000;
 
     int ret = 0;
 

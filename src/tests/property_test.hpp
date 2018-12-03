@@ -90,11 +90,12 @@ void init_log()
 }
 
 template <typename Property, typename Assertion, typename Generator>
-auto test_property(std::string_view property_name,
-                   Generator&& generator,
-                   Property&& property,
-                   Assertion&& assertion,
-                   size_t n = 10000) noexcept
+auto
+test_property(std::string_view property_name,
+              Generator&& generator,
+              Property&& property,
+              Assertion&& assertion,
+              size_t n)
 {
     auto log_ok = spdlog::get("ok");
     auto log_fail = spdlog::get("fail");
@@ -103,16 +104,16 @@ auto test_property(std::string_view property_name,
     size_t ret = 0;
     for(size_t i = 0; i < n; ++i)
     {
-        decltype(auto) feed = generator();
-        decltype(auto) prop = property(feed);
-        decltype(auto) result = assertion(prop, feed);
+        const auto feed = generator();
+        const auto prop = property(feed);
+        const bool result = assertion(prop, feed);
         if(result)
         {
             log_debug->debug("Test '{}' failed with values:\n"
                             "{}\n{}", property_name, feed, prop);
         }
 
-        ret += result;
+        ret += static_cast<size_t>(result);
     }
 
     if(ret)

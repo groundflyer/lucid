@@ -270,6 +270,15 @@ namespace yapt
                        { return math::almost_equal(a, b, ulp); }); }
 
     template <typename T, size_t N,
+    	      template <typename, size_t> class Container1>
+    constexpr auto
+    almost_equal(const Vector<T, N, Container1>& va,
+                 const T vb,
+                 const int ulp = N)
+    { return transform(va, [&](const T a)
+                       { return math::almost_equal(a, vb, ulp); }); }
+
+    template <typename T, size_t N,
     	      template <typename, size_t> class Container>
     constexpr auto
     fit(const Vector<T, N, Container>& v,
