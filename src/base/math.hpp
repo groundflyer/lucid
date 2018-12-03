@@ -29,7 +29,7 @@ namespace yapt::math
     // simple power function
     template <unsigned exp, typename T>
     constexpr T
-    pow(const T& base) noexcept
+    pow(const T base) noexcept
     {
 		T ret = base;
 
@@ -45,25 +45,25 @@ namespace yapt::math
     // check value is even
 	template <typename T>
     constexpr typename std::enable_if_t<std::is_integral_v<T>, bool>
-    is_even(const T& val) noexcept
+    is_even(const T val) noexcept
     { return val % 2 == 0; }
 
     // return result of (-1)^a
-    template <typename T, typename RT = int>
-    constexpr RT
-    minus_one_pow(const T & a)
+    template <typename T>
+    constexpr int
+    minus_one_pow(const T a)
     { return is_even(a) ? 1 : -1; }
 
     // return a sign of value
     template <typename T>
     constexpr T
-    sign(const T & val) noexcept
+    sign(const T val) noexcept
     { return val > 0 ? 1 : -1; }
 
 
     // compute factorial of value
     constexpr size_t
-    fac(const size_t & val) noexcept
+    fac(const size_t val) noexcept
     {
 		std::size_t ret (1);
 
@@ -77,7 +77,7 @@ namespace yapt::math
     // compute inversion number, O(N^2)-version
     template <typename Iterable>
     constexpr unsigned
-    inversion_number(const Iterable & input) noexcept
+    inversion_number(const Iterable& input) noexcept
     {
 		unsigned ret = 0;
 
@@ -103,11 +103,11 @@ namespace yapt::math
 
 
     // compute Levi-Civita symbol (signature of permutation)
-    template <typename Iterable, typename RT = int>
-    constexpr RT
-    sgn(const Iterable & numbers) noexcept
+    template <typename Iterable>
+    constexpr int
+    sgn(const Iterable& numbers) noexcept
     {
-    	RT ret {};
+    	int ret{};
 
     	if (!has_equal(numbers))
 			ret = minus_one_pow(inversion_number(numbers));
@@ -117,17 +117,17 @@ namespace yapt::math
 
     template <typename T>
     constexpr T
-    degrees(const T & _radians)
+    degrees(const T _radians)
     { return _radians * static_cast<T>(180) / PI<T>; }
 
     template <typename T>
     constexpr T
-    radians(const T & _degrees)
+    radians(const T _degrees)
     { return _degrees * PI<T> / static_cast<T>(180); }
 
-    template <typename Bias, typename T>
+    template <typename T, typename Bias>
     constexpr auto
-    lerp(const T& a, const T& b, const Bias& bias)
+    lerp(const T a, const T b, const Bias bias)
     { return b * bias + a * (T(1) - bias); }
 
     template <typename T>
@@ -145,7 +145,7 @@ namespace yapt::math
 
     template <typename T>
     constexpr auto
-    fit(const T& val, const T& bottom = T(0), const T& top = T(1))
+    fit(const T val, const T bottom = T{0}, const T top = T{1})
     {
         const auto range = (top - bottom);
         return (val - bottom) / range;
