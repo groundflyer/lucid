@@ -159,7 +159,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                              const auto& [vec, val] = feed;
                              return vec * val;
                          },
-                         [&](const auto property, const auto feed)
+                         [](const auto property, const auto feed)
                          {
                              const auto& [vec, val] = feed;
                              if constexpr(is_floating_point_v<T>)
@@ -177,7 +177,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                              vec *= val;
                              return vec;
                          },
-                         [&](auto property, const auto feed)
+                         [](auto property, const auto feed)
                          {
                              const auto& [vec, val] = feed;
                              property /= val;
@@ -191,7 +191,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
     // pair of vectors generator
     auto vvgen = [&]() { return pair(vgen(), vgen()); };
 
-    ret += test_property("{} +- {}"_format(vec_typestring, vec_typestring),
+    ret += test_property("{0} +- {0}"_format(vec_typestring),
                          vvgen,
                          [](const auto feed)
                          {
@@ -205,7 +205,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                          },
                          num_tests);
 
-    ret += test_property("{} +-= {}"_format(vec_typestring, vec_typestring),
+    ret += test_property("{0} +-= {0}"_format(vec_typestring),
                          vvgen,
                          [](const auto feed)
                          {
@@ -231,7 +231,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                              const auto& [vec1, vec2] = feed;
                              return vec1 * vec2;
                          },
-                         [&](const auto property, const auto feed)
+                         [](const auto property, const auto feed)
                          {
                              const auto& [vec1, vec2] = feed;
                              if constexpr(is_floating_point_v<T>)
@@ -241,7 +241,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                          },
                          num_tests);
 
-    ret += test_property("{} */= {}"_format(vec_typestring, vec_typestring),
+    ret += test_property("{0} */= {0}"_format(vec_typestring),
                          vvdgen,
                          [](const auto feed)
                          {
@@ -249,7 +249,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                              vec1 *= vec2;
                              return vec1;
                          },
-                         [&](auto property, const auto feed)
+                         [](auto property, const auto feed)
                          {
                              const auto& [vec1, vec2] = feed;
                              property /= vec2;
@@ -259,6 +259,21 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                                  return any(property != vec1);
                          },
                          num_tests);
+
+    if constexpr (is_floating_point_v<T>)
+    {
+        ret += test_property("dot({0}, {0})|length({0})"_format(vec_typestring),
+                             vgen,
+                             [](const Vec feed) { return dot(feed, feed); },
+                             [](const T property, const Vec feed) { return !math::almost_equal(math::sqrt(property), length(feed)); },
+                             num_tests);
+
+        ret += test_property("normalize({})"_format(vec_typestring),
+                             vgen,
+                             [](const Vec feed) { return normalize(feed); },
+                             [](const Vec property, const Vec) { return !math::almost_equal(length(property), T{1}); },
+                             num_tests);
+    }
 
     return ret;
 }
@@ -329,6 +344,12 @@ int main(int argc, char* argv[])
 
     ret += test_n(g, num_tests, idxs);
     ret += boolean_test(g, num_tests, idxs);
+
+    auto log = spdlog::get("debug");
+    if(ret)
+        log->info("{} tests failed.", ret);
+    else
+        log->info("All tests passed successfully.");
 
     return ret;
 }
