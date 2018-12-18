@@ -273,6 +273,27 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                              [](const Vec feed) { return normalize(feed); },
                              [](const Vec property, const Vec) { return !math::almost_equal(length(property), T{1}); },
                              num_tests);
+
+        if constexpr (N == 3)
+            ret += test_property("cross({0}, {0})"_format(vec_typestring),
+                                 [&]() { return pair(normalize(vgen()), normalize(vgen())); },
+                                 [](const auto feed)
+                                 {
+                                     const auto& [a, b] = feed;
+                                     return cross(a, b);
+                                 },
+                                 [](const Vec property, const auto feed)
+                                 {
+                                     const auto& [a, b] = feed;
+                                     const auto& [ax, ay, az] = a;
+                                     const auto& [bx, by, bz] = b;
+                                     // 3-dimensional righthanded cross product
+                                     const Vec check(ay * bz - az * by,
+                                                     az * bx - ax * bz,
+                                                     ax * by - ay * bx);
+                                     return any(!almost_equal(property, check));
+                                 },
+                                 num_tests);
     }
 
     return ret;

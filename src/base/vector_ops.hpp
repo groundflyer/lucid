@@ -147,30 +147,6 @@ namespace yapt
               const Vector<T, N, Container2> & b) noexcept
     { return dot(a, b) < 0 ? -a : a; }
 
-//     // 3-dimensional cross product
-//     template <typename T,
-// 	      template <typename, size_t> class Container1,
-// 	      template <typename, size_t> class Container2>
-//     constexpr Vector<T, 3, Container1>
-//     cross(const Vector<T, 3, Container1> & a,
-// 	  const Vector<T, 3, Container2> & b) noexcept
-//     {
-// 	Vector<T, 3, Container1> ret;
-
-// #ifdef LEFT			// Lefthanded coordinate system
-// 	ret.x() = a.z()*b.y() - a.y()*b.z();
-// 	ret.y() = a.x()*b.z() - a.z()*b.x();
-// 	ret.z() = a.y()*b.x() - a.x()*b.y();
-// #else			// Righthanded
-// 	ret.x() = a.y()*b.z() - a.z()*b.y();
-// 	ret.y() = a.z()*b.x() - a.x()*b.z();
-// 	ret.z() = a.x()*b.y() - a.y()*b.x();
-// #endif	// LEFT
-
-// 	return ret;
-//     }
-
-
     template <typename T, size_t N,
     	      template <typename, size_t> class Container>
     constexpr auto
