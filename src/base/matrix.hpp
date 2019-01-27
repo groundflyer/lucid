@@ -136,7 +136,7 @@ namespace yapt
 		operator[](const size_t i) const noexcept
 		{
             CHECK_INDEX(i, M);
-			return Vector(ArrayView<T, N>(const_cast<T*>(&(at(i,0)))));
+			return Vector(ArrayView<T, N>(&(at(i,0))));
 		}
 		constexpr auto
 		operator[](const size_t i) noexcept

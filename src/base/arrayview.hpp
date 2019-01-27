@@ -21,6 +21,9 @@ namespace yapt
 		constexpr
 		ArrayView(T* rhs) : p_data(rhs) {}
 
+		constexpr
+		ArrayView(const T* rhs) : p_data(const_cast<T*>(rhs)) {}
+
 		constexpr iterator
 		begin() const noexcept
 		{ return p_data; }
