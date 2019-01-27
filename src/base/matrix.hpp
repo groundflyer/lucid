@@ -206,7 +206,7 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix
-		operator+(const Matrix<T, M, N, Container2> & rhs)
+		operator+(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
 			Matrix ret;
 
@@ -246,7 +246,7 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix
-		operator-(const Matrix<T, M, N, Container2> & rhs)
+		operator-(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
 			Matrix ret;
 
@@ -296,7 +296,7 @@ namespace yapt
 		// element-wise product
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix
-		operator*(const Matrix<T, M, N, Container2> & rhs)
+		operator*(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
 			Matrix ret;
 
@@ -335,7 +335,7 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix
-		operator/(const Matrix<T, M, N, Container2> & rhs)
+		operator/(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
 			Matrix ret;
 
@@ -374,9 +374,9 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
-		operator==(const Matrix<T, M, N, Container2> & rhs)
+		operator==(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			Matrix<bool, M, N, Container> ret;
+			Matrix<bool, M, N> ret;
 
 			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) == rhs.at(i);
@@ -384,9 +384,9 @@ namespace yapt
 			return ret;
 		}
 		constexpr auto
-		operator==(const T & rhs)
+		operator==(const T & rhs) const noexcept
 		{
-			Matrix<bool, M, N, Container> ret;
+			Matrix<bool, M, N> ret;
 
 			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) == rhs;
@@ -396,9 +396,9 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
-		operator!=(const Matrix<T, M, N, Container2> & rhs)
+		operator!=(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			Matrix<bool, M, N, Container> ret;
+			Matrix<bool, M, N> ret;
 
 			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) != rhs.at(i);
@@ -406,9 +406,9 @@ namespace yapt
 			return ret;
 		}
 		constexpr auto
-		operator!=(const T & rhs)
+		operator!=(const T & rhs) const noexcept
 		{
-			Matrix<bool, M, N, Container> ret;
+			Matrix<bool, M, N> ret;
 
 			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) != rhs;
@@ -418,9 +418,9 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
-		operator<(const Matrix<T, M, N, Container2> & rhs)
+		operator<(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			Matrix<bool, M, N, Container> ret;
+			Matrix<bool, M, N> ret;
 
 			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) < rhs.at(i);
@@ -428,9 +428,9 @@ namespace yapt
 			return ret;
 		}
 		constexpr auto
-		operator<(const T & rhs)
+		operator<(const T & rhs) const noexcept
 		{
-			Matrix<bool, M, N, Container> ret;
+			Matrix<bool, M, N> ret;
 
 			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) < rhs;
@@ -440,9 +440,9 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
-		operator<=(const Matrix<T, M, N, Container2> & rhs)
+		operator<=(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			Matrix<bool, M, N, Container> ret;
+			Matrix<bool, M, N> ret;
 
 			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) <= rhs.at(i);
@@ -450,9 +450,9 @@ namespace yapt
 			return ret;
 		}
 		constexpr auto
-		operator<=(const T & rhs)
+		operator<=(const T & rhs) const noexcept
 		{
-			Matrix<bool, M, N, Container> ret;
+			Matrix<bool, M, N> ret;
 
 			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) <= rhs;
@@ -462,9 +462,9 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
-		operator>(const Matrix<T, M, N, Container2> & rhs)
+		operator>(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			Matrix<bool, M, N, Container> ret;
+			Matrix<bool, M, N> ret;
 
 			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) > rhs.at(i);
@@ -472,9 +472,9 @@ namespace yapt
 			return ret;
 		}
 		constexpr auto
-		operator>(const T & rhs)
+		operator>(const T & rhs) const noexcept
 		{
-			Matrix<bool, M, N, Container> ret;
+			Matrix<bool, M, N> ret;
 
 			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) > rhs;
@@ -484,7 +484,7 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
-		operator>=(const Matrix<T, M, N, Container2> & rhs)
+		operator>=(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
 			Matrix<bool, M, N, Container> ret;
 
@@ -494,7 +494,7 @@ namespace yapt
 			return ret;
 		}
 		constexpr auto
-		operator>=(const T & rhs)
+		operator>=(const T & rhs) const noexcept
 		{
 			Matrix<bool, M, N, Container> ret;
 

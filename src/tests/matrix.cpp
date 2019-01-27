@@ -128,6 +128,82 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                });
     }
 
+    auto matgen = [&]() { return Mat(argen()); };
+
+    ret += test_property_n("{} +- {}"_format(mat_typestring, t_typestring),
+                           [&](){ return pair(matgen(), dist(g)); },
+                           [](const auto feed)
+                           {
+                               const auto& [mat, scalar] = feed;
+                               return mat + scalar;
+                           },
+                           [](const Mat property, const auto feed)
+                           {
+                               const auto& [mat, scalar] = feed;
+                               const auto mm = property - scalar;
+                               if constexpr(is_floating_point_v<T>)
+                                   return any(!almost_equal(mm.flat_ref(), mat.flat_ref()));
+                               else
+                                   return any(mm.flat_ref() != mat.flat_ref());
+                           });
+
+    ret += test_property_n("{0} +- {0}"_format(mat_typestring),
+                           [&](){ return pair(matgen(), matgen()); },
+                           [](const auto feed)
+                           {
+                               const auto& [mat1, mat2] = feed;
+                               return mat1 + mat2;
+                           },
+                           [](const Mat property, const auto feed)
+                           {
+                               const auto& [mat1, mat2] = feed;
+                               const auto mm = property - mat2;
+                               if constexpr(is_floating_point_v<T>)
+                                   return any(!almost_equal(mm.flat_ref(), mat1.flat_ref()));
+                               else
+                                   return any(mm.flat_ref() != mat1.flat_ref());
+                           });
+
+    // distribution to generate divizor that is guaranteed to be greater than zero
+    RandomDistribution<T> divdist(T{1}, T{10000});
+
+    auto signgen = [&, bdist = RandomDistribution<bool>(0.5)]() mutable
+                   { return static_cast<T>(math::minus_one_pow(bdist(g))); };
+
+    ret += test_property_n("{} */ {}"_format(mat_typestring, t_typestring),
+                           [&](){ return pair(matgen(), divdist(g) * signgen()); },
+                           [](const auto feed)
+                           {
+                               const auto& [mat, scalar] = feed;
+                               return mat * scalar;
+                           },
+                           [](const Mat property, const auto feed)
+                           {
+                               const auto& [mat, scalar] = feed;
+                               const auto mm = property / scalar;
+                               if constexpr(is_floating_point_v<T>)
+                                   return any(!almost_equal(mm.flat_ref(), mat.flat_ref()));
+                               else
+                                   return any(mm.flat_ref() != mat.flat_ref());
+                           });
+
+    ret += test_property_n("{0} */ {0}"_format(mat_typestring),
+                           [&](){ return pair(matgen(), Mat(divdist.template operator()<MN>(g)) * signgen()); },
+                           [](const auto feed)
+                           {
+                               const auto& [mat1, mat2] = feed;
+                               return mat1 * mat2;
+                           },
+                           [](const Mat property, const auto feed)
+                           {
+                               const auto& [mat1, mat2] = feed;
+                               const auto mm = property / mat2;
+                               if constexpr(is_floating_point_v<T>)
+                                   return any(!almost_equal(mm.flat_ref(), mat1.flat_ref()));
+                               else
+                                   return any(mm.flat_ref() != mat1.flat_ref());
+                           });
+
     return ret;
 }
 
