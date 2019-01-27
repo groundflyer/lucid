@@ -39,8 +39,6 @@ option(BUILD_TESTS "Build tests" OFF)
 add_compile_options(-Wall -Wpedantic -Wextra -pipe)
 
 # Optimize for the host machine
-add_compile_options($<$<CONFIG:Release>:-O3>)
-add_compile_options($<$<CONFIG:Release>:-DNDEBUG>)
 add_compile_options($<$<CONFIG:Release>:-march=native>)
 add_compile_options($<$<CONFIG:Release>:-ffast-math>)
 
