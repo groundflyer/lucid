@@ -24,7 +24,7 @@ find_package(glfw3 3.2 REQUIRED)
 # Default Build Type is Release
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "RelWithDebInfo")
 endif()
 message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
 
@@ -62,6 +62,13 @@ endif()
 # Don't optimize Debug build
 add_compile_options($<$<CONFIG:Debug>:-O0>)
 add_compile_options($<$<CONFIG:Debug>:-g>)
+
+# RelWithDebInfo
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "")
+add_compile_options($<$<CONFIG:RelWithDebInfo>:-O3>)
+add_compile_options($<$<CONFIG:RelWithDebInfo>:-g>)
+add_compile_options($<$<CONFIG:RelWithDebInfo>:-march=native>)
+add_compile_options($<$<CONFIG:RelWithDebInfo>:-ffast-math>)
 
 # Colored output from Clang
 add_compile_options($<$<CXX_COMPILER_ID:Clang>:-fcolor-diagnostics>)

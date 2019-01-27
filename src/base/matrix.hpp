@@ -12,21 +12,25 @@
 
 namespace yapt
 {
-    template <typename T, size_t R, size_t C,
+    template <typename T, size_t M, size_t N,
 			  template <typename, size_t> typename Container = std::array>
     class Matrix
     {
 		static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");
-		static_assert(R > 1 || C > 1, "One-dimensional matrices are not supported.");
+		static_assert(M > 1 || N > 1, "One-dimensional matrices are not supported.");
 
-		static const constexpr size_t N = R * C;
+		static const constexpr size_t MN = M * N;
 
-		using Data = Container<T, N>;
+		using Data = Container<T, MN>;
 		Data m_data {};
 
-		static constexpr size_t
-		pos(const size_t i, const size_t j, const size_t J = C)
+		static constexpr auto
+		pos(const size_t i, const size_t j, const size_t J = N) noexcept
 		{ return i * J + j; }
+
+        static constexpr auto
+        indices(const size_t pos) noexcept
+        { return std::pair(pos / N, pos % N); }
 
 		// variyng template sink
         template <size_t>
@@ -35,53 +39,57 @@ namespace yapt
 
         template <size_t idx, typename ... Ts>
         constexpr void
-        unpack(const T& first, Ts && ... other)
+        unpack(const T& first, Ts && ... other) noexcept
         {
-            static_assert(idx < N, "Too many elements.");
+            static_assert(idx < MN, "Too many elements.");
             m_data[idx] = first;
-            if constexpr (sizeof...(other) == 0 && idx < N-1)
+            if constexpr (sizeof...(other) == 0 && idx < MN-1)
                 unpack<idx+1>(first);
             else
                 unpack<idx+1>(std::forward<Ts>(other)...);
         }
 
 		// unpack vector arguments
-		template <size_t idx,
-                  typename T1, size_t N1,
+		template <size_t idx, size_t MN1,
                   template <typename, size_t> typename Container2,
 				  typename ... Ts>
 		constexpr void
-        unpack(const Vector<T1, N1, Container2>& first,
-               Ts&& ... other)
+        unpack(const Vector<T, MN1, Container2>& first,
+               Ts&& ... other) noexcept
 		{
-            static_assert(idx < N, "Too many elements.");
-            for(size_t i = 0; i < std::min(N - idx, N1); ++i)
-                m_data[idx + 1] = static_cast<T>(first[i]);
-			unpack<idx + N1>(std::forward<Ts>(other)...);
+            static_assert(idx < MN, "Too many elements.");
+            const constexpr auto end = std::min(MN - idx, MN1);
+            for(size_t i = 0; i < end; ++i)
+                m_data[idx + i] = first[i];
+			unpack<idx + end>(std::forward<Ts>(other)...);
 		}
 
-        template <size_t idx, typename T1, size_t N1,
+        template <size_t idx, size_t MN1,
                   typename ... Ts>
         constexpr void
-        unpack(const Container<T1, N1>& first, Ts && ... other)
+        unpack(const Container<T, MN1>& first, Ts && ... other) noexcept
         {
-            static_assert(idx < N, "Too many elements.");
-            for(size_t i = 0; i < std::min(N - idx, N1); ++i)
-                m_data[idx + i] = static_cast<T>(first[i]);
-            unpack<idx + N1>(std::forward<Ts>(other)...);
+            static_assert(idx < MN, "Too many elements.");
+            const constexpr auto end = std::min(MN - idx, MN1);
+            for(size_t i = 0; i < end; ++i)
+                m_data[idx + i] = first[i];
+            unpack<idx + end>(std::forward<Ts>(other)...);
         }
 
-		template <size_t idx, typename T1, size_t R1, size_t C1,
+		template <size_t idx, size_t M1, size_t N1,
 				  template <typename, size_t> typename Container1,
                   typename ... Ts>
         constexpr void
-        unpack(const Matrix<T1, R1, C1, Container1>& first, Ts&& ... other)
+        unpack(const Matrix<T, M1, N1, Container1>& first, Ts&& ... other) noexcept
         {
-            const constexpr auto I = std::min(R, R1);
-            const constexpr auto J = std::min(C, C1);
-            for (size_t i = idx % R; i < I; ++i)
-                for (size_t j = idx / C; j < J; ++j)
-                    m_data[pos(i, j)] = static_cast<T>(first[i][j]);
+            const constexpr auto shift = indices(idx);
+            const constexpr auto shift_i = shift.first;
+            const constexpr auto shift_j = shift.second;
+            const constexpr auto I = std::min(M - shift_i, M1);
+            const constexpr auto J = std::min(N - shift_j, N1);
+            for (size_t i = 0; i < I; ++i)
+                for (size_t j = 0; j < J; ++j)
+                    m_data[pos(shift_i + i, shift_j + j)] = first.at(i, j);
             unpack<pos(I, J, J) + 1>(std::forward<Ts>(other)...);
         }
 
@@ -111,7 +119,7 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix&
-		operator=(const Matrix<T, R, C, Container2> & rhs) noexcept
+		operator=(const Matrix<T, M, N, Container2> & rhs) noexcept
 		{
 			std::copy(rhs.cbegin(), rhs.cend(), begin());
 			return *this;
@@ -124,17 +132,17 @@ namespace yapt
 			return *this;
 		}
 
-		const constexpr auto
+		constexpr decltype(auto)
 		operator[](const size_t i) const noexcept
 		{
-            CHECK_INDEX(i, R);
-			return Vector(ArrayView<T, C>(const_cast<T*>(&(at(i,0)))));
+            CHECK_INDEX(i, M);
+			return Vector(ArrayView<T, N>(const_cast<T*>(&(at(i,0)))));
 		}
 		constexpr auto
 		operator[](const size_t i) noexcept
 		{
-            CHECK_INDEX(i, R);
-			return Vector(ArrayView<T, C>(&(at(i,0))));
+            CHECK_INDEX(i, M);
+			return Vector(ArrayView<T, N>(&(at(i,0))));
 		}
 
 		template <size_t I>
@@ -150,28 +158,28 @@ namespace yapt
 		const constexpr T&
 		at(const size_t i) const noexcept
 		{
-            CHECK_INDEX(i, N);
+            CHECK_INDEX(i, MN);
 			return m_data[i];
 		}
 		constexpr T&
 		at(const size_t i) noexcept
 		{
-            CHECK_INDEX(i, N);
+            CHECK_INDEX(i, MN);
 			return m_data[i];
 		}
 
 		const constexpr T&
 		at(const size_t i, const size_t j) const noexcept
 		{
-            CHECK_INDEX(i, R);
-            CHECK_INDEX(j, C);
+            CHECK_INDEX(i, M);
+            CHECK_INDEX(j, N);
 			return m_data[pos(i, j)];
 		}
 		constexpr T&
 		at(const size_t i, const size_t j) noexcept
 		{
-            CHECK_INDEX(i, R);
-            CHECK_INDEX(j, C);
+            CHECK_INDEX(i, M);
+            CHECK_INDEX(j, N);
 			return m_data[pos(i, j)];
 		}
 
@@ -188,13 +196,21 @@ namespace yapt
 		cend() const noexcept
 		{ return m_data.cend(); }
 
+        constexpr decltype(auto)
+        flat_ref() const noexcept
+        { return Vector(ArrayView<T, M * N>(&(at(0)))); }
+
+        constexpr decltype(auto)
+        flat_ref() noexcept
+        { return Vector(ArrayView<T, M * N>(&(at(0)))); }
+
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix
-		operator+(const Matrix<T, R, C, Container2> & rhs)
+		operator+(const Matrix<T, M, N, Container2> & rhs)
 		{
 			Matrix ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) + rhs.at(i);
 
 			return ret;
@@ -204,16 +220,16 @@ namespace yapt
 		{
 			Matrix ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) + rhs;
 
 			return ret;
 		}
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix&
-		operator+=(const Matrix<T, R, C, Container2> & rhs)
+		operator+=(const Matrix<T, M, N, Container2> & rhs)
 		{
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				at(i) += rhs.at(i);
 
 			return *this;
@@ -221,7 +237,7 @@ namespace yapt
 		constexpr Matrix&
 		operator+=(const T & rhs) noexcept
 		{
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				at(i) += rhs;
 
 			return *this;
@@ -230,11 +246,11 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix
-		operator-(const Matrix<T, R, C, Container2> & rhs)
+		operator-(const Matrix<T, M, N, Container2> & rhs)
 		{
 			Matrix ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) - rhs.at(i);
 
 			return ret;
@@ -244,7 +260,7 @@ namespace yapt
 		{
 			Matrix ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) - rhs;
 
 			return ret;
@@ -254,16 +270,16 @@ namespace yapt
 		{
 			Matrix ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = -at(i);
 
 			return ret;
 		}
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix&
-		operator-=(const Matrix<T, R, C, Container2> & rhs)
+		operator-=(const Matrix<T, M, N, Container2> & rhs)
 		{
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				at(i) -= rhs.at(i);
 
 			return *this;
@@ -271,7 +287,7 @@ namespace yapt
 		constexpr Matrix&
 		operator-=(const T & rhs) noexcept
 		{
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				at(i) -= rhs;
 
 			return *this;
@@ -280,11 +296,11 @@ namespace yapt
 		// element-wise product
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix
-		operator*(const Matrix<T, R, C, Container2> & rhs)
+		operator*(const Matrix<T, M, N, Container2> & rhs)
 		{
 			Matrix ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) * rhs.at(i);
 
 			return ret;
@@ -294,16 +310,16 @@ namespace yapt
 		{
 			Matrix ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) * rhs;
 
 			return ret;
 		}
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix&
-		operator*=(const Matrix<T, R, C, Container2> & rhs)
+		operator*=(const Matrix<T, M, N, Container2> & rhs)
 		{
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				at(i) *= rhs.at(i);
 
 			return *this;
@@ -311,7 +327,7 @@ namespace yapt
 		constexpr Matrix&
 		operator*=(const T & rhs) noexcept
 		{
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				at(i) *= rhs;
 
 			return *this;
@@ -319,11 +335,11 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix
-		operator/(const Matrix<T, R, C, Container2> & rhs)
+		operator/(const Matrix<T, M, N, Container2> & rhs)
 		{
 			Matrix ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) / rhs.at(i);
 
 			return ret;
@@ -333,16 +349,16 @@ namespace yapt
 		{
 			Matrix ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) / rhs;
 
 			return ret;
 		}
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix&
-		operator/=(const Matrix<T, R, C, Container2> & rhs)
+		operator/=(const Matrix<T, M, N, Container2> & rhs)
 		{
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				at(i) /= rhs.at(i);
 
 			return *this;
@@ -350,7 +366,7 @@ namespace yapt
 		constexpr Matrix&
 		operator/=(const T & rhs) noexcept
 		{
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				at(i) /= rhs;
 
 			return *this;
@@ -358,11 +374,11 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
-		operator==(const Matrix<T, R, C, Container2> & rhs)
+		operator==(const Matrix<T, M, N, Container2> & rhs)
 		{
-			Matrix<bool, R, C, Container> ret;
+			Matrix<bool, M, N, Container> ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) == rhs.at(i);
 
 			return ret;
@@ -370,9 +386,9 @@ namespace yapt
 		constexpr auto
 		operator==(const T & rhs)
 		{
-			Matrix<bool, R, C, Container> ret;
+			Matrix<bool, M, N, Container> ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) == rhs;
 
 			return ret;
@@ -380,11 +396,11 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
-		operator!=(const Matrix<T, R, C, Container2> & rhs)
+		operator!=(const Matrix<T, M, N, Container2> & rhs)
 		{
-			Matrix<bool, R, C, Container> ret;
+			Matrix<bool, M, N, Container> ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) != rhs.at(i);
 
 			return ret;
@@ -392,9 +408,9 @@ namespace yapt
 		constexpr auto
 		operator!=(const T & rhs)
 		{
-			Matrix<bool, R, C, Container> ret;
+			Matrix<bool, M, N, Container> ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) != rhs;
 
 			return ret;
@@ -402,11 +418,11 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
-		operator<(const Matrix<T, R, C, Container2> & rhs)
+		operator<(const Matrix<T, M, N, Container2> & rhs)
 		{
-			Matrix<bool, R, C, Container> ret;
+			Matrix<bool, M, N, Container> ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) < rhs.at(i);
 
 			return ret;
@@ -414,9 +430,9 @@ namespace yapt
 		constexpr auto
 		operator<(const T & rhs)
 		{
-			Matrix<bool, R, C, Container> ret;
+			Matrix<bool, M, N, Container> ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) < rhs;
 
 			return ret;
@@ -424,11 +440,11 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
-		operator<=(const Matrix<T, R, C, Container2> & rhs)
+		operator<=(const Matrix<T, M, N, Container2> & rhs)
 		{
-			Matrix<bool, R, C, Container> ret;
+			Matrix<bool, M, N, Container> ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) <= rhs.at(i);
 
 			return ret;
@@ -436,9 +452,9 @@ namespace yapt
 		constexpr auto
 		operator<=(const T & rhs)
 		{
-			Matrix<bool, R, C, Container> ret;
+			Matrix<bool, M, N, Container> ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) <= rhs;
 
 			return ret;
@@ -446,11 +462,11 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
-		operator>(const Matrix<T, R, C, Container2> & rhs)
+		operator>(const Matrix<T, M, N, Container2> & rhs)
 		{
-			Matrix<bool, R, C, Container> ret;
+			Matrix<bool, M, N, Container> ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) > rhs.at(i);
 
 			return ret;
@@ -458,9 +474,9 @@ namespace yapt
 		constexpr auto
 		operator>(const T & rhs)
 		{
-			Matrix<bool, R, C, Container> ret;
+			Matrix<bool, M, N, Container> ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) > rhs;
 
 			return ret;
@@ -468,11 +484,11 @@ namespace yapt
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
-		operator>=(const Matrix<T, R, C, Container2> & rhs)
+		operator>=(const Matrix<T, M, N, Container2> & rhs)
 		{
-			Matrix<bool, R, C, Container> ret;
+			Matrix<bool, M, N, Container> ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) >= rhs.at(i);
 
 			return ret;
@@ -480,25 +496,18 @@ namespace yapt
 		constexpr auto
 		operator>=(const T & rhs)
 		{
-			Matrix<bool, R, C, Container> ret;
+			Matrix<bool, M, N, Container> ret;
 
-			for (size_t i = 0; i < N; ++i)
+			for (size_t i = 0; i < MN; ++i)
 				ret.at(i) = at(i) >= rhs;
 
 			return ret;
 		}
 
-
 		template <typename Rhs>
 		constexpr auto
 		dot(Rhs && rhs) const noexcept
 		{ return yapt::dot(*this, std::forward<Rhs>(rhs)); }
-
-
-		// transpose
-		constexpr Matrix
-		transpose() const noexcept
-		{ return yapt::transpose(*this); }
 
 		const constexpr Data&
 		data() const noexcept
@@ -509,36 +518,36 @@ namespace yapt
 		{
 			Matrix ret;
 
-			for (size_t i = 0; i < R; ++i)
-				for (size_t j = 0; j < C; ++j)
+			for (size_t i = 0; i < M; ++i)
+				for (size_t j = 0; j < N; ++j)
 					ret.at(i, j) = i == j ? 1 : 0;
 
 			return ret;
 		}
-
-
-    	friend std::ostream&
-    	operator<<(std::ostream & os, const Matrix & rhs)
-    	{
-            for (size_t i = 0; i < N - 1; ++i)
-                os << rhs.m_data[i] << ' ';
-            os << rhs.m_data[N-1];
-
-    	    return os;
-    	}
     };
 }
 
 namespace std
 {
-	template <typename T, size_t R, size_t C,
+	template <typename T, size_t M, size_t N,
 			  template <typename, size_t> typename Container>
-	struct tuple_size<yapt::Matrix<T, R, C, Container>> : integral_constant<size_t, R> {};
+	class tuple_size<yapt::Matrix<T, M, N, Container>>
+    {
+    public:
+        static const constexpr size_t value = M;
+    };
 
-	template <size_t I, typename T, size_t R, size_t C,
+	template <size_t I, typename T, size_t M, size_t N,
 			  template <typename, size_t> typename Container>
-	struct tuple_element<I, yapt::Matrix<T, R, C, Container>>
+	class tuple_element<I, yapt::Matrix<T, M, N, Container>>
 	{
-		using type = decltype(declval<yapt::Matrix<T, R, C, Container>>().template get<I>());
+    public:
+		using type = decltype(declval<yapt::Matrix<T, M, N, Container>>().template get<I>());
 	};
+
+    template <auto I, typename T, size_t M, size_t N,
+			  template <typename, size_t> typename Container>
+    constexpr decltype(auto)
+    get(const yapt::Matrix<T, M, N, Container>& mat) noexcept
+    { return mat.template get<I>(); }
 }
