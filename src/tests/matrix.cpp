@@ -39,6 +39,8 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                          ret |= property.at(i) != feed[i];
                      return ret;
                  };
+    auto arngen = [&](){ return dist.template operator()<N>(g); };
+    auto vgen = [&](){ return Vec(arngen()); };
 
     ret += test_property_n("{}({})"_format(mat_typestring, get_typeinfo_string(array<T, MN>{})),
                            argen,
@@ -55,7 +57,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                            {
                                array<Vec, M> ret;
                                for(size_t i = 0; i < M; ++i)
-                                   ret[i] = Vec(dist.template operator()<N>(g));
+                                   ret[i] = vgen();
                                return ret;
                            },
                            [](const auto& feed) { return construct<Mat>(feed); },
@@ -77,7 +79,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                            {
                                array<array<T, N>, M> ret;
                                for(size_t i = 0; i < M; ++i)
-                                   ret[i] = dist.template operator()<N>(g);
+                                   ret[i] = arngen();
                                return ret;
                            },
                            [](const auto& feed) { return construct<Mat>(feed); },
@@ -208,6 +210,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
 
     auto dsgen = [&](){ return divdist(g) * signgen(); };
     auto dmgen = [&](){ return Mat(divdist.template operator()<MN>(g)) * signgen(); };
+    auto dvgen = [&](){ return Vec(divdist.template operator()<N>(g)) * signgen(); };
 
     ret += test_property_n("{} */ {}"_format(mat_typestring, t_typestring),
                            [&](){ return pair(matgen(), dsgen()); },
@@ -277,6 +280,59 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                    return any(!almost_equal(property.flat_ref(), mat1.flat_ref()));
                                else
                                    return any((property != mat1).flat_ref());
+                           });
+
+    RandomDistribution<size_t> rowdist(0, M-1);
+
+    ret += test_property_n("{}[] = Vector<{}, {}>"_format(mat_typestring, t_typestring, N),
+                           [&](){ return tuple(matgen(), vgen(), rowdist(g)); },
+                           [](auto feed)
+                           {
+                               auto& [mat, vec, idx] = feed;
+                               mat[idx] = vec;
+                               return mat;
+                           },
+                           [](const Mat property, const auto feed)
+                           {
+                               const auto& vec = get<1>(feed);
+                               const auto& idx = get<2>(feed);
+                               return any(property[idx] != vec);
+                           });
+
+    ret += test_property_n("{}[] +-= Vector<{}, {}>"_format(mat_typestring, t_typestring, N),
+                           [&](){ return tuple(matgen(), vgen(), rowdist(g)); },
+                           [](auto feed)
+                           {
+                               auto& [mat, vec, idx] = feed;
+                               mat[idx] += vec;
+                               return mat;
+                           },
+                           [](Mat property, const auto feed)
+                           {
+                               const auto& [mat, vec, idx] = feed;
+                               property[idx] -= vec;
+                               if constexpr(is_floating_point_v<T>)
+                                   return any(!almost_equal(property.flat_ref(), mat.flat_ref(), 100 * MN));
+                               else
+                                   return any((property != mat).flat_ref());
+                           });
+
+    ret += test_property_n("{}[] */= Vector<{}, {}>"_format(mat_typestring, t_typestring, N),
+                           [&](){ return tuple(matgen(), dvgen(), rowdist(g)); },
+                           [](auto feed)
+                           {
+                               auto& [mat, vec, idx] = feed;
+                               mat[idx] *= vec;
+                               return mat;
+                           },
+                           [](Mat property, const auto feed)
+                           {
+                               const auto& [mat, vec, idx] = feed;
+                               property[idx] /= vec;
+                               if constexpr(is_floating_point_v<T>)
+                                   return any(!almost_equal(property.flat_ref(), mat.flat_ref(), 100 * MN));
+                               else
+                                   return any((property != mat).flat_ref());
                            });
 
     return ret;
