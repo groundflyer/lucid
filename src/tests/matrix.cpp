@@ -20,37 +20,47 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
     const auto t_typestring = get_typeinfo_string(T{});
     const auto mat_typestring = "Matrix<{}, {}, {}>"_format(t_typestring, M, N);
     RandomDistribution<T> dist(T{-10000}, T{10000});
-    unsigned ret = 0;
+    static const constexpr auto MN = M * N;
+    auto array_mn_gen = [&]() { return dist.template operator()<MN>(g); };
+    const auto array_assertion = [](const Mat& property, const auto& feed)
+                                 {
+                                     bool ret = false;
+                                     for(size_t i = 0; i < MN; ++i)
+                                         ret |= property.at(i) != feed[i];
+                                     return ret;
+                                 };
+    auto array_n_gen = [&](){ return dist.template operator()<N>(g); };
+    auto vgen = [&](){ return Vec(array_n_gen()); };
 
-    auto test_property_n = [num_tests](auto&& ... args)
-                           { return test_property(num_tests, forward<decltype(args)>(args)...); };
+    const auto test_property_n = [num_tests](auto&& ... args)
+                                 { return test_property(num_tests, forward<decltype(args)>(args)...); };
+
+    const auto assertion = [](const auto& a, const auto& b)
+                           {
+                               if constexpr(is_floating_point_v<T>)
+                                   return any(!almost_equal(a.flat_ref(), b.flat_ref(), 200 * sizeof(T{})));
+                               else
+                                   return any((a != b).flat_ref());
+                           };
+
+    auto mat_gen = [&]() { return Mat(array_mn_gen()); };
+
+    unsigned ret = 0;
 
     ret += test_property_n("{}({}).flat_ref()"_format(mat_typestring, t_typestring),
                            [&](){ return dist(g); },
                            [](const auto feed){ return Mat(feed); },
                            [](auto&& property, auto&& feed){ return any(property.flat_ref() != feed); });
 
-    const constexpr auto MN = M * N;
-    auto argen = [&]() { return dist.template operator()<MN>(g); };
-    auto arass = [](const Mat property, const auto feed)
-                 {
-                     bool ret = false;
-                     for(size_t i = 0; i < MN; ++i)
-                         ret |= property.at(i) != feed[i];
-                     return ret;
-                 };
-    auto arngen = [&](){ return dist.template operator()<N>(g); };
-    auto vgen = [&](){ return Vec(arngen()); };
-
     ret += test_property_n("{}({})"_format(mat_typestring, get_typeinfo_string(array<T, MN>{})),
-                           argen,
+                           array_mn_gen,
                            [](const auto& feed) { return construct<Mat>(feed); },
-                           arass);
+                           array_assertion);
 
     ret += test_property_n("{}(array<{}, {}>)"_format(mat_typestring, t_typestring, N),
-                           argen,
+                           array_mn_gen,
                            [](const auto& feed) { return Mat(feed); },
-                           arass);
+                           array_assertion);
 
     ret += test_property_n("{}({})"_format(mat_typestring, get_typeinfo_string(array<Vec, M>{})),
                            [&]()
@@ -79,7 +89,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                            {
                                array<array<T, N>, M> ret;
                                for(size_t i = 0; i < M; ++i)
-                                   ret[i] = arngen();
+                                   ret[i] = array_n_gen();
                                return ret;
                            },
                            [](const auto& feed) { return construct<Mat>(feed); },
@@ -99,13 +109,13 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
         const constexpr auto MN1 = M1 * N1;
         using sMat = Matrix<T, M1, N1>;
         using sVec = Vector<T, N1>;
-        auto smatgen = [&](){ return sMat(dist.template operator()<MN1>(g)); };
+        auto smat_gen = [&](){ return sMat(dist.template operator()<MN1>(g)); };
         auto svecgen = [&](){ return sVec(dist.template operator()<N1>(g)); };
 
         ret += test_property_n("{}(Matrix<{}, {}, {}>)"_format(mat_typestring, t_typestring, M1, N1),
-                               smatgen,
-                               [](const sMat feed) { return Mat(feed); },
-                               [](const Mat property, const sMat feed)
+                               smat_gen,
+                               [](const sMat& feed) { return Mat(feed); },
+                               [](const Mat& property, const sMat& feed)
                                {
                                    bool ret = false;
                                    for(size_t i = 0; i < M1; ++i)
@@ -115,9 +125,9 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                });
 
         ret += test_property_n("{0}({1}, Vector<{1}, {2}>, Matrix<{1}, {3}, {2}>)"_format(mat_typestring, t_typestring, N1, M1),
-                               [&](){ return tuple(dist(g), svecgen(), smatgen()); },
-                               [](const auto feed) { return construct<Mat>(feed); },
-                               [](const Mat property, const auto feed)
+                               [&](){ return tuple(dist(g), svecgen(), smat_gen()); },
+                               [](const auto& feed) { return construct<Mat>(feed); },
+                               [](const Mat& property, const auto& feed)
                                {
                                    const auto& [scalar, vec, mat] = feed;
                                    bool ret = property.at(0) != scalar;
@@ -130,169 +140,143 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                });
     }
 
-    auto matgen = [&]() { return Mat(argen()); };
-
     ret += test_property_n("{} +- {}"_format(mat_typestring, t_typestring),
-                           [&](){ return pair(matgen(), dist(g)); },
-                           [](const auto feed)
+                           [&](){ return pair(mat_gen(), dist(g)); },
+                           [](const auto& feed)
                            {
                                const auto& [mat, scalar] = feed;
                                return mat + scalar;
                            },
-                           [](const Mat property, const auto feed)
+                           [&](const Mat& property, const auto& feed)
                            {
                                const auto& [mat, scalar] = feed;
                                const auto mm = property - scalar;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(mm.flat_ref(), mat.flat_ref()));
-                               else
-                                   return any((mm != mat).flat_ref());
+                               return assertion(mm, mat);
                            });
 
     ret += test_property_n("{} +-= {}"_format(mat_typestring, t_typestring),
-                           [&](){ return pair(matgen(), dist(g)); },
+                           [&](){ return pair(mat_gen(), dist(g)); },
                            [](const auto& feed)
                            {
                                auto [mat, scalar] = feed;
                                mat += scalar;
                                return mat;
                            },
-                           [](Mat property, const auto feed)
+                           [&](Mat property, const auto& feed)
                            {
                                const auto& [mat, scalar] = feed;
                                property -= scalar;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(property.flat_ref(), mat.flat_ref()));
-                               else
-                                   return any((property != mat).flat_ref());
+                               return assertion(property, mat);
                            });
 
     ret += test_property_n("{0} +- {0}"_format(mat_typestring),
-                           [&](){ return pair(matgen(), matgen()); },
-                           [](const auto feed)
+                           [&](){ return pair(mat_gen(), mat_gen()); },
+                           [](const auto& feed)
                            {
                                const auto& [mat1, mat2] = feed;
                                return mat1 + mat2;
                            },
-                           [](const Mat property, const auto feed)
+                           [&](const Mat& property, const auto& feed)
                            {
                                const auto& [mat1, mat2] = feed;
                                const auto mm = property - mat2;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(mm.flat_ref(), mat1.flat_ref()));
-                               else
-                                   return any((mm != mat1).flat_ref());
+                               return assertion(mm, mat1);
                            });
 
     ret += test_property_n("{0} +-= {0}"_format(mat_typestring),
-                           [&](){ return pair(matgen(), matgen()); },
+                           [&](){ return pair(mat_gen(), mat_gen()); },
                            [](const auto& feed)
                            {
                                auto [mat1, mat2] = feed;
                                mat1 += mat2;
                                return mat1;
                            },
-                           [](Mat property, const auto feed)
+                           [&](Mat property, const auto& feed)
                            {
                                const auto& [mat1, mat2] = feed;
                                property -= mat2;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(property.flat_ref(), mat1.flat_ref()));
-                               else
-                                   return any((property != mat1).flat_ref());
+                               return assertion(property, mat1);
                            });
 
     // distribution to generate divizor that is guaranteed to be greater than zero
     RandomDistribution<T> divdist(T{1}, T{10000});
 
-    auto signgen = [&, bdist = RandomDistribution<bool>(0.5)]() mutable
+    auto sign_gen = [&, bdist = RandomDistribution<bool>(0.5)]() mutable
                    { return static_cast<T>(math::minus_one_pow(bdist(g))); };
 
-    auto dsgen = [&](){ return divdist(g) * signgen(); };
-    auto dmgen = [&](){ return Mat(divdist.template operator()<MN>(g)) * signgen(); };
-    auto dvgen = [&](){ return Vec(divdist.template operator()<N>(g)) * signgen(); };
+    auto div_scalar_gen = [&](){ return divdist(g) * sign_gen(); };
+    auto div_mat_gen = [&](){ return Mat(divdist.template operator()<MN>(g)) * sign_gen(); };
+    auto div_vec_gen = [&](){ return Vec(divdist.template operator()<N>(g)) * sign_gen(); };
 
     ret += test_property_n("{} */ {}"_format(mat_typestring, t_typestring),
-                           [&](){ return pair(matgen(), dsgen()); },
-                           [](const auto feed)
+                           [&](){ return pair(mat_gen(),div_scalar_gen()); },
+                           [](const auto& feed)
                            {
                                const auto& [mat, scalar] = feed;
                                return mat * scalar;
                            },
-                           [](const Mat property, const auto feed)
+                           [&](const Mat& property, const auto& feed)
                            {
                                const auto& [mat, scalar] = feed;
                                const auto mm = property / scalar;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(mm.flat_ref(), mat.flat_ref()));
-                               else
-                                   return any((mm != mat).flat_ref());
+                               return assertion(mm, mat);
                            });
 
     ret += test_property_n("{} */= {}"_format(mat_typestring, t_typestring),
-                           [&](){ return pair(matgen(), dsgen()); },
-                           [](const auto feed)
+                           [&](){ return pair(mat_gen(),div_scalar_gen()); },
+                           [](const auto& feed)
                            {
                                auto [mat, scalar] = feed;
                                mat *= scalar;
                                return mat;
                            },
-                           [](Mat property, const auto feed)
+                           [&](Mat property, const auto& feed)
                            {
                                const auto& [mat, scalar] = feed;
                                property /= scalar;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(property.flat_ref(), mat.flat_ref()));
-                               else
-                                   return any((property != mat).flat_ref());
+                               return assertion(property, mat);
                            });
 
     ret += test_property_n("{0} */ {0}"_format(mat_typestring),
-                           [&](){ return pair(matgen(), dmgen()); },
-                           [](const auto feed)
+                           [&](){ return pair(mat_gen(),div_mat_gen()); },
+                           [](const auto& feed)
                            {
                                const auto& [mat1, mat2] = feed;
                                return mat1 * mat2;
                            },
-                           [](const Mat property, const auto feed)
+                           [&](const Mat& property, const auto& feed)
                            {
                                const auto& [mat1, mat2] = feed;
                                const auto mm = property / mat2;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(mm.flat_ref(), mat1.flat_ref()));
-                               else
-                                   return any((mm != mat1).flat_ref());
+                               return assertion(mm, mat1);
                            });
 
     ret += test_property_n("{0} */= {0}"_format(mat_typestring),
-                           [&](){ return pair(matgen(), dmgen()); },
-                           [](const auto feed)
+                           [&](){ return pair(mat_gen(),div_mat_gen()); },
+                           [](const auto& feed)
                            {
                                auto [mat1, mat2] = feed;
                                mat1 *= mat2;
                                return mat1;
                            },
-                           [](Mat property, const auto feed)
+                           [&](Mat property, const auto& feed)
                            {
                                const auto& [mat1, mat2] = feed;
                                property /= mat2;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(property.flat_ref(), mat1.flat_ref()));
-                               else
-                                   return any((property != mat1).flat_ref());
+                               return assertion(property, mat1);
                            });
 
     RandomDistribution<size_t> rowdist(0, M-1);
 
     ret += test_property_n("{}[] = Vector<{}, {}>"_format(mat_typestring, t_typestring, N),
-                           [&](){ return tuple(matgen(), vgen(), rowdist(g)); },
+                           [&](){ return tuple(mat_gen(), vgen(), rowdist(g)); },
                            [](auto feed)
                            {
                                auto& [mat, vec, idx] = feed;
                                mat[idx] = vec;
                                return mat;
                            },
-                           [](const Mat property, const auto feed)
+                           [](const Mat& property, const auto& feed)
                            {
                                const auto& vec = get<1>(feed);
                                const auto& idx = get<2>(feed);
@@ -300,39 +284,48 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                            });
 
     ret += test_property_n("{}[] +-= Vector<{}, {}>"_format(mat_typestring, t_typestring, N),
-                           [&](){ return tuple(matgen(), vgen(), rowdist(g)); },
+                           [&](){ return tuple(mat_gen(), vgen(), rowdist(g)); },
                            [](auto feed)
                            {
                                auto& [mat, vec, idx] = feed;
                                mat[idx] += vec;
                                return mat;
                            },
-                           [](Mat property, const auto feed)
+                           [&](Mat property, const auto& feed)
                            {
                                const auto& [mat, vec, idx] = feed;
                                property[idx] -= vec;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(property.flat_ref(), mat.flat_ref(), 100 * MN));
-                               else
-                                   return any((property != mat).flat_ref());
+                               return assertion(property, mat);
                            });
 
     ret += test_property_n("{}[] */= Vector<{}, {}>"_format(mat_typestring, t_typestring, N),
-                           [&](){ return tuple(matgen(), dvgen(), rowdist(g)); },
+                           [&](){ return tuple(mat_gen(),div_vec_gen(), rowdist(g)); },
                            [](auto feed)
                            {
                                auto& [mat, vec, idx] = feed;
                                mat[idx] *= vec;
                                return mat;
                            },
-                           [](Mat property, const auto feed)
+                           [&](Mat property, const auto& feed)
                            {
                                const auto& [mat, vec, idx] = feed;
                                property[idx] /= vec;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(property.flat_ref(), mat.flat_ref(), 100 * MN));
-                               else
-                                   return any((property != mat).flat_ref());
+                               return assertion(property, mat);
+                           });
+
+    ret += test_property_n("{}: transpose(A dot B) = transpose(B) dot transpose(A)"_format(mat_typestring),
+                           [&](){ return pair(div_mat_gen(), Matrix<T, N, M>(divdist.template operator()<MN>(g)) * sign_gen()); },
+                           [](const auto& feed)
+                           {
+                               const auto& [a, b] = feed;
+                               return transpose(a.dot(b));
+                           },
+                           [&](const auto& property, const auto& feed)
+                           {
+                               const auto& ab_t = property;
+                               const auto& [a, b] = feed;
+                               const auto bt_at = transpose(b).dot(transpose(a));
+                               return assertion(ab_t, bt_at);
                            });
 
     return ret;
