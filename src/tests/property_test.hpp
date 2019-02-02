@@ -108,13 +108,13 @@ void init_log(const bool debug = false)
         log_debug->set_level(spdlog::level::debug);
 }
 
-template <typename Property, typename Assertion, typename Generator>
+template <typename Testing, typename Property, typename Generator>
 auto
 test_property(const size_t n,
               std::string_view property_name,
               Generator&& generator,
-              Property&& property,
-              Assertion&& assertion)
+              Testing&& testing,
+              Property&& property)
 {
     auto log_ok = spdlog::get("ok");
     auto log_fail = spdlog::get("fail");
@@ -124,8 +124,8 @@ test_property(const size_t n,
     for(size_t i = 0; i < n; ++i)
     {
         decltype(auto) feed = generator();
-        decltype(auto) prop = property(feed);
-        const bool result = assertion(prop, feed);
+        decltype(auto) prop = testing(feed);
+        const bool result = property(prop, feed);
         if(result)
         {
             log_debug->debug("Test '{}' failed with values:\n"

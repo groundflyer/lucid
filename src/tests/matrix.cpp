@@ -22,11 +22,11 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
     RandomDistribution<T> dist(T{-10000}, T{10000});
     static const constexpr auto MN = M * N;
     auto array_mn_gen = [&]() { return dist.template operator()<MN>(g); };
-    const auto array_assertion = [](const Mat& property, const auto& feed)
+    const auto array_assertion = [](const Mat& testing, const auto& feed)
                                  {
                                      bool ret = false;
                                      for(size_t i = 0; i < MN; ++i)
-                                         ret |= property.at(i) != feed[i];
+                                         ret |= testing.at(i) != feed[i];
                                      return ret;
                                  };
     auto array_n_gen = [&](){ return dist.template operator()<N>(g); };
@@ -50,7 +50,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
     ret += test_property_n("{}({}).flat_ref()"_format(mat_typestring, t_typestring),
                            [&](){ return dist(g); },
                            [](const auto feed){ return Mat(feed); },
-                           [](auto&& property, auto&& feed){ return any(property.flat_ref() != feed); });
+                           [](auto&& testing, auto&& feed){ return any(testing.flat_ref() != feed); });
 
     ret += test_property_n("{}({})"_format(mat_typestring, get_typeinfo_string(array<T, MN>{})),
                            array_mn_gen,
@@ -71,11 +71,11 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                return ret;
                            },
                            [](const auto& feed) { return construct<Mat>(feed); },
-                           [](const Mat& property, const auto& feed)
+                           [](const Mat& testing, const auto& feed)
                            {
                                bool ret = false;
                                for(size_t i = 0; i < M; ++i)
-                                   ret |= any(property[i] != feed[i]);
+                                   ret |= any(testing[i] != feed[i]);
                                return ret;
                            });
 
@@ -93,12 +93,12 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                return ret;
                            },
                            [](const auto& feed) { return construct<Mat>(feed); },
-                           [](const Mat& property, const auto& feed)
+                           [](const Mat& testing, const auto& feed)
                            {
                                bool ret = false;
                                for(size_t i = 0; i < M; ++i)
                                    for(size_t j = 0; j < N; ++j)
-                                       ret |= property[i][j] != feed[i][j];
+                                       ret |= testing[i][j] != feed[i][j];
                                return ret;
                            });
 
@@ -115,27 +115,27 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
         ret += test_property_n("{}(Matrix<{}, {}, {}>)"_format(mat_typestring, t_typestring, M1, N1),
                                smat_gen,
                                [](const sMat& feed) { return Mat(feed); },
-                               [](const Mat& property, const sMat& feed)
+                               [](const Mat& testing, const sMat& feed)
                                {
                                    bool ret = false;
                                    for(size_t i = 0; i < M1; ++i)
                                        for(size_t j = 0; j < N1; ++j)
-                                           ret |= feed.at(i, j) != property.at(i, j);
+                                           ret |= feed.at(i, j) != testing.at(i, j);
                                    return ret;
                                });
 
         ret += test_property_n("{0}({1}, Vector<{1}, {2}>, Matrix<{1}, {3}, {2}>)"_format(mat_typestring, t_typestring, N1, M1),
                                [&](){ return tuple(dist(g), svecgen(), smat_gen()); },
                                [](const auto& feed) { return construct<Mat>(feed); },
-                               [](const Mat& property, const auto& feed)
+                               [](const Mat& testing, const auto& feed)
                                {
                                    const auto& [scalar, vec, mat] = feed;
-                                   bool ret = property.at(0) != scalar;
+                                   bool ret = testing.at(0) != scalar;
                                    for(size_t i = 0; i < N1; ++i)
-                                       ret |= vec[i] != property[0][i + 1];
+                                       ret |= vec[i] != testing[0][i + 1];
                                    for(size_t i = 0; i < M1; ++i)
                                        for(size_t j = 0; j < N1; ++j)
-                                           ret |= mat.at(i, j) != property.at(i+1, j);
+                                           ret |= mat.at(i, j) != testing.at(i+1, j);
                                    return ret;
                                });
     }
@@ -147,10 +147,10 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                const auto& [mat, scalar] = feed;
                                return mat + scalar;
                            },
-                           [&](const Mat& property, const auto& feed)
+                           [&](const Mat& testing, const auto& feed)
                            {
                                const auto& [mat, scalar] = feed;
-                               const auto mm = property - scalar;
+                               const auto mm = testing - scalar;
                                return assertion(mm, mat);
                            });
 
@@ -162,11 +162,11 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                mat += scalar;
                                return mat;
                            },
-                           [&](Mat property, const auto& feed)
+                           [&](Mat testing, const auto& feed)
                            {
                                const auto& [mat, scalar] = feed;
-                               property -= scalar;
-                               return assertion(property, mat);
+                               testing -= scalar;
+                               return assertion(testing, mat);
                            });
 
     ret += test_property_n("{0} +- {0}"_format(mat_typestring),
@@ -176,10 +176,10 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                const auto& [mat1, mat2] = feed;
                                return mat1 + mat2;
                            },
-                           [&](const Mat& property, const auto& feed)
+                           [&](const Mat& testing, const auto& feed)
                            {
                                const auto& [mat1, mat2] = feed;
-                               const auto mm = property - mat2;
+                               const auto mm = testing - mat2;
                                return assertion(mm, mat1);
                            });
 
@@ -191,11 +191,11 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                mat1 += mat2;
                                return mat1;
                            },
-                           [&](Mat property, const auto& feed)
+                           [&](Mat testing, const auto& feed)
                            {
                                const auto& [mat1, mat2] = feed;
-                               property -= mat2;
-                               return assertion(property, mat1);
+                               testing -= mat2;
+                               return assertion(testing, mat1);
                            });
 
     // distribution to generate divizor that is guaranteed to be greater than zero
@@ -215,10 +215,10 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                const auto& [mat, scalar] = feed;
                                return mat * scalar;
                            },
-                           [&](const Mat& property, const auto& feed)
+                           [&](const Mat& testing, const auto& feed)
                            {
                                const auto& [mat, scalar] = feed;
-                               const auto mm = property / scalar;
+                               const auto mm = testing / scalar;
                                return assertion(mm, mat);
                            });
 
@@ -230,11 +230,11 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                mat *= scalar;
                                return mat;
                            },
-                           [&](Mat property, const auto& feed)
+                           [&](Mat testing, const auto& feed)
                            {
                                const auto& [mat, scalar] = feed;
-                               property /= scalar;
-                               return assertion(property, mat);
+                               testing /= scalar;
+                               return assertion(testing, mat);
                            });
 
     ret += test_property_n("{0} */ {0}"_format(mat_typestring),
@@ -244,10 +244,10 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                const auto& [mat1, mat2] = feed;
                                return mat1 * mat2;
                            },
-                           [&](const Mat& property, const auto& feed)
+                           [&](const Mat& testing, const auto& feed)
                            {
                                const auto& [mat1, mat2] = feed;
-                               const auto mm = property / mat2;
+                               const auto mm = testing / mat2;
                                return assertion(mm, mat1);
                            });
 
@@ -259,11 +259,11 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                mat1 *= mat2;
                                return mat1;
                            },
-                           [&](Mat property, const auto& feed)
+                           [&](Mat testing, const auto& feed)
                            {
                                const auto& [mat1, mat2] = feed;
-                               property /= mat2;
-                               return assertion(property, mat1);
+                               testing /= mat2;
+                               return assertion(testing, mat1);
                            });
 
     RandomDistribution<size_t> rowdist(0, M-1);
@@ -276,11 +276,11 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                mat[idx] = vec;
                                return mat;
                            },
-                           [](const Mat& property, const auto& feed)
+                           [](const Mat& testing, const auto& feed)
                            {
                                const auto& vec = get<1>(feed);
                                const auto& idx = get<2>(feed);
-                               return any(property[idx] != vec);
+                               return any(testing[idx] != vec);
                            });
 
     ret += test_property_n("{}[] +-= Vector<{}, {}>"_format(mat_typestring, t_typestring, N),
@@ -291,11 +291,11 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                mat[idx] += vec;
                                return mat;
                            },
-                           [&](Mat property, const auto& feed)
+                           [&](Mat testing, const auto& feed)
                            {
                                const auto& [mat, vec, idx] = feed;
-                               property[idx] -= vec;
-                               return assertion(property, mat);
+                               testing[idx] -= vec;
+                               return assertion(testing, mat);
                            });
 
     ret += test_property_n("{}[] */= Vector<{}, {}>"_format(mat_typestring, t_typestring, N),
@@ -306,11 +306,11 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                mat[idx] *= vec;
                                return mat;
                            },
-                           [&](Mat property, const auto& feed)
+                           [&](Mat testing, const auto& feed)
                            {
                                const auto& [mat, vec, idx] = feed;
-                               property[idx] /= vec;
-                               return assertion(property, mat);
+                               testing[idx] /= vec;
+                               return assertion(testing, mat);
                            });
 
     ret += test_property_n("{}: transpose(A dot B) = transpose(B) dot transpose(A)"_format(mat_typestring),
@@ -320,9 +320,9 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                const auto& [a, b] = feed;
                                return transpose(a.dot(b));
                            },
-                           [&](const auto& property, const auto& feed)
+                           [&](const auto& testing, const auto& feed)
                            {
-                               const auto& ab_t = property;
+                               const auto& ab_t = testing;
                                const auto& [a, b] = feed;
                                const auto bt_at = transpose(b).dot(transpose(a));
                                return assertion(ab_t, bt_at);

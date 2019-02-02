@@ -23,28 +23,28 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
     RandomDistribution<T> dist(T{-10000}, T{10000});
     unsigned ret = 0;
 
-    auto test_property_n = [num_tests](auto&& ... args)
-                           { return test_property(num_tests, forward<decltype(args)>(args)...); };
+    const auto test_property_n = [num_tests](auto&& ... args)
+                                 { return test_property(num_tests, forward<decltype(args)>(args)...); };
 
     ret += test_property_n("{}({})"_format(vec_typestring, t_typestring),
                            [&](){ return dist(g); },
-                           [](const auto feed) { return Vec(feed); },
-                           [](const auto property, const auto feed) { return any(property != feed); });
+                           [](const auto& feed) { return Vec(feed); },
+                           [](const auto& testing, const auto& feed) { return any(testing != feed); });
 
     // array generator
     auto argen = [&]() { return dist.template operator()<N>(g); };
 
     // array assertion
-    auto arass = [](const Vec property, const array<T, N> feed) { return assert_tuples(property, feed, make_index_sequence<N>{}); };
+    const auto arass = [](const Vec& testing, const array<T, N>& feed) { return assert_tuples(testing, feed, make_index_sequence<N>{}); };
 
     ret += test_property_n("{}({})"_format(vec_typestring, get_typeinfo_string(array<T, N>{})),
                            argen,
-                           [](const array<T, N> feed){ return construct<Vec>(feed); },
+                           [](const array<T, N>& feed){ return construct<Vec>(feed); },
                            arass);
 
     ret += test_property_n("{}(array<{}, {}>)"_format(vec_typestring, t_typestring, N),
                            argen,
-                           [](const array<T, N> feed) { return Vec(feed); },
+                           [](const array<T, N>& feed) { return Vec(feed); },
                            arass);
 
     if constexpr (N > 2)
@@ -52,13 +52,13 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
         const constexpr auto N1 = N - 1;
         ret += test_property_n("{0}({1}, Vector<{1}, {2}>)"_format(vec_typestring, t_typestring, N1),
                                [&]() { return tuple(dist(g), Vector<T, N1>(dist.template operator()<N1>(g))); },
-                               [](const auto feed) { return construct<Vec>(feed); },
-                               [](const Vec property, const auto feed)
+                               [](const auto& feed) { return construct<Vec>(feed); },
+                               [](const Vec& testing, const auto& feed)
                                {
                                    const auto& [v0, vv] = feed;
-                                   bool ret = property[0] != v0;
+                                   bool ret = testing[0] != v0;
                                    for(size_t i = 0; i < N1; ++i)
-                                       ret |= vv[i] != property[i + 1];
+                                       ret |= vv[i] != testing[i + 1];
                                    return ret;
                                });
     }
@@ -68,12 +68,13 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
     // vector and scalar value generator
     auto vsgen = [&]() { return pair(vgen(), dist(g)); };
 
-    // -O0 gives very unstable arithmetic
-#ifndef NDEBUG
-#define PM_ERR N * 100
-#else
-#define PM_ERR N
-#endif
+    const auto assertion = [](auto&& a, auto&& b)
+                           {
+                               if constexpr(is_floating_point_v<T>)
+                                   return any(!almost_equal(forward<decltype(a)>(a), forward<decltype(b)>(b), 100 * N));
+                               else
+                                   return any(a != b);
+                           };
 
     ret += test_property_n("{} +- {}"_format(vec_typestring, t_typestring),
                            vsgen,
@@ -82,31 +83,25 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                                const auto& [vec, val] = feed;
                                return vec + val;
                            },
-                           [](const auto property, const auto feed)
+                           [&](const auto& testing, const auto feed)
                            {
                                const auto& [vec, val] = feed;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(property - val, vec, PM_ERR));
-                               else
-                                   return any((property - val) != vec);
+                               return assertion(testing - val, vec);
                            });
 
     ret += test_property_n("{} +-= {}"_format(vec_typestring, t_typestring),
                            vsgen,
-                           [](const auto feed)
+                           [](const auto& feed)
                            {
                                auto [vec, val] = feed;
                                vec += val;
                                return vec;
                            },
-                           [](auto property, const auto feed)
+                           [&](auto testing, const auto& feed)
                            {
                                auto [vec, val] = feed;
-                               property -= val;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(property, vec, PM_ERR));
-                               else
-                                   return any(property != vec);
+                               testing -= val;
+                               return assertion(testing, vec);
                            });
 
     // distribution to generate divizor that is guaranteed to be greater than zero
@@ -121,36 +116,30 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
 
     ret += test_property_n("{} */ {}"_format(vec_typestring, t_typestring),
                            vdgen,
-                           [](const auto feed)
+                           [](const auto& feed)
                            {
                                const auto& [vec, val] = feed;
                                return vec * val;
                            },
-                           [](const auto property, const auto feed)
+                           [&](const auto& testing, const auto& feed)
                            {
                                const auto& [vec, val] = feed;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(property / val, vec));
-                               else
-                                   return any((property / val) != vec);
+                               return assertion(testing / val, vec);
                            });
 
     ret += test_property_n("{} */= {}"_format(vec_typestring, t_typestring),
                            vdgen,
-                           [](const auto feed)
+                           [](const auto& feed)
                            {
                                auto [vec, val] = feed;
                                vec *= val;
                                return vec;
                            },
-                           [](auto property, const auto feed)
+                           [&](auto testing, const auto& feed)
                            {
                                const auto& [vec, val] = feed;
-                               property /= val;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(property, vec));
-                               else
-                                   return any(property != vec);
+                               testing /= val;
+                               return assertion(testing, vec);
                            });
 
     // pair of vectors generator
@@ -158,36 +147,30 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
 
     ret += test_property_n("{0} +- {0}"_format(vec_typestring),
                            vvgen,
-                           [](const auto feed)
+                           [](const auto& feed)
                            {
                                const auto& [vec1, vec2] = feed;
                                return vec1 + vec2;
                            },
-                           [](const auto property, const auto feed)
+                           [&](const auto& testing, const auto& feed)
                            {
                                const auto& [vec1, vec2] = feed;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(property - vec2, vec1, PM_ERR));
-                               else
-                                   return any((property - vec2) != vec1);
+                               return assertion(testing - vec2, vec1);
                            });
 
     ret += test_property_n("{0} +-= {0}"_format(vec_typestring),
                            vvgen,
-                           [](const auto feed)
+                           [](const auto& feed)
                            {
                                auto [vec1, vec2] = feed;
                                vec1 += vec2;
                                return vec1;
                            },
-                           [](auto property, const auto feed)
+                           [&](auto testing, const auto& feed)
                            {
                                auto [vec1, vec2] = feed;
-                               property -= vec2;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(property, vec1, PM_ERR));
-                               else
-                                   return any(property != vec1);
+                               testing -= vec2;
+                               return assertion(testing, vec1);
                            });
 
     // vector and vector-divizor generator
@@ -195,59 +178,53 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
 
     ret += test_property_n("{0} */ {0}"_format(vec_typestring),
                            vvdgen,
-                           [](const auto feed)
+                           [](const auto& feed)
                            {
                                const auto& [vec1, vec2] = feed;
                                return vec1 * vec2;
                            },
-                           [](const auto property, const auto feed)
+                           [&](const auto& testing, const auto& feed)
                            {
                                const auto& [vec1, vec2] = feed;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(property / vec2, vec1));
-                               else
-                                   return any((property / vec2) != vec1);
+                               return assertion(testing / vec2, vec1);
                            });
 
     ret += test_property_n("{0} */= {0}"_format(vec_typestring),
                            vvdgen,
-                           [](const auto feed)
+                           [](const auto& feed)
                            {
                                auto [vec1, vec2] = feed;
                                vec1 *= vec2;
                                return vec1;
                            },
-                           [](auto property, const auto feed)
+                           [&](auto testing, const auto& feed)
                            {
                                const auto& [vec1, vec2] = feed;
-                               property /= vec2;
-                               if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(property, vec1));
-                               else
-                                   return any(property != vec1);
+                               testing /= vec2;
+                               return assertion(testing, vec1);
                            });
 
     if constexpr (is_floating_point_v<T>)
     {
         ret += test_property_n("dot({0}, {0})|length({0})"_format(vec_typestring),
                                vgen,
-                               [](const Vec feed) { return dot(feed, feed); },
-                               [](const T property, const Vec feed) { return !math::almost_equal(math::sqrt(property), length(feed)); });
+                               [](const Vec& feed) { return dot(feed, feed); },
+                               [](const T testing, const Vec& feed) { return !math::almost_equal(math::sqrt(testing), length(feed)); });
 
         ret += test_property_n("normalize({})"_format(vec_typestring),
                                vgen,
-                               [](const Vec feed) { return normalize(feed); },
-                               [](const Vec property, const Vec) { return !math::almost_equal(length(property), T{1}); });
+                               [](const Vec& feed) { return normalize(feed); },
+                               [](const Vec& testing, Vec) { return !math::almost_equal(length(testing), T{1}); });
 
         if constexpr (N == 3)
             ret += test_property_n("cross({0}, {0})"_format(vec_typestring),
                                    [&]() { return pair(normalize(vgen()), normalize(vgen())); },
-                                   [](const auto feed)
+                                   [](const auto& feed)
                                    {
                                        const auto& [a, b] = feed;
                                        return cross(a, b);
                                    },
-                                   [](const Vec property, const auto feed)
+                                   [](const Vec& testing, const auto& feed)
                                    {
                                        const auto& [a, b] = feed;
                                        const auto& [ax, ay, az] = a;
@@ -256,7 +233,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                                        const Vec check(ay * bz - az * by,
                                                        az * bx - ax * bz,
                                                        ax * by - ay * bx);
-                                       return any(!almost_equal(property, check));
+                                       return any(!almost_equal(testing, check));
                                    });
     }
 
@@ -286,19 +263,19 @@ __boolean_test(RandomEngine& g, const size_t num_tests) noexcept
 
     ret += test_property_n("any(Vector<bool, {}>)"_format(N),
                            [&]() { return Vector(dist.template operator()<N>(g)); },
-                           [](const Vector<bool, N> feed) { return any(feed); },
-                           [](const bool property, const Vector<bool, N> feed)
+                           [](const Vector<bool, N>& feed) { return any(feed); },
+                           [](const bool testing, const Vector<bool, N>& feed)
                            {
-                               return property != apply([](auto... vals) { return (false || ... || vals); },
+                               return testing != apply([](auto... vals) { return (false || ... || vals); },
                                                         feed.data());
                            });
 
     ret += test_property_n("all(Vector<bool, {}>)"_format(N),
                            [&]() { return Vector(dist.template operator()<N>(g)); },
-                           [](const Vector<bool, N> feed) { return all(feed); },
-                           [](const bool property, const Vector<bool, N> feed)
+                           [](const Vector<bool, N>& feed) { return all(feed); },
+                           [](const bool testing, const Vector<bool, N>& feed)
                            {
-                               return property != apply([](auto... vals) { return (true && ... && vals); },
+                               return testing != apply([](auto... vals) { return (true && ... && vals); },
                                                         feed.data());
                            });
 
