@@ -132,7 +132,7 @@ namespace yapt::math
 
     template <typename T>
     constexpr typename std::enable_if_t<std::is_floating_point_v<T>, bool>
-    almost_equal(const T a, const T b, const int ulp = 2)
+    almost_equal(const T a, const T b, const size_t ulp = 2)
     {
         // the machine epsilon has to be scaled to the magnitude of the values used
         // and multiplied by the desired precision in ULPs (units in the last place)

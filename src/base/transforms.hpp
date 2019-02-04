@@ -93,7 +93,7 @@ namespace yapt
 					  xz, yz, z*z);
 
 		const auto cos_theta = math::cos(angle);
-		const auto rot = Mat3::unit() * cos_theta +
+		const auto rot = Mat3::identity() * cos_theta +
 			aa * (1_r - cos_theta) + A * math::sin(angle);
 
 		return Mat4(rot);

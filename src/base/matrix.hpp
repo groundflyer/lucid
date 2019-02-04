@@ -17,7 +17,7 @@ namespace yapt
     class Matrix
     {
 		static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");
-		static_assert(M > 1 || N > 1, "One-dimensional matrices are not supported.");
+		static_assert(M > 1 && N > 1, "One-dimensional matrices are not supported.");
 
 		static const constexpr size_t MN = M * N;
 
@@ -514,7 +514,7 @@ namespace yapt
 		{ return m_data; }
 
 		static constexpr Matrix
-		unit()
+		identity()
 		{
 			Matrix ret;
 

@@ -250,7 +250,7 @@ namespace yapt
     constexpr auto
     almost_equal(const Vector<T, N, Container1>& va,
                  const T vb,
-                 const int ulp = N)
+                 const size_t ulp = N)
     { return transform(va, [&](const T a)
                        { return math::almost_equal(a, vb, ulp); }); }
 
