@@ -71,7 +71,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
     const auto assertion = [](auto&& a, auto&& b)
                            {
                                if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(forward<decltype(a)>(a), forward<decltype(b)>(b), 100 * N));
+                                   return any(!almost_equal(forward<decltype(a)>(a), forward<decltype(b)>(b), 200 * N));
                                else
                                    return any(a != b);
                            };
@@ -206,19 +206,19 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
 
     if constexpr (is_floating_point_v<T>)
     {
-        ret += test_property_n("dot({0}, {0})|length({0})"_format(vec_typestring),
+        ret += test_property_n("{}: A dot A = length A"_format(vec_typestring),
                                vgen,
                                [](const Vec& feed) { return dot(feed, feed); },
                                [](const T testing, const Vec& feed) { return !math::almost_equal(math::sqrt(testing), length(feed)); });
 
-        ret += test_property_n("normalize({})"_format(vec_typestring),
+        ret += test_property_n("normalize({}) = 1"_format(vec_typestring),
                                vgen,
                                [](const Vec& feed) { return normalize(feed); },
                                [](const Vec& testing, Vec) { return !math::almost_equal(length(testing), T{1}); });
 
-        if constexpr (N == 3)
-            ret += test_property_n("cross({0}, {0})"_format(vec_typestring),
-                                   [&]() { return pair(normalize(vgen()), normalize(vgen())); },
+        if constexpr (N > 2)
+            ret += test_property_n("{}: C <- cross A B | A dot C = B dot C = 0"_format(vec_typestring),
+                                   [&](){ return pair(normalize(vgen()), normalize(vgen())); },
                                    [](const auto& feed)
                                    {
                                        const auto& [a, b] = feed;
@@ -227,13 +227,10 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                                    [](const Vec& testing, const auto& feed)
                                    {
                                        const auto& [a, b] = feed;
-                                       const auto& [ax, ay, az] = a;
-                                       const auto& [bx, by, bz] = b;
-                                       // 3-dimensional righthanded cross product
-                                       const Vec check(ay * bz - az * by,
-                                                       az * bx - ax * bz,
-                                                       ax * by - ay * bx);
-                                       return any(!almost_equal(testing, check));
+                                       const auto at = a.dot(testing);
+                                       const auto bt = b.dot(testing);
+                                       const constexpr auto ulp = math::pow<sizeof(T)>(is_same_v<T, double> ? 500ul : 100u);
+                                       return !(math::almost_equal(at, T{0}, ulp) || math::almost_equal(bt, T{0}, ulp));
                                    });
     }
 

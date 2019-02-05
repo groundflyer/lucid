@@ -42,6 +42,21 @@ namespace yapt::math
 		return ret;
     }
 
+    template <unsigned exp, typename T>
+    constexpr T
+    ct_pow(const T value) noexcept
+    {
+        if(!exp) {
+            return 1;
+        } else {
+            const T base = ct_pow<exp/2>(value);
+            if constexpr (exp & 1)
+                return base * base * value;
+            else
+                return base * base;
+        }
+    }
+
     // check value is even
 	template <typename T>
     constexpr typename std::enable_if_t<std::is_integral_v<T>, bool>
@@ -130,16 +145,15 @@ namespace yapt::math
     lerp(const T a, const T b, const Bias bias)
     { return b * bias + a * (T(1) - bias); }
 
-    template <typename T>
+    template <typename T, typename ULP = unsigned>
     constexpr typename std::enable_if_t<std::is_floating_point_v<T>, bool>
-    almost_equal(const T a, const T b, const size_t ulp = 2)
+    almost_equal(const T a, const T b, const ULP ulp = 2)
     {
         // the machine epsilon has to be scaled to the magnitude of the values used
         // and multiplied by the desired precision in ULPs (units in the last place)
         // unless the result is subnormal
         const auto amb = abs(a - b);
-        return amb <= std::numeric_limits<T>::epsilon() *
-            abs(a + b) * ulp ||
+        return amb <= std::numeric_limits<T>::epsilon() * abs(a + b) * ulp ||
             amb < std::numeric_limits<T>::min();
     }
 

@@ -38,7 +38,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
     const auto assertion = [](const auto& a, const auto& b)
                            {
                                if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(a.flat_ref(), b.flat_ref(), 200 * sizeof(T{})));
+                                   return any(!almost_equal(a.flat_ref(), b.flat_ref(), 300 * sizeof(T{})));
                                else
                                    return any((a != b).flat_ref());
                            };
@@ -50,7 +50,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
     ret += test_property_n("{}({}).flat_ref()"_format(mat_typestring, t_typestring),
                            [&](){ return dist(g); },
                            [](const auto feed){ return Mat(feed); },
-                           [](auto&& testing, auto&& feed){ return any(testing.flat_ref() != feed); });
+                           [](const auto& testing, const auto& feed){ return any(testing.flat_ref() != feed); });
 
     ret += test_property_n("{}({})"_format(mat_typestring, get_typeinfo_string(array<T, MN>{})),
                            array_mn_gen,
@@ -140,14 +140,15 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                });
 
         if constexpr (M == N && is_floating_point_v<T>)
-            ret += test_property_n("{0}: inverse(A) dot A == {0}::identity()"_format(mat_typestring),
+            ret += test_property_n("{0}: inverse(A) dot A = {0}::identity()"_format(mat_typestring),
                                    [&](){ return mat_gen(); },
                                    [](const auto& feed){ return inverse(feed); },
                                    [](const auto& testing, const auto& feed)
                                    {
                                        const auto product = feed.dot(testing);
                                        const auto identity = Mat::identity();
-                                       return any(!almost_equal(product.flat_ref(), identity.flat_ref(), math::pow<sizeof(T)>(200)));
+                                       const constexpr auto ulp = math::pow<sizeof(T)>(is_same_v<T, double> ? 300ul : 100u);
+                                       return any(!almost_equal(product.flat_ref(), identity.flat_ref(), ulp));
                                    });
     }
 
@@ -324,7 +325,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                return assertion(testing, mat);
                            });
 
-    ret += test_property_n("{}: transpose(A dot B) == transpose(B) dot transpose(A)"_format(mat_typestring),
+    ret += test_property_n("{}: transpose(A dot B) = transpose(B) dot transpose(A)"_format(mat_typestring),
                            [&](){ return pair(div_mat_gen(), Matrix<T, N, M>(divdist.template operator()<MN>(g)) * sign_gen()); },
                            [](const auto& feed)
                            {

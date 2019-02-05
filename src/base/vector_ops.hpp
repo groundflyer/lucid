@@ -237,11 +237,12 @@ namespace yapt
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container1,
-			  template <typename, size_t> class Container2>
+			  template <typename, size_t> class Container2,
+              typename ULP = unsigned>
     constexpr auto
     almost_equal(const Vector<T, N, Container1>& va,
                  const Vector<T, N, Container2>& vb,
-                 const int ulp = N)
+                 const ULP ulp = N)
     { return transform(va, vb, [&](const T a, const T b)
                        { return math::almost_equal(a, b, ulp); }); }
 
