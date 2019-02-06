@@ -145,10 +145,11 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                    [](const auto& feed){ return inverse(feed); },
                                    [](const auto& testing, const auto& feed)
                                    {
-                                       const auto product = feed.dot(testing);
-                                       const auto identity = Mat::identity();
-                                       const constexpr auto ulp = math::pow<sizeof(T)>(is_same_v<T, double> ? 300ul : 100u);
-                                       return any(!almost_equal(product.flat_ref(), identity.flat_ref(), ulp));
+                                       // identity mantrix elements have different magnitude
+                                       // equalizing them as ulp is same for all of them
+                                       const auto zero = Mat::identity() - feed.dot(testing);
+                                       const constexpr auto ulp = math::pow<sizeof(T)>(100ul);
+                                       return any(!almost_equal(zero.flat_ref(), T{0}, ulp));
                                    });
     }
 
