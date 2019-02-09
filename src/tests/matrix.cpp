@@ -341,6 +341,24 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                return assertion(ab_t, bt_at);
                            });
 
+    if constexpr (M == 4)
+    {
+        const auto mat = mat_gen();
+        const auto& [a, b, c, d] = mat;
+        const auto asrt =
+            &std::get<0>(a) != &mat.at(0, 0) ||
+            &std::get<0>(b) != &mat.at(1, 0) ||
+            &std::get<0>(c) != &mat.at(2, 0) ||
+            &std::get<0>(d) != &mat.at(3, 0);
+
+        if(asrt)
+            spdlog::get("fail")->error("const auto& [a, b, c, d] = {}", mat_typestring);
+        else
+            spdlog::get("ok")->info("const auto& [a, b, c, d] = {}", mat_typestring);
+
+        ret += asrt;
+    }
+
     return ret;
 }
 

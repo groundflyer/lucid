@@ -4,6 +4,11 @@
 
 #pragma once
 
+// we don't use StaticSpan her, but if don't include it
+// a compiler would be unable to find std::get specialization
+// for Vector's Container
+#include "static_span.hpp"
+
 #include "debug.hpp"
 #include "vector_ops.hpp"
 
@@ -79,6 +84,12 @@ namespace yapt
 		Vector(Data && rhs) : m_data(std::forward<Data>(rhs)) {}
 
 		explicit constexpr
+		Vector(const Data& rhs) : m_data(rhs) {}
+
+		explicit constexpr
+		Vector(Data& rhs) : m_data(rhs) {}
+
+		explicit constexpr
 		Vector(T && rhs) { for (auto& i : m_data) i = rhs; }
 
         template <typename ... Ts>
@@ -145,12 +156,12 @@ namespace yapt
 		template <size_t I>
 		constexpr T&
 		get() noexcept
-		{ return m_data[I]; }
+		{ return std::get<I>(m_data); }
 
 		template <size_t I>
 		constexpr const T&
 		get() const noexcept
-		{ return m_data[I]; }
+		{ return std::get<I>(m_data); }
 
 		const constexpr T&
 		at(const size_t i) const noexcept
@@ -372,7 +383,7 @@ namespace std
         using type = T;
     };
 
-	template<auto I, typename T, size_t N,
+	template<size_t I, typename T, size_t N,
 			 template <typename, size_t> typename Container>
     constexpr decltype(auto)
     get(const yapt::Vector<T, N, Container>& vec) noexcept

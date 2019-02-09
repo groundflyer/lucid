@@ -4,25 +4,33 @@
 
 #pragma once
 
+#include <cstddef>
+#include <tuple>
 
 namespace yapt
 {
     template <typename T, size_t N>
-    class ArrayView
+    class StaticSpan
     {
-		T* p_data = nullptr;
+		T* p_data;
 
     public:
 		typedef T* iterator;
 		typedef const T* const_iterator;
 
-		ArrayView() = delete;
+		StaticSpan() = delete;
 
 		constexpr
-		ArrayView(T* rhs) : p_data(rhs) {}
+		StaticSpan(T& rhs) : p_data(&rhs) {}
 
 		constexpr
-		ArrayView(const T* rhs) : p_data(const_cast<T*>(rhs)) {}
+		StaticSpan(const T& rhs) : p_data(const_cast<T*>(&rhs)) {}
+
+        constexpr
+        StaticSpan(T (&rhs) [N]) : p_data(const_cast<T*>(rhs)) {}
+
+        constexpr
+        StaticSpan(const T(&rhs) [N]) : p_data(const_cast<T*>(rhs)) {}
 
 		constexpr iterator
 		begin() const noexcept
@@ -61,9 +69,21 @@ namespace yapt
 namespace std
 {
 	template <typename T, size_t N>
-	class tuple_size<yapt::ArrayView<T, N>> : integral_constant<size_t, N> {};
+	class tuple_size<yapt::StaticSpan<T, N>>
+    {
+    public:
+        static const constexpr size_t value = N;
+    };
 
 	template <size_t I, typename T, size_t N>
-	class tuple_element<I, yapt::ArrayView<T, N>>
-	{ using type = T; };
+	class tuple_element<I, yapt::StaticSpan<T, N>>
+	{
+    public:
+        using type = T;
+    };
+
+    template <size_t I, typename T, size_t N>
+    constexpr decltype(auto)
+    get(const yapt::StaticSpan<T, N>& span) noexcept
+    { return span.template get<I>(); }
 }

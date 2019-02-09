@@ -234,6 +234,25 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                                    });
     }
 
+    // structure binding test
+    if constexpr (N == 4)
+    {
+        const auto vec = vgen();
+        const auto& [x, y, z, w] = vec;
+        const auto asrt =
+            &x != &std::get<0>(vec) ||
+            &y != &std::get<1>(vec) ||
+            &z != &std::get<2>(vec) ||
+            &w != &std::get<3>(vec);
+
+        if(asrt)
+            spdlog::get("fail")->error("const auto& [x, y, z, w] = {}", vec_typestring);
+        else
+            spdlog::get("ok")->info("const auto& [x, y, z, w] = {}", vec_typestring);
+
+        ret += asrt;
+    }
+
     return ret;
 }
 

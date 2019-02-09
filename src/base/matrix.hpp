@@ -5,9 +5,8 @@
 #pragma once
 
 
-#include "vector.hpp"
 #include "matrix_ops.hpp"
-#include "arrayview.hpp"
+#include "vector.hpp"
 
 
 namespace yapt
@@ -105,6 +104,12 @@ namespace yapt
     	explicit constexpr
     	Matrix(Data&& rhs) : m_data(rhs) {}
 
+    	explicit constexpr
+    	Matrix(Data& rhs) : m_data(rhs) {}
+
+    	explicit constexpr
+    	Matrix(const Data& rhs) : m_data(rhs) {}
+
 		template <typename ... Ts>
 		explicit constexpr
 		Matrix(Ts&& ... rhs)
@@ -136,24 +141,24 @@ namespace yapt
 		operator[](const size_t i) const noexcept
 		{
             CHECK_INDEX(i, M);
-			return Vector(ArrayView<T, N>(&(at(i,0))));
+			return Vector(StaticSpan<T, N>(at(i,0)));
 		}
 		constexpr auto
 		operator[](const size_t i) noexcept
 		{
             CHECK_INDEX(i, M);
-			return Vector(ArrayView<T, N>(&(at(i,0))));
+			return Vector(StaticSpan<T, N>(at(i,0)));
 		}
 
 		template <size_t I>
-		constexpr decltype(auto)
+		constexpr auto
 		get() const noexcept
-		{ return (*this)[I]; }
+		{ return Vector(StaticSpan<T, N>(std::get<pos(I, 0)>(m_data))); }
 
 		template <size_t I>
-		constexpr decltype(auto)
+		constexpr auto
 		get() noexcept
-		{ return (*this)[I]; }
+		{ return Vector(StaticSpan<T, N>(std::get<pos(I, 0)>(m_data))); }
 
 		const constexpr T&
 		at(const size_t i) const noexcept
@@ -198,11 +203,11 @@ namespace yapt
 
         constexpr decltype(auto)
         flat_ref() const noexcept
-        { return Vector(ArrayView<T, M * N>(&(at(0)))); }
+        { return Vector(StaticSpan<T, M * N>(at(0))); }
 
         constexpr decltype(auto)
         flat_ref() noexcept
-        { return Vector(ArrayView<T, M * N>(&(at(0)))); }
+        { return Vector(StaticSpan<T, M * N>(at(0))); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix
