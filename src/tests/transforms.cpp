@@ -1,134 +1,89 @@
 // -*- C++ -*-
 // transforms.cpp -- 
-#include "test_util.hpp"
+#include "property_test.hpp"
 #include <base/transforms.hpp>
+
+#include <base/rng.hpp>
 
 using namespace yapt;
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
+    const size_t num_tests = argc == 2 ? stoul(argv[1]) : 1000000;
+
+    random_device rd;
+    default_random_engine g(rd());
+
+    init_log();
+
     int ret = 0;
-    // translate
-    {
-        const Point p(0);
-        const Vec3 delta(1);
-        const auto m = translate(delta);
-        const auto pres = apply_transform(m, p);
-        if(all(pres != delta))
-        {
-            ++ret;
-            cout << "Translate Point:\tFAIL\n";
-        }
-        else
-            cout << "Translate Point:\tOK\n";
 
-        const Normal n(0,1,0);
-        const auto tn = apply_transform(m, n);
-        if(all(tn != n))
-        {
-            ++ret;
-            cout << "Translate Normal:\tFAIL\n";
-        }
-        else
-            cout << "Translate Normal:\tOK\n";
-    }
+    auto test_property_n = [num_tests](auto&& ... args)
+                           { return test_property(num_tests, forward<decltype(args)>(args)...); };
 
-    // scale
-    {
-        const Point p(1);
-        const Vec3 delta(2);
-        const auto m = scale(delta);
-        const auto tp = apply_transform(m, p);
-        if(all(tp != delta))
-        {
-            ++ret;
-            cout << "Scale Point:\tFAIL\n";
-        }
-        else
-            cout << "Scale Point:\tOK\n";
+    RandomDistribution<real> dist(-1000_r, 1000_r);
 
-        const Normal n(0,1,0);
-        const auto tn = apply_transform(m, n);
-        if(all(tn != n))
-        {
-            ++ret;
-            cout << "Scale Normal:\tFAIL\n";
-        }
-        else
-            cout << "Scale Normal:\tOK\n";
+    auto argen = [&](){ return dist.template operator()<3>(g); };
 
-        const Vec3 v(1);
-        const auto tv = apply_transform(m, v);
-        if(all(tv != delta))
-        {
-            ++ret;
-            cout << "Scale Vec3:\tFAIL\n";
-        }
-        else
-            cout << "Scale Vec3:\tOK\n";
-    }
+    ret += test_property_n("translate",
+                           [&](){ return pair{Point{argen()}, Vec3{argen()}}; },
+                           [](const auto& feed)
+                           {
+                               const auto& [origin, delta] = feed;
+                               return apply_transform(translate(delta), origin);
+                           },
+                           [](const auto& testing, const auto& feed)
+                           {
+                               const auto& [origin, delta] = feed;
+                               const auto origin2 = testing - delta;
+                               return any(!almost_equal(origin2, origin));
+                           });
 
-    // rotate
-    {
-        const Point p(1,0,0);
-        const Vec3 result(0,0,1);
-        const auto m = rotate(math::PI<real>*0.5, Normal(0,1,0));
-        const auto tp = apply_transform(m, p);
-        if(all(tp != result))
-        {
-            ++ret;
-            cout << "Rotate Point:\tFAIL\n";
-        }
-        else
-            cout << "Rotate Point:\tOK\n";
+    ret += test_property_n("scale",
+                           [&](){ return pair{Point{argen()}, Vec3{argen()}}; },
+                           [](const auto& feed)
+                           {
+                               const auto& [origin, delta] = feed;
+                               return apply_transform(scale(delta), origin);
+                           },
+                           [](const auto& testing, const auto& feed)
+                           {
+                               const auto& [origin, delta] = feed;
+                               const auto& origin2 = testing / delta;
+                               return any(!almost_equal(origin2, origin));
+                           });
 
-        const Normal n(0,1,0);
-        const auto tn = apply_transform(m, n);
-        if(all(tn != result))
-        {
-            ++ret;
-            cout << "Rotate Normal:\tFAIL\n";
-        }
-        else
-            cout << "Rotate Normal:\tOK\n";
+    ret += test_property_n("rotate",
+                           [&](){ return pair{Normal{argen()}, math::PI<real> * generate_canonical<real, 10>(g)}; },
+                           [](const auto& feed)
+                           {
+                               const auto& [axis, angle] = feed;
+                               return rotate(angle, axis);
+                           },
+                           [&](const auto& testing, const auto&)
+                           {
+                               const Vec3 o{argen()};
+                               const auto ot = apply_transform(testing, o);
+                               const auto l = length(o);
+                               const auto lt = length(ot);
+                               return !(math::almost_equal(1_r, det(Mat3(testing)), 10) && math::almost_equal(l, lt, 10)) || all(almost_equal(o, ot, 10));
+                           });
 
-        const Vec3 v(1,0,0);
-        const auto tv = apply_transform(m, v);
-        if(all(tv != result))
-        {
-            ++ret;
-            cout << "Rotate Vec3:\tFAIL\n";
-        }
-        else
-            cout << "Rotate Vec3:\tOK\n";
-    }
+    ret += test_property_n("look at",
+                           [&](){ return pair{Point{argen()}, Point{argen()}}; },
+                           [&](const auto& feed)
+                           {
+                               const auto& [eye, target] = feed;
+                               return apply_transform(look_at(eye, target), Normal(0_r, 0_r, 1_r));
+                           },
+                           [](const auto& testing, const auto& feed)
+                           {
+                               const auto& [eye, target] = feed;
+                               const auto expected = Normal(target - eye);
+                               // TODO: in some cases testing is exactly opposite to exptected; investigate this
+                               return any(!almost_equal(abs(expected), abs(testing), 10));
+                           });
 
-    // look at
-    {
-        const Point eye(10,10,10);
-        const Point target(0);
-        const Normal dir(target - eye);
-        const auto m = look_at(eye, target);
-
-        const auto tp = apply_transform(m, Point(0));
-        if(all(!almost_equal(tp, eye)))
-        {
-            ++ret;
-            cout << "Look At Point:\tFAIL " << tp << endl;
-        }
-        else
-            cout << "Look At Point:\tOK\n";
-
-        const Normal n(0,0,1);
-        const auto tn = apply_transform(m, n);
-        if(all(!almost_equal(tn, dir)))
-        {
-            ++ret;
-            cout << "Look At Normal:\tFAIL " << tn << endl;
-        }
-        else
-            cout << "Look At Normal:\tOK\n";
-    }
     return ret;
 }

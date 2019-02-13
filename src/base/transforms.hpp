@@ -14,15 +14,19 @@ namespace yapt
     template <template <typename, size_t> typename Container>
     constexpr Vec4_<Container>
     homogenize(const Point_<Container> & a) noexcept
-    { return Vec4(a[0], a[1], a[2], 1); }
+    {
+        const auto& [x, y, z] = a;
+        return Vec4(x, y, z, 1);
+    }
 
     template <template <typename, size_t> typename Container>
     constexpr Vec3_<Container>
     dehomogenize(const Vec4_<Container> & a) noexcept
     {
-        Vec3 ret(a);
-        if(a[3] != 0 && a[3] != 1)
-            ret /= a[3];
+        Vec3 ret{a};
+        const auto& w = std::get<3>(a);
+        if(w != 0 && w != 1)
+            ret /= w;
         return ret;
     }
 
@@ -80,23 +84,11 @@ namespace yapt
     {
 		const auto& [x, y, z] = axis;
 
-		const Mat3 A(0, z, -y,
-					 -z, 0, -x,
-					 y, x, 0);
+        const Mat3 K{0, -z, y,
+                     z, 0, -x,
+                     -y, x, 0};
 
-		const auto xy = x*y;
-		const auto xz = x*z;
-		const auto yz = y*z;
-
-		const Mat3 aa(x*x, xy, xz,
-					  xy, y*y, yz,
-					  xz, yz, z*z);
-
-		const auto cos_theta = math::cos(angle);
-		const auto rot = Mat3::identity() * cos_theta +
-			aa * (1_r - cos_theta) + A * math::sin(angle);
-
-		return Mat4(rot);
+        return Mat4(Mat3::identity() + K * math::sin(angle) + K.dot(K) * (1_r - math::cos(angle)));
     }
 
     template <template <typename, size_t> typename EyeContainer,
@@ -105,12 +97,15 @@ namespace yapt
     constexpr auto
     look_at(const Point_<EyeContainer>& eye,
 			const Point_<CenContainer>& target,
-			const Normal_<UpContainer>& up = Normal_<UpContainer>(0, 1, 0)) noexcept
+			const Normal_<UpContainer>& up = Normal_<UpContainer>(0_r, 1_r, 0_r)) noexcept
     {
 		const auto f = normalize(eye - target);
-		const auto s = normalize(up.cross(f));
-        const auto u = f.cross(s);
-		return inverse(Mat4(Vec4(s), Vec4(u), Vec4(f), Vec4(0,0,0,1)).dot(translate(-eye)));
+		const auto r = normalize(up.cross(f));
+        const auto u = f.cross(r);
+		return inverse(Mat4(r, 0_r,
+                            u, 0_r,
+                            f, 0_r,
+                            0_r, 0_r, 0_r, 1_r).dot(translate(-eye)));
     }
 
 
@@ -124,17 +119,17 @@ namespace yapt
 
 		if(math::abs(v1x) > math::abs(v1y))
 		{
-			const auto il = real(1) / (math::sqrt(v1x*v1x + v1z*v1z));
+			const auto il = 1_r / (math::sqrt(v1x*v1x + v1z*v1z));
 			v2x = -v1z * il;
 			v2z = v1x * il;
 		}
 		else
 		{
-			const auto il = real(1) / (math::sqrt(v1y*v1y + v1z*v1z));
+			const auto il = 1_r / (math::sqrt(v1y*v1y + v1z*v1z));
 			v2y = v1z * il;
 			v2z = -v1y * il;
 		}
 
-		return std::pair(v2, v1.cross(v2));
+		return std::pair{v2, v1.cross(v2)};
     }
 }

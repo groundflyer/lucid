@@ -24,7 +24,7 @@ namespace yapt::math
     using std::round;
 
     template <typename T>
-    const constexpr T PI = static_cast<T>(3.141592653589793);
+    const constexpr T PI = T{3.141592653589793};
 
     // simple power function
     template <unsigned exp, typename T>

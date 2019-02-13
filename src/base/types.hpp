@@ -231,19 +231,33 @@ namespace yapt
 
 namespace std
 {
-	template <template <typename, size_t> typename Container>
-	struct tuple_size<yapt::Point_<Container>> : integral_constant<size_t, 3> {};
+    template <template <typename, size_t> typename Container>
+    class tuple_size<yapt::Point_<Container>>
+    {
+    public:
+        static const constexpr size_t value = 3;
+    };
 
-	template<size_t I,
-			 template <typename, size_t> typename Container>
-    struct tuple_element<I, yapt::Point_<Container>>
-	{ using type = yapt::real; };
+    template<size_t I,
+             template <typename, size_t> typename Container>
+    class tuple_element<I, yapt::Point_<Container>>
+    {
+    public:
+        using type = yapt::real;
+    };
 
-	template <template <typename, size_t> typename Container>
-	struct tuple_size<yapt::Normal_<Container>> : integral_constant<size_t, 3> {};
+    template <template <typename, size_t> typename Container>
+    class tuple_size<yapt::Normal_<Container>>
+    {
+    public:
+        static const constexpr size_t value = 3;
+    };
 
-	template<size_t I,
-			 template <typename, size_t> typename Container>
-    struct tuple_element<I, yapt::Normal_<Container>>
-	{ using type = yapt::real; };
+    template<size_t I,
+             template <typename, size_t> typename Container>
+    class tuple_element<I, yapt::Normal_<Container>>
+    {
+    public:
+        using type = yapt::real;
+    };
 }
