@@ -32,13 +32,17 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
     auto array_n_gen = [&](){ return dist.template operator()<N>(g); };
     auto vgen = [&](){ return Vec(array_n_gen()); };
 
-    const auto test_property_n = [num_tests](auto&& ... args)
-                                 { return test_property(num_tests, forward<decltype(args)>(args)...); };
+    const constexpr double threshold = is_floating_point_v<T> ? 0.01 : 0.0;
+    const auto test_property_n = [num_tests, threshold](auto&& ... args)
+                                 { return test_property(num_tests, threshold, forward<decltype(args)>(args)...); };
 
     const auto assertion = [](const auto& a, const auto& b)
                            {
                                if constexpr(is_floating_point_v<T>)
-                                   return any(!almost_equal(a.flat_ref(), b.flat_ref(), 300 * sizeof(T{})));
+                               {
+                                   const constexpr unsigned ULP = 5;
+                                   return any(!almost_equal(a.flat_ref(), b.flat_ref(), ULP));
+                               }
                                else
                                    return any((a != b).flat_ref());
                            };

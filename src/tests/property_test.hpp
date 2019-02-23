@@ -111,6 +111,7 @@ void init_log(const bool debug = false)
 template <typename Testing, typename Property, typename Generator>
 auto
 test_property(const size_t n,
+              const double threshold,
               std::string_view property_name,
               Generator&& generator,
               Testing&& testing,
@@ -120,25 +121,22 @@ test_property(const size_t n,
     auto log_fail = spdlog::get("fail");
     auto log_debug = spdlog::get("debug");
 
-    size_t ret = 0;
+    size_t sum = 0;
     for(size_t i = 0; i < n; ++i)
     {
-        decltype(auto) feed = generator();
-        decltype(auto) prop = testing(feed);
-        const bool result = property(prop, feed);
-        if(result)
-        {
-            log_debug->debug("Test '{}' failed with values:\n"
-                            "F: {}\nP: {}", property_name, feed, prop);
-        }
-
-        ret += static_cast<size_t>(result);
+        auto&& feed = generator();
+        const bool result = property(testing(std::forward<decltype(feed)>(feed)),
+                                     std::forward<decltype(feed)>(feed));
+        sum += static_cast<size_t>(result);
     }
 
+    const auto error = static_cast<double>(sum) / static_cast<double>(n);
+
+    const auto ret = error > threshold;
     if(ret)
-        log_fail->error("{}", property_name);
+        log_fail->error("{}: [error: {}%]", property_name, error * 100);
     else
-        log_ok->info("{}", property_name);
+        log_ok->info("{}: [error: {}%]", property_name, error * 100);
 
     return ret > 0;
 }

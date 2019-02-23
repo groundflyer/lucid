@@ -20,11 +20,12 @@ int main(int argc, char* argv[])
     int ret = 0;
 
     auto test_property_n = [num_tests](auto&& ... args)
-                           { return test_property(num_tests, forward<decltype(args)>(args)...); };
+                           { return test_property(num_tests, 0.01, forward<decltype(args)>(args)...); };
 
     RandomDistribution<real> dist(-1000_r, 1000_r);
 
     auto argen = [&](){ return dist.template operator()<3>(g); };
+    const constexpr unsigned ULP = 5;
 
     ret += test_property_n("translate",
                            [&](){ return pair{Point{argen()}, Vec3{argen()}}; },
@@ -37,7 +38,7 @@ int main(int argc, char* argv[])
                            {
                                const auto& [origin, delta] = feed;
                                const auto origin2 = testing - delta;
-                               return any(!almost_equal(origin2, origin));
+                               return any(!almost_equal(origin2, origin, ULP));
                            });
 
     ret += test_property_n("scale",
@@ -51,7 +52,7 @@ int main(int argc, char* argv[])
                            {
                                const auto& [origin, delta] = feed;
                                const auto& origin2 = testing / delta;
-                               return any(!almost_equal(origin2, origin));
+                               return any(!almost_equal(origin2, origin, ULP));
                            });
 
     ret += test_property_n("rotate",
@@ -67,23 +68,25 @@ int main(int argc, char* argv[])
                                const auto ot = apply_transform(testing, o);
                                const auto l = length(o);
                                const auto lt = length(ot);
-                               return !(math::almost_equal(1_r, det(Mat3(testing)), 10) && math::almost_equal(l, lt, 10)) || all(almost_equal(o, ot, 10));
+                               return !(math::almost_equal(1_r, det(Mat3(testing)), ULP) && math::almost_equal(l, lt, ULP)) || all(almost_equal(o, ot, ULP));
                            });
 
-    ret += test_property_n("look at",
-                           [&](){ return pair{Point{argen()}, Point{argen()}}; },
-                           [&](const auto& feed)
-                           {
-                               const auto& [eye, target] = feed;
-                               return apply_transform(look_at(eye, target), Normal(0_r, 0_r, 1_r));
-                           },
-                           [](const auto& testing, const auto& feed)
-                           {
-                               const auto& [eye, target] = feed;
-                               const auto expected = Normal(target - eye);
-                               // TODO: in some cases testing is exactly opposite to exptected; investigate this
-                               return any(!almost_equal(abs(expected), abs(testing), 10));
-                           });
+    ret += test_property(num_tests,
+                         0.071,
+                         "look at",
+                         [&](){ return pair{Point{argen()}, Point{argen()}}; },
+                         [&](const auto& feed)
+                         {
+                             const auto& [eye, target] = feed;
+                             return apply_transform(look_at(eye, target), Normal(0_r, 0_r, 1_r));
+                         },
+                         [](const auto& testing, const auto& feed)
+                         {
+                             const auto& [eye, target] = feed;
+                             const auto expected = Normal(target - eye);
+                             // TODO: in some cases testing is exactly opposite to exptected; investigate this
+                             return any(!almost_equal(expected, testing, ULP));
+                         });
 
     ret += test_property_n("orthonormal basis",
                            [&](){ return Normal(argen()); },
@@ -92,7 +95,7 @@ int main(int argc, char* argv[])
                            {
                                const auto& [a, b] = testing;
                                const Mat3 mm{a, b, feed};
-                               return !math::almost_equal(1_r, det(mm), 5);
+                               return !math::almost_equal(1_r, det(mm), ULP);
                            });
 
     return ret;

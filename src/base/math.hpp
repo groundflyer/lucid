@@ -69,14 +69,14 @@ namespace yapt::math
     minus_one_pow(const T a)
     { return is_even(a) ? 1 : -1; }
 
-    // compute factorial of value
+    // factorial
     constexpr size_t
     fac(const size_t val) noexcept
     {
-		std::size_t ret (1);
+		size_t ret{1};
 
 		if (val != 0)
-			for (std::size_t i = 1; i <= val; ++i)
+			for (size_t i = 1; i <= val; ++i)
 				ret *= i;
 
 		return ret;
