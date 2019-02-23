@@ -69,13 +69,6 @@ namespace yapt::math
     minus_one_pow(const T a)
     { return is_even(a) ? 1 : -1; }
 
-    // return a sign of value
-    template <typename T>
-    constexpr T
-    sign(const T val) noexcept
-    { return val > 0 ? 1 : -1; }
-
-
     // compute factorial of value
     constexpr size_t
     fac(const size_t val) noexcept

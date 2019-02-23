@@ -14,10 +14,7 @@ namespace yapt
     template <template <typename, size_t> typename Container>
     constexpr Vec4_<Container>
     homogenize(const Point_<Container> & a) noexcept
-    {
-        const auto& [x, y, z] = a;
-        return Vec4(x, y, z, 1);
-    }
+    { return Vec4(a, 1_r); }
 
     template <template <typename, size_t> typename Container>
     constexpr Vec3_<Container>
@@ -25,7 +22,7 @@ namespace yapt
     {
         Vec3 ret{a};
         const auto& w = std::get<3>(a);
-        if(w != 0 && w != 1)
+        if(w != 0_r && w != 1_r)
             ret /= w;
         return ret;
     }
@@ -111,25 +108,13 @@ namespace yapt
 
     template <template <typename, size_t> typename Container>
     constexpr auto
-    basis(const Vec3_<Container> & v1) noexcept
+    basis(const Vec3_<Container>& n) noexcept
     {
-		const auto& [v1x, v1y, v1z] = v1;
-		Vec3 v2;
-		auto& [v2x, v2y, v2z] = v2;
-
-		if(math::abs(v1x) > math::abs(v1y))
-		{
-			const auto il = 1_r / (math::sqrt(v1x*v1x + v1z*v1z));
-			v2x = -v1z * il;
-			v2z = v1x * il;
-		}
-		else
-		{
-			const auto il = 1_r / (math::sqrt(v1y*v1y + v1z*v1z));
-			v2y = v1z * il;
-			v2z = -v1y * il;
-		}
-
-		return std::pair{v2, v1.cross(v2)};
+		const auto& [nx, ny, nz] = n;
+        const auto sign = std::copysign(1_r, nz);
+        const auto a = -1_r / (sign + nz);
+        const auto b = nx * ny * a;
+		return std::pair(Vec3(1_r + sign * nx * nx * a, sign * b, -sign * nx),
+                         Vec3(b, sign + ny * ny * a, -ny));
     }
 }

@@ -85,5 +85,15 @@ int main(int argc, char* argv[])
                                return any(!almost_equal(abs(expected), abs(testing), 10));
                            });
 
+    ret += test_property_n("orthonormal basis",
+                           [&](){ return Normal(argen()); },
+                           [](const auto& feed){ return basis(feed); },
+                           [](const auto testing, const auto& feed)
+                           {
+                               const auto& [a, b] = testing;
+                               const Mat3 mm{a, b, feed};
+                               return !math::almost_equal(1_r, det(mm), 5);
+                           });
+
     return ret;
 }
