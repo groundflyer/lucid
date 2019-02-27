@@ -4,22 +4,26 @@
 
 #pragma once
 
-// we don't use StaticSpan her, but if don't include it
-// a compiler would be unable to find std::get specialization
+// we don't use StaticSpan here, but if don't include it
+// compiler would be unable to find std::get specialization
 // for Vector's Container
 #include "static_span.hpp"
-
 #include "debug.hpp"
-#include "vector_ops.hpp"
+#include "math.hpp"
 
 #include <array>
+#include <limits>
+#include <utility>
+#include <numeric>
+#include <algorithm>
+#include <functional>
 #include <type_traits>
 
 
 namespace yapt
 {
     template <typename T, size_t N,
-			  template <typename, size_t> typename Container>
+			  template <typename, size_t> typename Container = std::array>
     class Vector
     {
 		static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");
@@ -183,37 +187,37 @@ namespace yapt
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator+(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return transform(*this, rhs, std::plus<T>()); }
+		{ return transform(std::plus<T>(), *this, rhs); }
 		constexpr auto
 		operator+(const T & rhs) const noexcept
-		{ return transform(*this, [&rhs](const T& a){ return a + rhs; }); }
+		{ return transform([&rhs](const T& a){ return a + rhs; }, *this); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator-(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return transform(*this, rhs, std::minus<T>()); }
+		{ return transform(std::minus<T>(), *this, rhs); }
 		constexpr auto
 		operator-(const T & rhs) const noexcept
-		{ return transform(*this, [&rhs](const T& a){ return a - rhs; }); }
+		{ return transform([&rhs](const T& a){ return a - rhs; }, *this); }
 		constexpr auto
 		operator-() const noexcept
-		{ return transform(*this, std::negate<T>()); }
+		{ return transform(std::negate<T>(), *this); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator*(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return transform(*this, rhs, std::multiplies<T>()); }
+		{ return transform(std::multiplies<T>(), *this, rhs); }
 		constexpr auto
 		operator*(const T & rhs) const noexcept
-		{ return transform(*this, [&rhs](const T& a){ return a * rhs; }); }
+		{ return transform([&rhs](const T& a){ return a * rhs; }, *this); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator/(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return transform(*this, rhs, std::divides<T>()); }
+		{ return transform(std::divides<T>(), *this, rhs); }
 		constexpr auto
 		operator/(const T & rhs) const noexcept
-		{ return transform(*this, [&rhs](const T& a){ return a / rhs; }); }
+		{ return transform([&rhs](const T& a){ return a / rhs; }, *this); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr Vector&
@@ -292,68 +296,68 @@ namespace yapt
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator==(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return transform(*this, rhs, std::equal_to<T>()); }
+		{ return transform(std::equal_to<T>(), *this, rhs); }
 		constexpr auto
 		operator==(const T& rhs) const noexcept
-		{ return transform(*this, [&rhs](const T& elem){ return elem == rhs; }); }
+		{ return transform([&rhs](const T& elem){ return elem == rhs; }, *this); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator!=(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return transform(*this, rhs, std::not_equal_to<T>()); }
+		{ return transform(std::not_equal_to<T>(), *this, rhs); }
 		constexpr auto
 		operator!=(const T& rhs) const noexcept
-		{ return transform(*this, [&rhs](const T& elem){ return elem != rhs; }); }
+		{ return transform([&rhs](const T& elem){ return elem != rhs; }, *this); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator>(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return transform(*this, rhs, std::greater<T>()); }
+		{ return transform(std::greater<T>(), *this, rhs); }
 		constexpr auto
 		operator>(const T& rhs) const noexcept
-		{ return transform(*this, [&rhs](const T& elem){ return elem > rhs; }); }
+		{ return transform([&rhs](const T& elem){ return elem > rhs; }, *this); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator<(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return transform(*this, rhs, std::less<T>()); }
+		{ return transform(std::less<T>(), *this, rhs); }
 		constexpr auto
 		operator<(const T& rhs) const noexcept
-		{ return transform(*this, [&rhs](const T& elem){ return elem < rhs; }); }
+		{ return transform([&rhs](const T& elem){ return elem < rhs; }, *this); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator>=(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return transform(*this, rhs, std::greater_equal<T>()); }
+		{ return transform(std::greater_equal<T>(), *this, rhs); }
 		constexpr auto
 		operator>=(const T& rhs) const noexcept
-		{ return transform(*this, [&rhs](const T& elem){ return elem >= rhs; }); }
+		{ return transform([&rhs](const T& elem){ return elem >= rhs; }, *this); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		operator<=(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return transform(*this, rhs, std::less_equal<T>()); }
+		{ return transform(std::less_equal<T>(), *this, rhs); }
 		constexpr auto
 		operator<=(const T& rhs) const noexcept
-		{ return transform(*this, [&rhs](const T& elem){ return elem <= rhs; }); }
+		{ return transform([&rhs](const T& elem){ return elem <= rhs; }, *this); }
 
         constexpr auto
         operator!() const noexcept
-        { return transform(*this, std::logical_not<T>()); }
+        { return transform(std::logical_not<T>(), *this); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		dot(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return yapt::dot(*this, rhs); }
+		{ return transform_reduce(std::multiplies<T>(), std::plus<T>(), *this, rhs, T{0}); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		cross(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return yapt::cross(*this, rhs); }
+		{ return cross(*this, rhs); }
 
 		constexpr auto
 		length() const noexcept
-		{ return yapt::length(*this); }
+		{ return length(*this); }
 
 		constexpr auto
 		size() const noexcept
@@ -363,6 +367,253 @@ namespace yapt
     template <typename T, size_t N,
 			  template <typename, size_t> typename Container>
     Vector(Container<T, N> &&) -> Vector<T, N, Container>;
+
+    template <typename T, size_t N,
+			  template <typename, size_t> class Container1,
+			  template <typename, size_t> class Container2,
+			  typename BinaryOperation>
+    constexpr auto
+    transform(BinaryOperation binary_op,
+              const Vector<T, N, Container1> & a,
+			  const Vector<T, N, Container2> & b) noexcept
+    {
+		Vector<std::decay_t<std::result_of_t<BinaryOperation(T, T)>>, N> ret {};
+
+		for (size_t i = 0; i < N; ++i)
+			ret[i] = binary_op(a[i], b[i]);
+
+		return ret;
+    }
+
+
+    template <typename T, size_t N,
+			  template <typename, size_t> class Container,
+			  typename UnaryOperation>
+    constexpr auto
+    transform(UnaryOperation unary_op,
+              const Vector<T, N, Container> & a) noexcept
+    {
+		Vector<std::decay_t<std::result_of_t<UnaryOperation(T)>>, N> ret {};
+
+		for (size_t i = 0; i < N; ++i)
+			ret[i] = unary_op(a[i]);
+
+		return ret;
+    }
+
+
+    template <typename T, size_t N,
+			  template <typename, size_t> class Container,
+			  typename BinaryOperation,
+			  typename Init>
+    constexpr auto
+    reduce(BinaryOperation binary_op,
+           const Vector<T, N, Container>& a,
+    	   Init init) noexcept
+    {
+    	for (size_t i = 0; i < N; ++i)
+    	    init = binary_op(init, a[i]);
+
+    	return init;
+    }
+
+
+    template <typename T, size_t N,
+			  template <typename, size_t> class Container1,
+			  template <typename, size_t> class Container2,
+			  typename BinaryOperation1,
+			  typename BinaryOperation2,
+			  typename Init>
+    constexpr auto
+    transform_reduce(BinaryOperation1 binary_op1,
+					 BinaryOperation2 binary_op2,
+                     const Vector<T, N, Container1> & a,
+					 const Vector<T, N, Container2> & b,
+					 Init init) noexcept
+    {
+    	for (size_t i = 0; i < N; ++i)
+    	    init = binary_op2(init, binary_op1(a[i], b[i]));
+
+    	return init;
+    }
+
+
+    template <typename T, size_t N,
+			  template <typename, size_t> class Container,
+			  typename UnaryOperation,
+			  typename BinaryOperation,
+			  typename Init>
+    constexpr auto
+    transform_reduce(UnaryOperation unary_op,
+					 BinaryOperation binary_op,
+                     const Vector<T, N, Container> & a,
+					 Init init) noexcept
+    {
+		for (size_t i = 0; i < N; ++i)
+			init = binary_op(init, unary_op(a[i]));
+
+		return init;
+    }
+
+
+    // dot product
+    template <typename T, size_t N,
+			  template <typename, size_t> class Container1,
+			  template <typename, size_t> class Container2>
+    constexpr auto
+    dot(const Vector<T, N, Container1> & a,
+    	const Vector<T, N, Container2> & b) noexcept
+    { return transform_reduce(std::multiplies<T>(), std::plus<T>(), a, b, T{0}); }
+
+
+    // N-dimensional cross product
+    template <typename T, size_t N,
+			  template <typename, size_t> class Container1,
+			  template <typename, size_t> class Container2>
+    constexpr auto
+    cross(const Vector<T, N, Container1> & a,
+    	  const Vector<T, N, Container2> & b) noexcept
+    {
+    	Vector<std::decay_t<T>, N> ret;
+
+    	for (size_t i = 0; i < N; ++i)
+    	    for (size_t j = 0; j < N; ++j)
+				for (size_t k = 0; k < N; ++k)
+					ret[i] += math::sgn(std::array<size_t, 3>({{i,j,k}})) * a[j] * b[k];
+
+    	return ret;
+    }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    length2(const Vector<T, N, Container> & a) noexcept
+    { return transform_reduce(math::pow<2, T>, std::plus<T>(), a, T{0}); }
+
+    template <typename T, size_t N,
+			  template <typename, size_t> class Container>
+    constexpr auto
+    length(const Vector<T, N, Container> & a) noexcept
+    { return math::sqrt(length2(a)); }
+
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    normalize(const Vector<T, N, Container> & a) noexcept
+    {
+    	const auto l = length(a);
+        if constexpr(std::is_floating_point_v<T>)
+            return !(math::almost_equal(l, T{1}, 5) && math::almost_equal(l, T{0}, 5)) ? a / l : a;
+        else
+            return !(l == 1 && l == 0) ? a / l : a;
+    }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container1,
+			  template <typename, size_t> class Container2>
+    constexpr auto
+    distance(const Vector<T, N, Container1> & a,
+			 const Vector<T, N, Container2> & b)
+    { return length(a - b); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    sum(const Vector<T, N, Container> & a) noexcept
+    { return reduce(std::plus<T>(), a, T{0}); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    product(const Vector<T, N, Container> & a) noexcept
+    { return reduce(std::multiplies<T>(), a, T{1}); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    all(const Vector<T, N, Container> & a) noexcept
+    { return reduce(std::logical_and<bool>(), a, true); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    any(const Vector<T, N, Container> & a) noexcept
+    { return reduce(std::logical_or<bool>(), a, false); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    avg(const Vector<T, N, Container> & a) noexcept
+    { return sum(a) / N; }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    max(const Vector<T, N, Container> & a) noexcept
+    { return reduce(static_cast<const T&(*)(const T&, const T&)>(std::max), a, std::numeric_limits<T>::min()); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    min(const Vector<T, N, Container> & a) noexcept
+    { return reduce(static_cast<const T&(*)(const T&, const T&)>(std::min), a, std::numeric_limits<T>::max()); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container1,
+			  template <typename, size_t> class Container2>
+    constexpr auto
+    max(const Vector<T, N, Container1>& a,
+        const Vector<T, N, Container2>& b) noexcept
+    { return transform(static_cast<const T&(*)(const T&, const T&)>(std::max), a, b); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container1,
+			  template <typename, size_t> class Container2>
+    constexpr auto
+    min(const Vector<T, N, Container1>& a,
+        const Vector<T, N, Container2>& b) noexcept
+    { return transform(static_cast<const T&(*)(const T&, const T&)>(std::min), a, b); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container1,
+			  template <typename, size_t> class Container2,
+              typename ULP>
+    constexpr auto
+    almost_equal(const Vector<T, N, Container1>& va,
+                 const Vector<T, N, Container2>& vb,
+                 const ULP ulp)
+    { return transform([ulp](const T a, const T b){ return math::almost_equal(a, b, ulp); }, va, vb); }
+
+    template <typename T, size_t N, typename ULP,
+    	      template <typename, size_t> class Container1>
+    constexpr auto
+    almost_equal(const Vector<T, N, Container1>& va,
+                 const T b,
+                 const ULP ulp)
+    { return transform([ulp, b](const T a){ return math::almost_equal(a, b, ulp); }, va); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    fit(const Vector<T, N, Container>& v,
+        const T minval,
+        const T maxval) noexcept
+    { return transform([minval, maxval](const T& val){ return math::fit(minval, maxval, val); }, v); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    abs(const Vector<T, N, Container>& v) noexcept
+    { return transform(static_cast<T(*)(T)>(math::abs), v); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    clamp(const Vector<T, N, Container>& v,
+          const T minval,
+          const T maxval) noexcept
+    { return transform([&](const T val){ return std::clamp(val, minval, maxval); }, v); }
 }
 
 namespace std

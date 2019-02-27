@@ -126,7 +126,7 @@ namespace yapt::math
     template <typename T>
     constexpr T
     degrees(const T _radians)
-    { return _radians * static_cast<T>(180) / PI<T>; }
+    { return _radians * T{180} / PI<T>; }
 
     template <typename T>
     constexpr T
@@ -136,11 +136,11 @@ namespace yapt::math
     template <typename T, typename Bias>
     constexpr auto
     lerp(const T a, const T b, const Bias bias)
-    { return b * bias + a * (T(1) - bias); }
+    { return b * bias + a * (T{1} - bias); }
 
-    template <typename T, typename ULP = unsigned>
+    template <typename T, typename ULP>
     constexpr typename std::enable_if_t<std::is_floating_point_v<T>, bool>
-    almost_equal(const T a, const T b, const ULP ulp = 2)
+    almost_equal(const T a, const T b, const ULP ulp)
     {
         // the machine epsilon has to be scaled to the magnitude of the values used
         // and multiplied by the desired precision in ULPs (units in the last place)
@@ -152,9 +152,6 @@ namespace yapt::math
 
     template <typename T>
     constexpr auto
-    fit(const T val, const T bottom = T{0}, const T top = T{1})
-    {
-        const auto range = (top - bottom);
-        return (val - bottom) / range;
-    }
+    fit(const T val, const T minval, const T maxval)
+    { return (val - minval) / (maxval - minval); }
 }

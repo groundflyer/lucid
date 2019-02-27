@@ -57,12 +57,18 @@ namespace yapt
 		template <size_t I>
 		constexpr T&
 		get() noexcept
-		{ return *(p_data + I); }
+		{
+            static_assert(I < N, "Index out of range.");
+            return *(p_data + I);
+        }
 
 		template <size_t I>
 		constexpr const T&
 		get() const noexcept
-		{ return *(p_data + I); }
+		{
+            static_assert(I < N, "Index out of range.");
+            return *(p_data + I);
+        }
     };
 }
 
