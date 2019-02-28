@@ -27,7 +27,6 @@ namespace yapt
         return ret;
     }
 
-
     template <template <typename, size_t> typename MatContainer,
 			  template <typename, size_t> typename VecContainer>
     constexpr auto
@@ -90,11 +89,11 @@ namespace yapt
 
     template <template <typename, size_t> typename EyeContainer,
 			  template <typename, size_t> typename CenContainer,
-			  template <typename, size_t> typename UpContainer = std::array>
+			  template <typename, size_t> typename UpContainer>
     constexpr auto
     look_at(const Point_<EyeContainer>& eye,
 			const Point_<CenContainer>& target,
-			const Normal_<UpContainer>& up = Normal_<UpContainer>(0_r, 1_r, 0_r)) noexcept
+			const Normal_<UpContainer>& up) noexcept
     {
 		const auto f = normalize(eye - target);
 		const auto r = normalize(up.cross(f));

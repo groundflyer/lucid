@@ -24,6 +24,39 @@ namespace yapt
 {
     template <typename T, size_t N,
 			  template <typename, size_t> typename Container = std::array>
+    class Vector;
+
+    // dot product
+    template <typename T, size_t N,
+			  template <typename, size_t> class Container1,
+			  template <typename, size_t> class Container2>
+    constexpr auto
+    dot(const Vector<T, N, Container1> & a,
+    	const Vector<T, N, Container2> & b) noexcept
+    { return transform_reduce(std::multiplies<T>(), std::plus<T>(), a, b, T{0}); }
+
+
+    // N-dimensional cross product
+    template <typename T, size_t N,
+			  template <typename, size_t> class Container1,
+			  template <typename, size_t> class Container2>
+    constexpr auto
+    cross(const Vector<T, N, Container1> & a,
+    	  const Vector<T, N, Container2> & b) noexcept
+    {
+    	Vector<std::decay_t<T>, N> ret;
+
+    	for (size_t i = 0; i < N; ++i)
+    	    for (size_t j = 0; j < N; ++j)
+				for (size_t k = 0; k < N; ++k)
+					ret[i] += math::sgn(std::array<size_t, 3>({{i,j,k}})) * a[j] * b[k];
+
+    	return ret;
+    }
+
+
+    template <typename T, size_t N,
+			  template <typename, size_t> typename Container>
     class Vector
     {
 		static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");
@@ -348,16 +381,12 @@ namespace yapt
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		dot(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return transform_reduce(std::multiplies<T>(), std::plus<T>(), *this, rhs, T{0}); }
+        { return yapt::dot(*this, rhs); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		cross(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return cross(*this, rhs); }
-
-		constexpr auto
-		length() const noexcept
-		{ return length(*this); }
+		{ return yapt::cross(*this, rhs); }
 
 		constexpr auto
 		size() const noexcept
@@ -456,33 +485,7 @@ namespace yapt
     }
 
 
-    // dot product
-    template <typename T, size_t N,
-			  template <typename, size_t> class Container1,
-			  template <typename, size_t> class Container2>
-    constexpr auto
-    dot(const Vector<T, N, Container1> & a,
-    	const Vector<T, N, Container2> & b) noexcept
-    { return transform_reduce(std::multiplies<T>(), std::plus<T>(), a, b, T{0}); }
 
-
-    // N-dimensional cross product
-    template <typename T, size_t N,
-			  template <typename, size_t> class Container1,
-			  template <typename, size_t> class Container2>
-    constexpr auto
-    cross(const Vector<T, N, Container1> & a,
-    	  const Vector<T, N, Container2> & b) noexcept
-    {
-    	Vector<std::decay_t<T>, N> ret;
-
-    	for (size_t i = 0; i < N; ++i)
-    	    for (size_t j = 0; j < N; ++j)
-				for (size_t k = 0; k < N; ++k)
-					ret[i] += math::sgn(std::array<size_t, 3>({{i,j,k}})) * a[j] * b[k];
-
-    	return ret;
-    }
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container>

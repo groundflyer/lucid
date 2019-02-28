@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
                          [&](const auto& feed)
                          {
                              const auto& [eye, target] = feed;
-                             return apply_transform(look_at(eye, target), Normal(0_r, 0_r, 1_r));
+                             return apply_transform(look_at(eye, target, Normal(0_r, 1_r, 0_r)), Normal(0_r, 0_r, 1_r));
                          },
                          [](const auto& testing, const auto& feed)
                          {

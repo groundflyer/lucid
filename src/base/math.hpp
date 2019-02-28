@@ -26,42 +26,26 @@ namespace yapt::math
     template <typename T>
     const constexpr T PI = T{3.141592653589793};
 
-    // simple power function
-    template <unsigned exp, typename T>
-    constexpr T
-    pow(const T base) noexcept
-    {
-		T ret = base;
-
-		if (exp == 0)
-			ret = 1;
-		else if (exp > 1)
-			for (unsigned _ = 1; _ < exp; ++_)
-				ret *= base;
-
-		return ret;
-    }
-
-    template <unsigned exp, typename T>
-    constexpr T
-    ct_pow(const T value) noexcept
-    {
-        if(!exp) {
-            return 1;
-        } else {
-            const T base = ct_pow<exp/2>(value);
-            if constexpr (exp & 1)
-                return base * base * value;
-            else
-                return base * base;
-        }
-    }
-
     // check value is even
 	template <typename T>
     constexpr typename std::enable_if_t<std::is_integral_v<T>, bool>
     is_even(const T val) noexcept
     { return val % 2 == 0; }
+
+    template <unsigned exp, typename T>
+    constexpr T
+    pow(const T value) noexcept
+    {
+        if(!exp) {
+            return 1;
+        } else {
+            const T base = pow<exp/2>(value);
+            if constexpr (is_even(exp))
+                return base * base;
+            else
+                return base * base * value;
+        }
+    }
 
     // return result of (-1)^a
     template <typename T>

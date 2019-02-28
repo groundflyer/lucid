@@ -149,9 +149,9 @@ namespace yapt
 		constexpr void
 		normalize() noexcept
 		{
-			auto l = Super::length();
+			auto l = length(*this);
 
-			if (l != 1_r || l != 0_r)
+			if (!(math::almost_equal(l, 1_r, 5) && math::almost_equal(l, 0_r, 5)))
 				for (auto& elem : Super::m_data)
                     elem /= l;
 		}
