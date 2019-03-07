@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // sphere.cpp
-#include "test_util.hpp"
 #include <traversal/aabb.hpp>
+#include <iostream>
 
 using namespace std;
 using namespace yapt;
@@ -16,7 +16,6 @@ int main()
     const Ray tohit(Point(0), dir);
     const Ray tomiss(Point(1.1,0,0), dir);
     int ret = 0;
-    TEST_AND_COUT(sizeof(aabb));
     const auto hit_isect = intersect(tohit, aabb);
     if(!hit_isect)
     {
@@ -26,7 +25,7 @@ int main()
     else
         cout << "Hit OK\n";
 
-    if(intersect(tomiss, aabb, Range<real>()))
+    if(intersect(tomiss, aabb))
     {
         cout << "Miss failed\n";
         ret++;

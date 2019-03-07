@@ -45,8 +45,7 @@ namespace yapt
 			  template <typename, size_t> typename RayContainer>
 	constexpr auto
 	intersect(const Ray_<RayContainer>& ray,
-              const Triangle_<TriangleContainer>& prim,
-			  const Range<real>& range = Range<real>()) noexcept
+              const Triangle_<TriangleContainer>& prim) noexcept
     {
         const auto& [o, d] = ray;
         const auto& [p0, p1, p2] = prim;
@@ -54,27 +53,13 @@ namespace yapt
         const auto edge2 = p2 - p0;
         const auto pvec = d.cross(edge2);
         const auto D = edge1.dot(pvec);
-
-        if (D > 0)
-        {
-            const auto tvec = o - p0;
-            const auto u = tvec.dot(pvec);
-
-            if (Range(0_r, D).encloses(u))
-            {
-                const auto qvec = tvec.cross(edge1);
-                const auto v = d.dot(qvec);
-
-                if (v >= 0 && (u + v) <= D)
-                {
-                    const auto invD = 1_r / D;
-                    const auto t = edge2.dot(qvec) * invD;
-                    return Intersection(range.encloses(t), t, Vec2(u, v) * invD);
-                }
-            }
-        }
-
-        return Intersection();
+        const auto tvec = o - p0;
+        const auto u = tvec.dot(pvec);
+        const auto qvec = tvec.cross(edge1);
+        const auto v = d.dot(qvec);
+        const auto invD = 1_r / D;
+        const auto t = edge2.dot(qvec) * invD;
+        return Intersection{D > 0_r && u < D && v >= 0_r && (u + v) <= D, t, Vec2{u, v} * invD};
     }
 
 	template <template <typename, size_t> typename TriangleContainer,

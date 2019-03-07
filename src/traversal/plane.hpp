@@ -41,14 +41,12 @@ namespace yapt
 			  template <typename, size_t> typename RayContainer>
 	constexpr auto
 	intersect(const Ray_<RayContainer>& ray,
-              const Plane_<PlaneContainer>& prim,
-			  const Range<real>& range = Range<real>()) noexcept
+              const Plane_<PlaneContainer>& prim) noexcept
     {
         const auto& [o, d] = ray;
         const auto& [p, n] = prim;
         const auto t = ((p - o).dot(n) / (d.dot(n)));
-
-        return Intersection(range.encloses(t), t, Vec2(0));
+        return Intersection{t > 0_r, t, Vec2{}};
     }
 
 	template <template <typename, size_t> typename PlaneContainer,

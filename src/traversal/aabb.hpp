@@ -29,14 +29,14 @@ namespace yapt
 			  const Point_<Container2>& vmax) : m_vmin(vmin), m_vmax(vmax) {}
 
         constexpr const auto&
-        operator[](const std::uint8_t i) const noexcept
+        operator[](const size_t i) const noexcept
         {
             CHECK_INDEX(i, 2);
             return i ? m_vmax : m_vmin;
         }
 
         constexpr auto&
-        operator[](const std::uint8_t i) noexcept
+        operator[](const size_t i) noexcept
         {
             CHECK_INDEX(i, 2);
             return i ? m_vmax : m_vmin;
@@ -47,7 +47,7 @@ namespace yapt
         operator[](const Vector<bool, 3, Container1>& idxs) const noexcept
         {
             Vec3 ret;
-            for(std::uint8_t i = 0; i < 3; ++i)
+            for(size_t i = 0; i < 3; ++i)
                 ret[i] = (*this)[idxs[i]][i];
             return ret;
         }
@@ -64,25 +64,18 @@ namespace yapt
 			  template <typename, size_t> typename RayContainer>
 	constexpr auto
 	intersect(const Ray_<RayContainer>& ray,
-              const AABB_<AABBContainer>& prim,
-			  const Range<real>& range = Range<real>()) noexcept
+              const AABB_<AABBContainer>& prim) noexcept
 	{
 		const auto& [o, d] = ray;
-		const auto inv_d = Vec3(1) / d;
+		const auto inv_d = Vec3{1_r} / d;
 		const auto sign = inv_d < 0;
         const auto vmin = inv_d * (prim[sign] - o);
         const auto vmax = inv_d * (prim[!sign] - o);
         const auto& [xmin, ymin, zmin] = vmin;
         const auto& [xmax, ymax, zmax] = vmax;
-
-        if(xmin > ymax ||
-           ymin > xmax ||
-           std::max(xmin, ymin) > zmax ||
-           zmin > std::min(ymax, xmax))
-            return Intersection();
-
-        const auto mm = max(vmin);
-        return Intersection(range.encloses(mm), mm, Vec2());
+        const auto intersected = xmin < ymax && ymin < xmax &&
+            std::max(xmin, ymin) < zmax && zmin < std::min(ymax, xmax);
+        return Intersection{intersected, max(vmin), Vec2{}};
 	}
 
 	template <template <typename, size_t> typename AABBContainer,

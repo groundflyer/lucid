@@ -47,8 +47,7 @@ namespace yapt
 			  template <typename, size_t> typename RayContainer>
     constexpr auto
     intersect(const Ray_<RayContainer>& ray,
-              const Quad_<QuadContainer>& prim,
-              const Range<real>& range = Range<real>()) noexcept
+              const Quad_<QuadContainer>& prim) noexcept
     {
         const auto& [o, d] = ray;
         const auto& [v00, v01, v11, v10] = prim;
@@ -63,7 +62,7 @@ namespace yapt
         const auto T = o - v00;
         const auto alpha = T.dot(p) / det;
 
-        const Range range01(0_r, 1_r);
+        const constexpr Range range01(0_r, 1_r);
 
         if(!range01.encloses(alpha))
             return Intersection();
@@ -106,7 +105,7 @@ namespace yapt
         const auto& [Nx, Ny, Nz] = N;
         const auto& [aNx, aNy, aNz] = aN;
 
-        real a11, b11;
+        real a11{}, b11{};
         if((aNx >= aNy) && (aNx >= aNz))
         {
             a11 = (e02[1] * e03[2] - e02[2] * e03[1]) / Nx;
@@ -123,7 +122,7 @@ namespace yapt
             b11 = (e01[0] * e02[1] - e01[1] * e02[0]) / Nz;
         }
 
-        real u, v;
+        real u{}, v{};
         if(math::abs(a11 - 1) < std::numeric_limits<real>::min())
         {
             u = alpha;
@@ -143,7 +142,7 @@ namespace yapt
             const auto B = alpha * (b11 - 1) - beta * (a11 - 1) - 1;
             const auto C = alpha;
             const auto Delta = B*B - 4 * A * C;
-            const auto QQ = -0.5_r * (B + math::sign(B) * math::sqrt(Delta));
+            const auto QQ = -0.5_r * (B + std::copysign(1_r, B) * math::sqrt(Delta));
             u = QQ / A;
 
             if(!range01.encloses(u))
@@ -152,7 +151,7 @@ namespace yapt
             v = beta / (u * (b11 - 1) + 1);
         }
 
-        return Intersection(range.encloses(t), t, Vec2(u, v));
+        return Intersection{true, t, Vec2(u, v)};
     }
 
 	template <template <typename, size_t> typename QuadContainer,

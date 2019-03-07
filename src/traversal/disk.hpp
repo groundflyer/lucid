@@ -10,8 +10,9 @@
 namespace yapt
 {
     template <template <typename, size_t> typename Container>
-    struct Disk_ : public Plane_<Container>
+    struct Disk_
     {
+        Plane_<Container> plane;
         real radius2;
 
         constexpr
@@ -23,8 +24,8 @@ namespace yapt
         Disk_(const Point_<Container1>& _position,
               const Normal_<Container2>& _normal,
               const real _radius) :
-        Plane_<Container>(_position, _normal),
-            radius2(_radius * _radius)
+            plane(_position, _normal),
+            radius2(math::pow<2>(_radius))
         {}
     };
 
@@ -41,14 +42,12 @@ namespace yapt
 			  template <typename, size_t> typename RayContainer>
 	constexpr auto
 	intersect(const Ray_<RayContainer>& ray,
-              const Disk_<DiskContainer>& prim,
-			  const Range<real>& range = Range<real>()) noexcept
+              const Disk_<DiskContainer>& prim) noexcept
     {
-        auto plane_isect = intersect(ray, static_cast<Plane_<DiskContainer>>(prim), range);
+        auto plane_isect = intersect(ray, prim.plane);
         const auto& [o, d] = ray;
-        return Intersection(plane_isect && length2((o + d * plane_isect.distance()) - prim.position) <= prim.radius2,
-                            plane_isect.distance(),
-                            plane_isect.coords());
+        plane_isect.intersect &= length2((o + d * plane_isect.t) - prim.plane.position) <= prim.radius2;
+        return plane_isect;
     }
 
 	template <template <typename, size_t> typename DiskContainer,
