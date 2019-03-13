@@ -107,13 +107,17 @@ namespace yapt
 
     template <template <typename, size_t> typename Container>
     constexpr auto
-    basis(const Vec3_<Container>& n) noexcept
+    basis(const Normal_<Container>& n) noexcept
     {
 		const auto& [nx, ny, nz] = n;
         const auto sign = std::copysign(1_r, nz);
         const auto a = -1_r / (sign + nz);
         const auto b = nx * ny * a;
-		return std::pair(Vec3(1_r + sign * nx * nx * a, sign * b, -sign * nx),
-                         Vec3(b, sign + ny * ny * a, -ny));
+		return std::pair(Normal(1_r + sign * math::pow<2>(nx) * a,
+                                sign * b,
+                                -sign * nx),
+                         Normal(b,
+                                sign + math::pow<2>(ny) * a,
+                                -ny));
     }
 }

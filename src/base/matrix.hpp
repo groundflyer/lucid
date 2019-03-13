@@ -21,7 +21,7 @@ namespace yapt
     dot(const Matrix<T, M, N, MContainer> & lhs,
 		const Vector<T, N, VContainer> & rhs) noexcept
     {
-		Vector<T, N, VContainer> ret;
+		Vector<T, N> ret;
 
 		for (size_t i = 0; i < M; ++i)
 			for (size_t j = 0; j < N; ++j)
@@ -38,7 +38,7 @@ namespace yapt
     dot(const Matrix<T, M1, N1, Container1> & lhs,
 		const Matrix<T, M2, N2, Container2> & rhs) noexcept
     {
-		Matrix<T, M1, N2, Container1> ret(0);
+		Matrix<T, M1, N2> ret(0);
 
 		for (size_t i = 0; i < M1; ++i)
 			for (size_t j = 0; j < N2; ++j)

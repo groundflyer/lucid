@@ -53,8 +53,20 @@ namespace yapt
 			  template <typename, size_t> typename RayContainer,
               template <typename, size_t> typename IsectContainer>
     constexpr auto
-    compute_normal(const Ray_<RayContainer>&,
-                   const Intersection_<IsectContainer>&,
-                   const Plane_<PlaneContainer>& prim) noexcept
+    normal(const Ray_<RayContainer>&,
+           const Intersection_<IsectContainer>&,
+           const Plane_<PlaneContainer>& prim) noexcept
     { return Normal(prim.normal); }
+
+    template <template <typename, size_t> typename Container,
+              typename Generator>
+    constexpr auto
+    sample(Generator&& gen,
+           const Plane_<Container>& prim) noexcept
+    {
+        const auto& [pos, zaxis] = prim;
+        const Vec3 point(gen(), gen(), 0);
+        const auto [xaxis, yaxis] = basis(zaxis);
+        return transpose(Mat3(xaxis, yaxis, zaxis)).dot(point) + pos;
+    }
 }

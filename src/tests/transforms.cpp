@@ -91,11 +91,13 @@ int main(int argc, char* argv[])
     ret += test_property_n("orthonormal basis",
                            [&](){ return Normal(argen()); },
                            [](const auto& feed){ return basis(feed); },
-                           [](const auto testing, const auto& feed)
+                           [](const auto& testing, const auto& feed)
                            {
                                const auto& [a, b] = testing;
                                const Mat3 mm{a, b, feed};
-                               return !math::almost_equal(1_r, det(mm), ULP);
+                               const auto zero = Mat3::identity() - mm.dot(transpose(mm));
+                               const constexpr auto ulp = math::pow<sizeof(real)>(60ul);
+                               return any(!almost_equal(zero.flat_ref(), 0_r, ulp));
                            });
 
     return ret;

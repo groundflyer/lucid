@@ -507,7 +507,7 @@ namespace yapt
     {
     	const auto l = length(a);
         if constexpr(std::is_floating_point_v<T>)
-            return !(math::almost_equal(l, T{1}, 5) && math::almost_equal(l, T{0}, 5)) ? a / l : a;
+            return !(math::almost_equal(l, T{1}, 5) || math::almost_equal(l, T{0}, 5)) ? a / l : a;
         else
             return !(l == 1 && l == 0) ? a / l : a;
     }
