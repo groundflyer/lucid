@@ -6,7 +6,6 @@
 
 #include "intersection.hpp"
 #include "ray.hpp"
-#include <base/range.hpp>
 
 
 namespace yapt
@@ -52,19 +51,34 @@ namespace yapt
         const auto t1 = (-b + sqrtD) * factor;
         const auto t2 = (-b - sqrtD) * factor;
         const auto t = t1 > 0_r ? (t2 > 0_r ? std::min(t1, t2) : t1) : -b * factor;
-        return Intersection{D > 0, t, Vec2{}};
+        return Intersection{D > 0_r, t, Vec2{}};
 	}
 
 	template <template <typename, size_t> typename SphereContainer,
 			  template <typename, size_t> typename RayContainer,
               template <typename, size_t> typename IsectContainer>
     constexpr auto
-    compute_normal(const Ray_<RayContainer>& ray,
-                   const Intersection_<IsectContainer>& isect,
-                   const Sphere_<SphereContainer>& prim) noexcept
+    normal(const Ray_<RayContainer>& ray,
+           const Intersection_<IsectContainer>& isect,
+           const Sphere_<SphereContainer>& prim) noexcept
     {
         const auto& [o, d] = ray;
         const auto pos = o + d * isect.distance();
         return Normal(pos - prim.center);
+    }
+
+    template <template <typename, size_t> typename Container,
+              typename Generator>
+    constexpr auto
+    sample(Generator&& gen,
+           const Sphere_<Container>& prim) noexcept
+    {
+        const auto& [c, r] = prim;
+        const auto u = 2_r * gen() - 1;
+        const auto theta = 2_r * math::PI<real> * gen();
+        const auto _u = math::sqrt(1_r - math::pow<2>(u));
+        return Vec3(_u * math::cos(theta),
+                    _u * math::sin(theta),
+                    u) * r + c;
     }
 }
