@@ -1,7 +1,6 @@
 // -*- C++ -*-
 // primitives.cpp
 #include "property_test.hpp"
-#include <traversal/plane.hpp>
 #include <traversal/disk.hpp>
 #include <traversal/sphere.hpp>
 #include <base/rng.hpp>
@@ -22,7 +21,6 @@ int main(int argc, char *argv[])
 
     RandomDistribution<real> big_dist(-1000_r, 1000_r);
     RandomDistribution<real> rad_dist(0.1_r, 1000_r);
-    auto biggen = [&](){ return big_dist(g); };
     auto canonical = [&](){ return rand<real>(g); };
     auto posgen = [&](){ return Point(big_dist.template operator()<3>(g)); };
     auto normgen = [&](){ return Normal(big_dist.template operator()<3>(g)); };
@@ -40,10 +38,6 @@ int main(int argc, char *argv[])
     const auto test_prim = [&](auto&& name, auto&& gen, auto&& sampler)
                            { return test_property(num_tests, 0.01, name, gen, sampler, property); };
 
-
-    ret += test_prim("Plane",
-                     [&](){ return Plane(posgen(), normgen()); },
-                     [&](const auto& prim){ return pair(sample(biggen, prim), posgen()); });
     ret += test_prim("Disk",
                      [&](){ return Disk(posgen(), normgen(), rad_dist(g)); },
                      [&](const auto& prim){ return pair(sample(canonical, prim), posgen()); });

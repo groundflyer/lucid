@@ -4,15 +4,16 @@
 
 #pragma once
 
-#include "plane.hpp"
-
+#include "intersection.hpp"
+#include "ray.hpp"
 
 namespace yapt
 {
     template <template <typename, size_t> typename Container>
     struct Disk_
     {
-        Plane_<Container> plane;
+        Point_<Container> position;
+        Normal_<Container> normal;
         real radius;
 
         constexpr
@@ -24,7 +25,8 @@ namespace yapt
         Disk_(const Point_<Container1>& _position,
               const Normal_<Container2>& _normal,
               const real _radius) :
-            plane(_position, _normal),
+            position(_position),
+            normal(_normal),
             radius(_radius)
         {}
     };
@@ -44,11 +46,10 @@ namespace yapt
 	intersect(const Ray_<RayContainer>& ray,
               const Disk_<DiskContainer>& prim) noexcept
     {
-        const auto& plane = prim.plane;
-        auto plane_isect = intersect(ray, plane);
         const auto& [o, d] = ray;
-        plane_isect.intersect &= length((o + d * plane_isect.t) - plane.position) <= prim.radius;
-        return plane_isect;
+        const auto& [p, n, r] = prim;
+        const auto t = ((p - o).dot(n) / (d.dot(n)));
+        return Intersection(t > 0_r && distance(o + d * t, p) < r, t, Vec2{});
     }
 
 	template <template <typename, size_t> typename DiskContainer,
@@ -66,11 +67,11 @@ namespace yapt
     sample(Generator&& gen,
            const Disk_<Container>& prim) noexcept
     {
-        const auto& [pos, zaxis] = prim.plane;
-        const auto sr = prim.radius * math::sqrt(gen());
+        const auto& [p, zaxis, r] = prim;
+        const auto sr = r * math::sqrt(gen());
         const auto theta = 2_r * math::PI<real> * gen();
         const Vec3 point{sr * math::sin(theta), sr * math::cos(theta), 0_r};
         const auto [xaxis, yaxis] = basis(zaxis);
-        return transpose(Mat3(xaxis, yaxis, zaxis)).dot(point) + pos;
+        return transpose(Mat3(xaxis, yaxis, zaxis)).dot(point) + p;
     }
 }
