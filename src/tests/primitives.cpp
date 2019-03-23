@@ -4,6 +4,7 @@
 #include <traversal/disk.hpp>
 #include <traversal/sphere.hpp>
 #include <traversal/triangle.hpp>
+#include <traversal/quad.hpp>
 #include <base/rng.hpp>
 
 using namespace std;
@@ -57,6 +58,16 @@ int main(int argc, char *argv[])
                      });
     ret += test_prim("Triangle",
                      [&](){ return Triangle(posgen(), posgen(), posgen()); },
+                     sample_prim);
+    ret += test_prim("Quad",
+                     [&]()
+                     {
+                         const auto v00 = posgen();
+                         const auto v01 = posgen();
+                         const auto v10 = posgen();
+                         const auto v11 = v00 + v01 + v10;
+                         return Quad(v00, v01, v11, v10);
+                     },
                      sample_prim);
 
     return ret;

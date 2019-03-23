@@ -4,8 +4,7 @@
 
 #pragma once
 
-#include "intersection.hpp"
-#include "ray.hpp"
+#include "triangle.hpp"
 #include <base/range.hpp>
 
 
@@ -142,7 +141,7 @@ namespace yapt
             const auto B = alpha * (b11 - 1) - beta * (a11 - 1) - 1;
             const auto C = alpha;
             const auto Delta = B*B - 4 * A * C;
-            const auto QQ = -0.5_r * (B + std::copysign(1_r, B) * math::sqrt(Delta));
+            const auto QQ = -0.5_r * (B + std::copysign(math::sqrt(Delta), B));
             u = QQ / A;
 
             if(!range01.encloses(u))
@@ -158,12 +157,24 @@ namespace yapt
 			  template <typename, size_t> typename RayContainer,
               template <typename, size_t> typename IsectContainer>
     constexpr auto
-    compute_normal(const Ray_<RayContainer>&,
-                   const Intersection_<IsectContainer>&,
-                   const Quad_<QuadContainer>& prim) noexcept
+    normal(const Ray_<RayContainer>&,
+           const Intersection_<IsectContainer>&,
+           const Quad_<QuadContainer>& prim) noexcept
     {
         const auto e01 = prim.v10 - prim.v00;
         const auto e03 = prim.v01 - prim.v00;
         return Normal(e01.cross(e03));
+    }
+
+	template <template <typename, size_t> typename Container,
+              typename Generator>
+    constexpr auto
+    sample(Generator&& gen,
+           const Quad_<Container>& prim) noexcept
+    {
+        const auto& a = prim.v00;
+        const auto& b = prim.v11;
+        const auto& c = gen() > 0.5_r ? prim.v01 : prim.v10;
+        return triangle_sample(gen(), gen(), a, b, c);
     }
 }
