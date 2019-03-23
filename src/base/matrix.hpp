@@ -596,7 +596,7 @@ namespace yapt
 			{
 				T ret{1};
 				for (size_t i = 0; i < M; ++i)
-					ret *= a[i][idxs[i]];
+					ret *= a.at(i, idxs[i]);
 				return ret;
 			};
 
