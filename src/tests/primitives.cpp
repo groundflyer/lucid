@@ -3,6 +3,7 @@
 #include "property_test.hpp"
 #include <traversal/disk.hpp>
 #include <traversal/sphere.hpp>
+#include <traversal/triangle.hpp>
 #include <base/rng.hpp>
 
 using namespace std;
@@ -36,11 +37,13 @@ int main(int argc, char *argv[])
                          };
 
     const auto test_prim = [&](auto&& name, auto&& gen, auto&& sampler)
-                           { return test_property(num_tests, 0.01, name, gen, sampler, property); };
+                           { return test_property(num_tests, 0.012, name, gen, sampler, property); };
+
+    const auto sample_prim = [&](const auto& prim){ return pair(sample(canonical, prim), posgen()); };
 
     ret += test_prim("Disk",
                      [&](){ return Disk(posgen(), normgen(), rad_dist(g)); },
-                     [&](const auto& prim){ return pair(sample(canonical, prim), posgen()); });
+                     sample_prim);
     ret += test_prim("Sphere",
                      [&](){ return Sphere(posgen(), rad_dist(g)); },
                      [&](const auto& prim)
@@ -52,6 +55,9 @@ int main(int argc, char *argv[])
                          const auto origin = Vec3(rad_dist.template operator()<3>(g)) * sign + offset;
                          return pair(sampled_point, Point(origin));
                      });
+    ret += test_prim("Triangle",
+                     [&](){ return Triangle(posgen(), posgen(), posgen()); },
+                     sample_prim);
 
     return ret;
 }
