@@ -61,15 +61,16 @@ namespace yapt
            const Disk_<DiskContainer>& prim) noexcept
     { return normal(ray, isect, prim.plane); }
 
-    template <template <typename, size_t> typename Container,
-              typename Generator>
+	template <template <typename, size_t> typename SContainer,
+              template <typename, size_t> typename PContainer>
     constexpr auto
-    sample(Generator&& gen,
-           const Disk_<Container>& prim) noexcept
+    sample(const Vec2_<SContainer>& s,
+           const Disk_<PContainer>& prim) noexcept
     {
         const auto& [p, zaxis, r] = prim;
-        const auto sr = r * math::sqrt(gen());
-        const auto theta = 2_r * math::PI<real> * gen();
+        const auto& [t1, t2] = s;
+        const auto sr = r * math::sqrt(t1);
+        const auto theta = 2_r * math::PI<real> * t2;
         const Vec3 point{sr * math::sin(theta), sr * math::cos(theta), 0_r};
         const auto [xaxis, yaxis] = basis(zaxis);
         return transpose(Mat3(xaxis, yaxis, zaxis)).dot(point) + p;

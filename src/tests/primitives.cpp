@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     RandomDistribution<real> big_dist(-1000_r, 1000_r);
     RandomDistribution<real> rad_dist(0.1_r, 1000_r);
-    auto canonical = [&](){ return rand<real>(g); };
+    auto sgen = [&](){ return Vec2{rand<real, 2>(g)}; };
     auto posgen = [&](){ return Point(big_dist.template operator()<3>(g)); };
     auto normgen = [&](){ return Normal(big_dist.template operator()<3>(g)); };
 
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     const auto test_prim = [&](auto&& name, auto&& gen, auto&& sampler)
                            { return test_property(num_tests, 0.012, name, gen, sampler, property); };
 
-    const auto sample_prim = [&](const auto& prim){ return pair(sample(canonical, prim), posgen()); };
+    const auto sample_prim = [&](const auto& prim){ return pair(sample(sgen(), prim), posgen()); };
 
     ret += test_prim("Disk",
                      [&](){ return Disk(posgen(), normgen(), rad_dist(g)); },
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
                      [&](){ return Sphere(posgen(), rad_dist(g)); },
                      [&](const auto& prim)
                      {
-                         const auto sampled_point = sample(canonical, prim);
+                         const auto sampled_point = sample(sgen(), prim);
                          const auto sign = transform([](const real val){ return std::copysign(1_r, val); },
                                                      sampled_point);
                          const auto offset = sign * prim.radius;

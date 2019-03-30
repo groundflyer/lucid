@@ -67,15 +67,16 @@ namespace yapt
         return Normal(pos - prim.center);
     }
 
-    template <template <typename, size_t> typename Container,
-              typename Generator>
+	template <template <typename, size_t> typename SContainer,
+              template <typename, size_t> typename PContainer>
     constexpr auto
-    sample(Generator&& gen,
-           const Sphere_<Container>& prim) noexcept
+    sample(const Vec2_<SContainer>& s,
+           const Sphere_<PContainer>& prim) noexcept
     {
         const auto& [c, r] = prim;
-        const auto u = 2_r * gen() - 1;
-        const auto theta = 2_r * math::PI<real> * gen();
+        const auto& [t1, t2] = s;
+        const auto u = 2_r * t1 - 1;
+        const auto theta = 2_r * math::PI<real> * t2;
         const auto _u = math::sqrt(1_r - math::pow<2>(u));
         return Vec3(_u * math::cos(theta),
                     _u * math::sin(theta),

@@ -6,7 +6,6 @@
 
 #include "intersection.hpp"
 #include "ray.hpp"
-#include <base/range.hpp>
 
 
 namespace yapt
@@ -76,26 +75,41 @@ namespace yapt
         return Normal(edge1.cross(edge2));
     }
 
-    // R. Osada et al. Shape distributions. 2002
-    template <template <typename, size_t> typename Container>
-    constexpr auto
-    triangle_sample(const real r1,
-                    const real r2,
-                    const Point_<Container>& a,
-                    const Point_<Container>& b,
-                    const Point_<Container>& c) noexcept
+    namespace
     {
-        const auto sqr1 = math::sqrt(r1);
-        return a * (1_r - sqr1) + b * sqr1 * (1_r - r2) + c * sqr1 * r2;
+        constexpr void
+        shift(real& x, real& y) noexcept
+        {
+            x *= 0.5_r;
+            y -= x;
+        }
+
+        // R. Osada et al. Shape distributions. 2002
+        // Eric Heitz A Low-Distortion Map Between Triangle and Square
+        template <template <typename, size_t> typename Container>
+        constexpr auto
+        triangle_sample(const Vec2_<Container>& s,
+                        const Point_<Container>& a,
+                        const Point_<Container>& b,
+                        const Point_<Container>& c) noexcept
+        {
+            auto [t1, t2] = s;
+            if (t1 > t2)
+                shift(t1, t2);
+            else
+                shift(t2, t1);
+
+            return a * t1 + b * t2 + c * (1_r - t1 - t2);
+        }
     }
 
-	template <template <typename, size_t> typename Container,
-              typename Generator>
+	template <template <typename, size_t> typename SContainer,
+              template <typename, size_t> typename PContainer>
     constexpr auto
-    sample(Generator&& gen,
-           const Triangle_<Container>& prim) noexcept
+    sample(const Vec2_<SContainer>& s,
+           const Triangle_<PContainer>& prim) noexcept
     {
         const auto& [v0, v1, v2] = prim;
-        return triangle_sample(gen(), gen(), v0, v1, v2);
+        return triangle_sample(s, v0, v1, v2);
     }
 }

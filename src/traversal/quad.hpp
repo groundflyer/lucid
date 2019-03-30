@@ -166,15 +166,23 @@ namespace yapt
         return Normal(e01.cross(e03));
     }
 
-	template <template <typename, size_t> typename Container,
-              typename Generator>
+    namespace
+    {
+        constexpr auto
+        resample(const real s) noexcept
+        { return 2_r * (s > 0.5_r ? s - 0.5_r : 0.5_r - s); }
+    }
+
+	template <template <typename, size_t> typename SContainer,
+              template <typename, size_t> typename PContainer>
     constexpr auto
-    sample(Generator&& gen,
-           const Quad_<Container>& prim) noexcept
+    sample(const Vec2_<SContainer>& s,
+           const Quad_<PContainer>& prim) noexcept
     {
         const auto& a = prim.v00;
         const auto& b = prim.v11;
-        const auto& c = gen() > 0.5_r ? prim.v01 : prim.v10;
-        return triangle_sample(gen(), gen(), a, b, c);
+        const auto& [t1, t2] = s;
+        const auto& c = t1 > 0.5_r ? prim.v01 : prim.v10;
+        return triangle_sample(Vec2(resample(t1), t2), a, b, c);
     }
 }
