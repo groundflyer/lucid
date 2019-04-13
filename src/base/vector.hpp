@@ -4,11 +4,11 @@
 
 #pragma once
 
-// we don't use StaticSpan here, but if don't include it
+// we don't use StaticSpan here, but if we don't include it
 // compiler would be unable to find std::get specialization
 // for Vector's Container
-#include "static_span.hpp"
-#include "debug.hpp"
+#include <utils/static_span.hpp>
+#include <utils/debug.hpp>
 #include "math.hpp"
 
 #include <array>

@@ -1,6 +1,6 @@
 #include "property_test.hpp"
 
-#include <base/utils.hpp>
+#include <utils/typelist.hpp>
 #include <base/vector.hpp>
 #include <base/rng.hpp>
 

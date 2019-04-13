@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "intersection.hpp"
-#include "ray.hpp"
+#include <base/intersection.hpp>
+#include <base/ray.hpp>
 
 namespace yapt
 {

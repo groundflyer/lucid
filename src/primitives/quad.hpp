@@ -5,7 +5,7 @@
 #pragma once
 
 #include "triangle.hpp"
-#include <base/range.hpp>
+#include <utils/range.hpp>
 #include <base/rng.hpp>
 
 
@@ -62,14 +62,14 @@ namespace yapt
         const auto T = o - v00;
         const auto alpha = T.dot(p) / det;
 
-        const constexpr Range range01(0_r, 1_r);
+        const constexpr auto range01 = range(0_r, 1_r);
 
-        if(!range01.encloses(alpha))
+        if(!range01(alpha))
             return Intersection();
 
         const auto Q = T.cross(e01);
         const auto beta = d.dot(Q) / det;
-        if(!range01.encloses(beta))
+        if(!range01(beta))
             return Intersection();
 
         if((alpha + beta) > 1)
@@ -145,7 +145,7 @@ namespace yapt
             const auto QQ = -0.5_r * (B + std::copysign(math::sqrt(Delta), B));
             u = QQ / A;
 
-            if(!range01.encloses(u))
+            if(!range01(u))
                 u = C / QQ;
 
             v = beta / (u * (b11 - 1) + 1);

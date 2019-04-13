@@ -1,11 +1,11 @@
 // -*- C++ -*-
 // primitives.cpp
 #include "property_test.hpp"
-#include <traversal/aabb.hpp>
-#include <traversal/disk.hpp>
-#include <traversal/sphere.hpp>
-#include <traversal/triangle.hpp>
-#include <traversal/quad.hpp>
+#include <primitives/aabb.hpp>
+#include <primitives/disk.hpp>
+#include <primitives/sphere.hpp>
+#include <primitives/triangle.hpp>
+#include <primitives/quad.hpp>
 #include <base/rng.hpp>
 
 using namespace std;

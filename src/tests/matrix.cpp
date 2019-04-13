@@ -1,7 +1,7 @@
 #include "property_test.hpp"
 
+#include <utils/typelist.hpp>
 #include <base/matrix.hpp>
-#include <base/utils.hpp>
 #include <base/rng.hpp>
 
 using namespace std;
