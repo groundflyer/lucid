@@ -75,4 +75,9 @@ namespace yapt
         const auto [xaxis, yaxis] = basis(zaxis);
         return Point(transpose(Mat3(xaxis, yaxis, zaxis)).dot(point) + p);
     }
+
+    template <template <typename, size_t> typename Container>
+    constexpr auto
+    centroid(const Disk_<Container>& prim) noexcept
+    { return prim.position; }
 }

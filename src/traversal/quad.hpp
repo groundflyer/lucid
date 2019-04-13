@@ -179,4 +179,12 @@ namespace yapt
         const auto& c = t1 > 0.5_r ? prim.v01 : prim.v10;
         return Point(impl::triangle_sample(Vec2(resample(t1), t2), a, b, c));
     }
+
+    template <template <typename, size_t> typename Container>
+    constexpr auto
+    centroid(const Quad_<Container>& prim) noexcept
+    {
+        const auto& [v0, v1, v2, v3] = prim;
+        return Point((v0 + v1 + v2 + v3) * 0.25_r);
+    }
 }

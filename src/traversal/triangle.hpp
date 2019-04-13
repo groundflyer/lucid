@@ -112,4 +112,12 @@ namespace yapt
         const auto& [v0, v1, v2] = prim;
         return Point(impl::triangle_sample(s, v0, v1, v2));
     }
+
+    template <template <typename, size_t> typename Container>
+    constexpr auto
+    centroid(const Triangle_<Container>& prim) noexcept
+    {
+        const auto& [v0, v1, v2] = prim;
+        return Point((v0 + v1 + v2) / 3_r);
+    }
 }
