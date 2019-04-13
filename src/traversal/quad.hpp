@@ -6,6 +6,7 @@
 
 #include "triangle.hpp"
 #include <base/range.hpp>
+#include <base/rng.hpp>
 
 
 namespace yapt
@@ -166,13 +167,6 @@ namespace yapt
         return Normal(e01.cross(e03));
     }
 
-    namespace
-    {
-        constexpr auto
-        resample(const real s) noexcept
-        { return 2_r * (s > 0.5_r ? s - 0.5_r : 0.5_r - s); }
-    }
-
 	template <template <typename, size_t> typename SContainer,
               template <typename, size_t> typename PContainer>
     constexpr auto
@@ -183,6 +177,6 @@ namespace yapt
         const auto& b = prim.v11;
         const auto& [t1, t2] = s;
         const auto& c = t1 > 0.5_r ? prim.v01 : prim.v10;
-        return triangle_sample(Vec2(resample(t1), t2), a, b, c);
+        return Point(impl::triangle_sample(Vec2(resample(t1), t2), a, b, c));
     }
 }

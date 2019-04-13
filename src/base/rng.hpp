@@ -94,4 +94,14 @@ namespace yapt
 
     	return ret;
     }
+
+    /// brief: Resample canonical random point
+    template <typename T>
+    constexpr auto
+    resample(const T s) noexcept
+    {
+        static_assert(std::is_floating_point_v<T>);
+        const T h{0.5};
+        return T{2} * (s > h ? s - h : h - s);
+    }
 }

@@ -78,8 +78,13 @@ namespace yapt
         const auto u = 2_r * t1 - 1;
         const auto theta = 2_r * math::PI<real> * t2;
         const auto _u = math::sqrt(1_r - math::pow<2>(u));
-        return Vec3(_u * math::cos(theta),
-                    _u * math::sin(theta),
-                    u) * r + c;
+        return Point(_u * math::cos(theta),
+                     _u * math::sin(theta),
+                     u) * r + c;
     }
+
+    template <template <typename, size_t> typename Container>
+    constexpr auto
+    centroid(const Sphere_<Container>& prim) noexcept
+    { return prim.center; }
 }

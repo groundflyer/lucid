@@ -617,6 +617,20 @@ namespace yapt
           const T minval,
           const T maxval) noexcept
     { return transform([&](const T val){ return std::clamp(val, minval, maxval); }, v); }
+
+    template <typename T, size_t N,
+    	      template <typename, size_t> class Container>
+    constexpr auto
+    roll(const Vector<T, N, Container>& v,
+         const size_t shift) noexcept
+    {
+        Vector<T, N> ret{};
+
+        for (size_t i = 0; i < N; ++i)
+            ret[i] = v[(i - shift) % N];
+
+        return ret;
+    }
 }
 
 namespace std

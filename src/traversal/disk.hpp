@@ -73,6 +73,6 @@ namespace yapt
         const auto theta = 2_r * math::PI<real> * t2;
         const Vec3 point{sr * math::sin(theta), sr * math::cos(theta), 0_r};
         const auto [xaxis, yaxis] = basis(zaxis);
-        return transpose(Mat3(xaxis, yaxis, zaxis)).dot(point) + p;
+        return Point(transpose(Mat3(xaxis, yaxis, zaxis)).dot(point) + p);
     }
 }

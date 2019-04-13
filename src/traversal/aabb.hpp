@@ -6,40 +6,39 @@
 
 #include "intersection.hpp"
 #include "ray.hpp"
-#include <base/range.hpp>
+#include <base/rng.hpp>
 
 
 namespace yapt
 {
     // axis-aligned bounding box
     template <template <typename, size_t> typename Container>
-    class AABB_
+    struct AABB_
     {
-        Point_<Container> m_vmin;
-        Point_<Container> m_vmax;
+        Point_<Container> vmin;
+        Point_<Container> vmax;
 
-    public:
         constexpr
 		AABB_() {};
 
 		template <template <typename, size_t> typename Container1,
 				  template <typename, size_t> typename Container2>
 		constexpr
-		AABB_(const Point_<Container1>& vmin,
-			  const Point_<Container2>& vmax) : m_vmin(vmin), m_vmax(vmax) {}
+		AABB_(const Point_<Container1>& _vmin,
+			  const Point_<Container2>& _vmax) : vmin(_vmin), vmax(_vmax) {}
 
         constexpr const auto&
         operator[](const size_t i) const noexcept
         {
             CHECK_INDEX(i, 2);
-            return i ? m_vmax : m_vmin;
+            return i ? vmax : vmin;
         }
 
         constexpr auto&
         operator[](const size_t i) noexcept
         {
             CHECK_INDEX(i, 2);
-            return i ? m_vmax : m_vmin;
+            return i ? vmax : vmin;
         }
 
         template <template <typename, size_t> typename Container1>
@@ -82,9 +81,9 @@ namespace yapt
 			  template <typename, size_t> typename RayContainer,
               template <typename, size_t> typename IsectContainer>
     constexpr auto
-    compute_normal(const Ray_<RayContainer>& ray,
-                   const Intersection_<IsectContainer>& isect,
-                   const AABB_<AABBContainer>& prim) noexcept
+    normal(const Ray_<RayContainer>& ray,
+           const Intersection_<IsectContainer>& isect,
+           const AABB_<AABBContainer>& prim) noexcept
     {
         const auto& [o, d] = ray;
         const auto pos = o + d * isect.distance();
@@ -99,5 +98,41 @@ namespace yapt
         }
         const auto pp = md[0] > md[1];
         return Normal(vd[pp] * nsign[pp]);
+    }
+
+    namespace impl
+    {
+        template <template <typename, size_t> typename Container>
+        constexpr auto
+        diag(const AABB_<Container>& prim,
+             const unsigned shift,
+             const bool side) noexcept
+        {
+            const auto& [vmin, vmax] = prim;
+            const auto& startpoint = side ? vmin : vmax;
+            const auto diag = side ? vmax - vmin : vmin - vmax;
+            return std::pair(startpoint, startpoint + diag * roll(Vec3(1_r, 1_r, 0_r), shift));
+        }
+    }
+
+	template <template <typename, size_t> typename SContainer,
+              template <typename, size_t> typename PContainer>
+    constexpr auto
+    sample(const Vec2_<SContainer>& s,
+           const AABB_<PContainer>& prim) noexcept
+    {
+        const auto& [s1, s2] = s;
+        const auto s3 = math::fmod(2_r * (s1 + s2), 1_r);
+        const auto shift = static_cast<unsigned>(300_r * math::fmod(s1 + s2 + s3, 1_r));
+        const auto [a, b] = impl::diag(prim, shift, s3 > 0.5_r);
+        return math::lerp(a, b, roll(Vec3(resample(s1), resample(s2), 0_r), shift));
+    }
+
+    template <template <typename, size_t> typename Container>
+    constexpr auto
+    centroid(const AABB_<Container>& prim) noexcept
+    {
+        const auto& [vmin, vmax] = prim;
+        return (vmin + vmax) * 0.5_r;
     }
 }

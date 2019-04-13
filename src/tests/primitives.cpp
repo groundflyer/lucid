@@ -1,6 +1,7 @@
 // -*- C++ -*-
 // primitives.cpp
 #include "property_test.hpp"
+#include <traversal/aabb.hpp>
 #include <traversal/disk.hpp>
 #include <traversal/sphere.hpp>
 #include <traversal/triangle.hpp>
@@ -9,6 +10,14 @@
 
 using namespace std;
 using namespace yapt;
+
+constexpr auto
+radius(const Sphere& prim) noexcept
+{ return prim.radius; }
+
+constexpr auto
+radius(const AABB& prim) noexcept
+{ return distance(centroid(prim), prim.vmax); }
 
 int main(int argc, char *argv[])
 {
@@ -42,24 +51,29 @@ int main(int argc, char *argv[])
 
     const auto sample_prim = [&](const auto& prim){ return pair(sample(sgen(), prim), posgen()); };
 
-    ret += test_prim("Disk",
+    const auto sample_selfoccluded_prim = [&](const auto& prim)
+                                          {
+                                              const auto sampled_point = sample(sgen(), prim);
+                                              const auto offset = sampled_point - centroid(prim);
+                                              const auto sign = transform([](const real val){ return std::copysign(1_r, val); },
+                                                                          offset);
+                                              const auto origin = sampled_point + Vec3(rad_dist.template operator()<3>(g)) * sign * radius(prim) + offset;
+                                              return pair(sampled_point, Point(origin));
+                                          };
+
+    ret += test_prim("Disk: sample/trace",
                      [&](){ return Disk(posgen(), normgen(), rad_dist(g)); },
                      sample_prim);
-    ret += test_prim("Sphere",
+    ret += test_prim("Sphere: sample/trace",
                      [&](){ return Sphere(posgen(), rad_dist(g)); },
-                     [&](const auto& prim)
-                     {
-                         const auto sampled_point = sample(sgen(), prim);
-                         const auto sign = transform([](const real val){ return std::copysign(1_r, val); },
-                                                     sampled_point);
-                         const auto offset = sign * prim.radius;
-                         const auto origin = Vec3(rad_dist.template operator()<3>(g)) * sign + offset;
-                         return pair(sampled_point, Point(origin));
-                     });
-    ret += test_prim("Triangle",
+                     sample_selfoccluded_prim);
+    ret += test_prim("AABB: sample/trace",
+                     [&](){ return AABB(posgen(), posgen()); },
+                     sample_selfoccluded_prim);
+    ret += test_prim("Triangle: sample/trace",
                      [&](){ return Triangle(posgen(), posgen(), posgen()); },
                      sample_prim);
-    ret += test_prim("Quad",
+    ret += test_prim("Quad: sample/trace",
                      [&]()
                      {
                          const auto v00 = posgen();

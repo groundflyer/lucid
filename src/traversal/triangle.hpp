@@ -75,7 +75,7 @@ namespace yapt
         return Normal(edge1.cross(edge2));
     }
 
-    namespace
+    namespace impl
     {
         constexpr void
         shift(real& x, real& y) noexcept
@@ -110,6 +110,6 @@ namespace yapt
            const Triangle_<PContainer>& prim) noexcept
     {
         const auto& [v0, v1, v2] = prim;
-        return triangle_sample(s, v0, v1, v2);
+        return Point(impl::triangle_sample(s, v0, v1, v2));
     }
 }
