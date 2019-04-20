@@ -4,8 +4,7 @@
 
 #pragma once
 
-#include <base/intersection.hpp>
-#include <base/ray.hpp>
+#include "aabb.hpp"
 
 
 namespace yapt
@@ -87,4 +86,13 @@ namespace yapt
     constexpr auto
     centroid(const Sphere_<Container>& prim) noexcept
     { return prim.center; }
+
+    template <template <typename, size_t> typename Container>
+    constexpr auto
+    bound(const Sphere_<Container>& prim) noexcept
+    {
+        const auto& [c, r] = prim;
+        const auto d = math::sqrt(3_r * math::pow<2>(r));
+        return AABB{Point(c - d), Point(c + d)};
+    }
 }

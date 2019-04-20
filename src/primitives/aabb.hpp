@@ -8,6 +8,8 @@
 #include <base/ray.hpp>
 #include <base/rng.hpp>
 
+#include <utils/identity.hpp>
+
 
 namespace yapt
 {
@@ -135,4 +137,9 @@ namespace yapt
         const auto& [vmin, vmax] = prim;
         return (vmin + vmax) * 0.5_r;
     }
+
+    template <template <typename, size_t> typename Container>
+    constexpr auto
+    bound(const AABB_<Container>& prim) noexcept
+    { return prim; }
 }
