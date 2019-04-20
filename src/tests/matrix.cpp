@@ -58,7 +58,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
 
     ret += test_property_n("{}({})"_format(mat_typestring, get_typeinfo_string(array<T, MN>{})),
                            array_mn_gen,
-                           [](const auto& feed) { return construct<Mat>(feed); },
+                           [](const auto& feed) { return std::make_from_tuple<Mat>(feed); },
                            array_assertion);
 
     ret += test_property_n("{}(array<{}, {}>)"_format(mat_typestring, t_typestring, N),
@@ -74,7 +74,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                    ret[i] = vgen();
                                return ret;
                            },
-                           [](const auto& feed) { return construct<Mat>(feed); },
+                           [](const auto& feed) { return std::make_from_tuple<Mat>(feed); },
                            [](const Mat& testing, const auto& feed)
                            {
                                bool ret = false;
@@ -96,7 +96,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                    ret[i] = array_n_gen();
                                return ret;
                            },
-                           [](const auto& feed) { return construct<Mat>(feed); },
+                           [](const auto& feed) { return std::make_from_tuple<Mat>(feed); },
                            [](const Mat& testing, const auto& feed)
                            {
                                bool ret = false;
@@ -130,7 +130,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
 
         ret += test_property_n("{0}({1}, Vector<{1}, {2}>, Matrix<{1}, {3}, {2}>)"_format(mat_typestring, t_typestring, N1, M1),
                                [&](){ return tuple(dist(g), svecgen(), smat_gen()); },
-                               [](const auto& feed) { return construct<Mat>(feed); },
+                               [](const auto& feed) { return std::make_from_tuple<Mat>(feed); },
                                [](const Mat& testing, const auto& feed)
                                {
                                    const auto& [scalar, vec, mat] = feed;

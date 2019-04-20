@@ -8,6 +8,8 @@
 #include <primitives/quad.hpp>
 #include <base/rng.hpp>
 
+#include <utils/seq.hpp>
+
 using namespace std;
 using namespace yapt;
 
@@ -71,7 +73,7 @@ int main(int argc, char *argv[])
                      [&](){ return AABB(posgen(), posgen()); },
                      sample_selfoccluded_prim);
     ret += test_prim("Triangle: sample/trace",
-                     [&](){ return Triangle(posgen(), posgen(), posgen()); },
+                     [&](){ return Triangle{posgen(), posgen(), posgen()}; },
                      sample_prim);
     ret += test_prim("Quad: sample/trace",
                      [&]()
@@ -80,7 +82,7 @@ int main(int argc, char *argv[])
                          const auto v01 = posgen();
                          const auto v10 = posgen();
                          const auto v11 = v00 + v01 + v10;
-                         return Quad(v00, v01, v11, v10);
+                         return Quad{v00, v01, v11, v10};
                      },
                      sample_prim);
 

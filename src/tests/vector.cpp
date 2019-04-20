@@ -40,7 +40,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
 
     ret += test_property_n("{}({})"_format(vec_typestring, get_typeinfo_string(array<T, N>{})),
                            argen,
-                           [](const array<T, N>& feed){ return construct<Vec>(feed); },
+                           [](const array<T, N>& feed){ return std::make_from_tuple<Vec>(feed); },
                            arass);
 
     ret += test_property_n("{}(array<{}, {}>)"_format(vec_typestring, t_typestring, N),
@@ -53,7 +53,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
         const constexpr auto N1 = N - 1;
         ret += test_property_n("{0}({1}, Vector<{1}, {2}>)"_format(vec_typestring, t_typestring, N1),
                                [&]() { return tuple(dist(g), Vector<T, N1>(dist.template operator()<N1>(g))); },
-                               [](const auto& feed) { return construct<Vec>(feed); },
+                               [](const auto& feed) { return std::make_from_tuple<Vec>(feed); },
                                [](const Vec& testing, const auto& feed)
                                {
                                    const auto& [v0, vv] = feed;
