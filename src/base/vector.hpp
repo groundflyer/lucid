@@ -397,16 +397,16 @@ namespace yapt
 			  template <typename, size_t> typename Container>
     Vector(Container<T, N> &&) -> Vector<T, N, Container>;
 
-    template <typename T, size_t N,
+    template <typename T1, typename T2, size_t N,
 			  template <typename, size_t> class Container1,
 			  template <typename, size_t> class Container2,
 			  typename BinaryOperation>
     constexpr auto
     transform(BinaryOperation binary_op,
-              const Vector<T, N, Container1> & a,
-			  const Vector<T, N, Container2> & b) noexcept
+              const Vector<T1, N, Container1> & a,
+			  const Vector<T2, N, Container2> & b) noexcept
     {
-		Vector<std::decay_t<std::result_of_t<BinaryOperation(T, T)>>, N> ret {};
+		Vector<std::decay_t<std::result_of_t<BinaryOperation(T1, T2)>>, N> ret {};
 
 		for (size_t i = 0; i < N; ++i)
 			ret[i] = binary_op(a[i], b[i]);
@@ -447,7 +447,7 @@ namespace yapt
     }
 
 
-    template <typename T, size_t N,
+    template <typename T1, typename T2, size_t N,
 			  template <typename, size_t> class Container1,
 			  template <typename, size_t> class Container2,
 			  typename BinaryOperation1,
@@ -456,8 +456,8 @@ namespace yapt
     constexpr auto
     transform_reduce(BinaryOperation1 binary_op1,
 					 BinaryOperation2 binary_op2,
-                     const Vector<T, N, Container1> & a,
-					 const Vector<T, N, Container2> & b,
+                     const Vector<T1, N, Container1> & a,
+					 const Vector<T2, N, Container2> & b,
 					 Init init) noexcept
     {
     	for (size_t i = 0; i < N; ++i)

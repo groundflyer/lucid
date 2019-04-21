@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
 
     RandomDistribution<real> big_dist(-1000_r, 1000_r);
     RandomDistribution<real> rad_dist(0.1_r, 1000_r);
+    RandomDistribution<bool> bern_dist(0.5);
     auto sgen = [&](){ return Vec2{rand<real, 2>(g)}; };
     auto posgen = [&](){ return Point(big_dist.template operator()<3>(g)); };
     auto normgen = [&](){ return Normal(big_dist.template operator()<3>(g)); };
@@ -80,14 +81,28 @@ int main(int argc, char *argv[])
 
     const auto sphere_gen = [&](){ return Sphere(posgen(), rad_dist(g)); };
 
-    const auto sphere_bound_gen = [&](const auto& prim)
-                                  {
-                                      const auto [target, origin] = sample_selfoccluded_prim(prim);
-                                      return tuple{bound(prim), target, origin};
-                                  };
+    const auto disk_gen = [&](){ return Disk(posgen(), normgen(), rad_dist(g)); };
+
+    // const auto sphere_bound_gen = [&](const auto& prim)
+    //                               {
+    //                                   const auto [target, origin] = sample_selfoccluded_prim(prim);
+    //                                   return tuple{bound(prim), target, origin};
+    //                               };
+
+    const auto bound_gen = [&](const auto& prim)
+                           {
+                               const AABB bbox = bound(prim);
+                               const Point sp = sample(sgen(), prim);
+                               const auto tb = Vector(bern_dist.template operator()<3>(g));
+                               const auto offset = transform([](const auto& a, const auto& b){ return a ? b : -b; },
+                                                             tb,
+                                                             Vec3(rad_dist.template operator()<3>(g)));
+                               const Point origin(bbox[tb] + offset);
+                               return tuple(bbox, sp, origin);
+                           };
 
     ret += intersect_test_prim("Disk: sample/trace",
-                               [&](){ return Disk(posgen(), normgen(), rad_dist(g)); },
+                               disk_gen,
                                sample_prim);
     ret += intersect_test_prim("Sphere: sample/trace",
                                sphere_gen,
@@ -111,7 +126,11 @@ int main(int argc, char *argv[])
 
     ret += bound_test_prim("Sphere: bound",
                            sphere_gen,
-                           sphere_bound_gen);
+                           bound_gen);
+
+    ret += bound_test_prim("Disk: bound",
+                           disk_gen,
+                           bound_gen);
 
     return ret;
 }

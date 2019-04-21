@@ -4,8 +4,7 @@
 
 #pragma once
 
-#include <base/intersection.hpp>
-#include <base/ray.hpp>
+#include "aabb.hpp"
 
 namespace yapt
 {
@@ -42,7 +41,7 @@ namespace yapt
 
 	template <template <typename, size_t> typename DiskContainer,
 			  template <typename, size_t> typename RayContainer>
-	constexpr auto
+	constexpr Intersection
 	intersect(const Ray_<RayContainer>& ray,
               const Disk_<DiskContainer>& prim) noexcept
     {
@@ -55,15 +54,15 @@ namespace yapt
 	template <template <typename, size_t> typename DiskContainer,
 			  template <typename, size_t> typename RayContainer,
               template <typename, size_t> typename IsectContainer>
-    constexpr auto
-    normal(const Ray_<RayContainer>& ray,
-           const Intersection_<IsectContainer>& isect,
+    constexpr Normal
+    normal(const Ray_<RayContainer>&,
+           const Intersection_<IsectContainer>&,
            const Disk_<DiskContainer>& prim) noexcept
-    { return normal(ray, isect, prim.plane); }
+    { return prim.normal; }
 
 	template <template <typename, size_t> typename SContainer,
               template <typename, size_t> typename PContainer>
-    constexpr auto
+    constexpr Point
     sample(const Vec2_<SContainer>& s,
            const Disk_<PContainer>& prim) noexcept
     {
@@ -77,7 +76,17 @@ namespace yapt
     }
 
     template <template <typename, size_t> typename Container>
-    constexpr auto
+    constexpr Point
     centroid(const Disk_<Container>& prim) noexcept
     { return prim.position; }
+
+    template <template <typename, size_t> typename Container>
+    constexpr AABB
+    bound(const Disk_<Container>& prim) noexcept
+    {
+        const auto& [p, n, r] = prim;
+        const auto h = math::abs(math::sqrt(1_r - math::pow<2>(n.dot(Vec3(0, 1, 0)))) * r);
+        const Vec3 offset(r, h, r);
+        return AABB{p - offset, p + offset};
+    }
 }

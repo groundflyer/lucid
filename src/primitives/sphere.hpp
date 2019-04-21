@@ -92,7 +92,6 @@ namespace yapt
     bound(const Sphere_<Container>& prim) noexcept
     {
         const auto& [c, r] = prim;
-        const auto d = math::sqrt(3_r * math::pow<2>(r));
-        return AABB{Point(c - d), Point(c + d)};
+        return AABB{c - r, c + r};
     }
 }
