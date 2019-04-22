@@ -11,41 +11,15 @@
 
 namespace yapt
 {
+    // v00, v01, v11, v10
     template <template <typename, size_t> typename Container>
-    struct Quad_
-    {
-        Point_<Container> v00;
-        Point_<Container> v01;
-        Point_<Container> v11;
-        Point_<Container> v10;
-
-        constexpr
-        Quad_() {}
-
-		template <template <typename, size_t> typename Container1,
-                  template <typename, size_t> typename Container2,
-                  template <typename, size_t> typename Container3,
-                  template <typename, size_t> typename Container4>
-        constexpr
-        Quad_(const Point_<Container1>& _v00,
-              const Point_<Container2>& _v01,
-              const Point_<Container3>& _v11,
-              const Point_<Container4>& _v10) :
-            v00(_v00), v01(_v01), v11(_v11), v10(_v10)
-        {}
-    };
-
-    template <template <typename, size_t> typename Container>
-    Quad_(const Point_<Container>&,
-          const Point_<Container>&,
-          const Point_<Container>&,
-          const Point_<Container>&) -> Quad_<Container>;
+    using Quad_ = std::array<Point_<Container>, 4>;
 
     using Quad = Quad_<std::array>;
 
     template <template <typename, size_t> typename QuadContainer,
 			  template <typename, size_t> typename RayContainer>
-    constexpr auto
+    constexpr Intersection
     intersect(const Ray_<RayContainer>& ray,
               const Quad_<QuadContainer>& prim) noexcept
     {
@@ -157,34 +131,35 @@ namespace yapt
 	template <template <typename, size_t> typename QuadContainer,
 			  template <typename, size_t> typename RayContainer,
               template <typename, size_t> typename IsectContainer>
-    constexpr auto
+    constexpr Normal
     normal(const Ray_<RayContainer>&,
            const Intersection_<IsectContainer>&,
            const Quad_<QuadContainer>& prim) noexcept
     {
-        const auto e01 = prim.v10 - prim.v00;
-        const auto e03 = prim.v01 - prim.v00;
+        const auto e01 = std::get<3>(prim) - std::get<0>(prim);
+        const auto e03 = std::get<1>(prim) - std::get<0>(prim);
         return Normal(e01.cross(e03));
     }
 
 	template <template <typename, size_t> typename SContainer,
               template <typename, size_t> typename PContainer>
-    constexpr auto
+    constexpr Point
     sample(const Vec2_<SContainer>& s,
            const Quad_<PContainer>& prim) noexcept
     {
-        const auto& a = prim.v00;
-        const auto& b = prim.v11;
+        const auto& [a, c1, b, c2] = prim;
         const auto& [t1, t2] = s;
-        const auto& c = t1 > 0.5_r ? prim.v01 : prim.v10;
-        return Point(impl::triangle_sample(Vec2(resample(t1), t2), a, b, c));
+        const auto& c = t1 > 0.5_r ? c1 : c2;
+        return Point(detail::triangle_sample(Vec2(resample(t1), t2), a, b, c));
     }
 
     template <template <typename, size_t> typename Container>
-    constexpr auto
+    constexpr Point
     centroid(const Quad_<Container>& prim) noexcept
-    {
-        const auto& [v0, v1, v2, v3] = prim;
-        return Point((v0 + v1 + v2 + v3) * 0.25_r);
-    }
+    { return centroid(detail::bound(prim)); }
+
+    template <template <typename, size_t> typename Container>
+    constexpr AABB
+    bound(const Quad_<Container>& prim) noexcept
+    { return detail::bound(prim); }
 }

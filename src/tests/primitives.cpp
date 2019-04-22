@@ -51,21 +51,17 @@ int main(int argc, char *argv[])
 
     const auto bound_property = [](const auto& testing, const auto& prim) noexcept
                                 {
-                                    const auto& [bound, target, origin] = testing;
-                                    const Ray tohit{origin, Normal(target - origin)};
-                                    const auto hit_prim = intersect(tohit, prim);
-                                    const auto hit_bound = intersect(tohit, bound);
-                                    return !hit_bound && hit_prim.t < hit_bound.t;
+                                    const auto& [bound, ray] = testing;
+                                    const auto hit_prim = intersect(ray, prim);
+                                    const auto hit_bound = intersect(ray, bound);
+                                    return !hit_bound && hit_prim && hit_prim.t < hit_bound.t;
                                 };
 
     const auto test_prim = [&](auto&& name, auto&& gen, auto&& sampler, auto&& property)
-                           { return test_property(num_tests, 0.012, name, gen, sampler, property); };
+                           { return test_property(num_tests, 0.022, name, gen, sampler, property); };
 
     const auto intersect_test_prim = [&](auto&& name, auto&& gen, auto&& sampler)
                                      { return test_prim(name, gen, sampler, sample_intersect_property); };
-
-    const auto bound_test_prim = [&](auto&& name, auto&& gen, auto&& sampler)
-                                 { return test_prim(name, gen, sampler, bound_property); };
 
     const auto sample_prim = [&](const auto& prim){ return pair(sample(sgen(), prim), posgen()); };
 
@@ -79,16 +75,6 @@ int main(int argc, char *argv[])
                                               return pair(sampled_point, Point(origin));
                                           };
 
-    const auto sphere_gen = [&](){ return Sphere(posgen(), rad_dist(g)); };
-
-    const auto disk_gen = [&](){ return Disk(posgen(), normgen(), rad_dist(g)); };
-
-    // const auto sphere_bound_gen = [&](const auto& prim)
-    //                               {
-    //                                   const auto [target, origin] = sample_selfoccluded_prim(prim);
-    //                                   return tuple{bound(prim), target, origin};
-    //                               };
-
     const auto bound_gen = [&](const auto& prim)
                            {
                                const AABB bbox = bound(prim);
@@ -98,8 +84,26 @@ int main(int argc, char *argv[])
                                                              tb,
                                                              Vec3(rad_dist.template operator()<3>(g)));
                                const Point origin(bbox[tb] + offset);
-                               return tuple(bbox, sp, origin);
+                               return pair{bbox, Ray(origin, Normal(sp - origin))};
                            };
+
+    const auto bound_test_prim = [&](auto&& name, auto&& gen)
+                                 { return test_prim(name, gen, bound_gen, bound_property); };
+
+    const auto sphere_gen = [&](){ return Sphere(posgen(), rad_dist(g)); };
+
+    const auto disk_gen = [&](){ return Disk(posgen(), normgen(), rad_dist(g)); };
+
+    const auto triangle_gen = [&](){ return Triangle{posgen(), posgen(), posgen()}; };
+
+    const auto quad_gen = [&]()
+                          {
+                              const auto v00 = posgen();
+                              const auto v01 = posgen();
+                              const auto v10 = posgen();
+                              const auto v11 = v00 + v01 + v10;
+                              return Quad{v00, v01, v11, v10};
+                          };
 
     ret += intersect_test_prim("Disk: sample/trace",
                                disk_gen,
@@ -111,26 +115,24 @@ int main(int argc, char *argv[])
                                [&](){ return AABB(posgen(), posgen()); },
                                sample_selfoccluded_prim);
     ret += intersect_test_prim("Triangle: sample/trace",
-                               [&](){ return Triangle{posgen(), posgen(), posgen()}; },
+                               triangle_gen,
                                sample_prim);
     ret += intersect_test_prim("Quad: sample/trace",
-                               [&]()
-                               {
-                                   const auto v00 = posgen();
-                                   const auto v01 = posgen();
-                                   const auto v10 = posgen();
-                                   const auto v11 = v00 + v01 + v10;
-                                   return Quad{v00, v01, v11, v10};
-                               },
+                               quad_gen,
                                sample_prim);
 
-    ret += bound_test_prim("Sphere: bound",
-                           sphere_gen,
-                           bound_gen);
+    ret += bound_test_prim("Sphere: bound", sphere_gen);
 
-    ret += bound_test_prim("Disk: bound",
-                           disk_gen,
-                           bound_gen);
+    ret += bound_test_prim("Disk: bound", disk_gen);
+
+    ret += bound_test_prim("Triangle: bound", triangle_gen);
+
+    ret += bound_test_prim("Quad: bound", quad_gen);
+
+    if(ret)
+        fmt::print("{} tests failed\n", ret);
+    else
+        fmt::print("All tests passed\n");
 
     return ret;
 }

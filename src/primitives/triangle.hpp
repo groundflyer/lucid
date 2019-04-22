@@ -4,45 +4,20 @@
 
 #pragma once
 
-#include <base/intersection.hpp>
-#include <base/ray.hpp>
+#include "aabb.hpp"
 
 
 namespace yapt
 {
     template <template <typename, size_t> typename Container>
-    struct Triangle_
-    {
-        Point_<Container> v0;
-        Point_<Container> v1;
-        Point_<Container> v2;
-
-        constexpr
-        Triangle_() {}
-
-		template <template <typename, size_t> typename Container1,
-                  template <typename, size_t> typename Container2,
-                  template <typename, size_t> typename Container3>
-        constexpr
-        Triangle_(const Point_<Container1>& _v0,
-                  const Point_<Container2>& _v1,
-                  const Point_<Container3>& _v2) :
-        v0(_v0), v1(_v1), v2(_v2)
-        {}
-    };
-
-
-    template <template <typename, size_t> typename Container>
-    Triangle_(const Point_<Container>&,
-              const Point_<Container>&,
-              const Point_<Container>&) -> Triangle_<Container>;
+    using Triangle_ = std::array<Point_<Container>, 3>;
 
     using Triangle = Triangle_<std::array>;
 
 
 	template <template <typename, size_t> typename TriangleContainer,
 			  template <typename, size_t> typename RayContainer>
-	constexpr auto
+	constexpr Intersection
 	intersect(const Ray_<RayContainer>& ray,
               const Triangle_<TriangleContainer>& prim) noexcept
     {
@@ -64,7 +39,7 @@ namespace yapt
 	template <template <typename, size_t> typename TriangleContainer,
 			  template <typename, size_t> typename RayContainer,
               template <typename, size_t> typename IsectContainer>
-    constexpr auto
+    constexpr Normal
     normal(const Ray_<RayContainer>&,
            const Intersection_<IsectContainer>&,
            const Triangle_<TriangleContainer>& prim) noexcept
@@ -75,7 +50,7 @@ namespace yapt
         return Normal(edge1.cross(edge2));
     }
 
-    namespace impl
+    namespace detail
     {
         constexpr void
         shift(real& x, real& y) noexcept
@@ -101,23 +76,44 @@ namespace yapt
 
             return a * t1 + b * t2 + c * (1_r - t1 - t2);
         }
+
+        template <typename Prim>
+        constexpr auto
+        bound(const Prim& prim) noexcept
+        {
+            const Point vmin(std::apply([](const auto& v1, const auto& ... verts)
+                                        {
+                                            return reduce([](const auto& a, const auto& b){ return yapt::min(a, b);},
+                                                          Vec3(v1),
+                                                          Vec3(verts)...);
+                                        },
+                    prim));
+
+            const Point vmax(std::apply([](const auto& v1, const auto& ... verts)
+                                        {
+                                            return reduce([](const auto& a, const auto& b){ return yapt::max(a, b);},
+                                                          Vec3(v1),
+                                                          Vec3(verts)...);
+                                        },
+                    prim));
+            return AABB{vmin, vmax};
+        }
     }
 
 	template <template <typename, size_t> typename SContainer,
               template <typename, size_t> typename PContainer>
-    constexpr auto
+    constexpr Point
     sample(const Vec2_<SContainer>& s,
            const Triangle_<PContainer>& prim) noexcept
-    {
-        const auto& [v0, v1, v2] = prim;
-        return Point(impl::triangle_sample(s, v0, v1, v2));
-    }
+    { return Point(std::apply([&](const auto& ... verts){ return detail::triangle_sample(s, verts...); }, prim)); }
 
     template <template <typename, size_t> typename Container>
-    constexpr auto
+    constexpr Point
     centroid(const Triangle_<Container>& prim) noexcept
-    {
-        const auto& [v0, v1, v2] = prim;
-        return Point((v0 + v1 + v2) / 3_r);
-    }
+    { return centroid(detail::bound(prim)); }
+
+    template <template <typename, size_t> typename Container>
+    constexpr AABB
+    bound(const Triangle_<Container>& prim) noexcept
+    { return detail::bound(prim); }
 }

@@ -177,6 +177,18 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                                return assertion(testing, vec1);
                            });
 
+    ret += test_property_n("min({0}, {0}), max({0}, {0})"_format(vec_typestring), vvgen,
+                           [](const auto &feed)
+                           {
+                               const auto& [vec1, vec2] = feed;
+                               return pair{yapt::min(vec1, vec2), yapt::max(vec1, vec2)};
+                           },
+                           [&](const auto& testing, const auto&)
+                           {
+                               const auto& [vmin, vmax] = testing;
+                               return any(vmin > vmax);
+                           });
+
     // vector and vector-divizor generator
     auto vvdgen = [&]() { return pair(vgen(), Vec(divdist.template operator()<N>(g)) * signgen()); };
 
