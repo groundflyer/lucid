@@ -28,8 +28,6 @@ int main(int argc, char *argv[])
     random_device rd;
     default_random_engine g(rd());
 
-    init_log();
-
     int ret = 0;
 
     RandomDistribution<real> big_dist(-1000_r, 1000_r);

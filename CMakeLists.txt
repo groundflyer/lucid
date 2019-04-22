@@ -85,7 +85,9 @@ if(USE_DOUBLE_PRECISION)
 endif()
 message(STATUS "Floating-point format: ${_precision} precision")
 
-# spdlog
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/spdlog/include)
+# fmt
+set(BUILD_SHARED_LIBS FALSE)
+add_subdirectory(fmt EXCLUDE_ALL)
+# include_directories(${CMAKE_CURRENT_SOURCE_DIR}/fmt/include)
 
 add_subdirectory(src)

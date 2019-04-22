@@ -355,11 +355,6 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
             &std::get<0>(c) != &mat.at(2, 0) ||
             &std::get<0>(d) != &mat.at(3, 0);
 
-        if(asrt)
-            spdlog::get("fail")->error("const auto& [a, b, c, d] = {}", mat_typestring);
-        else
-            spdlog::get("ok")->info("const auto& [a, b, c, d] = {}", mat_typestring);
-
         ret += asrt;
     }
 
@@ -388,15 +383,12 @@ int main(int argc, char* argv[])
     random_device rd;
     default_random_engine g(rd());
 
-    init_log();
-
     const int ret = test_n(g, num_tests, Indicies{});
 
-    auto log = spdlog::get("debug");
     if(ret)
-        log->info("{} tests failed.", ret);
+        fmt::print("{} tests failed.\n", ret);
     else
-        log->info("All tests passed successfully.");
+        fmt::print("All tests passed.\n");
 
     return ret;
 }

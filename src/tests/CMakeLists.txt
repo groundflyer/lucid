@@ -12,5 +12,6 @@ foreach(src ${test_srcs})
   endif()
 
   add_test(NAME ${name} COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${name})
+  target_link_libraries(${name} PRIVATE fmt-header-only)
   message(STATUS "Added test: ${name}")
 endforeach()

@@ -7,10 +7,8 @@
 #include <base/vector.hpp>
 #include <base/matrix.hpp>
 
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/sinks/stdout_sinks.h>
-#include <spdlog/fmt/ostr.h>
+#include <format>
+#include <fmt/ostream.h>
 
 #include <tuple>
 #include <sstream>
@@ -89,18 +87,6 @@ operator<<(std::ostream& os, pair<T1, T2> arg)
 }
 }
 
-void init_log(const bool debug = false)
-{
-    auto log_ok = spdlog::stdout_color_st("ok");
-    auto log_fail = spdlog::stderr_color_st("fail");
-    auto log_debug = spdlog::stdout_logger_st("debug");
-    log_ok->set_pattern("%v: %^OK%$");
-    log_fail->set_pattern("%v: %^FAIL%$");
-    log_debug->set_pattern("%v");
-    if(debug)
-        log_debug->set_level(spdlog::level::debug);
-}
-
 template <typename Testing, typename Property, typename Generator>
 auto
 test_property(const size_t n,
@@ -110,10 +96,6 @@ test_property(const size_t n,
               Testing&& testing,
               Property&& property)
 {
-    auto log_ok = spdlog::get("ok");
-    auto log_fail = spdlog::get("fail");
-    auto log_debug = spdlog::get("debug");
-
     size_t sum = 0;
     for(size_t i = 0; i < n; ++i)
     {
@@ -126,10 +108,13 @@ test_property(const size_t n,
     const auto error = static_cast<double>(sum) / static_cast<double>(n);
 
     const auto ret = error > threshold;
+    static const constexpr char RED[] = "\033[31m";
+    static const constexpr char GREEN[] = "\033[32m";
+    static const constexpr char RESET[] = "\033[0m";
     if(ret)
-        log_fail->error("{}: [error: {}%]", property_name, error * 100);
+        fmt::print("{}FAIL{} {}% {}\n", RED, RESET, error * 100, property_name);
     else
-        log_ok->info("{}: [error: {}%]", property_name, error * 100);
+        fmt::print("{}OK{} {}% {}\n", GREEN, RESET, error * 100, property_name);
 
     return ret > 0;
 }

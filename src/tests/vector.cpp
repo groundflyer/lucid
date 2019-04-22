@@ -263,11 +263,6 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
             &z != &std::get<2>(vec) ||
             &w != &std::get<3>(vec);
 
-        if(asrt)
-            spdlog::get("fail")->error("const auto& [x, y, z, w] = {}", vec_typestring);
-        else
-            spdlog::get("ok")->info("const auto& [x, y, z, w] = {}", vec_typestring);
-
         ret += asrt;
     }
 
@@ -331,18 +326,15 @@ int main(int argc, char* argv[])
     random_device rd;
     default_random_engine g(rd());
 
-    init_log();
-
     Indicies idxs;
 
     ret += test_n(g, num_tests, idxs);
     ret += boolean_test(g, num_tests, idxs);
 
-    auto log = spdlog::get("debug");
     if(ret)
-        log->info("{} tests failed.", ret);
+        fmt::print("{} tests failed.\n", ret);
     else
-        log->info("All tests passed successfully.");
+        fmt::print("All tests passed.\n");
 
     return ret;
 }
