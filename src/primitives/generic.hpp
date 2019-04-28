@@ -7,8 +7,8 @@
 #include "aabb.hpp"
 #include "sphere.hpp"
 #include "triangle.hpp"
+#include "quad.hpp"
 #include "disk.hpp"
-#include "plane.hpp"
 
 #include <variant>
 
@@ -19,15 +19,15 @@ namespace yapt
     using GenericPrimitive_ = std::variant<AABB_<Container>,
                                            Sphere_<Container>,
                                            Triangle_<Container>,
-                                           Disk_<Container>,
-                                           Plane_<Container>>;
+                                           Quad_<Container>,
+                                           Disk_<Container>>;
 
-    using GenericPrimitive = std::variant<AABB, Sphere, Triangle, Disk, Plane>;
+    using GenericPrimitive = std::variant<AABB, Sphere, Triangle, Quad, Disk>;
 
 
     template <template <typename, size_t> typename PrimContainer,
 			  template <typename, size_t> typename RayContainer>
-    constexpr auto
+    constexpr Intersection
     intersect(const Ray_<RayContainer>& ray,
               const GenericPrimitive_<PrimContainer>& prim) noexcept
     {
@@ -39,13 +39,42 @@ namespace yapt
 	template <template <typename, size_t> typename PrimContainer,
 			  template <typename, size_t> typename RayContainer,
               template <typename, size_t> typename IsectContainer>
-    constexpr auto
-    compute_normal(const Ray_<RayContainer>& ray,
-                   const Intersection_<IsectContainer>& isect,
-                   const GenericPrimitive_<PrimContainer>& prim) noexcept
+    constexpr Normal
+    normal(const Ray_<RayContainer>& ray,
+           const Intersection_<IsectContainer>& isect,
+           const GenericPrimitive_<PrimContainer>& prim) noexcept
     {
         return std::visit([&](const auto& held_prim)
-                          { return compute_normal(ray, isect, held_prim); },
-                          prim);
+                          { return normal(ray, isect, held_prim); },
+            prim);
+    }
+
+	template <template <typename, size_t> typename SContainer,
+              template <typename, size_t> typename PContainer>
+    constexpr Point
+    sample(const Vec2_<SContainer>& s,
+           const GenericPrimitive_<PContainer>& prim) noexcept
+    {
+        return std::visit([&](const auto& held_prim)
+                          { return sample(s, held_prim); },
+            prim);
+    }
+
+    template <template <typename, size_t> typename Container>
+    constexpr Point
+    centroid(const GenericPrimitive_<Container>& prim) noexcept
+    {
+        return std::visit([](const auto& held_prim)
+                          { return centroid(held_prim); },
+            prim);
+    }
+
+    template <template <typename, size_t> typename Container>
+    constexpr AABB
+    bound(const GenericPrimitive_<Container>& prim) noexcept
+    {
+        return std::visit([](const auto& held_prim)
+                          { return bound(held_prim); },
+            prim);
     }
 }

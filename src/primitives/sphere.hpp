@@ -35,7 +35,7 @@ namespace yapt
 
 	template <template <typename, size_t> typename SphereContainer,
 			  template <typename, size_t> typename RayContainer>
-	constexpr auto
+	constexpr Intersection
 	intersect(const Ray_<RayContainer>& ray,
               const Sphere_<SphereContainer>& prim) noexcept
 	{
@@ -56,7 +56,7 @@ namespace yapt
 	template <template <typename, size_t> typename SphereContainer,
 			  template <typename, size_t> typename RayContainer,
               template <typename, size_t> typename IsectContainer>
-    constexpr auto
+    constexpr Normal
     normal(const Ray_<RayContainer>& ray,
            const Intersection_<IsectContainer>& isect,
            const Sphere_<SphereContainer>& prim) noexcept
@@ -68,7 +68,7 @@ namespace yapt
 
 	template <template <typename, size_t> typename SContainer,
               template <typename, size_t> typename PContainer>
-    constexpr auto
+    constexpr Point
     sample(const Vec2_<SContainer>& s,
            const Sphere_<PContainer>& prim) noexcept
     {
@@ -83,12 +83,12 @@ namespace yapt
     }
 
     template <template <typename, size_t> typename Container>
-    constexpr auto
+    constexpr Point
     centroid(const Sphere_<Container>& prim) noexcept
     { return prim.center; }
 
     template <template <typename, size_t> typename Container>
-    constexpr auto
+    constexpr AABB
     bound(const Sphere_<Container>& prim) noexcept
     {
         const auto& [c, r] = prim;

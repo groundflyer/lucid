@@ -6,6 +6,7 @@
 #include <primitives/sphere.hpp>
 #include <primitives/triangle.hpp>
 #include <primitives/quad.hpp>
+#include <primitives/generic.hpp>
 #include <base/rng.hpp>
 
 #include <utils/seq.hpp>
@@ -88,6 +89,8 @@ int main(int argc, char *argv[])
     const auto bound_test_prim = [&](auto&& name, auto&& gen)
                                  { return test_prim(name, gen, bound_gen, bound_property); };
 
+    const auto aabb_gen = [&](){ return AABB(posgen(), posgen()); };
+
     const auto sphere_gen = [&](){ return Sphere(posgen(), rad_dist(g)); };
 
     const auto disk_gen = [&](){ return Disk(posgen(), normgen(), rad_dist(g)); };
@@ -103,6 +106,17 @@ int main(int argc, char *argv[])
                               return Quad{v00, v01, v11, v10};
                           };
 
+    const auto all_gens =
+        tuple{[&]() { return GenericPrimitive(sphere_gen()); },
+              [&]() { return GenericPrimitive(triangle_gen()); },
+              [&]() { return GenericPrimitive(quad_gen()); },
+              [&]() { return GenericPrimitive(disk_gen()); }};
+
+    RandomDistribution<size_t> prim_choose(0, std::tuple_size_v<decltype(all_gens)>);
+
+    const auto rand_prim_gen = [&]()
+                                  { return switcher(prim_choose(g), all_gens); };
+
     ret += intersect_test_prim("Disk: sample/trace",
                                disk_gen,
                                sample_prim);
@@ -110,7 +124,7 @@ int main(int argc, char *argv[])
                                sphere_gen,
                                sample_selfoccluded_prim);
     ret += intersect_test_prim("AABB: sample/trace",
-                               [&](){ return AABB(posgen(), posgen()); },
+                               aabb_gen,
                                sample_selfoccluded_prim);
     ret += intersect_test_prim("Triangle: sample/trace",
                                triangle_gen,
@@ -126,6 +140,8 @@ int main(int argc, char *argv[])
     ret += bound_test_prim("Triangle: bound", triangle_gen);
 
     ret += bound_test_prim("Quad: bound", quad_gen);
+
+    ret += bound_test_prim("GenericPrimitive: bound", rand_prim_gen);
 
     if(ret)
         fmt::print("{} tests failed\n", ret);
