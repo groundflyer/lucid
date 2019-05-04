@@ -112,9 +112,9 @@ test_property(const size_t n,
     static const constexpr char GREEN[] = "\033[32m";
     static const constexpr char RESET[] = "\033[0m";
     if(ret)
-        fmt::print("{}FAIL{} {}% {}\n", RED, RESET, error * 100, property_name);
+        fmt::print("{}FAIL{} {:.3f}% {}\n", RED, RESET, error * 100, property_name);
     else
-        fmt::print("{}OK{} {}% {}\n", GREEN, RESET, error * 100, property_name);
+        fmt::print("{}OK{} {:.3f}% {}\n", GREEN, RESET, error * 100, property_name);
 
     return ret > 0;
 }

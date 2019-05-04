@@ -113,11 +113,11 @@ namespace yapt
         const auto sign = std::copysign(1_r, nz);
         const auto a = -1_r / (sign + nz);
         const auto b = nx * ny * a;
-		return std::pair(Normal(1_r + sign * math::pow<2>(nx) * a,
+		return std::pair(Normal(1_r + sign * pow<2>(nx) * a,
                                 sign * b,
                                 -sign * nx),
                          Normal(b,
-                                sign + math::pow<2>(ny) * a,
+                                sign + pow<2>(ny) * a,
                                 -ny));
     }
 }

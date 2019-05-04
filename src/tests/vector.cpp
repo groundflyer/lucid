@@ -113,7 +113,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
 
     // random sign generator
     auto signgen = [&, bdist = RandomDistribution<bool>(0.5)]() mutable
-                   { return static_cast<T>(math::minus_one_pow(bdist(g))); };
+                   { return static_cast<T>(minus_one_pow(bdist(g))); };
 
     // vector and divisor generator
     auto vdgen = [&]() { return pair(vgen(), divdist(g) * signgen()); };
@@ -225,12 +225,12 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
         ret += test_property_n("{}: A dot A = length A"_format(vec_typestring),
                                vgen,
                                [](const Vec& feed) { return dot(feed, feed); },
-                               [](const T testing, const Vec& feed) { return !math::almost_equal(math::sqrt(testing), length(feed), 5); });
+                               [](const T testing, const Vec& feed) { return !almost_equal(math::sqrt(testing), length(feed), 5); });
 
         ret += test_property_n("normalize({}) = 1"_format(vec_typestring),
                                vgen,
                                [](const Vec& feed) { return normalize(feed); },
-                               [](const Vec& testing, Vec) { return !math::almost_equal(length(testing), T{1}, 5); });
+                               [](const Vec& testing, Vec) { return !almost_equal(length(testing), T{1}, 5); });
 
         if constexpr (N > 2)
             ret += test_property(num_tests,
@@ -247,8 +247,8 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                                      const auto& [a, b] = feed;
                                      const auto at = a.dot(testing);
                                      const auto bt = b.dot(testing);
-                                     const constexpr auto ulp = math::pow<sizeof(T)>(is_same_v<T, double> ? 100ul : 55u);
-                                     return !(math::almost_equal(at, T{0}, ulp) || math::almost_equal(bt, T{0}, ulp));
+                                     const constexpr auto ulp = pow<sizeof(T)>(is_same_v<T, double> ? 100ul : 55u);
+                                     return !(almost_equal(at, T{0}, ulp) || almost_equal(bt, T{0}, ulp));
                                  });
     }
 

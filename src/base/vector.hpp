@@ -9,7 +9,7 @@
 // for Vector's Container
 #include <utils/static_span.hpp>
 #include <utils/debug.hpp>
-#include "math.hpp"
+#include <utils/math.hpp>
 
 #include <array>
 #include <limits>
@@ -49,7 +49,7 @@ namespace yapt
     	for (size_t i = 0; i < N; ++i)
     	    for (size_t j = 0; j < N; ++j)
 				for (size_t k = 0; k < N; ++k)
-					ret[i] += math::sgn(std::array<size_t, 3>({{i,j,k}})) * a[j] * b[k];
+					ret[i] += sgn(std::array<size_t, 3>({{i,j,k}})) * a[j] * b[k];
 
     	return ret;
     }
@@ -491,7 +491,7 @@ namespace yapt
     	      template <typename, size_t> class Container>
     constexpr auto
     length2(const Vector<T, N, Container> & a) noexcept
-    { return transform_reduce(math::pow<2, T>, std::plus<T>(), a, T{0}); }
+    { return transform_reduce(pow<2, T>, std::plus<T>(), a, T{0}); }
 
     template <typename T, size_t N,
 			  template <typename, size_t> class Container>
@@ -507,7 +507,7 @@ namespace yapt
     {
     	const auto l = length(a);
         if constexpr(std::is_floating_point_v<T>)
-            return !(math::almost_equal(l, T{1}, 5) || math::almost_equal(l, T{0}, 5)) ? a / l : a;
+            return !(almost_equal(l, T{1}, 5) || almost_equal(l, T{0}, 5)) ? a / l : a;
         else
             return !(l == 1 && l == 0) ? a / l : a;
     }
@@ -586,7 +586,7 @@ namespace yapt
     almost_equal(const Vector<T, N, Container1>& va,
                  const Vector<T, N, Container2>& vb,
                  const ULP ulp)
-    { return transform([ulp](const T a, const T b){ return math::almost_equal(a, b, ulp); }, va, vb); }
+    { return transform([ulp](const T a, const T b){ return almost_equal(a, b, ulp); }, va, vb); }
 
     template <typename T, size_t N, typename ULP,
     	      template <typename, size_t> class Container1>
@@ -594,7 +594,7 @@ namespace yapt
     almost_equal(const Vector<T, N, Container1>& va,
                  const T b,
                  const ULP ulp)
-    { return transform([ulp, b](const T a){ return math::almost_equal(a, b, ulp); }, va); }
+    { return transform([ulp, b](const T a){ return almost_equal(a, b, ulp); }, va); }
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container>
@@ -602,7 +602,7 @@ namespace yapt
     fit(const Vector<T, N, Container>& v,
         const T minval,
         const T maxval) noexcept
-    { return transform([minval, maxval](const T& val){ return math::fit(minval, maxval, val); }, v); }
+    { return transform([minval, maxval](const T& val){ return fit(minval, maxval, val); }, v); }
 
     template <typename T, size_t N,
     	      template <typename, size_t> class Container>

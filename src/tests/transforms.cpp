@@ -2,7 +2,6 @@
 // transforms.cpp -- 
 #include "property_test.hpp"
 #include <base/transforms.hpp>
-
 #include <base/rng.hpp>
 
 using namespace yapt;
@@ -14,8 +13,6 @@ int main(int argc, char* argv[])
 
     random_device rd;
     default_random_engine g(rd());
-
-    init_log();
 
     int ret = 0;
 
@@ -68,7 +65,7 @@ int main(int argc, char* argv[])
                                const auto ot = apply_transform(testing, o);
                                const auto l = length(o);
                                const auto lt = length(ot);
-                               return !(math::almost_equal(1_r, det(Mat3(testing)), ULP) && math::almost_equal(l, lt, ULP)) || all(almost_equal(o, ot, ULP));
+                               return !(almost_equal(1_r, det(Mat3(testing)), ULP) && almost_equal(l, lt, ULP)) || all(almost_equal(o, ot, ULP));
                            });
 
     ret += test_property(num_tests,
@@ -96,9 +93,14 @@ int main(int argc, char* argv[])
                                const auto& [a, b] = testing;
                                const Mat3 mm{a, b, feed};
                                const auto zero = Mat3::identity() - mm.dot(transpose(mm));
-                               const constexpr auto ulp = math::pow<sizeof(real)>(60ul);
+                               const constexpr auto ulp = pow<sizeof(real)>(60ul);
                                return any(!almost_equal(zero.flat_ref(), 0_r, ulp));
                            });
+
+    if(ret)
+        fmt::print("{} tests failed\n", ret);
+    else
+        fmt::print("All tests passed\n");
 
     return ret;
 }

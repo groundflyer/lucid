@@ -127,7 +127,7 @@ namespace yapt
         const auto s3 = math::fmod(2_r * (s1 + s2), 1_r);
         const auto shift = static_cast<unsigned>(300_r * math::fmod(s1 + s2 + s3, 1_r));
         const auto [a, b] = impl::diag(prim, shift, s3 > 0.5_r);
-        return math::lerp(a, b, roll(Vec3(resample(s1), resample(s2), 0_r), shift));
+        return lerp(a, b, roll(Vec3(resample(s1), resample(s2), 0_r), shift));
     }
 
     template <template <typename, size_t> typename Container>

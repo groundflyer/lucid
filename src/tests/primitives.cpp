@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
                                                const Ray tomiss{origin, Normal(origin - target)};
                                                const auto hit = intersect(tohit, prim);
                                                const auto miss = intersect(tomiss, prim);
-                                               return !hit && miss && !math::almost_equal(hit.t, distance(target, origin), 10);
+                                               return !hit && miss && !almost_equal(hit.t, distance(target, origin), 10);
                                            };
 
     const auto bound_property = [](const auto& testing, const auto& prim) noexcept

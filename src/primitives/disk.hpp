@@ -85,7 +85,7 @@ namespace yapt
     bound(const Disk_<Container>& prim) noexcept
     {
         const auto& [p, n, r] = prim;
-        const auto h = math::abs(math::sqrt(1_r - math::pow<2>(n.dot(Vec3(0, 1, 0)))) * r);
+        const auto h = math::abs(math::sqrt(1_r - pow<2>(n.dot(Vec3(0, 1, 0)))) * r);
         const Vec3 offset(r, h, r);
         return AABB{p - offset, p + offset};
     }

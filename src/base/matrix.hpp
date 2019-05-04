@@ -601,11 +601,11 @@ namespace yapt
 			};
 
 		auto get_elem = [&]()
-			{ return math::sgn(idxs) * product(); };
+			{ return sgn(idxs) * product(); };
 
 		T ret = get_elem();
 
-		const constexpr size_t rank = math::fac(M) - 1;
+		const constexpr size_t rank = fac(M) - 1;
 		for (size_t _ = 0; _ < rank; ++_)
 		{
 			std::next_permutation(idxs.begin(), idxs.end());
@@ -654,7 +654,7 @@ namespace yapt
 
 		for (size_t i = 0; i < M; ++i)
 			for(size_t j = 0; j < N; ++j)
-				ret[i][j] = math::minus_one_pow(i+j) * det(minor_matrix(a, i, j));
+				ret[i][j] = minus_one_pow(i+j) * det(minor_matrix(a, i, j));
 
 		return ret;
     }
@@ -668,7 +668,7 @@ namespace yapt
         const auto is_zero = [](const T& val)
                              {
                                  if constexpr (std::is_floating_point_v<T>)
-                                     return math::almost_equal(val, T{0}, 5);
+                                     return almost_equal(val, T{0}, 5);
                                  else
                                      return val == 0;
                              };

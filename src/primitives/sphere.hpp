@@ -43,7 +43,7 @@ namespace yapt
 		const auto a = d.dot(d);
 		const auto pc = o - prim.center;
 		const auto b = d.dot(pc * 2_r);
-		const auto c = pc.dot(pc) - math::pow<2>(prim.radius);
+		const auto c = pc.dot(pc) - pow<2>(prim.radius);
 		const auto D = b * b - 4_r * a * c;
         const auto factor = 0.5_r * a;
         const auto sqrtD = math::sqrt(D);
@@ -76,7 +76,7 @@ namespace yapt
         const auto& [t1, t2] = s;
         const auto u = 2_r * t1 - 1;
         const auto theta = 2_r * math::PI<real> * t2;
-        const auto _u = math::sqrt(1_r - math::pow<2>(u));
+        const auto _u = math::sqrt(1_r - pow<2>(u));
         return Point(_u * math::cos(theta),
                      _u * math::sin(theta),
                      u) * r + c;

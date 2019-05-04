@@ -10,7 +10,9 @@
 #include <type_traits>
 
 
-namespace yapt::math
+namespace yapt
+{
+namespace math
 {
 	using std::abs;
 	using std::pow;
@@ -25,27 +27,12 @@ namespace yapt::math
 
     template <typename T>
     const constexpr T PI = T{3.141592653589793};
+}
 
-    // check value is even
 	template <typename T>
     constexpr typename std::enable_if_t<std::is_integral_v<T>, bool>
     is_even(const T val) noexcept
     { return val % 2 == 0; }
-
-    template <unsigned exp, typename T>
-    constexpr T
-    pow(const T value) noexcept
-    {
-        if(!exp) {
-            return 1;
-        } else {
-            const T base = pow<exp/2>(value);
-            if constexpr (is_even(exp))
-                return base * base;
-            else
-                return base * base * value;
-        }
-    }
 
     // return result of (-1)^a
     template <typename T>
@@ -54,13 +41,13 @@ namespace yapt::math
     { return is_even(a) ? 1 : -1; }
 
     // factorial
-    constexpr size_t
-    fac(const size_t val) noexcept
+    constexpr std::size_t
+    fac(const std::size_t val) noexcept
     {
-		size_t ret{1};
+		std::size_t ret{1};
 
 		if (val != 0)
-			for (size_t i = 1; i <= val; ++i)
+			for (std::size_t i = 1; i <= val; ++i)
 				ret *= i;
 
 		return ret;
@@ -107,16 +94,6 @@ namespace yapt::math
     	return ret;
     }
 
-    template <typename T>
-    constexpr T
-    degrees(const T _radians)
-    { return _radians * T{180} / PI<T>; }
-
-    template <typename T>
-    constexpr T
-    radians(const T _degrees)
-    { return _degrees * PI<T> / static_cast<T>(180); }
-
     template <typename T, typename Bias>
     constexpr auto
     lerp(const T a, const T b, const Bias bias)
@@ -138,4 +115,29 @@ namespace yapt::math
     constexpr auto
     fit(const T val, const T minval, const T maxval)
     { return (val - minval) / (maxval - minval); }
+
+    template <unsigned exp, typename T>
+    constexpr T
+    pow(const T value) noexcept
+    {
+        if(!exp) {
+            return 1;
+        } else {
+            const T base = pow<exp/2>(value);
+            if constexpr (is_even(exp))
+                return base * base;
+            else
+                return base * base * value;
+        }
+    }
+
+    template <typename T>
+    constexpr T
+    degrees(const T _radians)
+    { return _radians * T{180} / math::PI<T>; }
+
+    template <typename T>
+    constexpr T
+    radians(const T _degrees)
+    { return _degrees * math::PI<T> / static_cast<T>(180); }
 }

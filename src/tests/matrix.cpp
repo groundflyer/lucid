@@ -152,7 +152,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                        // identity mantrix elements have different magnitude
                                        // equalizing them as ulp is same for all of them
                                        const auto zero = Mat::identity() - feed.dot(testing);
-                                       const constexpr auto ulp = math::pow<sizeof(T)>(100ul);
+                                       const constexpr auto ulp = pow<sizeof(T)>(100ul);
                                        return any(!almost_equal(zero.flat_ref(), T{0}, ulp));
                                    });
     }
@@ -219,7 +219,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
     RandomDistribution<T> divdist(T{1}, T{10000});
 
     auto sign_gen = [&, bdist = RandomDistribution<bool>(0.5)]() mutable
-                   { return static_cast<T>(math::minus_one_pow(bdist(g))); };
+                   { return static_cast<T>(minus_one_pow(bdist(g))); };
 
     auto div_scalar_gen = [&](){ return divdist(g) * sign_gen(); };
     auto div_mat_gen = [&](){ return Mat(divdist.template operator()<MN>(g)) * sign_gen(); };

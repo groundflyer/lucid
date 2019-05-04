@@ -151,7 +151,7 @@ namespace yapt
 		{
 			auto l = length(*this);
 
-			if (!(math::almost_equal(l, 1_r, 5) || math::almost_equal(l, 0_r, 5)))
+			if (!(almost_equal(l, 1_r, 5) || almost_equal(l, 0_r, 5)))
 				for (auto& elem : Super::m_data)
                     elem /= l;
 		}
