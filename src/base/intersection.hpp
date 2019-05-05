@@ -6,7 +6,7 @@
 
 #include "types.hpp"
 
-namespace yapt
+namespace lucid
 {
     template <template <typename, size_t> typename Container>
     struct Intersection_

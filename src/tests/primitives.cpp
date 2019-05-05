@@ -12,7 +12,7 @@
 #include <utils/seq.hpp>
 
 using namespace std;
-using namespace yapt;
+using namespace lucid;
 
 constexpr auto
 radius(const Sphere& prim) noexcept

@@ -13,7 +13,7 @@
 #include <variant>
 
 
-namespace yapt
+namespace lucid
 {
     template <template <typename, size_t> typename Container>
     using GenericPrimitive_ = std::variant<AABB_<Container>,

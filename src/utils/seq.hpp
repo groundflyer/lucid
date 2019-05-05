@@ -7,7 +7,7 @@
 #include <type_traits>
 #include <tuple>
 
-namespace yapt
+namespace lucid
 {
     namespace detail
     {

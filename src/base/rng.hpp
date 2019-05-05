@@ -11,7 +11,7 @@
 #include <type_traits>
 
 
-namespace yapt
+namespace lucid
 {
     template <typename T,
 			  typename Distribution = std::conditional_t<std::is_integral_v<T>,

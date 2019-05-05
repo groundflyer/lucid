@@ -7,7 +7,7 @@
 #include "aabb.hpp"
 
 
-namespace yapt
+namespace lucid
 {
     template <template <typename, size_t> typename Container>
     struct Sphere_

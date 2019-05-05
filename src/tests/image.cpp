@@ -6,7 +6,7 @@
 #include <image/io.hpp>
 
 using namespace std;
-using namespace yapt;
+using namespace lucid;
 
 int main()
 {

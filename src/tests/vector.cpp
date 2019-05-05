@@ -7,7 +7,7 @@
 #include <string>
 
 using namespace std;
-using namespace yapt;
+using namespace lucid;
 
 static const constexpr size_t MaxN = 4;
 using Indicies = make_index_sequence<MaxN - 1>;
@@ -181,7 +181,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                            [](const auto &feed)
                            {
                                const auto& [vec1, vec2] = feed;
-                               return pair{yapt::min(vec1, vec2), yapt::max(vec1, vec2)};
+                               return pair{lucid::min(vec1, vec2), lucid::max(vec1, vec2)};
                            },
                            [&](const auto& testing, const auto&)
                            {

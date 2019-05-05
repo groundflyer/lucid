@@ -5,7 +5,7 @@
 #include <base/rng.hpp>
 
 using namespace std;
-using namespace yapt;
+using namespace lucid;
 
 static const constexpr size_t MaxN = 4;
 using Indicies = make_index_sequence<MaxN - 1>;

@@ -10,7 +10,7 @@
 #include <type_traits>
 
 
-namespace yapt
+namespace lucid
 {
     template <typename T>
     constexpr auto

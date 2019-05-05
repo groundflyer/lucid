@@ -8,7 +8,7 @@
 #include "vector.hpp"
 
 
-namespace yapt
+namespace lucid
 {
     template <typename T, size_t M, size_t N,
 			  template <typename, size_t> typename Container = std::array>
@@ -549,7 +549,7 @@ namespace yapt
 		template <typename Rhs>
 		constexpr auto
 		dot(const Rhs& rhs) const noexcept
-		{ return yapt::dot(*this, rhs); }
+		{ return lucid::dot(*this, rhs); }
 
 		const constexpr Data&
 		data() const noexcept
@@ -686,7 +686,7 @@ namespace std
 {
 	template <typename T, size_t M, size_t N,
 			  template <typename, size_t> typename Container>
-	class tuple_size<yapt::Matrix<T, M, N, Container>>
+	class tuple_size<lucid::Matrix<T, M, N, Container>>
     {
     public:
         static const constexpr size_t value = M;
@@ -694,15 +694,15 @@ namespace std
 
 	template <size_t I, typename T, size_t M, size_t N,
 			  template <typename, size_t> typename Container>
-	class tuple_element<I, yapt::Matrix<T, M, N, Container>>
+	class tuple_element<I, lucid::Matrix<T, M, N, Container>>
 	{
     public:
-		using type = decltype(declval<yapt::Matrix<T, M, N, Container>>().template get<I>());
+		using type = decltype(declval<lucid::Matrix<T, M, N, Container>>().template get<I>());
 	};
 
     template <auto I, typename T, size_t M, size_t N,
 			  template <typename, size_t> typename Container>
     constexpr decltype(auto)
-    get(const yapt::Matrix<T, M, N, Container>& mat) noexcept
+    get(const lucid::Matrix<T, M, N, Container>& mat) noexcept
     { return mat.template get<I>(); }
 }

@@ -5,7 +5,7 @@
 #pragma once
 
 
-namespace yapt
+namespace lucid
 {
     template <typename T>
     struct incorrect_range

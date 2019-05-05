@@ -9,7 +9,7 @@
 #include <utility>
 
 
-namespace yapt
+namespace lucid
 {
     template <template <typename, size_t> typename Container>
     constexpr Vec4_<Container>

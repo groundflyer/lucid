@@ -4,7 +4,7 @@
 #include <iostream>
 
 using namespace std;
-using namespace yapt;
+using namespace lucid;
 
 using Mat4f = Matrix<float, 4, 4, array>;
 

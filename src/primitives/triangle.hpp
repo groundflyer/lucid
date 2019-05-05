@@ -7,7 +7,7 @@
 #include "aabb.hpp"
 
 
-namespace yapt
+namespace lucid
 {
     template <template <typename, size_t> typename Container>
     using Triangle_ = std::array<Point_<Container>, 3>;
@@ -83,7 +83,7 @@ namespace yapt
         {
             const Point vmin(std::apply([](const auto& v1, const auto& ... verts)
                                         {
-                                            return reduce([](const auto& a, const auto& b){ return yapt::min(a, b);},
+                                            return reduce([](const auto& a, const auto& b){ return lucid::min(a, b);},
                                                           Vec3(v1),
                                                           Vec3(verts)...);
                                         },
@@ -91,7 +91,7 @@ namespace yapt
 
             const Point vmax(std::apply([](const auto& v1, const auto& ... verts)
                                         {
-                                            return reduce([](const auto& a, const auto& b){ return yapt::max(a, b);},
+                                            return reduce([](const auto& a, const auto& b){ return lucid::max(a, b);},
                                                           Vec3(v1),
                                                           Vec3(verts)...);
                                         },

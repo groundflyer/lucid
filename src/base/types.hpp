@@ -10,7 +10,7 @@
 #include <cstdint>
 
 
-namespace yapt
+namespace lucid
 {
 #ifdef _DOUBLE_PRECISION
     typedef double real;
@@ -232,7 +232,7 @@ namespace yapt
 namespace std
 {
     template <template <typename, size_t> typename Container>
-    class tuple_size<yapt::Point_<Container>>
+    class tuple_size<lucid::Point_<Container>>
     {
     public:
         static const constexpr size_t value = 3;
@@ -240,14 +240,14 @@ namespace std
 
     template<size_t I,
              template <typename, size_t> typename Container>
-    class tuple_element<I, yapt::Point_<Container>>
+    class tuple_element<I, lucid::Point_<Container>>
     {
     public:
-        using type = yapt::real;
+        using type = lucid::real;
     };
 
     template <template <typename, size_t> typename Container>
-    class tuple_size<yapt::Normal_<Container>>
+    class tuple_size<lucid::Normal_<Container>>
     {
     public:
         static const constexpr size_t value = 3;
@@ -255,9 +255,9 @@ namespace std
 
     template<size_t I,
              template <typename, size_t> typename Container>
-    class tuple_element<I, yapt::Normal_<Container>>
+    class tuple_element<I, lucid::Normal_<Container>>
     {
     public:
-        using type = yapt::real;
+        using type = lucid::real;
     };
 }

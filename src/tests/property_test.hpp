@@ -19,7 +19,7 @@
 using namespace fmt::literals;
 
 
-namespace yapt
+namespace lucid
 {
     template <typename T, size_t N,
               template <typename, size_t> typename Container>
@@ -137,7 +137,7 @@ MAKE_TYPEINFO_STRING(unsigned short)
 
 template <typename T, size_t N>
 constexpr auto
-get_typeinfo_string(yapt::Vector<T, N, std::array>)
+get_typeinfo_string(lucid::Vector<T, N, std::array>)
 { return "Vector<{}, {}>"_format(get_typeinfo_string(T{}), N); }
 
 template <typename... Ts>

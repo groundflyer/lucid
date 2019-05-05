@@ -8,7 +8,7 @@
 #include "transforms.hpp"
 
 
-namespace yapt
+namespace lucid
 {
     template <template <typename, size_t> typename Container>
     struct Ray_

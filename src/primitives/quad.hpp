@@ -9,7 +9,7 @@
 #include <base/rng.hpp>
 
 
-namespace yapt
+namespace lucid
 {
     // v00, v01, v11, v10
     template <template <typename, size_t> typename Container>

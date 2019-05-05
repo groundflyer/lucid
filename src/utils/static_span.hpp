@@ -7,7 +7,7 @@
 #include <cstddef>
 #include <tuple>
 
-namespace yapt
+namespace lucid
 {
     template <typename T, size_t N>
     class StaticSpan
@@ -75,14 +75,14 @@ namespace yapt
 namespace std
 {
 	template <typename T, size_t N>
-	class tuple_size<yapt::StaticSpan<T, N>>
+	class tuple_size<lucid::StaticSpan<T, N>>
     {
     public:
         static const constexpr size_t value = N;
     };
 
 	template <size_t I, typename T, size_t N>
-	class tuple_element<I, yapt::StaticSpan<T, N>>
+	class tuple_element<I, lucid::StaticSpan<T, N>>
 	{
     public:
         using type = T;
@@ -90,6 +90,6 @@ namespace std
 
     template <size_t I, typename T, size_t N>
     constexpr decltype(auto)
-    get(const yapt::StaticSpan<T, N>& span) noexcept
+    get(const lucid::StaticSpan<T, N>& span) noexcept
     { return span.template get<I>(); }
 }

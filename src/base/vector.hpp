@@ -20,7 +20,7 @@
 #include <type_traits>
 
 
-namespace yapt
+namespace lucid
 {
     template <typename T, size_t N,
 			  template <typename, size_t> typename Container = std::array>
@@ -381,12 +381,12 @@ namespace yapt
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		dot(const Vector<T, N, Container2> & rhs) const noexcept
-        { return yapt::dot(*this, rhs); }
+        { return lucid::dot(*this, rhs); }
 
 		template <template <typename, size_t> typename Container2>
 		constexpr auto
 		cross(const Vector<T, N, Container2> & rhs) const noexcept
-		{ return yapt::cross(*this, rhs); }
+		{ return lucid::cross(*this, rhs); }
 
 		constexpr auto
 		size() const noexcept
@@ -637,7 +637,7 @@ namespace std
 {
 	template <typename T, size_t N,
 			  template <typename, size_t> typename Container>
-	class tuple_size<yapt::Vector<T, N, Container>>
+	class tuple_size<lucid::Vector<T, N, Container>>
     {
     public:
         static const constexpr size_t value = N;
@@ -645,7 +645,7 @@ namespace std
 
 	template<size_t I, typename T, size_t N,
 			 template <typename, size_t> typename Container>
-    class tuple_element<I, yapt::Vector<T, N, Container>>
+    class tuple_element<I, lucid::Vector<T, N, Container>>
 	{
     public:
         using type = T;
@@ -654,6 +654,6 @@ namespace std
 	template<size_t I, typename T, size_t N,
 			 template <typename, size_t> typename Container>
     constexpr decltype(auto)
-    get(const yapt::Vector<T, N, Container>& vec) noexcept
+    get(const lucid::Vector<T, N, Container>& vec) noexcept
     { return vec.template get<I>(); }
 }

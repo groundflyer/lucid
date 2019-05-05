@@ -11,7 +11,7 @@
 #include <utils/identity.hpp>
 
 
-namespace yapt
+namespace lucid
 {
     // axis-aligned bounding box
     template <template <typename, size_t> typename Container>

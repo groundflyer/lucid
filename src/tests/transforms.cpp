@@ -4,7 +4,7 @@
 #include <base/transforms.hpp>
 #include <base/rng.hpp>
 
-using namespace yapt;
+using namespace lucid;
 using namespace std;
 
 int main(int argc, char* argv[])

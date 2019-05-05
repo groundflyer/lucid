@@ -6,7 +6,7 @@
 
 #include <tuple>
 
-namespace yapt
+namespace lucid
 {
     template <size_t I, typename... Ts>
     using pack_element = typename std::tuple_element<I, std::tuple<Ts...>>::type;

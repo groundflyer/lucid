@@ -4,7 +4,7 @@
 #include <cameras/perspective.hpp>
 
 using namespace std;
-using namespace yapt;
+using namespace lucid;
 
 int main()
 {
