@@ -48,7 +48,7 @@ namespace lucid
         const auto& [o, d] = ray;
         const auto& [p, n, r] = prim;
         const auto t = ((p - o).dot(n) / (d.dot(n)));
-        return Intersection(t > 0_r && distance(o + d * t, p) < r, t, Vec2{});
+        return Intersection(!std::signbit(t) && distance(o + d * t, p) < r, t, Vec2{});
     }
 
 	template <template <typename, size_t> typename DiskContainer,

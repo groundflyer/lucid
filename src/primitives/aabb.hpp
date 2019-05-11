@@ -69,7 +69,7 @@ namespace lucid
 	{
 		const auto& [o, d] = ray;
 		const auto inv_d = Vec3{1_r} / d;
-		const auto sign = inv_d < 0;
+		const auto sign = inv_d < 0_r;
         const auto vmin = inv_d * (prim[sign] - o);
         const auto vmax = inv_d * (prim[!sign] - o);
         const auto& [xmin, ymin, zmin] = vmin;
@@ -94,15 +94,15 @@ namespace lucid
         real md[2] {};
         for(unsigned i = 0; i < 2; ++i)
         {
-            const auto ad = abs(pos - prim[i]);
-            md[i] = min(ad);
+            const auto ad = lucid::abs(pos - prim[i]);
+            md[i] = lucid::min(ad);
             vd[i] = Vec3(ad == md[i]);
         }
         const auto pp = md[0] > md[1];
         return Normal(vd[pp] * nsign[pp]);
     }
 
-    namespace impl
+    namespace detail
     {
         template <template <typename, size_t> typename Container>
         constexpr auto
@@ -126,7 +126,7 @@ namespace lucid
         const auto& [s1, s2] = s;
         const auto s3 = math::fmod(2_r * (s1 + s2), 1_r);
         const auto shift = static_cast<unsigned>(300_r * math::fmod(s1 + s2 + s3, 1_r));
-        const auto [a, b] = impl::diag(prim, shift, s3 > 0.5_r);
+        const auto [a, b] = detail::diag(prim, shift, s3 > 0.5_r);
         return lerp(a, b, roll(Vec3(resample(s1), resample(s2), 0_r), shift));
     }
 

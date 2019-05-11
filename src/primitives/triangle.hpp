@@ -33,7 +33,7 @@ namespace lucid
         const auto v = d.dot(qvec);
         const auto invD = 1_r / D;
         const auto t = edge2.dot(qvec) * invD;
-        return Intersection{D > 0_r && u < D && v >= 0_r && (u + v) <= D, t, Vec2{u, v} * invD};
+        return Intersection{!std::signbit(D) && u < D && !std::signbit(v) && (u + v) <= D, t, Vec2{u, v} * invD};
     }
 
 	template <template <typename, size_t> typename TriangleContainer,

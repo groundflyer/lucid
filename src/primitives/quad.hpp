@@ -64,13 +64,13 @@ namespace lucid
 
             const auto Q_ = T_.cross(e23);
             const auto beta_ = d.dot(Q_) / det_;
-            if(beta_ < 0)
+            if(std::signbit(beta_))
                 return Intersection();
         }
 
         const auto t = e03.dot(Q) / det;
 
-        if(t < 0)
+        if(std::signbit(t))
             return Intersection();
 
         const auto e02 = v11 - v00;
