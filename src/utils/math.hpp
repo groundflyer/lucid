@@ -6,7 +6,9 @@
 
 #include <cmath>
 #include <limits>
+#include <utility>
 #include <iterator>
+#include <algorithm>
 #include <type_traits>
 
 
@@ -139,5 +141,19 @@ namespace math
     template <typename T>
     constexpr T
     radians(const T _degrees)
-    { return _degrees * math::PI<T> / static_cast<T>(180); }
+    { return _degrees * math::PI<T> / T{180}; }
+
+    // solves quadratic equation ax^2 + bx + c
+    // for non-complex cases
+    // return bool and the smallest of two positive roots
+    template <typename T>
+    constexpr auto
+    quadratic(const T a, const T b, const T c) noexcept
+    {
+        const auto D = pow<2>(b) - T{4} * a * c;
+        const auto sqrtD = std::copysign(math::sqrt(D), b);
+        const auto q = -T{0.5} * a * (b + sqrtD);
+        const auto [x1, x2] = std::minmax(c / q, q / a);
+        return std::pair{!std::signbit(D), std::signbit(x1) ? x2 : x1};
+    }
 }

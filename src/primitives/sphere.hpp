@@ -44,13 +44,8 @@ namespace lucid
 		const auto pc = o - prim.center;
 		const auto b = d.dot(pc * 2_r);
 		const auto c = pc.dot(pc) - pow<2>(prim.radius);
-		const auto D = b * b - 4_r * a * c;
-        const auto factor = 0.5_r * a;
-        const auto sqrtD = math::sqrt(D);
-        const auto t1 = (-b + sqrtD) * factor;
-        const auto t2 = (-b - sqrtD) * factor;
-        const auto t = t1 > 0_r ? (t2 > 0_r ? std::min(t1, t2) : t1) : -b * factor;
-        return Intersection{D > 0_r, t, Vec2{}};
+        const auto [hit, t] = quadratic(a, b, c);
+        return Intersection{hit, t, Vec2{}};
 	}
 
 	template <template <typename, size_t> typename SphereContainer,
