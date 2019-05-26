@@ -51,6 +51,22 @@ namespace lucid
             if constexpr (sizeof...(rest) > 0)
                 return switcher_impl(lookup, std::forward<TupleArgs>(tuple_args), std::forward<RestItems>(rest)...);
         }
+
+        template <std::size_t I, typename T, std::size_t N1, std::size_t N2>
+        constexpr decltype(auto)
+        array_cat_idx(std::array<T, N1>&& first, std::array<T, N2>&& second)
+        {
+            if constexpr (I < N1)
+                return std::get<I>(std::forward<std::array<T, N1>>(first));
+            else
+                return std::get<I - N1>(std::forward<std::array<T, N2>>(second));
+        }
+
+        template <typename T, std::size_t N1, std::size_t N2, std::size_t ... Is>
+        constexpr auto
+        array_cat_impl(std::array<T, N1>&& first, std::array<T, N2>&& second, std::index_sequence<Is...>) noexcept
+        { return std::array<T, N1 + N2>{std::move(array_cat_idx<Is>(std::forward<std::array<T, N1>>(first),
+                                                                    std::forward<std::array<T, N2>>(second)))...}; }
     }
 
     template <typename BinaryOp, typename Init, typename ... Args>
@@ -75,4 +91,19 @@ namespace lucid
                           },
             enumerate(std::forward<Tuple>(tuple)));
     }
+
+    template <typename T, std::size_t N1, std::size_t N2, typename ... Rest>
+    constexpr auto
+    array_cat(std::array<T, N1>&& first, std::array<T, N2>&& second, Rest&& ... rest) noexcept
+    {
+        const auto ret = detail::array_cat_impl(std::forward<std::array<T, N1>>(first),
+                                                std::forward<std::array<T, N2>>(second),
+                                                std::make_index_sequence<N1+N2>{});
+
+        if constexpr (sizeof...(rest))
+            return array_cat(ret, rest...);
+
+        return ret;
+    }
+
 }

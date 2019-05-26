@@ -71,12 +71,6 @@ add_compile_options($<$<CONFIG:RelWithDebInfo>:-ffast-math>)
 # Colored output from Clang
 add_compile_options($<$<CXX_COMPILER_ID:Clang>:-fcolor-diagnostics>)
 
-# Print vectorization statistics
-if(CMAKE_VERBOSE_MAKEFILE)
-  add_compile_options($<$<CXX_COMPILER_ID:GNU>:-fopt-info-vec>)
-  add_compile_options($<$<CXX_COMPILER_ID:Clang>:-Rpass=loop-vectorize>)
-endif()
-
 # Set floating point precision
 set(_precision "single")
 if(USE_DOUBLE_PRECISION)

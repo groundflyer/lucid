@@ -9,11 +9,11 @@
 #include <memory>
 #include <iterator>
 
-namespace yapt
+namespace lucid
 {
     // num_pixels for number of pixels vectors<T, NC>
     // size for number of elements of type T
-    template <typename T, size_t NC,
+    template <typename T, std::size_t NC,
               typename Allocator = std::allocator<T>>
     class Image
     {
@@ -21,31 +21,29 @@ namespace yapt
         Allocator m_alloc = Allocator();
         T* p_data = nullptr;
 
-        size_t
-        pos(const size_t row, const size_t column) const noexcept
+        std::size_t
+        pos(const std::size_t row, const std::size_t column) const noexcept
         {
             CHECK_INDEX(row, height());
             CHECK_INDEX(column, width());
             return NC * (row * width() + column);
         }
 
-        template <typename Iterator>
-        class base_iterator
+        class iterator
         {
-        protected:
             T* p_data;
             Vec2u m_res;
-            size_t m_pos = 0;
+            std::size_t m_pos = 0;
 
             auto
             num_pixels() const noexcept
             { return product(m_res); }
 
         public:
-            base_iterator() = delete;
+            iterator() = delete;
 
             explicit
-            base_iterator(T* data, const Vec2u& res, size_t pos = 0) :
+            iterator(T* data, const Vec2u& res, std::size_t pos = 0) :
                 p_data(data), m_res(res), m_pos(pos) {}
 
             auto
@@ -56,86 +54,63 @@ namespace yapt
                 return Vec2u(x, y);
             }
 
-            Iterator&
+            iterator&
             operator++() noexcept
             {
                 m_pos++;
-                return static_cast<Iterator&>(*this);
+                return static_cast<iterator&>(*this);
             }
 
-            Iterator&
+            iterator&
             operator--() noexcept
             {
                 m_pos--;
-                return static_cast<Iterator&>(*this);
+                return static_cast<iterator&>(*this);
             }
 
-            Iterator
-            operator+(const size_t rhs) const noexcept
-            { return Iterator(p_data, m_res, m_pos + rhs); }
+            iterator
+            operator+(const std::size_t rhs) const noexcept
+            { return iterator(p_data, m_res, m_pos + rhs); }
 
-            Iterator
-            operator-(const size_t rhs) const noexcept
-            { return Iterator(p_data, m_res, m_pos - rhs); }
+            iterator
+            operator-(const std::size_t rhs) const noexcept
+            { return iterator(p_data, m_res, m_pos - rhs); }
 
-            Iterator&
-            operator+=(const size_t rhs) noexcept
+            iterator&
+            operator+=(const std::size_t rhs) noexcept
             {
                 m_pos += rhs;
-                return static_cast<Iterator&>(*this);
+                return static_cast<iterator&>(*this);
             }
 
-            Iterator&
-            operator-=(const size_t rhs) noexcept
+            iterator&
+            operator-=(const std::size_t rhs) noexcept
             {
                 m_pos -= rhs;
-                return static_cast<Iterator&>(*this);
+                return static_cast<iterator&>(*this);
             }
 
-            size_t
-            operator-(const Iterator& rhs) const noexcept
+            std::size_t
+            operator-(const iterator& rhs) const noexcept
             { return m_pos - rhs.m_pos; }
 
             bool
-            operator==(const base_iterator& rhs) const noexcept
+            operator==(const iterator& rhs) const noexcept
             { return p_data == rhs.p_data && num_pixels() == rhs.num_pixels() && m_pos == rhs.m_pos; }
 
             bool
-            operator!=(const base_iterator& rhs) const noexcept
+            operator!=(const iterator& rhs) const noexcept
             { return p_data != rhs.p_data || num_pixels() != rhs.num_pixels() || m_pos != rhs.m_pos; }
+
+            decltype(auto)
+            operator*() const noexcept
+            {
+                CHECK_INDEX(Super::m_pos, Super::num_pixels());
+                return Vector(StaticSpan<T, NC>(p_data + m_pos * NC));
+            }
         };
 
     public:
-        class iterator : public base_iterator<iterator>
-        {
-            using Super = base_iterator<iterator>;
-
-        public:
-            using Super::Super;
-
-            auto
-            operator*() const noexcept
-            {
-                CHECK_INDEX(Super::m_pos, Super::num_pixels());
-                return Vector(ArrayView<T, NC>(Super::p_data + Super::m_pos * NC));
-            }
-        };
-
-        class const_iterator : public base_iterator<const_iterator>
-        {
-            using Super = base_iterator<const_iterator>;
-
-        public:
-            using Super::Super;
-
-            const auto
-            operator*() const noexcept
-            {
-                CHECK_INDEX(Super::m_pos, Super::num_pixels());
-                return Vector(ArrayView<T, NC>(const_cast<T*>(Super::p_data + Super::m_pos * NC)));
-            }
-        };
-
         class view
         {
             T* p_data;
@@ -155,26 +130,26 @@ namespace yapt
             end() const noexcept
             { return iterator(p_data, m_res, m_res[0]); }
 
-            const_iterator
+            iterator
             cbegin() const noexcept
             { return iterator(p_data, m_res); }
 
-            const_iterator
+            iterator
             cend() const noexcept
             { return iterator(p_data, m_res, m_res[0]); }
 
             auto
-            operator[](const size_t i) noexcept
+            operator[](const std::size_t i) noexcept
             {
                 CHECK_INDEX(i, m_num_pixels);
-                return Vector(ArrayView<T, NC>(p_data + i * NC));
+                return Vector(StaticSpan<T, NC>(p_data + i * NC));
             }
 
-            const auto
-            operator[](const size_t i) const noexcept
+            decltype(auto)
+            operator[](const std::size_t i) const noexcept
             {
                 CHECK_INDEX(i, m_num_pixels);
-                return Vector(ArrayView<T, NC>(const_cast<T*>(p_data + i * NC)));
+                return Vector(StaticSpan<T, NC>(p_data + i * NC));
             }
         };
 
@@ -186,7 +161,7 @@ namespace yapt
         {
             p_data = std::allocator_traits<Allocator>::allocate(m_alloc, size());
 
-            for (size_t i = 0; i < size(); ++i)
+            for (std::size_t i = 0; i < size(); ++i)
                 std::allocator_traits<Allocator>::construct(m_alloc, p_data + i);
         }
 
@@ -209,7 +184,7 @@ namespace yapt
             {
                 if(p_data)
                 {
-                    for (size_t i = 0; i < size(); ++i)
+                    for (std::size_t i = 0; i < size(); ++i)
                         std::allocator_traits<Allocator>::destroy(m_alloc, p_data + i);
 
                     std::allocator_traits<Allocator>::deallocate(m_alloc, p_data, size());
@@ -224,7 +199,7 @@ namespace yapt
 
         virtual ~Image() noexcept
         {
-            for (size_t i = 0; i < size(); ++i)
+            for (std::size_t i = 0; i < size(); ++i)
                 std::allocator_traits<Allocator>::destroy(m_alloc, p_data + i);
 
             std::allocator_traits<Allocator>::deallocate(m_alloc, p_data, size());
@@ -240,55 +215,55 @@ namespace yapt
 
         auto
         begin() const noexcept
-        { return const_iterator(p_data, m_res); }
+        { return iterator(p_data, m_res); }
 
         auto
         end() const noexcept
-        { return const_iterator(p_data, m_res, num_pixels()); }
+        { return iterator(p_data, m_res, num_pixels()); }
 
         auto
         cbegin() const noexcept
-        { return const_iterator(p_data, m_res); }
+        { return iterator(p_data, m_res); }
 
         auto
         cend() const noexcept
-        { return const_iterator(p_data, m_res, num_pixels()); }
+        { return iterator(p_data, m_res, num_pixels()); }
 
         auto
-        operator[](const size_t i) noexcept
+        operator[](const std::size_t i) noexcept
         { return view(p_data + pos(i, 0), m_res); }
 
-        const auto
-        operator[](const size_t i) const noexcept
+        decltype(auto)
+        operator[](const std::size_t i) const noexcept
         { return view(p_data + pos(i, 0), m_res); }
 
         auto
-        at(const size_t i) noexcept
+        at(const std::size_t i) noexcept
         {
             CHECK_INDEX(i, num_pixels());
-            return Vector(ArrayView<T, NC>(p_data + i * NC));
+            return Vector(StaticSpan<T, NC>(p_data + i * NC));
         }
 
-        const auto
-        at(const size_t i) const noexcept
+        decltype(auto)
+        at(const std::size_t i) const noexcept
         {
             CHECK_INDEX(i, num_pixels());
-            return Vector(ArrayView<T, NC>(const_cast<T*>(p_data + i * NC)));
+            return Vector(StaticSpan<T, NC>(p_data + i * NC));
         }
 
         auto
-        at(const size_t i, const size_t j) noexcept
-        { return Vector(ArrayView<T, NC>(p_data + pos(i, j))); }
+        at(const std::size_t i, const std::size_t j) noexcept
+        { return Vector(StaticSpan<T, NC>(p_data + pos(i, j))); }
 
-        const auto
-        at(const size_t i, const size_t j) const noexcept
-        { return Vector(ArrayView<T, NC>(const_cast<T*>(p_data + pos(i, j)))); }
+        decltype(auto)
+        at(const std::size_t i, const std::size_t j) const noexcept
+        { return Vector(StaticSpan<T, NC>(p_data + pos(i, j))); }
 
-        const size_t&
+        const std::size_t&
         width() const noexcept
         { return m_res[0]; }
 
-        const size_t&
+        const std::size_t&
         height() const noexcept
         { return m_res[1]; }
 

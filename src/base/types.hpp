@@ -86,22 +86,22 @@ namespace lucid
         template <typename T>
         constexpr auto
         operator+(T&& rhs) const noexcept
-        { return Point_(Super::operator+(std::forward<T>(rhs))); }
+        { return Point_<std::array>(Super::operator+(std::forward<T>(rhs))); }
 
         template <typename ... Ts>
         constexpr auto
         operator-(Ts && ... rhs) const noexcept
-        { return Point_(Super::operator-(std::forward<Ts>(rhs)...)); }
+        { return Point_<std::array>(Super::operator-(std::forward<Ts>(rhs)...)); }
 
         template <typename T>
         constexpr auto
         operator*(T&& rhs) const noexcept
-        { return Point_(Super::operator*(std::forward<T>(rhs))); }
+        { return Point_<std::array>(Super::operator*(std::forward<T>(rhs))); }
 
         template <typename T>
         constexpr auto
         operator/(T&& rhs) const noexcept
-        { return Point_(Super::operator/(std::forward<T>(rhs))); }
+        { return Point_<std::array>(Super::operator/(std::forward<T>(rhs))); }
 
         template <typename T>
         constexpr Point_&

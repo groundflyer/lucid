@@ -7,8 +7,8 @@
 #include <algorithm>
 
 void
-yapt::write_ppm(const yapt::Image<unsigned char, 3>& img,
-                const std::string& filename)
+lucid::write_ppm(const lucid::Image<unsigned char, 3>& img,
+                 const std::string& filename)
 {
     std::ofstream out(filename);
     out << "P3\n"

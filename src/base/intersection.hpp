@@ -16,14 +16,19 @@ namespace lucid
         Vec2_<Container> st;
 
         constexpr
-        Intersection_() : intersect(false) {}
+        Intersection_() : intersect(false),
+                          t(std::numeric_limits<real>::max()),
+                          st(Vec2(0))
+        {}
 
 		template <template <typename, size_t> typename Container2>
 		constexpr
 		Intersection_(const bool _intersect,
                       const real& _t,
                       const Vec2_<Container2>& _st) :
-            intersect(_intersect), t(_t), st(_st) {}
+            intersect(_intersect),
+            t(intersect ? _t : std::numeric_limits<real>::max()),
+            st(_st) {}
 
         constexpr
         operator bool() const noexcept

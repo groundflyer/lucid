@@ -1,19 +1,21 @@
 // -*- C++ -*-
 // lucid.cpp
 
-#include <scene/geometry_object.hpp>
+#include <primitives/generic.hpp>
 #include <cameras/perspective.hpp>
+#include <cameras/utils.hpp>
 #include <image/io.hpp>
+#include <utils/seq.hpp>
+
+#include <format>
 
 #include <GLFW/glfw3.h>
 
 #include <string>
 #include <stdexcept>
 
-// #define STB_IMAGE_IMPLEMENTATION
-// #include "stb_image.h"
 
-using namespace yapt;
+using namespace lucid;
 
 namespace vp
 {
@@ -55,7 +57,7 @@ namespace vp
     static unsigned EBO;
     static unsigned texture;
 
-    static Vec2u res;
+    static lucid::Vec2u res;
 
     static void
     resize(GLFWwindow*, int width, int height) noexcept
@@ -74,7 +76,7 @@ namespace vp
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        window = glfwCreateWindow(1280, 720, "Lucid", nullptr, nullptr);
+        window = glfwCreateWindow(640, 640, "Lucid", nullptr, nullptr);
 
         if(!window)
         {
@@ -87,7 +89,7 @@ namespace vp
 
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
-        res = Vec2u(width, height);
+        res = lucid::Vec2u(width, height);
         glViewport(0, 0, width, height);
 
         int shader_status;
@@ -166,12 +168,12 @@ namespace vp
         // glGenerateMipmap(GL_TEXTURE_2D);
     }
 
-    static void
-    load_img(const unsigned char* data, int width, int height) noexcept
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        // glGenerateMipmap(GL_TEXTURE_2D);
-    }
+    // static void
+    // load_img(const unsigned char* data, int width, int height) noexcept
+    // {
+    //     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    //     // glGenerateMipmap(GL_TEXTURE_2D);
+    // }
 
     static bool
     active() noexcept
@@ -210,31 +212,76 @@ namespace vp
     }
 }
 
-int main(int argc, char *argv[])
+constexpr auto
+link(const Point& p) noexcept
+{ return Point_<StaticSpan>(StaticSpan<real, 3>(std::get<0>(p))); }
+
+static const constexpr std::array<Point, 8> box_points
+    {Point(-1, -1, 1),
+            Point(-1, -1, -1),
+            Point(1, -1, -1),
+            Point(1, -1, 1),
+            Point(-1, 1, 1),
+            Point(-1, 1, -1),
+            Point(1, 1, -1),
+            Point(1, 1, 1)};
+
+static const constexpr RGB materials[]
+    {RGB{0, 0, 0},              // black default
+     RGB{1, 1, 1},              // white
+     RGB{1, 0.1_r, 0.1_r},      // red
+     RGB{0.1_r, 1, 0.1_r},      // green
+     RGB{0.1_r, 0.5_r, 0.7_r}};
+
+template <typename Is, std::size_t Mi>
+struct WallDescr {};
+
+// vertices and materials indicies
+static const constexpr std::tuple box_description
+    {WallDescr<std::index_sequence<0, 1, 2, 3>, 1>{}, // white floor
+     WallDescr<std::index_sequence<0, 1, 5, 4>, 2>{}, // red left
+     WallDescr<std::index_sequence<2, 3, 7, 6>, 3>{}, // green right
+     WallDescr<std::index_sequence<4, 7, 6, 5>, 1>{}, // white ceiling
+     WallDescr<std::index_sequence<1, 2, 6, 5>, 1>{}}; // white back
+
+using ObjectData = std::pair<GenericPrimitive, std::size_t>;
+
+template <std::size_t ... Pns>
+constexpr decltype(auto)
+make_wall_geo(std::index_sequence<Pns...>) noexcept
+{ return Quad{std::get<Pns>(box_points)...}; }
+
+template <typename Is, std::size_t Mi>
+constexpr decltype(auto)
+make_wall(WallDescr<Is, Mi>) noexcept
+{ return ObjectData{make_wall_geo(Is{}), Mi}; }
+
+constexpr auto
+make_room() noexcept
 {
-    // size_t resx = 640;
-    // size_t resy = 480;
-    // if(argc == 3)
-    // {
-    //     resx = std::stoul(argv[1]);
-    //     resy = std::stoul(argv[2]);
-    // }
-    // const Vec2u res(resx, resy);
-    // std::cout << "Res: " << resx << ' ' << resy << std::endl;
-    const Point sphere_pos(0,1,0);
-    const Point disk_pos(-1,1,1);
-    const Sphere sphere(sphere_pos, 1);
-    const Plane plane(Point(0, 0, 0), Normal(0,1,0));
-    std::vector<GenericPrimitive> prims;
-    prims.push_back(sphere);
-    prims.push_back(plane);
-    prims.push_back(Disk(disk_pos, Normal(sphere_pos - disk_pos), 1_r));
-    prims.push_back(AABB(Point(-6,0,1), Point(-3,4,3)));
+    return std::apply([](auto ... pns){ return std::array<ObjectData, sizeof...(pns)>{make_wall(pns)...}; },
+                      box_description);
+}
 
-    const Point lp(-2, 5, -3);
+template <typename Scene, std::size_t ... Ids>
+constexpr decltype(auto)
+traverse_impl(const Ray& ray, const Scene& scene, std::index_sequence<Ids...>) noexcept
+{
+    return reduce([&](const auto& a, const auto& b)
+                  { return a.first.t < b.first.t ? (a) : (b); },
+        std::pair{Intersection{}, -1ul},
+        std::pair{intersect(ray, std::get<Ids>(scene).first), Ids}...);
+}
 
-    PerspectiveCamera cam(math::radians(120_r),
-                          look_at(Point(0,4,-6), sphere_pos));
+template <typename T, std::size_t N>
+constexpr decltype(auto)
+traverse_scene(const Ray& ray, const std::array<T, N>& scene) noexcept
+{ return traverse_impl(ray, scene, std::make_index_sequence<N>{}); }
+
+
+int main(/*int argc, char *argv[]*/)
+{
+    perspective::shoot cam(radians(120_r), look_at(Point(0, 0, 2), Point(0, 0, 0), Normal(0, 1, 0)));
 
     try
     {
@@ -242,9 +289,16 @@ int main(int argc, char *argv[])
     }
     catch (const std::runtime_error& ex)
     {
-        std::cerr << ex.what() << std::endl;
+        fmt::print(stderr, "OpenGL Error: {}", ex.what());
         return 1;
     }
+
+    const auto room = array_cat(make_room(),
+                                std::array<ObjectData, 2>
+                                {
+                                    ObjectData{Sphere(Point(0.5_r, -0.7_r, 0.2_r), 0.3_r), 4ul},
+                                    ObjectData{Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r), 4ul}
+                                });
     
     Image<unsigned char, 3> img(vp::res);
 
@@ -252,34 +306,18 @@ int main(int argc, char *argv[])
     {
         const auto dc = to_device_coords(it.pos(), img.res());
         const auto ray = cam(dc);
-        const auto isect = traverse(ray, prims);
-        const auto p = get_intersection_pos(ray, isect.first);
-        const auto i = -ray.dir;
-        const auto n = compute_normal(ray, isect.first, *isect.second);
-        const auto L = lp - p;
-        const auto Ld = length(L);
-        const Normal l(L / Ld);
-        const auto shadow = occlusion(Ray(p, l), prims, Range<real>(std::numeric_limits<real>::min() + std::numeric_limits<real>::epsilon() * 1000, Ld));
-        const RGB c(std::max(n.dot(l), 0_r) / (math::pow<3>(Ld)) * 30 * !shadow);
-        const Vector<unsigned char, 3, std::array> c8(yapt::min(c * 255, RGB(255)));
+        const auto [isect, pid] = traverse_scene(ray, room);
+        const auto& c = materials[room[pid].second];
+        const RGB8 c8 = isect ? RGB8{ c * 255} : RGB8{255, 0, 0};
         *it = c8;
-        // *it = fit(n, min(n), max(n));
     }
 
     vp::load_img(img);
-    std::cout << "Image res: " << img.res() << std::endl;
-    // const char* img_path = argv[1];
-    // int img_w, img_h, nch;
-    // auto img_data = stbi_load(img_path, &img_w, &img_h, &nch, 0);
-    // vp::load_img(img_data, img_w, img_h);
-    // stbi_image_free(img_data);
 
     while(vp::active())
         vp::draw();
 
     vp::cleanup();
-
-    write_ppm(img, "render.ppm");
 
     return 0;
 }

@@ -8,7 +8,7 @@
 
 #include <string>
 
-namespace yapt
+namespace lucid
 {
     void
     write_ppm(const Image<unsigned char, 3>&,
