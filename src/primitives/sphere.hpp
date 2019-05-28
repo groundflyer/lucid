@@ -6,6 +6,7 @@
 
 #include "aabb.hpp"
 
+#include <iostream>
 
 namespace lucid
 {
@@ -57,7 +58,7 @@ namespace lucid
            const Sphere_<SphereContainer>& prim) noexcept
     {
         const auto& [o, d] = ray;
-        const auto pos = o + d * isect.distance();
+        const auto pos = o + d * isect.t;
         return Normal(pos - prim.center);
     }
 

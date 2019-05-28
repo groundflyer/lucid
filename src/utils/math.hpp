@@ -146,14 +146,27 @@ namespace math
     // solves quadratic equation ax^2 + bx + c
     // for non-complex cases
     // return bool and the smallest of two positive roots
+    // template <typename T>
+    // constexpr auto
+    // quadratic(const T a, const T b, const T c) noexcept
+    // {
+    //     const auto D = pow<2>(b) - T{4} * a * c;
+    //     const auto sqrtD = std::copysign(math::sqrt(D), b);
+    //     const auto q = -T{0.5} * a * (b + sqrtD);
+    //     const auto [x1, x2] = std::minmax(c / q, q / a);
+    //     return std::pair{!std::signbit(D), std::signbit(x1) ? x1 : x2};
+    // };
+
     template <typename T>
     constexpr auto
     quadratic(const T a, const T b, const T c) noexcept
     {
         const auto D = pow<2>(b) - T{4} * a * c;
-        const auto sqrtD = std::copysign(math::sqrt(D), b);
-        const auto q = -T{0.5} * a * (b + sqrtD);
-        const auto [x1, x2] = std::minmax(c / q, q / a);
-        return std::pair{!std::signbit(D), std::signbit(x1) ? x2 : x1};
+        const auto factor = T{0.5} * a;
+        const auto sqrtD = math::sqrt(D);
+        const auto x1 = (-b + sqrtD) * factor;
+        const auto x2 = (-b - sqrtD) * factor;
+        const auto x = std::signbit(x1) ? x2 : (std::signbit(x2) ? x1 : std::min(x1, x2));
+        return std::pair{!std::signbit(D * x), x};
     }
 }
