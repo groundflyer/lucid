@@ -27,7 +27,7 @@ namespace lucid
 				  template <typename, size_t> typename Container2>
 		constexpr
 		AABB_(const Point_<Container1>& _vmin,
-			  const Point_<Container2>& _vmax) : vmin(_vmin), vmax(_vmax) {}
+			  const Point_<Container2>& _vmax) : vmin(lucid::min(_vmin, _vmax)), vmax(lucid::max(_vmin, _vmax)) {}
 
         constexpr const auto&
         operator[](const size_t i) const noexcept
@@ -74,9 +74,11 @@ namespace lucid
         const auto vmax = inv_d * (prim[!sign] - o);
         const auto& [xmin, ymin, zmin] = vmin;
         const auto& [xmax, ymax, zmax] = vmax;
-        const auto intersected = xmin < ymax && ymin < xmax &&
-            std::max(xmin, ymin) < zmax && zmin < std::min(ymax, xmax);
-        return Intersection{intersected, max(vmin), Vec2{}};
+        decltype(auto) tmin1 = std::max(ymin, xmin);
+        decltype(auto) tmax1 = std::min(ymax, xmax);
+        decltype(auto) tmin2 = std::max(zmin, tmin1);
+        const bool intersected = xmin <= ymax && ymin <= xmax && tmin1 <= zmax && zmin <= tmax1;
+        return Intersection{intersected && !std::signbit(tmin2), tmin2, Vec2{}};
 	}
 
 	template <template <typename, size_t> typename AABBContainer,
@@ -88,7 +90,7 @@ namespace lucid
            const AABB_<AABBContainer>& prim) noexcept
     {
         const auto& [o, d] = ray;
-        const auto pos = o + d * isect.distance();
+        const auto pos = o + d * isect.t;
         const real nsign[2] {-1_r, 1_r};
         Vec3 vd[2] {};
         real md[2] {};
