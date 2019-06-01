@@ -52,7 +52,11 @@ int main(int argc, char *argv[])
                                                const auto miss = intersect(tomiss, prim);
 
                                                // if (!hit)
+                                               // {
                                                //     fmt::print("No hit\n");
+                                               //     fmt::print("target {}, origin {}\n", target, origin);
+                                               // }
+
 
                                                // if (miss)
                                                // {
@@ -60,10 +64,9 @@ int main(int argc, char *argv[])
                                                //     fmt::print("Miss t {}, hit pos{}\n", miss.t, origin + tomiss.dir * miss.t);
                                                // }
 
-                                               // if (!almost_equal(hit.t, distance(target, origin), 1000))
+                                               // if (hit && !almost_equal(hit.t, distance(target, origin), hit_t_ulp))
                                                // {
                                                //     fmt::print("Incorrect t: expected {}, got {}\n", distance(target, origin), hit.t);
-                                               //     // fmt::print("target {}, origin {}\n", target, origin);
                                                // }
 
                                                return !hit || miss || !almost_equal(hit.t, distance(target, origin), hit_t_ulp);
@@ -119,11 +122,12 @@ int main(int argc, char *argv[])
 
     const auto quad_gen = [&]()
                           {
-                              const auto v00 = posgen();
-                              const auto v01 = posgen();
-                              const auto v10 = posgen();
+                              const Point v00{0, 0, 0};
+                              const Point v01{0, rad_dist(g), 0};
+                              const Point v10{rad_dist(g), 0, 0};
                               const auto v11 = v00 + v01 + v10;
-                              return Quad{v00, v01, v11, v10};
+                              const auto t = rotate(big_dist(g), normgen()).dot(translate(posgen()));
+                              return apply_transform(t, Quad{v00, v01, v11, v10});
                           };
 
     const auto all_gens =
@@ -137,31 +141,31 @@ int main(int argc, char *argv[])
     const auto rand_prim_gen = [&]()
                                   { return switcher(prim_choose(g), all_gens); };
 
-    // ret += intersect_test_prim("Disk: sample/trace",
-    //                            disk_gen,
-    //                            sample_prim);
+    ret += intersect_test_prim("Disk: sample/trace",
+                               disk_gen,
+                               sample_prim);
     ret += intersect_test_prim("Sphere: sample/trace",
                                sphere_gen,
                                sample_selfoccluded_prim);
-    // ret += intersect_test_prim("AABB: sample/trace",
-    //                            aabb_gen,
-    //                            sample_selfoccluded_prim);
-    // ret += intersect_test_prim("Triangle: sample/trace",
-    //                            triangle_gen,
-    //                            sample_prim);
-    // ret += intersect_test_prim("Quad: sample/trace",
-    //                            quad_gen,
-    //                            sample_prim);
+    ret += intersect_test_prim("AABB: sample/trace",
+                               aabb_gen,
+                               sample_selfoccluded_prim);
+    ret += intersect_test_prim("Triangle: sample/trace",
+                               triangle_gen,
+                               sample_prim);
+    ret += intersect_test_prim("Quad: sample/trace",
+                               quad_gen,
+                               sample_prim);
 
-    // ret += bound_test_prim("Sphere: bound", sphere_gen);
+    ret += bound_test_prim("Sphere: bound", sphere_gen);
 
-    // ret += bound_test_prim("Disk: bound", disk_gen);
+    ret += bound_test_prim("Disk: bound", disk_gen);
 
-    // ret += bound_test_prim("Triangle: bound", triangle_gen);
+    ret += bound_test_prim("Triangle: bound", triangle_gen);
 
-    // ret += bound_test_prim("Quad: bound", quad_gen);
+    ret += bound_test_prim("Quad: bound", quad_gen);
 
-    // ret += bound_test_prim("GenericPrimitive: bound", rand_prim_gen);
+    ret += bound_test_prim("GenericPrimitive: bound", rand_prim_gen);
 
     if(ret)
         fmt::print("{} tests failed\n", ret);

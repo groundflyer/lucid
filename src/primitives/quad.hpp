@@ -28,13 +28,13 @@ namespace lucid
         const auto e01 = v10 - v00;
         const auto e03 = v01 - v00;
         const auto p = d.cross(e03);
-        const auto det = e01.dot(p);
+        const auto D = e01.dot(p);
 
-        if(math::abs(det) < std::numeric_limits<real>::min())
+        if(math::abs(D) < std::numeric_limits<real>::min())
             return Intersection();
 
         const auto T = o - v00;
-        const auto alpha = T.dot(p) / det;
+        const auto alpha = T.dot(p) / D;
 
         const constexpr auto range01 = range(0_r, 1_r);
 
@@ -42,7 +42,7 @@ namespace lucid
             return Intersection();
 
         const auto Q = T.cross(e01);
-        const auto beta = d.dot(Q) / det;
+        const auto beta = d.dot(Q) / D;
         if(!range01(beta))
             return Intersection();
 
@@ -51,26 +51,26 @@ namespace lucid
             const auto e23 = v01 - v11;
             const auto e21 = v10 - v11;
             const auto p_ = d.cross(e21);
-            const auto det_ = e23.dot(p_);
+            const auto D_ = e23.dot(p_);
 
-            if(math::abs(det_) < std::numeric_limits<real>::min())
+            if(math::abs(D_) < std::numeric_limits<real>::min())
                 return Intersection();
 
             const auto T_ = o - v11;
-            const auto alpha_ = T_.dot(p_) / det_;
+            const auto alpha_ = T_.dot(p_) / D_;
 
             if(alpha_ < 0)
                 return Intersection();
 
             const auto Q_ = T_.cross(e23);
-            const auto beta_ = d.dot(Q_) / det_;
-            if(std::signbit(beta_))
+            const auto beta_ = d.dot(Q_) / D_;
+            if(beta_ < 0)
                 return Intersection();
         }
 
-        const auto t = e03.dot(Q) / det;
+        const auto t = e03.dot(Q) / D;
 
-        if(std::signbit(t))
+        if(t < 0)
             return Intersection();
 
         const auto e02 = v11 - v00;
@@ -138,7 +138,7 @@ namespace lucid
     {
         const auto e01 = std::get<3>(prim) - std::get<0>(prim);
         const auto e03 = std::get<1>(prim) - std::get<0>(prim);
-        return Normal(e01.cross(e03));
+        return Normal(e03.cross(e01));
     }
 
 	template <template <typename, size_t> typename SContainer,
@@ -162,4 +162,15 @@ namespace lucid
     constexpr AABB
     bound(const Quad_<Container>& prim) noexcept
     { return detail::bound(prim); }
+
+    template <template <typename, size_t> typename MatContainer,
+			  template <typename, size_t> typename QuadContainer>
+    constexpr auto
+    apply_transform(const Mat4_<MatContainer> & t,
+					const Quad_<QuadContainer> & prim) noexcept
+    {
+        return std::apply([&](const auto& ... points)
+                          { return Quad{apply_transform(t, points)...}; },
+            prim);
+    }
 }

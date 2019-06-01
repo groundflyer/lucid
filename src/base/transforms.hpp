@@ -76,7 +76,7 @@ namespace lucid
     // angle in radians
     template <template <typename, size_t> typename Container>
     constexpr auto
-    rotate(const real angle, const Vec3_<Container> & axis) noexcept
+    rotate(const real angle, const Normal_<Container> & axis) noexcept
     {
 		const auto& [x, y, z] = axis;
 
