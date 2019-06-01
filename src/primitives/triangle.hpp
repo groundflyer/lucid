@@ -5,6 +5,7 @@
 #pragma once
 
 #include "aabb.hpp"
+#include <utils/range.hpp>
 
 
 namespace lucid
@@ -15,10 +16,10 @@ namespace lucid
     using Triangle = Triangle_<std::array>;
 
 
-	template <template <typename, size_t> typename TriangleContainer,
-			  template <typename, size_t> typename RayContainer>
-	constexpr Intersection
-	intersect(const Ray_<RayContainer>& ray,
+    template <template <typename, size_t> typename TriangleContainer,
+              template <typename, size_t> typename RayContainer>
+    constexpr Intersection
+    intersect(const Ray_<RayContainer>& ray,
               const Triangle_<TriangleContainer>& prim) noexcept
     {
         const auto& [o, d] = ray;
@@ -27,17 +28,24 @@ namespace lucid
         const auto edge2 = v2 - v0;
         const auto pvec = d.cross(edge2);
         const auto D = edge1.dot(pvec);
-        const auto tvec = o - v0;
-        const auto u = tvec.dot(pvec);
-        const auto qvec = tvec.cross(edge1);
-        const auto v = d.dot(qvec);
         const auto invD = 1_r / D;
+        const auto tvec = o - v0;
+        const auto u = tvec.dot(pvec) * invD;
+        const auto qvec = tvec.cross(edge1);
+        const auto v = d.dot(qvec) * invD;
         const auto t = edge2.dot(qvec) * invD;
-        return Intersection{!std::signbit(D) && u < D && !std::signbit(v) && (u + v) <= D, t, Vec2{u, v} * invD};
+        const bool not_intersected = almost_equal(D, 0_r, 10) ||
+            std::signbit(v) ||
+            std::signbit(t) ||
+            u + v > 1_r;
+
+        const bool intersected = range(0_r, 1_r)(u) && !not_intersected;
+
+        return Intersection{intersected, t, Vec2{u, v}};
     }
 
-	template <template <typename, size_t> typename TriangleContainer,
-			  template <typename, size_t> typename RayContainer,
+    template <template <typename, size_t> typename TriangleContainer,
+              template <typename, size_t> typename RayContainer,
               template <typename, size_t> typename IsectContainer>
     constexpr Normal
     normal(const Ray_<RayContainer>&,
@@ -59,22 +67,30 @@ namespace lucid
             y -= x;
         }
 
-        // R. Osada et al. Shape distributions. 2002
-        // Eric Heitz A Low-Distortion Map Between Triangle and Square
+        template <template <typename, size_t> typename Container>
+        constexpr auto
+        s2t(Vec2_<Container> s) noexcept
+        {
+            auto& [x, y] = s;
+
+            if(y > x)
+                shift(x, y);
+            else
+                shift(y, x);
+
+            return s;
+        }
+
+        // Eric Heitz A Low-Distortion Map Between Triangle and Square, 2019
         template <template <typename, size_t> typename Container>
         constexpr auto
         triangle_sample(const Vec2_<Container>& s,
-                        const Point_<Container>& a,
-                        const Point_<Container>& b,
-                        const Point_<Container>& c) noexcept
+                        const Point_<Container>& v1,
+                        const Point_<Container>& v2,
+                        const Point_<Container>& v3) noexcept
         {
-            auto [t1, t2] = s;
-            if (t1 > t2)
-                shift(t1, t2);
-            else
-                shift(t2, t1);
-
-            return a * t1 + b * t2 + c * (1_r - t1 - t2);
+            const auto [t1, t2] = s2t(s);
+            return v1 * t1 + v2 * t2 + v3 * (1_r - t1 - t2);
         }
 
         template <typename Prim>
@@ -100,7 +116,7 @@ namespace lucid
         }
     }
 
-	template <template <typename, size_t> typename SContainer,
+    template <template <typename, size_t> typename SContainer,
               template <typename, size_t> typename PContainer>
     constexpr Point
     sample(const Vec2_<SContainer>& s,
