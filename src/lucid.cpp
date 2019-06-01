@@ -6,6 +6,7 @@
 #include <cameras/utils.hpp>
 #include <image/io.hpp>
 #include <utils/seq.hpp>
+#include <base/rng.hpp>
 
 #include <format>
 
@@ -238,10 +239,10 @@ struct WallDescr {};
 
 // vertices and materials indicies
 static const constexpr std::tuple box_description
-    {WallDescr<std::index_sequence<0, 1, 2, 3>, 1>{}, // white floor
+    {WallDescr<std::index_sequence<0, 3, 2, 1>, 1>{}, // white floor
      WallDescr<std::index_sequence<0, 1, 5, 4>, 2>{}, // red left
      WallDescr<std::index_sequence<2, 3, 7, 6>, 3>{}, // green right
-     WallDescr<std::index_sequence<4, 7, 6, 5>, 1>{}, // white ceiling
+     WallDescr<std::index_sequence<4, 5, 6, 7>, 1>{}, // white ceiling
      WallDescr<std::index_sequence<1, 2, 6, 5>, 1>{}}; // white back
 
 using ObjectData = std::pair<GenericPrimitive, std::size_t>;
@@ -281,7 +282,7 @@ traverse_scene(const Ray& ray, const std::array<T, N>& scene) noexcept
 
 int main(/*int argc, char *argv[]*/)
 {
-    perspective::shoot cam(radians(120_r), look_at(Point(0, 0, 2), Point(0, 0, 0), Normal(0, 1, 0)));
+    perspective::shoot cam(radians(60_r), look_at(Point(0, 0, 4), Point(0, 0, 0), Normal(0, 1, 0)));
 
     try
     {
@@ -296,19 +297,48 @@ int main(/*int argc, char *argv[]*/)
     const auto room = array_cat(make_room(),
                                 std::array<ObjectData, 2>
                                 {
-                                    ObjectData{Sphere(Point(0.5_r, -0.7_r, 0.2_r), 0.3_r), 4ul},
+                                    ObjectData{Sphere(Point(0.5_r, -0.6_r, 0.2_r), 0.4_r), 4ul},
                                     ObjectData{Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r), 4ul}
                                 });
-    
+
+    const real bias = 0.001_r;
+    std::random_device rd;
+    std::default_random_engine g(rd());
+
+    const constexpr std::size_t lid = 6;
+
     Image<unsigned char, 3> img(vp::res);
 
     for(auto it = img.begin(); it != img.end(); ++it)
     {
         const auto dc = to_device_coords(it.pos(), img.res());
         const auto ray = cam(dc);
+        const auto& [ro, rd] = ray;
         const auto [isect, pid] = traverse_scene(ray, room);
-        const auto& c = materials[room[pid].second];
-        const RGB8 c8 = isect ? RGB8{ c * 255} : RGB8{255, 0, 0};
+        const auto& pm = room[pid];
+        const auto& prim = pm.first;
+
+        // const Normal i = -rd;
+        const Normal n = normal(ray, isect, prim);
+        const Point p(ro + rd * isect.t);
+
+        RGB c{};
+
+        if (isect && pid != lid)
+        {
+            const Point lp = sample(Vec2(rand<real, 2>(g)), std::get<lid>(room).first);
+            const Normal shray_dir = Normal(lp - p);
+            const Ray shadow_ray(p + shray_dir * bias, shray_dir);
+            const auto [si, sid] = traverse_scene(shadow_ray, room);
+            if(si && sid == 5)
+                c = RGB{si.t, 0, 0};
+            else if (si && sid == lid)
+                c = materials[pm.second] * std::max(dot(shray_dir, n), 0_r); // / (1 + pow<2>(si.t));
+        }
+
+        // const auto dd = dot(i, n);
+        // const RGB c(abs(n));
+        const RGB8 c8 = RGB8{c * 255};
         *it = c8;
     }
 
