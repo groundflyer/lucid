@@ -227,6 +227,8 @@ namespace lucid
     using RGBA = RGBA_<std::array>;
     using RGB8 = RGB8_<std::array>;
     using RGBA8 = RGBA8_<std::array>;
+
+    static const constexpr real Pi = math::Pi_<real>;
 }
 
 namespace std

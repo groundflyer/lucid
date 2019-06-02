@@ -71,7 +71,7 @@ namespace lucid
         const auto& [c, r] = prim;
         const auto& [t1, t2] = s;
         const auto u = 2_r * t1 - 1;
-        const auto theta = 2_r * math::PI<real> * t2;
+        const auto theta = 2_r * Pi * t2;
         const auto _u = math::sqrt(1_r - pow<2>(u));
         return Point(_u * math::cos(theta),
                      _u * math::sin(theta),

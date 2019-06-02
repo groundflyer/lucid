@@ -120,4 +120,12 @@ namespace lucid
                                 sign + pow<2>(ny) * a,
                                 -ny));
     }
+
+    template <template <typename, size_t> typename Container>
+    constexpr auto
+    basis_matrix(const Normal_<Container>& z) noexcept
+    {
+        const auto [x, y] = basis(z);
+        return transpose(Mat3(x, y, z));
+    }
 }

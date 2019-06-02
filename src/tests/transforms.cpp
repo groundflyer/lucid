@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
                            });
 
     ret += test_property_n("rotate",
-                           [&](){ return pair{Normal{argen()}, math::PI<real> * generate_canonical<real, 10>(g)}; },
+                           [&](){ return pair{Normal{argen()}, Pi * generate_canonical<real, 10>(g)}; },
                            [](const auto& feed)
                            {
                                const auto& [axis, angle] = feed;

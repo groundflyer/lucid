@@ -28,7 +28,7 @@ namespace math
     using std::round;
 
     template <typename T>
-    const constexpr T PI = T{3.141592653589793};
+    const constexpr T Pi_ = T{3.141592653589793};
 }
 
 	template <typename T>
@@ -136,12 +136,12 @@ namespace math
     template <typename T>
     constexpr T
     degrees(const T _radians)
-    { return _radians * T{180} / math::PI<T>; }
+    { return _radians * T{180} / math::Pi_<T>; }
 
     template <typename T>
     constexpr T
     radians(const T _degrees)
-    { return _degrees * math::PI<T> / T{180}; }
+    { return _degrees * math::Pi_<T> / T{180}; }
 
     // solves quadratic equation ax^2 + bx + c
     // for non-complex cases

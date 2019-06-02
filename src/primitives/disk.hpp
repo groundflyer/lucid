@@ -69,10 +69,9 @@ namespace lucid
         const auto& [p, zaxis, r] = prim;
         const auto& [t1, t2] = s;
         const auto sr = r * math::sqrt(t1);
-        const auto theta = 2_r * math::PI<real> * t2;
+        const auto theta = 2_r * Pi * t2;
         const Vec3 point{sr * math::sin(theta), sr * math::cos(theta), 0_r};
-        const auto [xaxis, yaxis] = basis(zaxis);
-        return Point(transpose(Mat3(xaxis, yaxis, zaxis)).dot(point) + p);
+        return Point(basis_matrix(zaxis).dot(point) + p);
     }
 
     template <template <typename, size_t> typename Container>

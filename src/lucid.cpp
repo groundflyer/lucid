@@ -213,9 +213,16 @@ namespace vp
     }
 }
 
-constexpr auto
-link(const Point& p) noexcept
-{ return Point_<StaticSpan>(StaticSpan<real, 3>(std::get<0>(p))); }
+auto
+sample_hemisphere(const Normal& n, const Vec2& u) noexcept
+{
+    const auto& [u1, u2] = u;
+    const auto r = 2_r * Pi * u2;
+    const auto phi = math::sqrt(1_r - pow<2>(u1));
+    return basis_matrix(n).dot(Vec3(math::cos(r) * phi,
+                                    math::sin(r) * phi,
+                                    u1));
+}
 
 static const constexpr std::array<Point, 8> box_points
     {Point(-1, -1, 1),
@@ -324,18 +331,42 @@ int main(/*int argc, char *argv[]*/)
 
         RGB c{};
 
-        if (isect && pid != lid)
+        if (isect)
         {
-            const Point lp = sample(Vec2(rand<real, 2>(g)), std::get<lid>(room).first);
-            const Normal shray_dir = Normal(lp - p);
-            const Ray shadow_ray(p + shray_dir * bias, shray_dir);
-            const auto [si, sid] = traverse_scene(shadow_ray, room);
-            if(si && sid == 5)
-                c = RGB{si.t, 0, 0};
-            else if (si && sid == lid)
-                c = materials[pm.second] * std::max(dot(shray_dir, n), 0_r); // / (1 + pow<2>(si.t));
+            if (pid != lid)
+            {
+                const Normal gidir(sample_hemisphere(n, Vec2(rand<real, 2>(g))));
+                const Ray raygi(p, gidir);
+                const auto [gi_isect, gi_hitid] = traverse_scene(raygi, room);
+                RGB gi_color{};
+                if (gi_isect)
+                {
+                    if(gi_hitid == lid)
+                        gi_color = std::max(dot(gidir, n), 0_r);
+                    else
+                    {
+                        const auto& [gi_prim, gi_mat] = room[gi_hitid];
+                        const Normal gi_n = normal(raygi, gi_isect, gi_prim);
+                        const Point gi_p = p + gidir * gi_isect.t;
+                        const Point gi_nee_p = sample(Vec2(rand<real, 2>(g)), std::get<lid>(room).first);
+                        const Normal gi_nee_dir(gi_nee_p - gi_p);
+                        const Ray gi_nee_ray(gi_p, gi_nee_dir);
+                        const auto [gi_nee_isect, gi_nee_id] = traverse_scene(gi_nee_ray, room);
+                        if(gi_nee_isect && gi_nee_id == lid)
+                            gi_color = materials[gi_mat] * std::max(dot(gi_nee_dir, gi_n), 0_r);
+                        
+                    }
+                }
+                const Point lp = sample(Vec2(rand<real, 2>(g)), std::get<lid>(room).first);
+                const Normal shray_dir = Normal(lp - p);
+                const Ray shadow_ray(p + shray_dir * bias, shray_dir);
+                const auto [si, sid] = traverse_scene(shadow_ray, room);
+                if (si && sid == lid)
+                    c = materials[pm.second] * std::max(dot(shray_dir, n), 0_r) + gi_color; // / (1 + pow<2>(si.t));
+            }
+            else
+                c = RGB{1};
         }
-
         // const auto dd = dot(i, n);
         // const RGB c(abs(n));
         const RGB8 c8 = RGB8{c * 255};
