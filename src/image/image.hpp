@@ -105,7 +105,7 @@ namespace lucid
             decltype(auto)
             operator*() const noexcept
             {
-                CHECK_INDEX(Super::m_pos, Super::num_pixels());
+                CHECK_INDEX(m_pos, num_pixels());
                 return Vector(StaticSpan<T, NC>(p_data + m_pos * NC));
             }
         };
@@ -141,14 +141,14 @@ namespace lucid
             auto
             operator[](const std::size_t i) noexcept
             {
-                CHECK_INDEX(i, m_num_pixels);
+                CHECK_INDEX(i, num_pixels());
                 return Vector(StaticSpan<T, NC>(p_data + i * NC));
             }
 
             decltype(auto)
             operator[](const std::size_t i) const noexcept
             {
-                CHECK_INDEX(i, m_num_pixels);
+                CHECK_INDEX(i, num_pixels());
                 return Vector(StaticSpan<T, NC>(p_data + i * NC));
             }
         };

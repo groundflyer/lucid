@@ -83,7 +83,7 @@ namespace lucid
     constexpr decltype(auto)
     switcher(const std::size_t idx, Tuple&& tuple, Args&& ... args) noexcept
     {
-        return std::apply([lookup=idx, args_tuple=std::tuple(args...)](auto&& ... items)
+        return std::apply([lookup=idx, args_tuple=std::forward_as_tuple(args...)](auto&& ... items) mutable
                           {
                               return detail::switcher_impl(lookup,
                                                            args_tuple,

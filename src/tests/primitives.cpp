@@ -50,25 +50,6 @@ int main(int argc, char *argv[])
                                                const Ray tomiss{origin, Normal(origin - target)};
                                                const auto hit = intersect(tohit, prim);
                                                const auto miss = intersect(tomiss, prim);
-
-                                               // if (!hit)
-                                               // {
-                                               //     fmt::print("No hit\n");
-                                               //     fmt::print("target {}, origin {}\n", target, origin);
-                                               // }
-
-
-                                               // if (miss)
-                                               // {
-                                               //     fmt::print("Miss is hit\n");
-                                               //     fmt::print("Miss t {}, hit pos{}\n", miss.t, origin + tomiss.dir * miss.t);
-                                               // }
-
-                                               // if (hit && !almost_equal(hit.t, distance(target, origin), hit_t_ulp))
-                                               // {
-                                               //     fmt::print("Incorrect t: expected {}, got {}\n", distance(target, origin), hit.t);
-                                               // }
-
                                                return !hit || miss || !almost_equal(hit.t, distance(target, origin), hit_t_ulp);
                                            };
 
