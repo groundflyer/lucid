@@ -297,11 +297,11 @@ int main(/*int argc, char *argv[]*/)
 
     const auto room_mat_ids = array_cat(box_mat_idxs, std::array<std::size_t, 2>{4, 1});
 
-    // const real bias = 0.001_r;
-    // std::random_device rd;
-    // std::default_random_engine g(rd());
+    const real bias = 0.001_r;
+    std::random_device rd;
+    std::default_random_engine g(rd());
 
-    // const constexpr std::size_t lid = 6;
+    const constexpr std::size_t lid = 6;
 
     Image<unsigned char, 3> img(vp::res);
 
@@ -309,53 +309,53 @@ int main(/*int argc, char *argv[]*/)
     {
         const auto dc = to_device_coords(it.pos(), img.res());
         const auto ray = cam(dc);
-        // const auto& [ro, rd] = ray;
+        const auto& [ro, rd] = ray;
         const auto [isect, pid] = hider(ray, room_geo);
-        // const auto& prim = room_geo[pid];
-        const auto& c = materials[room_mat_ids[pid]];
+        const auto& prim = room_geo[pid];
+        const auto& mat_color = materials[room_mat_ids[pid]];
 
         // const Normal i = Normal(-rd);
-        // const Normal n = normal(ray, isect, prim);
-        // const Point p(ro + rd * isect.t);
+        const Normal n = normal(ray, isect, prim);
+        const Point p(ro + rd * isect.t);
 
-        // RGB c{};
+        RGB c{};
 
-        // if (isect)
-        // {
-        //     if (pid != lid)
-        //     {
-        //         const Normal gidir(sample_hemisphere(n, Vec2(rand<real, 2>(g))));
-        //         const Ray raygi(p, gidir);
-        //         const auto [gi_isect, gi_hitid] = traverse_scene(raygi, room);
-        //         RGB gi_color{};
-        //         if (gi_isect)
-        //         {
-        //             if(gi_hitid == lid)
-        //                 gi_color = std::max(dot(gidir, n), 0_r);
-        //             else
-        //             {
-        //                 const auto& [gi_prim, gi_mat] = room[gi_hitid];
-        //                 const Normal gi_n = normal(raygi, gi_isect, gi_prim);
-        //                 const Point gi_p = p + gidir * gi_isect.t;
-        //                 const Point gi_nee_p = sample(Vec2(rand<real, 2>(g)), std::get<lid>(room).first);
-        //                 const Normal gi_nee_dir(gi_nee_p - gi_p);
-        //                 const Ray gi_nee_ray(gi_p, gi_nee_dir);
-        //                 const auto [gi_nee_isect, gi_nee_id] = traverse_scene(gi_nee_ray, room);
-        //                 if(gi_nee_isect && gi_nee_id == lid)
-        //                     gi_color = materials[gi_mat] * std::max(dot(gi_nee_dir, gi_n), 0_r);
+        if (isect)
+        {
+            if (pid != lid)
+            {
+                // const Normal gidir(sample_hemisphere(n, Vec2(rand<real, 2>(g))));
+                // const Ray raygi(p, gidir);
+                // const auto [gi_isect, gi_hitid] = traverse_scene(raygi, room);
+                // RGB gi_color{};
+                // if (gi_isect)
+                // {
+                //     if(gi_hitid == lid)
+                //         gi_color = std::max(dot(gidir, n), 0_r);
+                //     else
+                //     {
+                //         const auto& [gi_prim, gi_mat] = room[gi_hitid];
+                //         const Normal gi_n = normal(raygi, gi_isect, gi_prim);
+                //         const Point gi_p = p + gidir * gi_isect.t;
+                //         const Point gi_nee_p = sample(Vec2(rand<real, 2>(g)), std::get<lid>(room).first);
+                //         const Normal gi_nee_dir(gi_nee_p - gi_p);
+                //         const Ray gi_nee_ray(gi_p, gi_nee_dir);
+                //         const auto [gi_nee_isect, gi_nee_id] = traverse_scene(gi_nee_ray, room);
+                //         if(gi_nee_isect && gi_nee_id == lid)
+                //             gi_color = materials[gi_mat] * std::max(dot(gi_nee_dir, gi_n), 0_r);
                         
-        //             }
-        //         }
-        //         const Point lp = sample(Vec2(rand<real, 2>(g)), std::get<lid>(room).first);
-        //         const Normal shray_dir = Normal(lp - p);
-        //         const Ray shadow_ray(p + shray_dir * bias, shray_dir);
-        //         const auto [si, sid] = traverse_scene(shadow_ray, room);
-        //         if (si && sid == lid)
-        //             c = materials[pm.second] * std::max(dot(shray_dir, n), 0_r) + gi_color; // / (1 + pow<2>(si.t));
-        //     }
-        //     else
-        //         c = RGB{1};
-        // }
+                //     }
+                // }
+                const Point lp = sample(Vec2(rand<real, 2>(g)), std::get<lid>(room_geo));
+                const Normal shray_dir = Normal(lp - p);
+                const Ray shadow_ray(p + shray_dir * bias, shray_dir);
+                const auto [si, spid] = hider(shadow_ray, room_geo);
+                if (si && spid == lid)
+                    c = mat_color * std::max(dot(shray_dir, n), 0_r) / (1 + pow<2>(si.t));
+            }
+            else
+                c = RGB{1};
+        }
         // const auto dd = dot(i, n);
         // const RGB c(materials[pm.second] * dd);
         // const RGB c(isect.t * 0.1);
