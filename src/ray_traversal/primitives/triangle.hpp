@@ -132,4 +132,15 @@ namespace lucid
     constexpr AABB
     bound(const Triangle_<Container>& prim) noexcept
     { return detail::bound(prim); }
+
+    template <template <typename, size_t> typename MatContainer,
+			  template <typename, size_t> typename TriangleContainer>
+    constexpr auto
+    apply_transform(const Mat4_<MatContainer>& t,
+					const Triangle_<TriangleContainer>& prim) noexcept
+    {
+        return std::apply([&](const auto& ... points)
+                          { return Triangle{apply_transform(t, points)...}; },
+            prim);
+    }
 }

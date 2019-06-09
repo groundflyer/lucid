@@ -1,7 +1,7 @@
 // -*- C++ -*-
 // lucid.cpp
 
-#include <primitives/generic.hpp>
+#include <ray_traversal/primitives/generic.hpp>
 #include <cameras/perspective.hpp>
 #include <cameras/utils.hpp>
 #include <image/io.hpp>
@@ -241,16 +241,23 @@ static const constexpr RGB materials[]
      RGB{0.1_r, 1, 0.1_r},      // green
      RGB{0.1_r, 0.5_r, 0.7_r}};
 
-template <typename Is, std::size_t Mi>
-struct WallDescr {};
+static const constexpr std::tuple box_geo_descr
+    {
+     std::index_sequence<0, 3, 2, 1>{}, // floor
+     std::index_sequence<0, 1, 5, 4>{}, // left wall
+     std::index_sequence<2, 3, 7, 6>{}, // right wall
+     std::index_sequence<4, 5, 6, 7>{}, // ceiling
+     std::index_sequence<1, 2, 6, 5>{}  // back wall
+    };
 
-// vertices and materials indicies
-static const constexpr std::tuple box_description
-    {WallDescr<std::index_sequence<0, 3, 2, 1>, 1>{}, // white floor
-     WallDescr<std::index_sequence<0, 1, 5, 4>, 2>{}, // red left
-     WallDescr<std::index_sequence<2, 3, 7, 6>, 3>{}, // green right
-     WallDescr<std::index_sequence<4, 5, 6, 7>, 1>{}, // white ceiling
-     WallDescr<std::index_sequence<1, 2, 6, 5>, 1>{}}; // white back
+static const constexpr std::array<std::size_t, 5> box_mat_idxs
+    {
+     1,                         // white
+     2,                         // red
+     3,                         // green
+     1,                         // white
+     1                          // white
+    };
 
 using ObjectData = std::pair<GenericPrimitive, std::size_t>;
 
@@ -259,32 +266,12 @@ constexpr decltype(auto)
 make_wall_geo(std::index_sequence<Pns...>) noexcept
 { return Quad{std::get<Pns>(box_points)...}; }
 
-template <typename Is, std::size_t Mi>
-constexpr decltype(auto)
-make_wall(WallDescr<Is, Mi>) noexcept
-{ return ObjectData{make_wall_geo(Is{}), Mi}; }
-
 constexpr auto
 make_room() noexcept
 {
-    return std::apply([](auto ... pns){ return std::array<ObjectData, sizeof...(pns)>{make_wall(pns)...}; },
-                      box_description);
+    return std::apply([](auto ... pns){ return std::array<GenericPrimitive, sizeof...(pns)>{make_wall_geo(pns)...}; },
+                      box_geo_descr);
 }
-
-template <typename Scene, std::size_t ... Ids>
-constexpr decltype(auto)
-traverse_impl(const Ray& ray, const Scene& scene, std::index_sequence<Ids...>) noexcept
-{
-    return reduce([&](const auto& a, const auto& b)
-                  { return a.first.t < b.first.t ? (a) : (b); },
-        std::pair{Intersection{}, -1ul},
-        std::pair{intersect(ray, std::get<Ids>(scene).first), Ids}...);
-}
-
-template <typename T, std::size_t N>
-constexpr decltype(auto)
-traverse_scene(const Ray& ray, const std::array<T, N>& scene) noexcept
-{ return traverse_impl(ray, scene, std::make_index_sequence<N>{}); }
 
 
 int main(/*int argc, char *argv[]*/)
@@ -301,18 +288,20 @@ int main(/*int argc, char *argv[]*/)
         return 1;
     }
 
-    const auto room = array_cat(make_room(),
-                                std::array<ObjectData, 2>
-                                {
-                                    ObjectData{Sphere(Point(0.5_r, -0.6_r, 0.2_r), 0.4_r), 4ul},
-                                    ObjectData{Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r), 4ul}
-                                });
+    const auto room_geo = array_cat(make_room(),
+                                    std::array<GenericPrimitive, 2>
+                                    {
+                                        GenericPrimitive{Sphere(Point(0.5_r, -0.6_r, 0.2_r), 0.4_r)},
+                                        GenericPrimitive{Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r)}
+                                    });
 
-    const real bias = 0.001_r;
-    std::random_device rd;
-    std::default_random_engine g(rd());
+    const auto room_mat_ids = array_cat(box_mat_idxs, std::array<std::size_t, 2>{4, 1});
 
-    const constexpr std::size_t lid = 6;
+    // const real bias = 0.001_r;
+    // std::random_device rd;
+    // std::default_random_engine g(rd());
+
+    // const constexpr std::size_t lid = 6;
 
     Image<unsigned char, 3> img(vp::res);
 
@@ -320,55 +309,56 @@ int main(/*int argc, char *argv[]*/)
     {
         const auto dc = to_device_coords(it.pos(), img.res());
         const auto ray = cam(dc);
-        const auto& [ro, rd] = ray;
-        const auto [isect, pid] = traverse_scene(ray, room);
-        const auto& pm = room[pid];
-        const auto& prim = pm.first;
+        // const auto& [ro, rd] = ray;
+        const auto [isect, pid] = hider(ray, room_geo);
+        // const auto& prim = room_geo[pid];
+        const auto& c = materials[room_mat_ids[pid]];
 
-        // const Normal i = -rd;
-        const Normal n = normal(ray, isect, prim);
-        const Point p(ro + rd * isect.t);
+        // const Normal i = Normal(-rd);
+        // const Normal n = normal(ray, isect, prim);
+        // const Point p(ro + rd * isect.t);
 
-        RGB c{};
+        // RGB c{};
 
-        if (isect)
-        {
-            if (pid != lid)
-            {
-                const Normal gidir(sample_hemisphere(n, Vec2(rand<real, 2>(g))));
-                const Ray raygi(p, gidir);
-                const auto [gi_isect, gi_hitid] = traverse_scene(raygi, room);
-                RGB gi_color{};
-                if (gi_isect)
-                {
-                    if(gi_hitid == lid)
-                        gi_color = std::max(dot(gidir, n), 0_r);
-                    else
-                    {
-                        const auto& [gi_prim, gi_mat] = room[gi_hitid];
-                        const Normal gi_n = normal(raygi, gi_isect, gi_prim);
-                        const Point gi_p = p + gidir * gi_isect.t;
-                        const Point gi_nee_p = sample(Vec2(rand<real, 2>(g)), std::get<lid>(room).first);
-                        const Normal gi_nee_dir(gi_nee_p - gi_p);
-                        const Ray gi_nee_ray(gi_p, gi_nee_dir);
-                        const auto [gi_nee_isect, gi_nee_id] = traverse_scene(gi_nee_ray, room);
-                        if(gi_nee_isect && gi_nee_id == lid)
-                            gi_color = materials[gi_mat] * std::max(dot(gi_nee_dir, gi_n), 0_r);
+        // if (isect)
+        // {
+        //     if (pid != lid)
+        //     {
+        //         const Normal gidir(sample_hemisphere(n, Vec2(rand<real, 2>(g))));
+        //         const Ray raygi(p, gidir);
+        //         const auto [gi_isect, gi_hitid] = traverse_scene(raygi, room);
+        //         RGB gi_color{};
+        //         if (gi_isect)
+        //         {
+        //             if(gi_hitid == lid)
+        //                 gi_color = std::max(dot(gidir, n), 0_r);
+        //             else
+        //             {
+        //                 const auto& [gi_prim, gi_mat] = room[gi_hitid];
+        //                 const Normal gi_n = normal(raygi, gi_isect, gi_prim);
+        //                 const Point gi_p = p + gidir * gi_isect.t;
+        //                 const Point gi_nee_p = sample(Vec2(rand<real, 2>(g)), std::get<lid>(room).first);
+        //                 const Normal gi_nee_dir(gi_nee_p - gi_p);
+        //                 const Ray gi_nee_ray(gi_p, gi_nee_dir);
+        //                 const auto [gi_nee_isect, gi_nee_id] = traverse_scene(gi_nee_ray, room);
+        //                 if(gi_nee_isect && gi_nee_id == lid)
+        //                     gi_color = materials[gi_mat] * std::max(dot(gi_nee_dir, gi_n), 0_r);
                         
-                    }
-                }
-                const Point lp = sample(Vec2(rand<real, 2>(g)), std::get<lid>(room).first);
-                const Normal shray_dir = Normal(lp - p);
-                const Ray shadow_ray(p + shray_dir * bias, shray_dir);
-                const auto [si, sid] = traverse_scene(shadow_ray, room);
-                if (si && sid == lid)
-                    c = materials[pm.second] * std::max(dot(shray_dir, n), 0_r) + gi_color; // / (1 + pow<2>(si.t));
-            }
-            else
-                c = RGB{1};
-        }
+        //             }
+        //         }
+        //         const Point lp = sample(Vec2(rand<real, 2>(g)), std::get<lid>(room).first);
+        //         const Normal shray_dir = Normal(lp - p);
+        //         const Ray shadow_ray(p + shray_dir * bias, shray_dir);
+        //         const auto [si, sid] = traverse_scene(shadow_ray, room);
+        //         if (si && sid == lid)
+        //             c = materials[pm.second] * std::max(dot(shray_dir, n), 0_r) + gi_color; // / (1 + pow<2>(si.t));
+        //     }
+        //     else
+        //         c = RGB{1};
+        // }
         // const auto dd = dot(i, n);
-        // const RGB c(abs(n));
+        // const RGB c(materials[pm.second] * dd);
+        // const RGB c(isect.t * 0.1);
         const RGB8 c8 = RGB8{c * 255};
         *it = c8;
     }

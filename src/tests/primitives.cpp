@@ -1,12 +1,12 @@
 // -*- C++ -*-
 // primitives.cpp
 #include "property_test.hpp"
-#include <primitives/aabb.hpp>
-#include <primitives/disk.hpp>
-#include <primitives/sphere.hpp>
-#include <primitives/triangle.hpp>
-#include <primitives/quad.hpp>
-#include <primitives/generic.hpp>
+#include <ray_traversal/primitives/aabb.hpp>
+#include <ray_traversal/primitives/disk.hpp>
+#include <ray_traversal/primitives/sphere.hpp>
+#include <ray_traversal/primitives/triangle.hpp>
+#include <ray_traversal/primitives/quad.hpp>
+#include <ray_traversal/primitives/generic.hpp>
 #include <base/rng.hpp>
 
 #include <utils/seq.hpp>
@@ -39,8 +39,6 @@ int main(int argc, char *argv[])
     auto posgen = [&](){ return Point(big_dist.template operator()<3>(g)); };
     auto normgen = [&](){ return Normal(big_dist.template operator()<3>(g)); };
 
-    // we are very tolerant to hit distance
-    // because sphere hit test has poor precision
     static const constexpr auto hit_t_ulp = 10;
 
     const auto sample_intersect_property = [](const auto& sampled, const auto& prim) noexcept
@@ -93,14 +91,10 @@ int main(int argc, char *argv[])
     const auto bound_test_prim = [&](auto&& name, auto&& gen)
                                  { return test_prim(name, gen, bound_gen, bound_property); };
 
-    const auto aabb_gen = [&](){ return AABB(Point(-1,-1,-1), Point(1,1,1)); };
-
+    const auto aabb_gen = [&](){ return AABB(posgen(), posgen()); };
     const auto sphere_gen = [&](){ return Sphere(posgen(), rad_dist(g)); };
-
     const auto disk_gen = [&](){ return Disk(posgen(), normgen(), rad_dist(g)); };
-
     const auto triangle_gen = [&](){ return Triangle{posgen(), posgen(), posgen()}; };
-
     const auto quad_gen = [&]()
                           {
                               const Point v00{0, 0, 0};
@@ -111,16 +105,47 @@ int main(int argc, char *argv[])
                               return apply_transform(t, Quad{v00, v01, v11, v10});
                           };
 
-    const auto all_gens =
+    const auto aabb_gen_l = [&](const real max_rad, const Normal&) -> GenericPrimitive
+                            { return AABB(-Point(rand<real, 3>(g)) * max_rad * 0.5_r,
+                                          Point(rand<real, 3>(g)) * max_rad * 0.5_r); };
+    const auto sphere_gen_l = [&](const real max_rad, const Normal&) -> GenericPrimitive
+                              { return Sphere(Point(0), rand<real>(g) * max_rad); };
+    const auto disk_gen_l = [&](const real, const Normal& n) -> GenericPrimitive
+                            { return Disk(Point(0), n, rad_dist(g)); };
+    const auto triangle_gen_l = [&](const real, const Normal& n) -> GenericPrimitive
+                                {
+                                    const Point v0{-rad_dist(g), -rad_dist(g), 0};
+                                    const Point v1{0, rad_dist(g), 0};
+                                    const Point v2{rad_dist(g), -rad_dist(g), 0};
+                                    Mat4 t(basis_matrix(n));
+                                    t[3][3] = 1;
+                                    return apply_transform(t, Triangle{v0, v1, v2});
+                                };
+    const auto quad_gen_l = [&](const real, const Normal& n) -> GenericPrimitive
+                          {
+                              const real x = rad_dist(g);
+                              const real y = rad_dist(g);
+                              const Point v00{-x, -y, 0};
+                              const Point v01{0, y * 2, 0};
+                              const Point v10{x * 2, 0, 0};
+                              const auto v11 = v00 + v01 + v10;
+                              Mat4 t(basis_matrix(n));
+                              t[3][3] = 1;
+                              return apply_transform(t, Quad{v00, v01, v11, v10});
+                          };
+
+    const auto gp_gen =
         tuple{[&]() { return GenericPrimitive(sphere_gen()); },
               [&]() { return GenericPrimitive(triangle_gen()); },
               [&]() { return GenericPrimitive(quad_gen()); },
               [&]() { return GenericPrimitive(disk_gen()); }};
+    const auto gp_gen_l = tuple{sphere_gen_l, triangle_gen_l, quad_gen_l, disk_gen_l, aabb_gen_l};
 
-    RandomDistribution<size_t> prim_choose(0, std::tuple_size_v<decltype(all_gens)>);
+    RandomDistribution<size_t> gp_choose(0, std::tuple_size_v<decltype(gp_gen)>);
+    RandomDistribution<size_t> gp_choose_l(0, std::tuple_size_v<decltype(gp_gen_l)>);
 
-    const auto rand_prim_gen = [&]()
-                                  { return switcher(prim_choose(g), all_gens); };
+    const auto rand_prim_gen = [&](){ return switcher(gp_choose(g), gp_gen); };
+    const auto rand_prim_gen_l = [&](const real m, const Normal& n){ return switcher(gp_choose_l(g), gp_gen_l, m, n); };
 
     ret += intersect_test_prim("Disk: sample/trace",
                                disk_gen,
@@ -147,6 +172,36 @@ int main(int argc, char *argv[])
     ret += bound_test_prim("Quad: bound", quad_gen);
 
     ret += bound_test_prim("GenericPrimitive: bound", rand_prim_gen);
+
+    ret += test_property(num_tests, 0.05, "GenericPrimitive: hider",
+                         [&]()
+                         {
+                             const Point o = posgen();
+                             const Normal d{o - posgen()};
+                             const Ray ray{o, d};
+                             const constexpr size_t num_prims = 10;
+                             const auto radiuses = rad_dist.template operator()<num_prims>(g);
+                             array<Point, num_prims> positions;
+                             positions[0] = o + d * radiuses[0];
+                             for(size_t i = 1; i < num_prims; ++i)
+                                 positions[i] = positions[i - 1] + d * (radiuses[i - 1] + radiuses[i]);
+
+                             array<GenericPrimitive, num_prims> prims;
+                             for(size_t i = 0; i < num_prims; ++i)
+                                 prims[i] = apply_transform(translate(positions[i]), rand_prim_gen_l(radiuses[i], -d));
+
+                             return pair{ray, prims};
+                         },
+                         [](const auto& feed)
+                         {
+                             const auto& [ray, prims] = feed;
+                             return hider(ray, prims);
+                         },
+                         [](const auto& testing, const auto)
+                         {
+                             const auto& [isect, pidx] = testing;
+                             return !isect || pidx != 0ul;
+                         });
 
     if(ret)
         fmt::print("{} tests failed\n", ret);

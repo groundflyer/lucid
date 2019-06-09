@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <base/ray.hpp>
+#include <ray_traversal/ray_traversal.hpp>
 
 
 namespace lucid::perspective

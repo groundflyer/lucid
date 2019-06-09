@@ -77,4 +77,15 @@ namespace lucid
                           { return bound(held_prim); },
             prim);
     }
+
+    template <template <typename, size_t> typename MatContainer,
+			  template <typename, size_t> typename PrimContainer>
+    constexpr GenericPrimitive
+    apply_transform(const Mat4_<MatContainer>& t,
+                    const GenericPrimitive_<PrimContainer>& prim) noexcept
+    {
+        return std::visit([&t](const auto& held_prim)
+                          { return GenericPrimitive(apply_transform(t, held_prim)); },
+            prim);
+    }
 }

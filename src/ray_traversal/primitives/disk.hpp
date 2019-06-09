@@ -88,4 +88,16 @@ namespace lucid
         const Vec3 offset(r, h, r);
         return AABB{p - offset, p + offset};
     }
+
+    template <template <typename, size_t> typename MatContainer,
+			  template <typename, size_t> typename PrimContainer>
+    constexpr Disk
+    apply_transform(const Mat4_<MatContainer>& t,
+                    const Disk_<PrimContainer>& prim) noexcept
+    {
+        const auto& [p, n, r] = prim;
+        return Disk(apply_transform(t, p),
+                    apply_transform(t, n),
+                    r);
+    }
 }

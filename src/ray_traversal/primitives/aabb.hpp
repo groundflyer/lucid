@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include <base/intersection.hpp>
-#include <base/ray.hpp>
+#include <ray_traversal/ray_traversal.hpp>
+
 #include <base/rng.hpp>
 
 #include <utils/identity.hpp>
@@ -144,4 +144,14 @@ namespace lucid
     constexpr AABB
     bound(const AABB_<Container>& prim) noexcept
     { return prim; }
+
+    template <template <typename, size_t> typename MatContainer,
+			  template <typename, size_t> typename PrimContainer>
+    constexpr AABB
+    apply_transform(const Mat4_<MatContainer>& t,
+                    const AABB_<PrimContainer>& prim) noexcept
+    {
+        const auto& [vmin, vmax] = prim;
+        return AABB(apply_transform(t, vmin), apply_transform(t, vmax));
+    }
 }

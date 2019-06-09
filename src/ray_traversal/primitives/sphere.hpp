@@ -90,4 +90,14 @@ namespace lucid
         const auto& [c, r] = prim;
         return AABB{c - r, c + r};
     }
+
+    template <template <typename, size_t> typename MatContainer,
+			  template <typename, size_t> typename PrimContainer>
+    constexpr Sphere
+    apply_transform(const Mat4_<MatContainer>& t,
+                    const Sphere_<PrimContainer>& prim) noexcept
+    {
+        const auto& [c, r] = prim;
+        return Sphere(apply_transform(t, c), r);
+    }
 }
