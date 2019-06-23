@@ -12,9 +12,9 @@
 namespace lucid
 {
     template <typename T, std::size_t N,
-			  template <typename, std::size_t> typename Container>
+			  template <typename, std::size_t> typename Container = std::array>
     class Vector: public ImmutableVectorOperators<T, N, Container, Vector>,
-        MutableVectorOperators<T, N, Container, Vector>
+        public MutableVectorOperators<T, N, Container, Vector>
     {
     protected:
 		using Data = Container<T, N>;
@@ -100,22 +100,6 @@ namespace lucid
 		operator=(const Vector & rhs) noexcept
 		{
 			m_data = rhs.m_data;
-			return *this;
-		}
-
-		// between different containers we copy data manually
-		template <template <typename, std::size_t> typename Container2>
-		constexpr Vector&
-		operator=(const Vector<T, N, Container2> & rhs) noexcept
-		{
-			std::copy(rhs.cbegin(), rhs.cend(), begin());
-			return *this;
-		}
-
-		constexpr Vector&
-		operator=(const T & rhs) noexcept
-		{
-			for (T& i : m_data) i = rhs;
 			return *this;
 		}
 
