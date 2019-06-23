@@ -261,14 +261,6 @@ namespace lucid
 		cend() const noexcept
 		{ return m_data.cend(); }
 
-        constexpr decltype(auto)
-        flat_ref() const noexcept
-        { return Vector(StaticSpan<T, M * N>(at(0))); }
-
-        constexpr decltype(auto)
-        flat_ref() noexcept
-        { return Vector(StaticSpan<T, M * N>(at(0))); }
-
 		template <template <typename, size_t> typename Container2>
 		constexpr Matrix
 		operator+(const Matrix<T, M, N, Container2> & rhs) const noexcept
@@ -441,20 +433,20 @@ namespace lucid
 		constexpr auto
 		operator==(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			Matrix<bool, M, N> ret;
+            std::bitset<M*N> ret{};
 
 			for (size_t i = 0; i < MN; ++i)
-				ret.at(i) = at(i) == rhs.at(i);
+				ret[i] = at(i) == rhs.at(i);
 
 			return ret;
 		}
 		constexpr auto
 		operator==(const T & rhs) const noexcept
 		{
-			Matrix<bool, M, N> ret;
+            std::bitset<M*N> ret{};
 
 			for (size_t i = 0; i < MN; ++i)
-				ret.at(i) = at(i) == rhs;
+				ret[i] = at(i) == rhs;
 
 			return ret;
 		}
@@ -463,20 +455,20 @@ namespace lucid
 		constexpr auto
 		operator!=(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			Matrix<bool, M, N> ret;
+			std::bitset<M*N> ret{};
 
 			for (size_t i = 0; i < MN; ++i)
-				ret.at(i) = at(i) != rhs.at(i);
+				ret[i] = at(i) != rhs.at(i);
 
 			return ret;
 		}
 		constexpr auto
 		operator!=(const T & rhs) const noexcept
 		{
-			Matrix<bool, M, N> ret;
+			std::bitset<M*N> ret{};
 
 			for (size_t i = 0; i < MN; ++i)
-				ret.at(i) = at(i) != rhs;
+				ret[i] = at(i) != rhs;
 
 			return ret;
 		}
@@ -485,20 +477,20 @@ namespace lucid
 		constexpr auto
 		operator<(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			Matrix<bool, M, N> ret;
+			std::bitset<M*N> ret{};
 
 			for (size_t i = 0; i < MN; ++i)
-				ret.at(i) = at(i) < rhs.at(i);
+				ret[i] = at(i) < rhs.at(i);
 
 			return ret;
 		}
 		constexpr auto
 		operator<(const T & rhs) const noexcept
 		{
-			Matrix<bool, M, N> ret;
+			std::bitset<M*N> ret{};
 
 			for (size_t i = 0; i < MN; ++i)
-				ret.at(i) = at(i) < rhs;
+				ret[i] = at(i) < rhs;
 
 			return ret;
 		}
@@ -507,20 +499,20 @@ namespace lucid
 		constexpr auto
 		operator<=(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			Matrix<bool, M, N> ret;
+			std::bitset<M*N> ret{};
 
 			for (size_t i = 0; i < MN; ++i)
-				ret.at(i) = at(i) <= rhs.at(i);
+				ret[i] = at(i) <= rhs.at(i);
 
 			return ret;
 		}
 		constexpr auto
 		operator<=(const T & rhs) const noexcept
 		{
-			Matrix<bool, M, N> ret;
+			std::bitset<M*N> ret{};
 
 			for (size_t i = 0; i < MN; ++i)
-				ret.at(i) = at(i) <= rhs;
+				ret[i] = at(i) <= rhs;
 
 			return ret;
 		}
@@ -529,20 +521,20 @@ namespace lucid
 		constexpr auto
 		operator>(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			Matrix<bool, M, N> ret;
+			std::bitset<M*N> ret{};
 
 			for (size_t i = 0; i < MN; ++i)
-				ret.at(i) = at(i) > rhs.at(i);
+				ret[i] = at(i) > rhs.at(i);
 
 			return ret;
 		}
 		constexpr auto
 		operator>(const T & rhs) const noexcept
 		{
-			Matrix<bool, M, N> ret;
+			std::bitset<M*N> ret{};
 
 			for (size_t i = 0; i < MN; ++i)
-				ret.at(i) = at(i) > rhs;
+				ret[i] = at(i) > rhs;
 
 			return ret;
 		}
@@ -551,20 +543,20 @@ namespace lucid
 		constexpr auto
 		operator>=(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			Matrix<bool, M, N, Container> ret;
+			std::bitset<M*N> ret{};
 
 			for (size_t i = 0; i < MN; ++i)
-				ret.at(i) = at(i) >= rhs.at(i);
+				ret[i] = at(i) >= rhs.at(i);
 
 			return ret;
 		}
 		constexpr auto
 		operator>=(const T & rhs) const noexcept
 		{
-			Matrix<bool, M, N, Container> ret;
+			std::bitset<M*N> ret{};
 
 			for (size_t i = 0; i < MN; ++i)
-				ret.at(i) = at(i) >= rhs;
+				ret[i] = at(i) >= rhs;
 
 			return ret;
 		}
@@ -590,6 +582,18 @@ namespace lucid
 			return ret;
 		}
     };
+
+    template <typename T, size_t M, size_t N,
+			  template <typename, size_t> typename Container>
+    constexpr auto
+    ref(const Matrix<T, M, N, Container>& m) noexcept
+    { return Matrix<T, M, N, StaticSpan>(m.at(0)); }
+
+    template <typename T, size_t M, size_t N,
+			  template <typename, size_t> typename Container>
+    constexpr auto
+    flat_ref(const Matrix<T, M, N, Container>& m) noexcept
+    { return Vector(StaticSpan<T, M * N>(m.at(0))); }
 
     template <typename T, size_t M, size_t N,
 			  template <typename, size_t> class Container>

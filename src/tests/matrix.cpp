@@ -41,20 +41,20 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                if constexpr(is_floating_point_v<T>)
                                {
                                    const constexpr unsigned ULP = 5;
-                                   return any(!almost_equal(a.flat_ref(), b.flat_ref(), ULP));
+                                   return any(!almost_equal(flat_ref(a), flat_ref(b), ULP));
                                }
                                else
-                                   return any((a != b).flat_ref());
+                                   return any(flat_ref(a) != flat_ref(b));
                            };
 
     auto mat_gen = [&]() { return Mat(array_mn_gen()); };
 
     unsigned ret = 0;
 
-    ret += test_property_n("{}({}).flat_ref()"_format(mat_typestring, t_typestring),
+    ret += test_property_n("flat_ref({}({}))"_format(mat_typestring, t_typestring),
                            [&](){ return dist(g); },
                            [](const auto feed){ return Mat(feed); },
-                           [](const auto& testing, const auto& feed){ return any(testing.flat_ref() != feed); });
+                           [](const auto& testing, const auto& feed){ return any(flat_ref(testing) != feed); });
 
     ret += test_property_n("{}({})"_format(mat_typestring, get_typeinfo_string(array<T, MN>{})),
                            array_mn_gen,
@@ -153,7 +153,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                        // equalizing them as ulp is same for all of them
                                        const auto zero = Mat::identity() - feed.dot(testing);
                                        const constexpr auto ulp = pow<sizeof(T)>(100ul);
-                                       return any(!almost_equal(zero.flat_ref(), T{0}, ulp));
+                                       return any(!almost_equal(flat_ref(zero), T{0}, ulp));
                                    });
     }
 
