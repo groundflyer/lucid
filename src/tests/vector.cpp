@@ -2,6 +2,8 @@
 
 #include <utils/typelist.hpp>
 #include <base/vector.hpp>
+#include <base/normal.hpp>
+#include <base/point.hpp>
 #include <base/rng.hpp>
 
 #include <string>
@@ -284,30 +286,31 @@ template <size_t N, typename RandomEngine>
 auto
 __boolean_test(RandomEngine& g, const size_t num_tests) noexcept
 {
-    RandomDistribution<bool> dist(0.5);
     unsigned ret = 0;
+
+    auto bool_vector_gen = [&]{ return (Vector(rand<float, N>(g)) > Vector(rand<float, N>(g))); };
 
     static const constexpr double threshold = 0.0;
     auto test_property_n = [num_tests](auto&& ... args)
                            { return test_property(num_tests, threshold, forward<decltype(args)>(args)...); };
 
     ret += test_property_n("any(Vector<bool, {}>)"_format(N),
-                           [&]() { return Vector(dist.template operator()<N>(g)); },
-                           [](const Vector<bool, N>& feed) { return any(feed); },
-                           [](const bool testing, const Vector<bool, N>& feed)
-                           {
-                               return testing != apply([](auto... vals) { return (false || ... || vals); },
-                                                        feed.data());
-                           });
+                           bool_vector_gen,
+                           [](const auto& feed) { return any(feed); },
+                           [](const auto testing, const auto& feed)
+                           { return testing != feed.any(); });
 
     ret += test_property_n("all(Vector<bool, {}>)"_format(N),
-                           [&]() { return Vector(dist.template operator()<N>(g)); },
-                           [](const Vector<bool, N>& feed) { return all(feed); },
-                           [](const bool testing, const Vector<bool, N>& feed)
-                           {
-                               return testing != apply([](auto... vals) { return (true && ... && vals); },
-                                                        feed.data());
-                           });
+                           bool_vector_gen,
+                           [](const auto& feed) { return all(feed); },
+                           [](const auto testing, const auto& feed)
+                           { return testing != feed.all(); });
+
+    ret += test_property_n("!(Vector<bool, {}>)"_format(N),
+                           bool_vector_gen,
+                           [](const auto& feed) { return !feed; },
+                           [](const auto testing, const auto& feed)
+                           { return testing != (~feed); });
 
     return ret;
 }
@@ -322,6 +325,15 @@ int main(int argc, char* argv[])
     const size_t num_tests = argc == 2 ? stoul(argv[1]) : 1000000;
 
     int ret = 0;
+
+    // just checkig if it compiles
+    Vector<float, 3, std::array> vec{0, 1, 2};
+    Point_<float, 3, std::array> point{3, 4, 5};
+    Normal_<float, 3, std::array> normal{6, 7, 8};
+    vec = point;
+    point = normal;
+    Vector<float, 4, std::array> vv(1.f, vec);
+    vv[0] = 2.f;
 
     random_device rd;
     default_random_engine g(rd());

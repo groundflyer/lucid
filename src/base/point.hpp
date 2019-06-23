@@ -11,56 +11,70 @@
 
 namespace lucid
 {
-    template <typename T, std::size_t N,
-			  template <typename, std::size_t> typename Container = std::array>
-    class Vector:
-        public ImmutableVectorOperators<T, N, Container, Vector>,
-        public MutableVectorOperators<T, N, Container, Vector>
-    {
-		using Data = Container<T, N>;
+    struct InvalidPointException {};
 
+    template <typename T, std::size_t N = 3,
+			  template <typename, std::size_t> typename Container = std::array>
+    class Point_:
+        public ImmutableVectorOperators<T, N, Container, Point_>,
+        public MutableVectorOperators<T, N, Container, Point_>
+    {
+        static_assert(std::is_floating_point_v<T>, "Point consist of floating point elements.");
+
+		using Data = Container<T, N>;
 		Data m_data {};
+
+        constexpr void
+        check() const
+        {
+            if (any(transform(static_cast<bool(*)(T)>(std::isinf), *this)))
+                throw InvalidPointException{};
+        }
 
     public:
 		constexpr
-		Vector() {}
+		Point_() {}
 
 		constexpr
-		Vector(const Vector& rhs) : m_data(rhs.m_data) {}
+		Point_(const Point_& rhs) : m_data(rhs.m_data) { check(); }
 
 		constexpr
-		Vector(Vector&& rhs) : m_data(std::move(rhs.m_data)) {}
+		Point_(Point_&& rhs) : m_data(std::move(rhs.m_data)) { check(); }
 
 		explicit constexpr
-		Vector(const Data& rhs) : m_data(rhs) {}
+		Point_(const Data& rhs) : m_data(rhs) { check(); }
 
 		explicit constexpr
-		Vector(Data&& rhs) : m_data(std::move(rhs)) {}
+		Point_(Data&& rhs) : m_data(std::move(rhs)) { check(); }
 
         template <typename ... Ts>
         explicit constexpr
-        Vector(Ts&& ... rhs) : m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...)) {}
+        Point_(Ts&& ... rhs) : m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...))
+        { check(); }
 
-		constexpr Vector&
-		operator=(const Vector& rhs) noexcept
+		constexpr Point_&
+		operator=(const Point_& rhs) noexcept
 		{
 			m_data = rhs.m_data;
+            check();
 			return *this;
 		}
 
-		constexpr Vector&
-		operator=(Vector&& rhs) noexcept
+		constexpr Point_&
+		operator=(Point_&& rhs) noexcept
 		{
 			m_data = std::move(rhs.m_data);
+            check();
 			return *this;
 		}
+
 
 		constexpr decltype(auto)
 		operator=(const T& rhs) noexcept
 		{
             for (std::size_t i = 0; i < N; ++i)
                 m_data[i] = rhs;
-
+            check();
 			return *this;
 		}
 
@@ -71,22 +85,9 @@ namespace lucid
         {
             for (std::size_t i = 0; i < N; ++i)
                 m_data[i] = rhs[i];
-
+            check();
 			return *this;
         }
-
-		constexpr auto
-		begin() noexcept
-		{ return m_data.begin(); }
-		constexpr auto
-		end() noexcept
-		{ return m_data.end(); }
-		constexpr auto
-		cbegin() const noexcept
-		{ return m_data.cbegin(); }
-		constexpr auto
-		cend() const noexcept
-		{ return m_data.cend(); }
 
 		const constexpr T&
 		operator[](const std::size_t i) const noexcept
@@ -101,18 +102,40 @@ namespace lucid
 			return m_data[i];
 		}
 
-		template <std::size_t I>
-		constexpr T&
-		get() noexcept
-		{ return std::get<I>(m_data); }
+		constexpr decltype(auto)
+		begin() const noexcept
+		{ return m_data.begin(); }
+		constexpr decltype(auto)
+		end() const noexcept
+		{ return m_data.end(); }
+		constexpr decltype(auto)
+		begin() noexcept
+		{ return m_data.begin(); }
+		constexpr decltype(auto)
+		end() noexcept
+		{ return m_data.end(); }
+		constexpr decltype(auto)
+		cbegin() const noexcept
+		{ return m_data.cbegin(); }
+		constexpr decltype(auto)
+		cend() const noexcept
+		{ return m_data.cend(); }
 
 		template <std::size_t I>
 		constexpr const T&
 		get() const noexcept
 		{ return std::get<I>(m_data); }
 
+		template <std::size_t I>
+		constexpr T&
+		get() noexcept
+		{ return std::get<I>(m_data); }
+
 		const constexpr Data&
 		data() const noexcept
+		{ return m_data; }
+		const constexpr Data&
+		data() noexcept
 		{ return m_data; }
 
 		constexpr auto
@@ -122,14 +145,14 @@ namespace lucid
 
     template <typename T, std::size_t N,
 			  template <typename, std::size_t> typename Container>
-    Vector(Container<T, N> &&) -> Vector<T, N, Container>;
+    Point_(Container<T, N> &&) -> Point_<T, N, Container>;
 }
 
 namespace std
 {
 	template <typename T, std::size_t N,
 			  template <typename, std::size_t> typename Container>
-	class tuple_size<lucid::Vector<T, N, Container>>
+	class tuple_size<lucid::Point_<T, N, Container>>
     {
     public:
         static const constexpr std::size_t value = N;
@@ -137,7 +160,7 @@ namespace std
 
 	template<std::size_t I, typename T, std::size_t N,
 			 template <typename, std::size_t> typename Container>
-    class tuple_element<I, lucid::Vector<T, N, Container>>
+    class tuple_element<I, lucid::Point_<T, N, Container>>
 	{
     public:
         using type = T;
@@ -146,6 +169,6 @@ namespace std
 	template<std::size_t I, typename T, std::size_t N,
 			 template <typename, std::size_t> typename Container>
     constexpr decltype(auto)
-    get(const lucid::Vector<T, N, Container>& vec) noexcept
+    get(const lucid::Point_<T, N, Container>& vec) noexcept
     { return vec.template get<I>(); }
 }

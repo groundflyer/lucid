@@ -7,6 +7,7 @@
 
 #include "vector.hpp"
 
+#include <utils/debug.hpp>
 
 namespace lucid
 {
@@ -16,12 +17,13 @@ namespace lucid
 
     template <typename T, size_t M, size_t N,
 			  template <typename, size_t> class MContainer,
-			  template <typename, size_t> class VContainer>
+			  template <typename, size_t> class VContainer,
+              template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType>
     constexpr auto
     dot(const Matrix<T, M, N, MContainer> & lhs,
-		const Vector<T, N, VContainer> & rhs) noexcept
+		const VectorType<T, N, VContainer> & rhs) noexcept
     {
-		Vector<T, N> ret;
+		VectorType<T, N, std::array> ret{};
 
 		for (size_t i = 0; i < M; ++i)
 			for (size_t j = 0; j < N; ++j)
@@ -75,63 +77,77 @@ namespace lucid
 
         template <size_t idx, typename ... Ts>
         constexpr void
-        unpack(const T& first, Ts && ... other) noexcept
+        unpack(const T& head, Ts && ... tail) noexcept
         {
             static_assert(idx < MN, "Too many elements.");
-            m_data[idx] = first;
-            if constexpr (sizeof...(other) == 0 && idx < MN-1)
-                unpack<idx+1>(first);
+
+            m_data[idx] = head;
+
+            if constexpr (sizeof...(tail) == 0 && idx < MN-1)
+                unpack<idx+1>(head);
             else
-                unpack<idx+1>(std::forward<Ts>(other)...);
+                unpack<idx+1>(std::forward<Ts>(tail)...);
         }
 
 		// unpack vector arguments
 		template <size_t idx, size_t MN1,
                   template <typename, size_t> typename Container2,
+                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType,
 				  typename ... Ts>
 		constexpr void
-        unpack(const Vector<T, MN1, Container2>& first,
-               Ts&& ... other) noexcept
+        unpack(const VectorType<T, MN1, Container2>& head,
+               Ts&& ... tail) noexcept
 		{
             static_assert(idx < MN, "Too many elements.");
+
             const constexpr auto end = std::min(MN - idx, MN1);
+
             for(size_t i = 0; i < end; ++i)
-                m_data[idx + i] = first[i];
-			unpack<idx + end>(std::forward<Ts>(other)...);
+                m_data[idx + i] = head[i];
+
+			unpack<idx + end>(std::forward<Ts>(tail)...);
 		}
 
         template <size_t idx, size_t MN1,
                   typename ... Ts>
         constexpr void
-        unpack(const Container<T, MN1>& first, Ts && ... other) noexcept
+        unpack(const Container<T, MN1>& head, Ts && ... tail) noexcept
         {
             static_assert(idx < MN, "Too many elements.");
             const constexpr auto end = std::min(MN - idx, MN1);
             for(size_t i = 0; i < end; ++i)
-                m_data[idx + i] = first[i];
-            unpack<idx + end>(std::forward<Ts>(other)...);
+                m_data[idx + i] = head[i];
+            unpack<idx + end>(std::forward<Ts>(tail)...);
         }
 
 		template <size_t idx, size_t M1, size_t N1,
 				  template <typename, size_t> typename Container1,
                   typename ... Ts>
         constexpr void
-        unpack(const Matrix<T, M1, N1, Container1>& first, Ts&& ... other) noexcept
+        unpack(const Matrix<T, M1, N1, Container1>& head, Ts&& ... tail) noexcept
         {
             const constexpr auto shift = indices(idx);
             const constexpr auto shift_i = shift.first;
             const constexpr auto shift_j = shift.second;
             const constexpr auto I = std::min(M - shift_i, M1);
             const constexpr auto J = std::min(N - shift_j, N1);
+
             for (size_t i = 0; i < I; ++i)
                 for (size_t j = 0; j < J; ++j)
-                    m_data[pos(shift_i + i, shift_j + j)] = first.at(i, j);
-            unpack<pos(I, J, J) + 1>(std::forward<Ts>(other)...);
+                    m_data[pos(shift_i + i, shift_j + j)] = head.at(i, j);
+
+            unpack<pos(I, J, J) + 1>(std::forward<Ts>(tail)...);
         }
 
     public:
 		constexpr
     	Matrix() {}
+
+        constexpr
+        Matrix(const Matrix& rhs) : m_data(rhs.m_data) {}
+
+        constexpr
+        Matrix(Matrix&& rhs) : m_data(std::move(rhs.m_data)) {}
 
 		// single scalar construcor
     	explicit constexpr
@@ -139,7 +155,7 @@ namespace lucid
     	{ for (auto & elem : *this) elem = rhs;	}
 
     	explicit constexpr
-    	Matrix(Data&& rhs) : m_data(rhs) {}
+    	Matrix(Data&& rhs) : m_data(std::move(rhs)) {}
 
     	explicit constexpr
     	Matrix(Data& rhs) : m_data(rhs) {}
@@ -156,6 +172,13 @@ namespace lucid
 		operator=(const Matrix& rhs) noexcept
 		{
 			m_data = rhs.m_data;
+			return *this;
+		}
+
+		constexpr Matrix&
+		operator=(Matrix&& rhs) noexcept
+		{
+			m_data = std::move(rhs.m_data);
 			return *this;
 		}
 

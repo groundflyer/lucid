@@ -11,6 +11,7 @@
 #include <utils/math.hpp>
 
 #include <array>
+#include <bitset>
 #include <limits>
 #include <utility>
 #include <numeric>
@@ -18,6 +19,13 @@
 #include <functional>
 #include <type_traits>
 
+namespace std
+{
+    template <std::size_t N>
+    std::bitset<N>
+    operator!(const std::bitset<N>& rhs) noexcept
+    { return ~rhs; }
+}
 
 namespace lucid
 {
@@ -31,7 +39,12 @@ namespace lucid
               const VectorType<T1, N, Container1>& a,
 			  const VectorType<T2, N, Container2>& b) noexcept
     {
-		VectorType<std::decay_t<std::result_of_t<BinaryOperation(T1, T2)>>, N, std::array> ret{};
+        using ElemType = typename std::decay_t<std::result_of_t<BinaryOperation(T1, T2)>>;
+        using RetType = typename std::conditional_t<std::is_same_v<ElemType, bool>,
+                                                    std::bitset<N>,
+                                                    VectorType<ElemType, N, std::array>>;
+
+        RetType ret{};
 
 		for (std::size_t i = 0; i < N; ++i)
 			ret[i] = binary_op(a[i], b[i]);
@@ -48,7 +61,12 @@ namespace lucid
     transform(UnaryOperation unary_op,
               const VectorType<T, N, Container> & a) noexcept
     {
-		VectorType<std::decay_t<std::result_of_t<UnaryOperation(T)>>, N, std::array> ret{};
+        using ElemType = typename std::decay_t<std::result_of_t<UnaryOperation(T)>>;
+        using RetType = typename std::conditional_t<std::is_same_v<ElemType, bool>,
+                                                    std::bitset<N>,
+                                                    VectorType<ElemType, N, std::array>>;
+
+	    RetType ret{};
 
 		for (std::size_t i = 0; i < N; ++i)
 			ret[i] = unary_op(a[i]);
@@ -179,6 +197,16 @@ namespace lucid
     constexpr auto
     any(const VectorType<T, N, Container> & a) noexcept
     { return reduce(std::logical_or<bool>(), a, false); }
+
+    template <std::size_t N>
+    constexpr bool
+    all(const std::bitset<N>& a) noexcept
+    { return a.all(); }
+
+    template <std::size_t N>
+    constexpr bool
+    any(const std::bitset<N>& a) noexcept
+    { return a.any(); }
 
     template <typename T, std::size_t N,
     	      template <typename, std::size_t> class Container,
@@ -432,10 +460,10 @@ namespace lucid
         { return static_cast<VectorType<T, N, Container>&>(*this); }
 
     public:
-		// between different containers we copy data manually
-		template <template <typename, std::size_t> typename Container2>
+		template <template <typename, std::size_t> typename Container2,
+                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
 		constexpr decltype(auto)
-		operator=(const VectorType<T, N, Container2>& rhs) noexcept
+		operator=(const VectorType2<T, N, Container2>& rhs) noexcept
 		{
             for (std::size_t i = 0; i < N; ++i)
                 this_vec()[i] = rhs[i];
@@ -525,6 +553,29 @@ namespace lucid
 		}
     };
 
+
+    template <std::size_t idx,
+              typename OutType, std::size_t OutSize,
+              typename InType,
+              typename ... Tail>
+    std::array<OutType, OutSize>&
+    vector_constructor(std::array<OutType, OutSize>& out,
+                       const InType& head,
+                       Tail&& ... tail) noexcept
+    {
+        static_assert(idx < OutSize, "Too many elements.");
+
+        out[idx] = head;
+
+        if constexpr (sizeof...(tail) > 0)
+            return vector_constructor<idx + 1>(out, std::forward<Tail>(tail)...);
+
+        if constexpr (idx < (OutSize - 1))
+            return vector_constructor<idx + 1>(out, head);
+
+        return out;
+    }
+
     template <std::size_t idx,
               typename OutType, std::size_t OutSize,
               typename InType, std::size_t InSize,
@@ -544,28 +595,6 @@ namespace lucid
 
         if constexpr (sizeof...(tail) > 0)
             return vector_constructor<idx + N>(out, std::forward<Tail>(tail)...);
-
-        return out;
-    }
-
-    template <std::size_t idx,
-              typename OutType, std::size_t OutSize,
-              typename InType,
-              typename ... Tail>
-    std::array<OutType, OutSize>&
-    vector_constructor(std::array<OutType, OutSize>& out,
-                       const InType& head,
-                       Tail&& ... tail) noexcept
-    {
-        static_assert(idx < OutSize, "Too many elements.");
-
-        out[idx] = head;
-
-        if constexpr (sizeof...(tail) > 0)
-            return vector_constructor<idx+1>(out, std::forward<Tail>(tail)...);
-
-        if constexpr (idx < (OutSize - 1))
-            return vector_constructor<idx+1>(out, head);
 
         return out;
     }

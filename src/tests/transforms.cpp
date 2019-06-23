@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
     const constexpr unsigned ULP = 5;
 
     ret += test_property_n("translate",
-                           [&](){ return pair{Point{argen()}, Vec3{argen()}}; },
+                           [&](){ return pair{Point{argen()}, Point{argen()}}; },
                            [](const auto& feed)
                            {
                                const auto& [origin, delta] = feed;
@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
                            });
 
     ret += test_property_n("scale",
-                           [&](){ return pair{Point{argen()}, Vec3{argen()}}; },
+                           [&](){ return pair{Point{argen()}, Point{argen()}}; },
                            [](const auto& feed)
                            {
                                const auto& [origin, delta] = feed;

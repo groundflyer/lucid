@@ -12,12 +12,12 @@
 namespace lucid
 {
     template <template <typename, size_t> typename Container>
-    constexpr Vec4_<Container>
-    homogenize(const Point_<Container> & a) noexcept
+    constexpr auto
+    homogenize(const Point_<real, 3, Container> & a) noexcept
     { return Vec4(a, 1_r); }
 
     template <template <typename, size_t> typename Container>
-    constexpr Vec3_<Container>
+    constexpr auto
     dehomogenize(const Vec4_<Container> & a) noexcept
     {
         Vec3 ret{a};
@@ -39,20 +39,20 @@ namespace lucid
 			  template <typename, size_t> typename PointContainer>
     constexpr auto
     apply_transform(const Mat4_<MatContainer> & t,
-					const Point_<PointContainer> & p) noexcept
+					const Point_<real, 3, PointContainer> & p) noexcept
     { return Point(dehomogenize(t.dot(homogenize(p)))); }
 
     template <template <typename, size_t> typename MatContainer,
 			  template <typename, size_t> typename NormalContainer>
     constexpr auto
     apply_transform(const Mat4_<MatContainer> & t,
-					const Normal_<NormalContainer> & n) noexcept
+					const Normal_<real, 3, NormalContainer> & n) noexcept
     { return Normal(dehomogenize(transpose(inverse(t)).dot(Vec4(n)))); }
 
 
     template <template <typename, size_t> typename Container>
     constexpr auto
-    translate(const Vec3_<Container> & delta) noexcept
+    translate(const Point_<real, 3, Container> & delta) noexcept
     {
 		const auto& [x, y, z] = delta;
 		return Mat4(1, 0, 0, x,
@@ -63,7 +63,7 @@ namespace lucid
 
     template <template <typename, size_t> typename Container>
     constexpr auto
-    scale(const Vec3_<Container> & delta) noexcept
+    scale(const Point_<real, 3, Container> & delta) noexcept
     {
 		const auto& [x, y, z] = delta;
 		return Mat4(x, 0, 0, 0,
@@ -76,7 +76,7 @@ namespace lucid
     // angle in radians
     template <template <typename, size_t> typename Container>
     constexpr auto
-    rotate(const real angle, const Normal_<Container> & axis) noexcept
+    rotate(const real angle, const Normal_<real, 3, Container> & axis) noexcept
     {
 		const auto& [x, y, z] = axis;
 
@@ -91,12 +91,12 @@ namespace lucid
 			  template <typename, size_t> typename CenContainer,
 			  template <typename, size_t> typename UpContainer>
     constexpr auto
-    look_at(const Point_<EyeContainer>& eye,
-			const Point_<CenContainer>& target,
-			const Normal_<UpContainer>& up) noexcept
+    look_at(const Point_<real, 3, EyeContainer>& eye,
+			const Point_<real, 3, CenContainer>& target,
+			const Normal_<real, 3, UpContainer>& up) noexcept
     {
-		const auto f = normalize(eye - target);
-		const auto r = normalize(up.cross(f));
+		const Normal f(eye - target);
+		const auto r = up.cross(f);
         const auto u = f.cross(r);
 		return inverse(Mat4(r, 0_r,
                             u, 0_r,
@@ -107,7 +107,7 @@ namespace lucid
 
     template <template <typename, size_t> typename Container>
     constexpr auto
-    basis(const Normal_<Container>& n) noexcept
+    basis(const Normal_<real, 3, Container>& n) noexcept
     {
 		const auto& [nx, ny, nz] = n;
         const auto sign = std::copysign(1_r, nz);
@@ -123,7 +123,7 @@ namespace lucid
 
     template <template <typename, size_t> typename Container>
     constexpr auto
-    basis_matrix(const Normal_<Container>& z) noexcept
+    basis_matrix(const Normal_<real, 3, Container>& z) noexcept
     {
         const auto [x, y] = basis(z);
         return transpose(Mat3(x, y, z));
