@@ -524,4 +524,49 @@ namespace lucid
 			return this_vec();
 		}
     };
+
+    template <std::size_t idx,
+              typename OutType, std::size_t OutSize,
+              typename InType, std::size_t InSize,
+              template <typename, std::size_t> typename Container,
+              template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType,
+              typename ... Tail>
+    std::array<OutType, OutSize>&
+    vector_constructor(std::array<OutType, OutSize>& out,
+                       const VectorType<InType, InSize, Container>& head,
+                       Tail&& ... tail) noexcept
+    {
+        static_assert(idx < OutSize, "Too many elements.");
+
+        const constexpr auto N = std::min(OutSize - idx, InSize);
+        for(std::size_t i = 0; i < N; ++i)
+            out[idx + i] = static_cast<OutType>(head[i]);
+
+        if constexpr (sizeof...(tail) > 0)
+            return vector_constructor<idx + N>(out, std::forward<Tail>(tail)...);
+
+        return out;
+    }
+
+    template <std::size_t idx,
+              typename OutType, std::size_t OutSize,
+              typename InType,
+              typename ... Tail>
+    std::array<OutType, OutSize>&
+    vector_constructor(std::array<OutType, OutSize>& out,
+                       const InType& head,
+                       Tail&& ... tail) noexcept
+    {
+        static_assert(idx < OutSize, "Too many elements.");
+
+        out[idx] = head;
+
+        if constexpr (sizeof...(tail) > 0)
+            return vector_constructor<idx+1>(out, std::forward<Tail>(tail)...);
+
+        if constexpr (idx < (OutSize - 1))
+            return vector_constructor<idx+1>(out, head);
+
+        return out;
+    }
 }
