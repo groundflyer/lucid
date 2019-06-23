@@ -460,26 +460,6 @@ namespace lucid
         { return static_cast<VectorType<T, N, Container>&>(*this); }
 
     public:
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr decltype(auto)
-		operator=(const VectorType2<T, N, Container2>& rhs) noexcept
-		{
-            for (std::size_t i = 0; i < N; ++i)
-                this_vec()[i] = rhs[i];
-
-			return this_vec();
-		}
-
-		constexpr decltype(auto)
-		operator=(const T& rhs) noexcept
-		{
-            for (std::size_t i = 0; i < N; ++i)
-                this_vec()[i] = rhs;
-
-			return *this;
-		}
-
 		template <template <typename, std::size_t> typename Container2>
 		constexpr decltype(auto)
 		operator+=(const VectorType<T, N, Container2> & rhs) noexcept
