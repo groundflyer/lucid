@@ -20,6 +20,12 @@ namespace lucid
 
 		StaticSpan() = delete;
 
+        constexpr
+        StaticSpan(const StaticSpan& rhs) : p_data(rhs.p_data) {}
+
+        constexpr
+        StaticSpan(StaticSpan&& rhs) : p_data(rhs.p_data) {}
+
 		constexpr
 		StaticSpan(T& rhs) : p_data(&rhs) {}
 
@@ -76,15 +82,6 @@ namespace lucid
             return *(p_data + I);
         }
     };
-
-    // template <typename T, std::size_t N,
-    //           template<typename, std::size_t> typename Container,
-    //           template <typename, std::size_t,
-    //                     template<typename, std::size_t> typename>
-    //           typename VectorType>
-    // constexpr auto
-    // link(VectorType<T, N, Container>&& vec) noexcept
-    // { return VectorType<T, N, StaticSpan>(StaticSpan<T, N>(std::get<0>(std::forward<VectorType<T, N, Container>>(vec)))); }
 }
 
 namespace std
