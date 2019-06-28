@@ -30,26 +30,20 @@ namespace lucid
 			  const Point_<Container2>& _vmax) : vmin(lucid::min(_vmin, _vmax)), vmax(lucid::max(_vmin, _vmax)) {}
 
         constexpr const auto&
-        operator[](const size_t i) const noexcept
-        {
-            CHECK_INDEX(i, 2);
-            return i ? vmax : vmin;
-        }
+        operator[](const bool i) const noexcept
+        { return i ? vmax : vmin; }
 
         constexpr auto&
-        operator[](const size_t i) noexcept
-        {
-            CHECK_INDEX(i, 2);
-            return i ? vmax : vmin;
-        }
+        operator[](const bool i) noexcept
+        { return i ? vmax : vmin; }
 
-        template <template <typename, size_t> typename Container1>
+        template <typename Idxs>
         constexpr auto
-        operator[](const Vector<bool, 3, Container1>& idxs) const noexcept
+        operator[](const Idxs& idxs) const noexcept
         {
-            Vec3 ret;
+            Point ret{};
             for(size_t i = 0; i < 3; ++i)
-                ret[i] = (*this)[idxs[i]][i];
+                ret[i] = (*this)[bool(idxs[i])][i];
             return ret;
         }
 	};
@@ -59,7 +53,6 @@ namespace lucid
 		  const Point_<Container>&) -> AABB_<Container>;
 
 	using AABB = AABB_<std::array>;
-
 
 	template <template <typename, size_t> typename AABBContainer,
 			  template <typename, size_t> typename RayContainer>

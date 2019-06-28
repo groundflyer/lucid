@@ -14,6 +14,7 @@
 using namespace std;
 using namespace lucid;
 
+
 constexpr auto
 radius(const Sphere& prim) noexcept
 { return prim.radius; }
@@ -24,7 +25,7 @@ radius(const AABB& prim) noexcept
 
 int main(int argc, char *argv[])
 {
-    const size_t num_tests = argc == 2 ? stoul(argv[1]) : 1000000;
+     const size_t num_tests = argc == 2 ? stoul(argv[1]) : 1000000;
 
     random_device rd;
     default_random_engine g(rd());
@@ -83,7 +84,7 @@ int main(int argc, char *argv[])
                                const auto tb = Vector(bern_dist.template operator()<3>(g));
                                const auto offset = transform([](const auto& a, const auto& b){ return a ? b : -b; },
                                                              tb,
-                                                             Vec3(rad_dist.template operator()<3>(g)));
+                                                             Point(rad_dist.template operator()<3>(g)));
                                const Point origin(bbox[tb] + offset);
                                return pair{bbox, Ray(origin, Normal(sp - origin))};
                            };

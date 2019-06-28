@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
                                const Mat3 mm{a, b, feed};
                                const auto zero = Mat3::identity() - mm.dot(transpose(mm));
                                const constexpr auto ulp = pow<sizeof(real)>(60ul);
-                               return any(!almost_equal(zero.flat_ref(), 0_r, ulp));
+                               return any(!almost_equal(flat_ref(zero), 0_r, ulp));
                            });
 
     if(ret)

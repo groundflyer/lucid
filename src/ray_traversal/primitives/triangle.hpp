@@ -100,16 +100,16 @@ namespace lucid
             const Point vmin(std::apply([](const auto& v1, const auto& ... verts)
                                         {
                                             return reduce([](const auto& a, const auto& b){ return lucid::min(a, b);},
-                                                          Vec3(v1),
-                                                          Vec3(verts)...);
+                                                          v1,
+                                                          verts...);
                                         },
                     prim));
 
             const Point vmax(std::apply([](const auto& v1, const auto& ... verts)
                                         {
                                             return reduce([](const auto& a, const auto& b){ return lucid::max(a, b);},
-                                                          Vec3(v1),
-                                                          Vec3(verts)...);
+                                                          v1,
+                                                          verts...);
                                         },
                     prim));
             return AABB{vmin, vmax};

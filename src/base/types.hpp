@@ -45,6 +45,12 @@ namespace lucid
     using Vec3i_ = Vector<int, 3, Container>;
 
     template <template <typename, size_t> typename Container>
+    using Point_ = PointN_<real, 3, Container>;
+
+    template <template <typename, size_t> typename Container>
+    using Normal_ = NormalN_<real, 3, Container>;
+
+    template <template <typename, size_t> typename Container>
     using Mat2_ = Matrix<real, 2, 2, Container>;
 
     template <template <typename, size_t> typename Container>
@@ -70,8 +76,8 @@ namespace lucid
     using Vec4 = Vec4_<std::array>;
     using Vec3i = Vec3i_<std::array>;
     using Vec2u = Vec2u_<std::array>;
-    using Point = Point_<real, 3, std::array>;
-    using Normal = Normal_<real, 3, std::array>;
+    using Point = Point_<std::array>;
+    using Normal = Normal_<std::array>;
     using Mat2 = Mat2_<std::array>;
     using Mat3 = Mat3_<std::array>;
     using Mat4 = Mat4_<std::array>;

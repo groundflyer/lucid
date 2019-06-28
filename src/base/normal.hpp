@@ -15,7 +15,7 @@ namespace lucid
 
     template <typename T, std::size_t N = 3,
 			  template <typename, std::size_t> typename Container = std::array>
-    class Normal_: public ImmutableVectorOperators<T, N, Container, Normal_>
+    class NormalN_: public ImmutableVectorOperators<T, N, Container, NormalN_>
     {
         static_assert(std::is_floating_point_v<T>, "Point consist of floating point elements.");
 
@@ -25,23 +25,37 @@ namespace lucid
 
     public:
 		constexpr
-		Normal_() {}
+		NormalN_() {}
 
 		constexpr
-		Normal_(const Normal_& rhs) : m_data(rhs.m_data) { normalize(); }
+		NormalN_(const NormalN_& rhs) : m_data(rhs.m_data) { normalize(); }
 
 		constexpr
-		Normal_(Normal_&& rhs) : m_data(std::move(rhs.m_data)) { normalize(); }
+		NormalN_(NormalN_&& rhs) : m_data(std::move(rhs.m_data)) { normalize(); }
 
 		explicit constexpr
-		Normal_(const Data& rhs) : m_data(rhs) { normalize(); }
+		NormalN_(const Data& rhs) : m_data(rhs) { normalize(); }
 
 		explicit constexpr
-		Normal_(Data&& rhs) : m_data(std::move(rhs)) { normalize(); }
+		NormalN_(Data&& rhs) : m_data(std::move(rhs)) { normalize(); }
 
         template <typename ... Ts>
         explicit constexpr
-        Normal_(Ts&& ... rhs) : m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...)) { normalize(); }
+        NormalN_(Ts&& ... rhs) : m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...)) { normalize(); }
+
+        NormalN_&
+        operator=(const NormalN_& rhs) noexcept
+        {
+            m_data = rhs.m_data;
+            return *this;
+        }
+
+        NormalN_&
+        operator=(NormalN_&& rhs) noexcept
+        {
+            m_data = std::move(rhs.m_data);
+            return *this;
+        }
 
 		constexpr decltype(auto)
 		begin() const noexcept
@@ -101,14 +115,14 @@ namespace lucid
 
     template <typename T, std::size_t N,
 			  template <typename, std::size_t> typename Container>
-    Normal_(Container<T, N> &&) -> Normal_<T, N, Container>;
+    NormalN_(Container<T, N> &&) -> NormalN_<T, N, Container>;
 }
 
 namespace std
 {
 	template <typename T, std::size_t N,
 			  template <typename, std::size_t> typename Container>
-	class tuple_size<lucid::Normal_<T, N, Container>>
+	class tuple_size<lucid::NormalN_<T, N, Container>>
     {
     public:
         static const constexpr std::size_t value = N;
@@ -116,7 +130,7 @@ namespace std
 
 	template<std::size_t I, typename T, std::size_t N,
 			 template <typename, std::size_t> typename Container>
-    class tuple_element<I, lucid::Normal_<T, N, Container>>
+    class tuple_element<I, lucid::NormalN_<T, N, Container>>
 	{
     public:
         using type = T;
@@ -125,6 +139,6 @@ namespace std
 	template<std::size_t I, typename T, std::size_t N,
 			 template <typename, std::size_t> typename Container>
     constexpr decltype(auto)
-    get(const lucid::Normal_<T, N, Container>& vec) noexcept
+    get(const lucid::NormalN_<T, N, Container>& vec) noexcept
     { return vec.template get<I>(); }
 }

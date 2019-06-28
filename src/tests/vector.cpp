@@ -281,7 +281,6 @@ auto
 test_n(RandomEngine& g, const size_t num_tests, index_sequence<Ns...>) noexcept
 { return (0u + ... + test_t<Ns + 2>(g, num_tests, ArithmeticTypes{})); }
 
-
 template <size_t N, typename RandomEngine>
 auto
 __boolean_test(RandomEngine& g, const size_t num_tests) noexcept
@@ -325,15 +324,6 @@ int main(int argc, char* argv[])
     const size_t num_tests = argc == 2 ? stoul(argv[1]) : 1000000;
 
     int ret = 0;
-
-    // just checkig if it compiles
-    Vector<float, 3, std::array> vec{0, 1, 2};
-    Point_<float, 3, std::array> point{3, 4, 5};
-    Normal_<float, 3, std::array> normal{6, 7, 8};
-    vec = point;
-    point = normal;
-    Vector<float, 4, std::array> vv(1.f, vec);
-    vv[0] = 2.f;
 
     random_device rd;
     default_random_engine g(rd());

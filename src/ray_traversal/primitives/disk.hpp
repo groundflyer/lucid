@@ -70,7 +70,7 @@ namespace lucid
         const auto& [t1, t2] = s;
         const auto sr = r * math::sqrt(t1);
         const auto theta = 2_r * Pi * t2;
-        const Vec3 point{sr * math::sin(theta), sr * math::cos(theta), 0_r};
+        const Point point{sr * math::sin(theta), sr * math::cos(theta), 0_r};
         return Point(basis_matrix(zaxis).dot(point) + p);
     }
 
@@ -85,7 +85,7 @@ namespace lucid
     {
         const auto& [p, n, r] = prim;
         const auto h = math::abs(math::sqrt(1_r - pow<2>(n.dot(Vec3(0, 1, 0)))) * r);
-        const Vec3 offset(r, h, r);
+        const Point offset(r, h, r);
         return AABB{p - offset, p + offset};
     }
 
