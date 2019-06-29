@@ -110,7 +110,7 @@ namespace lucid
             {
                 auto l = length(*this);
 
-                if (almost_equal(l, T{1}, 5))
+                if (almost_equal(l, T{1}, 5) || almost_equal(l, T{0}, 5))
                     return;
 
                 for (auto &elem : m_data)
