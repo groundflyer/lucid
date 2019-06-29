@@ -291,6 +291,13 @@ namespace lucid
         return ret;
     }
 
+    template <typename T, std::size_t N,
+    	      template <typename, std::size_t> class Container,
+              template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType>
+    auto
+    isfinite(const VectorType<T, N, Container>& v) noexcept
+    { return transform(static_cast<bool(*)(T)>(std::isfinite), v); }
+
     // dot product
     template <typename T, std::size_t N,
 			  template <typename, std::size_t> class Container1,
@@ -547,13 +554,16 @@ namespace lucid
     {
         static_assert(idx < OutSize, "Too many elements.");
 
-        out[idx] = head;
+        out[idx] = static_cast<OutType>(head);
 
         if constexpr (sizeof...(tail) > 0)
             return vector_constructor<idx + 1>(out, std::forward<Tail>(tail)...);
 
         if constexpr (idx < (OutSize - 1))
             return vector_constructor<idx + 1>(out, head);
+
+        if constexpr (sizeof...(tail) == 0 && (idx + 1) < OutSize)
+            return vector_constructor<idx + 1>(out, OutType{0});
 
         return out;
     }
@@ -577,6 +587,10 @@ namespace lucid
 
         if constexpr (sizeof...(tail) > 0)
             return vector_constructor<idx + N>(out, std::forward<Tail>(tail)...);
+
+        // fill remaining with zeros
+        if constexpr (sizeof...(tail) == 0 && (idx + N) < OutSize)
+            return vector_constructor<idx + N>(out, OutType{0});
 
         return out;
     }
