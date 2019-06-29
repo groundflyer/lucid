@@ -5,6 +5,8 @@
 #pragma once
 
 #include <base/vector.hpp>
+#include <base/normal.hpp>
+#include <base/point.hpp>
 #include <base/matrix.hpp>
 
 #include <format>
@@ -25,6 +27,32 @@ namespace lucid
               template <typename, size_t> typename Container>
     std::ostream&
     operator<<(std::ostream& os, const Vector<T, N, Container>& rhs) noexcept
+    {
+        os << '[';
+        for (size_t i = 0; i < N - 1; ++i)
+            os << rhs[i] << ", ";
+        os << rhs[N - 1] << ']';
+
+        return os;
+    }
+
+    template <typename T, size_t N,
+              template <typename, size_t> typename Container>
+    std::ostream&
+    operator<<(std::ostream& os, const NormalN_<T, N, Container>& rhs) noexcept
+    {
+        os << '[';
+        for (size_t i = 0; i < N - 1; ++i)
+            os << rhs[i] << ", ";
+        os << rhs[N - 1] << ']';
+
+        return os;
+    }
+
+    template <typename T, size_t N,
+              template <typename, size_t> typename Container>
+    std::ostream&
+    operator<<(std::ostream& os, const PointN_<T, N, Container>& rhs) noexcept
     {
         os << '[';
         for (size_t i = 0; i < N - 1; ++i)
