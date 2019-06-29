@@ -13,16 +13,11 @@ namespace lucid
 {
     template <template <typename, size_t> typename Container>
     constexpr auto
-    homogenize(const Point_<Container> & a) noexcept
-    { return Vec4(a, 1_r); }
-
-    template <template <typename, size_t> typename Container>
-    constexpr auto
     dehomogenize(const Vec4_<Container> & a) noexcept
     {
         Vec3 ret{a};
         const auto& w = std::get<3>(a);
-        if(w != 0_r && w != 1_r)
+        if(!(almost_equal(w, 0_r, 5) || almost_equal(w, 1_r, 5)))
             ret /= w;
         return ret;
     }
@@ -40,7 +35,7 @@ namespace lucid
     constexpr auto
     apply_transform(const Mat4_<MatContainer> & t,
 					const Point_<PointContainer> & p) noexcept
-    { return Point(dehomogenize(t.dot(homogenize(p)))); }
+    { return Point(dehomogenize(t.dot(Vec4(p, 1)))); }
 
     template <template <typename, size_t> typename MatContainer,
 			  template <typename, size_t> typename NormalContainer>
