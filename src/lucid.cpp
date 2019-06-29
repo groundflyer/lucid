@@ -307,7 +307,7 @@ int main(/*int argc, char *argv[]*/)
 
     for(auto it = img.begin(); it != img.end(); ++it)
     {
-        const auto dc = to_device_coords(it.pos(), img.res());
+        const auto dc = to_device_coords(Vec2(it.pos()), Vec2(img.res()));
         const auto ray = cam(dc);
         const auto& [ro, rd] = ray;
         const auto [isect, pid] = hider(ray, room_geo);

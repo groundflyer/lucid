@@ -11,52 +11,48 @@
 
 namespace lucid
 {
-    struct InvalidPointException {};
-
     template <typename T, std::size_t N = 3,
 			  template <typename, std::size_t> typename Container = std::array>
     class PointN_:
         public ImmutableVectorOperators<T, N, Container, PointN_>,
         public MutableVectorOperators<T, N, Container, PointN_>
     {
-        static_assert(std::is_floating_point_v<T>, "Point consist of floating point elements.");
-
 		using Data = Container<T, N>;
 		Data m_data {};
-
-        constexpr void
-        check() const
-        {
-            if (any(transform(static_cast<bool(*)(T)>(std::isinf), *this)))
-                throw InvalidPointException{};
-        }
 
     public:
 		constexpr
 		PointN_() {}
 
 		constexpr
-		PointN_(const PointN_& rhs) : m_data(rhs.m_data) { check(); }
+		PointN_(const PointN_& rhs) : m_data(rhs.m_data) {}
 
 		constexpr
-		PointN_(PointN_&& rhs) : m_data(std::move(rhs.m_data)) { check(); }
+		PointN_(PointN_&& rhs) : m_data(std::move(rhs.m_data)) {}
+
+        template <template <typename, std::size_t> typename Container2>
+        constexpr
+        PointN_(const PointN_<T, N, Container2>& rhs) : m_data(vector_constructor<0>(m_data, rhs)) {}
+
+        template <template <typename, std::size_t> typename Container2>
+        constexpr
+        PointN_(PointN_<T, N, Container2>&& rhs) : m_data(vector_constructor<0>(m_data, std::move(rhs))) {}
 
 		explicit constexpr
-		PointN_(const Data& rhs) : m_data(rhs) { check(); }
+		PointN_(const Data& rhs) : m_data(rhs) {}
 
 		explicit constexpr
-		PointN_(Data&& rhs) : m_data(std::move(rhs)) { check(); }
+		PointN_(Data&& rhs) : m_data(std::move(rhs)) {}
 
         template <typename ... Ts>
         explicit constexpr
         PointN_(Ts&& ... rhs) : m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...))
-        { check(); }
+        {}
 
 		constexpr PointN_&
 		operator=(const PointN_& rhs) noexcept
 		{
 			m_data = rhs.m_data;
-            check();
 			return *this;
 		}
 
@@ -64,7 +60,6 @@ namespace lucid
 		operator=(PointN_&& rhs) noexcept
 		{
 			m_data = std::move(rhs.m_data);
-            check();
 			return *this;
 		}
 
@@ -74,7 +69,6 @@ namespace lucid
 		{
             for (std::size_t i = 0; i < N; ++i)
                 m_data[i] = rhs;
-            check();
 			return *this;
 		}
 
@@ -85,7 +79,6 @@ namespace lucid
         {
             for (std::size_t i = 0; i < N; ++i)
                 m_data[i] = rhs[i];
-            check();
 			return *this;
         }
 

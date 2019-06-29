@@ -43,7 +43,7 @@ namespace lucid
         {
             Point ret{};
             for(size_t i = 0; i < 3; ++i)
-                ret[i] = (*this)[bool(idxs[i])][i];
+                ret[i] = (*this)[bool{idxs[i]}][i];
             return ret;
         }
 	};
@@ -89,7 +89,7 @@ namespace lucid
         real md[2] {};
         for(unsigned i = 0; i < 2; ++i)
         {
-            const auto ad = lucid::abs(pos - prim[i]);
+            const auto ad = lucid::abs(pos - prim[bool(i)]);
             md[i] = lucid::min(ad);
             vd[i] = Vec3(ad == md[i]);
         }

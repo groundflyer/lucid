@@ -433,7 +433,7 @@ namespace lucid
 		constexpr auto
 		operator==(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-            std::bitset<M*N> ret{};
+            Matrix ret{};
 
 			for (size_t i = 0; i < MN; ++i)
 				ret[i] = at(i) == rhs.at(i);
@@ -443,7 +443,7 @@ namespace lucid
 		constexpr auto
 		operator==(const T & rhs) const noexcept
 		{
-            std::bitset<M*N> ret{};
+            Matrix ret{};
 
 			for (size_t i = 0; i < MN; ++i)
 				ret[i] = at(i) == rhs;
@@ -455,7 +455,7 @@ namespace lucid
 		constexpr auto
 		operator!=(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			std::bitset<M*N> ret{};
+			Matrix ret{};
 
 			for (size_t i = 0; i < MN; ++i)
 				ret[i] = at(i) != rhs.at(i);
@@ -465,7 +465,7 @@ namespace lucid
 		constexpr auto
 		operator!=(const T & rhs) const noexcept
 		{
-			std::bitset<M*N> ret{};
+			Matrix ret{};
 
 			for (size_t i = 0; i < MN; ++i)
 				ret[i] = at(i) != rhs;
@@ -477,7 +477,7 @@ namespace lucid
 		constexpr auto
 		operator<(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			std::bitset<M*N> ret{};
+			Matrix ret{};
 
 			for (size_t i = 0; i < MN; ++i)
 				ret[i] = at(i) < rhs.at(i);
@@ -487,7 +487,7 @@ namespace lucid
 		constexpr auto
 		operator<(const T & rhs) const noexcept
 		{
-			std::bitset<M*N> ret{};
+			Matrix ret{};
 
 			for (size_t i = 0; i < MN; ++i)
 				ret[i] = at(i) < rhs;
@@ -499,7 +499,7 @@ namespace lucid
 		constexpr auto
 		operator<=(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			std::bitset<M*N> ret{};
+			Matrix ret{};
 
 			for (size_t i = 0; i < MN; ++i)
 				ret[i] = at(i) <= rhs.at(i);
@@ -509,7 +509,7 @@ namespace lucid
 		constexpr auto
 		operator<=(const T & rhs) const noexcept
 		{
-			std::bitset<M*N> ret{};
+			Matrix ret{};
 
 			for (size_t i = 0; i < MN; ++i)
 				ret[i] = at(i) <= rhs;
@@ -521,7 +521,7 @@ namespace lucid
 		constexpr auto
 		operator>(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			std::bitset<M*N> ret{};
+			Matrix ret{};
 
 			for (size_t i = 0; i < MN; ++i)
 				ret[i] = at(i) > rhs.at(i);
@@ -531,7 +531,7 @@ namespace lucid
 		constexpr auto
 		operator>(const T & rhs) const noexcept
 		{
-			std::bitset<M*N> ret{};
+			Matrix ret{};
 
 			for (size_t i = 0; i < MN; ++i)
 				ret[i] = at(i) > rhs;
@@ -543,7 +543,7 @@ namespace lucid
 		constexpr auto
 		operator>=(const Matrix<T, M, N, Container2> & rhs) const noexcept
 		{
-			std::bitset<M*N> ret{};
+			Matrix ret{};
 
 			for (size_t i = 0; i < MN; ++i)
 				ret[i] = at(i) >= rhs.at(i);
@@ -553,7 +553,7 @@ namespace lucid
 		constexpr auto
 		operator>=(const T & rhs) const noexcept
 		{
-			std::bitset<M*N> ret{};
+			Matrix ret{};
 
 			for (size_t i = 0; i < MN; ++i)
 				ret[i] = at(i) >= rhs;

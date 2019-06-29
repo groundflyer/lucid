@@ -11,7 +11,6 @@
 #include <utils/math.hpp>
 
 #include <array>
-#include <bitset>
 #include <limits>
 #include <utility>
 #include <numeric>
@@ -19,13 +18,6 @@
 #include <functional>
 #include <type_traits>
 
-namespace std
-{
-    template <std::size_t N>
-    std::bitset<N>
-    operator!(const std::bitset<N>& rhs) noexcept
-    { return ~rhs; }
-}
 
 namespace lucid
 {
@@ -41,9 +33,7 @@ namespace lucid
 			  const VectorType2<T2, N, Container2>& b) noexcept
     {
         using ElemType = typename std::decay_t<std::result_of_t<BinaryOperation(T1, T2)>>;
-        using RetType = typename std::conditional_t<std::is_same_v<ElemType, bool>,
-                                                    std::bitset<N>,
-                                                    VectorType1<ElemType, N, std::array>>;
+        using RetType = VectorType1<ElemType, N, std::array>;
 
         RetType ret{};
 
@@ -63,9 +53,7 @@ namespace lucid
               const VectorType<T, N, Container> & a) noexcept
     {
         using ElemType = typename std::decay_t<std::result_of_t<UnaryOperation(T)>>;
-        using RetType = typename std::conditional_t<std::is_same_v<ElemType, bool>,
-                                                    std::bitset<N>,
-                                                    VectorType<ElemType, N, std::array>>;
+        using RetType = VectorType<ElemType, N, std::array>;
 
 	    RetType ret{};
 
@@ -200,16 +188,6 @@ namespace lucid
     constexpr auto
     any(const VectorType<T, N, Container> & a) noexcept
     { return reduce(std::logical_or<bool>(), a, false); }
-
-    template <std::size_t N>
-    constexpr bool
-    all(const std::bitset<N>& a) noexcept
-    { return a.all(); }
-
-    template <std::size_t N>
-    constexpr bool
-    any(const std::bitset<N>& a) noexcept
-    { return a.any(); }
 
     template <typename T, std::size_t N,
     	      template <typename, std::size_t> class Container,
@@ -562,7 +540,7 @@ namespace lucid
               typename OutType, std::size_t OutSize,
               typename InType,
               typename ... Tail>
-    std::array<OutType, OutSize>&
+    constexpr std::array<OutType, OutSize>&
     vector_constructor(std::array<OutType, OutSize>& out,
                        const InType& head,
                        Tail&& ... tail) noexcept
@@ -586,7 +564,7 @@ namespace lucid
               template <typename, std::size_t> typename Container,
               template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType,
               typename ... Tail>
-    std::array<OutType, OutSize>&
+    constexpr std::array<OutType, OutSize>&
     vector_constructor(std::array<OutType, OutSize>& out,
                        const VectorType<InType, InSize, Container>& head,
                        Tail&& ... tail) noexcept

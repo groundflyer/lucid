@@ -11,14 +11,10 @@
 
 namespace lucid
 {
-    struct InvalidNormalException {};
-
     template <typename T, std::size_t N = 3,
 			  template <typename, std::size_t> typename Container = std::array>
     class NormalN_: public ImmutableVectorOperators<T, N, Container, NormalN_>
     {
-        static_assert(std::is_floating_point_v<T>, "Point consist of floating point elements.");
-
 		using Data = Container<T, N>;
 
 		Data m_data {};
@@ -108,20 +104,19 @@ namespace lucid
 		{ return N; }
 
 		constexpr void
-		normalize()
+		normalize() noexcept
 		{
-			auto l = length(*this);
+            if constexpr (std::is_floating_point_v<T>)
+            {
+                auto l = length(*this);
 
-            if (almost_equal(l, T{1}, 5))
-                return;
+                if (almost_equal(l, T{1}, 5))
+                    return;
 
-            if (almost_equal(l, T{0}, 5) ||
-                any(transform(static_cast<bool(*)(T)>(std::isinf), *this)))
-                throw InvalidNormalException{};
-
-            for (auto& elem : m_data)
-                elem /= l;
-		}
+                for (auto &elem : m_data)
+                    elem /= l;
+            }
+        }
     };
 
     template <typename T, std::size_t N,
