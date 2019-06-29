@@ -27,7 +27,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                      bool ret = false;
                                      for(size_t i = 0; i < MN; ++i)
                                          ret |= testing.at(i) != feed[i];
-                                     return ret;
+                                     return ret || !all(lucid::isfinite(flat_ref(testing)));
                                  };
     auto array_n_gen = [&](){ return dist.template operator()<N>(g); };
     auto vgen = [&](){ return Vec(array_n_gen()); };
@@ -41,7 +41,9 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                if constexpr(is_floating_point_v<T>)
                                {
                                    const constexpr unsigned ULP = 5;
-                                   return any(!almost_equal(flat_ref(a), flat_ref(b), ULP));
+                                   return any(!almost_equal(flat_ref(a), flat_ref(b), ULP))
+                                       || !all(lucid::isfinite(flat_ref(a)))
+                                       || !all(lucid::isfinite(flat_ref(b)));
                                }
                                else
                                    return any(flat_ref(a) != flat_ref(b));
@@ -54,7 +56,8 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
     ret += test_property_n("flat_ref({}({}))"_format(mat_typestring, t_typestring),
                            [&](){ return dist(g); },
                            [](const auto feed){ return Mat(feed); },
-                           [](const auto& testing, const auto& feed){ return any(flat_ref(testing) != feed); });
+                           [](const auto& testing, const auto& feed)
+                           { return any(flat_ref(testing) != feed) || !all(lucid::isfinite(flat_ref(testing))); });
 
     ret += test_property_n("{}({})"_format(mat_typestring, get_typeinfo_string(array<T, MN>{})),
                            array_mn_gen,
@@ -80,7 +83,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                bool ret = false;
                                for(size_t i = 0; i < M; ++i)
                                    ret |= any(testing[i] != feed[i]);
-                               return ret;
+                               return ret || !all(lucid::isfinite(flat_ref(testing)));
                            });
 
     stringstream ss;
@@ -103,7 +106,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                for(size_t i = 0; i < M; ++i)
                                    for(size_t j = 0; j < N; ++j)
                                        ret |= testing[i][j] != feed[i][j];
-                               return ret;
+                               return ret || !all(lucid::isfinite(flat_ref(testing)));
                            });
 
     if constexpr (M > 2 && N > 2)
@@ -125,7 +128,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                    for(size_t i = 0; i < M1; ++i)
                                        for(size_t j = 0; j < N1; ++j)
                                            ret |= feed.at(i, j) != testing.at(i, j);
-                                   return ret;
+                                   return ret || !all(lucid::isfinite(flat_ref(testing)));
                                });
 
         ret += test_property_n("{0}({1}, Vector<{1}, {2}>, Matrix<{1}, {3}, {2}>)"_format(mat_typestring, t_typestring, N1, M1),
@@ -153,7 +156,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                                        // equalizing them as ulp is same for all of them
                                        const auto zero = Mat::identity() - feed.dot(testing);
                                        const constexpr auto ulp = pow<sizeof(T)>(100ul);
-                                       return any(!almost_equal(flat_ref(zero), T{0}, ulp));
+                                       return any(!almost_equal(flat_ref(zero), T{0}, ulp)) || !all(lucid::isfinite(flat_ref(testing)));
                                    });
     }
 
@@ -297,7 +300,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                            {
                                const auto& vec = get<1>(feed);
                                const auto& idx = get<2>(feed);
-                               return any(testing[idx] != vec);
+                               return any(testing[idx] != vec) || !all(lucid::isfinite(flat_ref(testing)));
                            });
 
     ret += test_property_n("{}[] +-= Vector<{}, {}>"_format(mat_typestring, t_typestring, N),

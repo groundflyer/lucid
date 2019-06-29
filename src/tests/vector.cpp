@@ -38,7 +38,8 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
     auto argen = [&]() { return dist.template operator()<N>(g); };
 
     // array assertion
-    const auto arass = [](const Vec& testing, const array<T, N>& feed) { return assert_tuples(testing, feed, make_index_sequence<N>{}); };
+    const auto arass = [](const Vec& testing, const array<T, N>& feed)
+                       { return assert_tuples(testing, feed, make_index_sequence<N>{}) && !all(lucid::isfinite(testing)); };
 
     ret += test_property_n("{}({})"_format(vec_typestring, get_typeinfo_string(array<T, N>{})),
                            argen,
@@ -62,7 +63,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                                    bool ret = testing[0] != v0;
                                    for(size_t i = 0; i < N1; ++i)
                                        ret |= vv[i] != testing[i + 1];
-                                   return ret;
+                                   return ret || !all(lucid::isfinite(testing));
                                });
     }
 
@@ -76,7 +77,9 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                                if constexpr(is_floating_point_v<T>)
                                {
                                    static const constexpr unsigned ULP = 200;
-                                   return any(!almost_equal(forward<decltype(a)>(a), forward<decltype(b)>(b), ULP));
+                                   return any(!almost_equal(forward<decltype(a)>(a), forward<decltype(b)>(b), ULP))
+                                       || !all(lucid::isfinite(a))
+                                       || !all(lucid::isfinite(b));
                                }
                                else
                                    return any(a != b);
@@ -188,7 +191,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                            [&](const auto& testing, const auto&)
                            {
                                const auto& [vmin, vmax] = testing;
-                               return any(vmin > vmax);
+                               return any(vmin > vmax) || !all(lucid::isfinite(vmin)) || !all(lucid::isfinite(vmax));
                            });
 
     // vector and vector-divizor generator
@@ -227,12 +230,14 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
         ret += test_property_n("{}: A dot A = length A"_format(vec_typestring),
                                vgen,
                                [](const Vec& feed) { return dot(feed, feed); },
-                               [](const T testing, const Vec& feed) { return !almost_equal(math::sqrt(testing), length(feed), 5); });
+                               [](const T testing, const Vec& feed)
+                               { return !almost_equal(math::sqrt(testing), length(feed), 5) || !std::isfinite(testing); });
 
         ret += test_property_n("normalize({}) = 1"_format(vec_typestring),
                                vgen,
                                [](const Vec& feed) { return normalize(feed); },
-                               [](const Vec& testing, Vec) { return !almost_equal(length(testing), T{1}, 5); });
+                               [](const Vec& testing, Vec)
+                               { return !almost_equal(length(testing), T{1}, 5) || !all(lucid::isfinite(testing)); });
 
         if constexpr (N > 2)
             ret += test_property(num_tests,
@@ -250,7 +255,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                                      const auto at = a.dot(testing);
                                      const auto bt = b.dot(testing);
                                      const constexpr auto ulp = pow<sizeof(T)>(is_same_v<T, double> ? 100ul : 55u);
-                                     return !(almost_equal(at, T{0}, ulp) || almost_equal(bt, T{0}, ulp));
+                                     return !(almost_equal(at, T{0}, ulp) || almost_equal(bt, T{0}, ulp)) || !all(lucid::isfinite(testing));
                                  });
     }
 
@@ -285,31 +290,30 @@ template <size_t N, typename RandomEngine>
 auto
 __boolean_test(RandomEngine& g, const size_t num_tests) noexcept
 {
+    RandomDistribution<bool> dist(0.5);
     unsigned ret = 0;
-
-    auto bool_vector_gen = [&]{ return (Vector(rand<float, N>(g)) > Vector(rand<float, N>(g))); };
 
     static const constexpr double threshold = 0.0;
     auto test_property_n = [num_tests](auto&& ... args)
                            { return test_property(num_tests, threshold, forward<decltype(args)>(args)...); };
 
     ret += test_property_n("any(Vector<bool, {}>)"_format(N),
-                           bool_vector_gen,
-                           [](const auto& feed) { return any(feed); },
-                           [](const auto testing, const auto& feed)
-                           { return testing != feed.any(); });
+                           [&]() { return Vector(dist.template operator()<N>(g)); },
+                           [](const Vector<bool, N>& feed) { return any(feed); },
+                           [](const bool testing, const Vector<bool, N>& feed)
+                           {
+                               return testing != apply([](auto... vals) { return (false || ... || vals); },
+                                                        feed.data());
+                           });
 
     ret += test_property_n("all(Vector<bool, {}>)"_format(N),
-                           bool_vector_gen,
-                           [](const auto& feed) { return all(feed); },
-                           [](const auto testing, const auto& feed)
-                           { return testing != feed.all(); });
-
-    ret += test_property_n("!(Vector<bool, {}>)"_format(N),
-                           bool_vector_gen,
-                           [](const auto& feed) { return !feed; },
-                           [](const auto testing, const auto& feed)
-                           { return testing != (~feed); });
+                           [&]() { return Vector(dist.template operator()<N>(g)); },
+                           [](const Vector<bool, N>& feed) { return all(feed); },
+                           [](const bool testing, const Vector<bool, N>& feed)
+                           {
+                               return testing != apply([](auto... vals) { return (true && ... && vals); },
+                                                        feed.data());
+                           });
 
     return ret;
 }

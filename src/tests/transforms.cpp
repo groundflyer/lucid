@@ -35,7 +35,8 @@ int main(int argc, char* argv[])
                            {
                                const auto& [origin, delta] = feed;
                                const auto origin2 = testing - delta;
-                               return any(!almost_equal(origin2, origin, ULP));
+                               return any(!almost_equal(origin2, origin, ULP))
+                                   || !all(lucid::isfinite(origin2));
                            });
 
     ret += test_property_n("scale",
@@ -49,7 +50,8 @@ int main(int argc, char* argv[])
                            {
                                const auto& [origin, delta] = feed;
                                const auto& origin2 = testing / delta;
-                               return any(!almost_equal(origin2, origin, ULP));
+                               return any(!almost_equal(origin2, origin, ULP))
+                                   || !all(lucid::isfinite(origin2));
                            });
 
     ret += test_property_n("rotate",
@@ -65,10 +67,13 @@ int main(int argc, char* argv[])
                                const auto ot = apply_transform(testing, o);
                                const auto l = length(o);
                                const auto lt = length(ot);
-                               return !(almost_equal(1_r, det(Mat3(testing)), ULP) && almost_equal(l, lt, ULP)) || all(almost_equal(o, ot, ULP));
+                               return !(almost_equal(1_r, det(Mat3(testing)), ULP) && almost_equal(l, lt, ULP))
+                                   || all(almost_equal(o, ot, ULP))
+                                   || !all(lucid::isfinite(ot));
                            });
 
     ret += test_property(num_tests,
+                         // fails in 7% of cases
                          0.071,
                          "look at",
                          [&](){ return pair{Point{argen()}, Point{argen()}}; },
@@ -81,8 +86,8 @@ int main(int argc, char* argv[])
                          {
                              const auto& [eye, target] = feed;
                              const auto expected = Normal(target - eye);
-                             // TODO: in some cases testing is exactly opposite to exptected; investigate this
-                             return any(!almost_equal(expected, testing, ULP));
+                             return any(!almost_equal(expected, testing, ULP))
+                                 || !all(lucid::isfinite(testing));
                          });
 
     ret += test_property_n("orthonormal basis",
