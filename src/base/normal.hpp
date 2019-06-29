@@ -27,11 +27,22 @@ namespace lucid
 		constexpr
 		NormalN_() {}
 
+        // don't call normalize when copying
+        // this allows normals to have length != 1
+        // in many cases it's convenient
 		constexpr
-		NormalN_(const NormalN_& rhs) : m_data(rhs.m_data) { normalize(); }
+		NormalN_(const NormalN_& rhs) : m_data(rhs.m_data) {}
 
 		constexpr
-		NormalN_(NormalN_&& rhs) : m_data(std::move(rhs.m_data)) { normalize(); }
+		NormalN_(NormalN_&& rhs) : m_data(std::move(rhs.m_data)) {}
+
+        template <template <typename, std::size_t> typename Container2>
+        constexpr
+        NormalN_(const NormalN_<T, 3, Container2>& rhs) : m_data(vector_constructor<0>(m_data, rhs)) {}
+
+        template <template <typename, std::size_t> typename Container2>
+        constexpr
+        NormalN_(NormalN_<T, 3, Container2>&& rhs) : m_data(vector_constructor<0>(m_data, std::move(rhs))) {}
 
 		explicit constexpr
 		NormalN_(const Data& rhs) : m_data(rhs) { normalize(); }

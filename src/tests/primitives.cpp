@@ -140,7 +140,8 @@ int main(int argc, char *argv[])
               [&]() { return GenericPrimitive(triangle_gen()); },
               [&]() { return GenericPrimitive(quad_gen()); },
               [&]() { return GenericPrimitive(disk_gen()); }};
-    const auto gp_gen_l = tuple{sphere_gen_l, triangle_gen_l, quad_gen_l, disk_gen_l, aabb_gen_l};
+    // const auto gp_gen_l = tuple{sphere_gen_l, triangle_gen_l, quad_gen_l, disk_gen_l, aabb_gen_l};
+    const auto gp_gen_l = tuple{sphere_gen_l};
 
     RandomDistribution<size_t> gp_choose(0, std::tuple_size_v<decltype(gp_gen)>);
     RandomDistribution<size_t> gp_choose_l(0, std::tuple_size_v<decltype(gp_gen_l)>);
