@@ -82,12 +82,13 @@ namespace lucid
         }
 
         // Eric Heitz A Low-Distortion Map Between Triangle and Square, 2019
-        template <template <typename, size_t> typename Container>
+        template <template <typename, size_t> typename Container1,
+                  template <typename, size_t> typename Container2>
         constexpr auto
-        triangle_sample(const Vec2_<Container>& s,
-                        const Point_<Container>& v1,
-                        const Point_<Container>& v2,
-                        const Point_<Container>& v3) noexcept
+        triangle_sample(const Vec2_<Container1>& s,
+                        const Point_<Container2>& v1,
+                        const Point_<Container2>& v2,
+                        const Point_<Container2>& v3) noexcept
         {
             const auto [t1, t2] = s2t(s);
             return v1 * t1 + v2 * t2 + v3 * (1_r - t1 - t2);

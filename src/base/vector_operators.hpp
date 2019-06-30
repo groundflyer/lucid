@@ -4,9 +4,6 @@
 
 #pragma once
 
-// we don't use StaticSpan here, but if we don't include it
-// compiler would be unable to find std::get specialization
-// for Vector's Container
 #include <utils/static_span.hpp>
 #include <utils/math.hpp>
 
@@ -329,6 +326,13 @@ namespace lucid
 
     	return ret;
     }
+
+    template <typename T, std::size_t N,
+              template <typename, std::size_t> typename Container,
+              template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType>
+    constexpr auto
+    ref(const VectorType<T, N, Container>& v) noexcept
+    { return VectorType<T, N, StaticSpan>(StaticSpan<T, N>(v[0])); }
 
     template <typename T, std::size_t N,
               template <typename, std::size_t> typename Container,

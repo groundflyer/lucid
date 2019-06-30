@@ -259,17 +259,21 @@ static const constexpr std::array<std::size_t, 5> box_mat_idxs
      1                          // white
     };
 
-using ObjectData = std::pair<GenericPrimitive, std::size_t>;
+// Cornell Box Primitives
+using QuadRef = Quad_<StaticSpan>;
+using CBPrimTypes = typelist<Sphere, QuadRef, Disk>;
+using CBPrim = typename CBPrimTypes::variant;
+using ObjectData = std::pair<CBPrim, std::size_t>;
 
 template <std::size_t ... Pns>
 constexpr decltype(auto)
 make_wall_geo(std::index_sequence<Pns...>) noexcept
-{ return Quad{std::get<Pns>(box_points)...}; }
+{ return QuadRef{ref(std::get<Pns>(box_points))...}; }
 
 constexpr auto
 make_room() noexcept
 {
-    return std::apply([](auto ... pns){ return std::array<GenericPrimitive, sizeof...(pns)>{make_wall_geo(pns)...}; },
+    return std::apply([](auto ... pns){ return std::array<CBPrim, sizeof...(pns)>{make_wall_geo(pns)...}; },
                       box_geo_descr);
 }
 
@@ -289,10 +293,10 @@ int main(/*int argc, char *argv[]*/)
     }
 
     const auto room_geo = array_cat(make_room(),
-                                    std::array<GenericPrimitive, 2>
+                                    std::array<CBPrim, 2>
                                     {
-                                        GenericPrimitive{Sphere(Point(0.5_r, -0.6_r, 0.2_r), 0.4_r)},
-                                        GenericPrimitive{Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r)}
+                                        CBPrim{Sphere(Point(0.5_r, -0.6_r, 0.2_r), 0.4_r)},
+                                        CBPrim{Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r)}
                                     });
 
     const auto room_mat_ids = array_cat(box_mat_idxs, std::array<std::size_t, 2>{4, 1});
