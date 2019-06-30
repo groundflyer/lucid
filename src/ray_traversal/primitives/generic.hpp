@@ -10,82 +10,79 @@
 #include "quad.hpp"
 #include "disk.hpp"
 
-#include <variant>
+#include <utils/typelist.hpp>
 
 
 namespace lucid
 {
     template <template <typename, size_t> typename Container>
-    using GenericPrimitive_ = std::variant<AABB_<Container>,
-                                           Sphere_<Container>,
-                                           Triangle_<Container>,
-                                           Quad_<Container>,
-                                           Disk_<Container>>;
+    using AllPrimTypes = typelist<AABB_<Container>,
+                                  Sphere_<Container>,
+                                  Triangle_<Container>,
+                                  Quad_<Container>,
+                                  Disk_<Container>>;
 
-    using GenericPrimitive = std::variant<AABB, Sphere, Triangle, Quad, Disk>;
+    template <template <typename, size_t> typename Container>
+    using GenericPrimitive_ = typename AllPrimTypes<Container>::variant;
+
+    using GenericPrimitive = GenericPrimitive_<std::array>;
 
 
-    template <template <typename, size_t> typename PrimContainer,
-			  template <typename, size_t> typename RayContainer>
+    template <template <typename, size_t> typename RayContainer,
+              typename ... Prims>
     constexpr Intersection
     intersect(const Ray_<RayContainer>& ray,
-              const GenericPrimitive_<PrimContainer>& prim) noexcept
+              const std::variant<Prims...>& prim) noexcept
     {
-        return std::visit([&](const auto& held_prim)
-                          { return intersect(ray, held_prim); },
+        return std::visit([&](const auto& held_prim){ return intersect(ray, held_prim); },
                           prim);
     }
 
-	template <template <typename, size_t> typename PrimContainer,
-			  template <typename, size_t> typename RayContainer,
-              template <typename, size_t> typename IsectContainer>
+	template <template <typename, size_t> typename RayContainer,
+              template <typename, size_t> typename IsectContainer,
+              typename ... Prims>
     constexpr Normal
     normal(const Ray_<RayContainer>& ray,
            const Intersection_<IsectContainer>& isect,
-           const GenericPrimitive_<PrimContainer>& prim) noexcept
+           const std::variant<Prims...>& prim) noexcept
     {
-        return std::visit([&](const auto& held_prim)
-                          { return normal(ray, isect, held_prim); },
-            prim);
+        return std::visit([&](const auto& held_prim){ return normal(ray, isect, held_prim); },
+                          prim);
     }
 
 	template <template <typename, size_t> typename SContainer,
-              template <typename, size_t> typename PContainer>
+              typename ... Prims>
     constexpr Point
     sample(const Vec2_<SContainer>& s,
-           const GenericPrimitive_<PContainer>& prim) noexcept
+           const std::variant<Prims...>& prim) noexcept
     {
-        return std::visit([&](const auto& held_prim)
-                          { return sample(s, held_prim); },
-            prim);
+        return std::visit([&](const auto& held_prim){ return sample(s, held_prim); },
+                          prim);
     }
 
-    template <template <typename, size_t> typename Container>
+    template <typename ... Prims>
     constexpr Point
-    centroid(const GenericPrimitive_<Container>& prim) noexcept
+    centroid(const std::variant<Prims...>& prim) noexcept
     {
-        return std::visit([](const auto& held_prim)
-                          { return centroid(held_prim); },
-            prim);
+        return std::visit([](const auto& held_prim){ return centroid(held_prim); },
+                          prim);
     }
 
-    template <template <typename, size_t> typename Container>
+    template <typename ... Prims>
     constexpr AABB
-    bound(const GenericPrimitive_<Container>& prim) noexcept
+    bound(const std::variant<Prims...>& prim) noexcept
     {
-        return std::visit([](const auto& held_prim)
-                          { return bound(held_prim); },
-            prim);
+        return std::visit([](const auto& held_prim){ return bound(held_prim); },
+                          prim);
     }
 
     template <template <typename, size_t> typename MatContainer,
-			  template <typename, size_t> typename PrimContainer>
-    constexpr GenericPrimitive
+			  typename ... Prims>
+    constexpr auto
     apply_transform(const Mat4_<MatContainer>& t,
-                    const GenericPrimitive_<PrimContainer>& prim) noexcept
+                    const std::variant<Prims...>& prim) noexcept
     {
-        return std::visit([&t](const auto& held_prim)
-                          { return GenericPrimitive(apply_transform(t, held_prim)); },
-            prim);
+        return std::visit([&t](const auto& held_prim){ return std::variant<Prims...>(apply_transform(t, held_prim)); },
+                          prim);
     }
 }

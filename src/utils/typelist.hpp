@@ -5,6 +5,7 @@
 #pragma once
 
 #include <tuple>
+#include <variant>
 
 namespace lucid
 {
@@ -21,5 +22,9 @@ namespace lucid
     };
 
     template <typename... Ts>
-    struct typelist {};
+    struct typelist
+    {
+        using variant = typename std::variant<Ts...>;
+        using tuple = typename std::tuple<Ts...>;
+    };
 }
