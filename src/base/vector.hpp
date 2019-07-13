@@ -23,23 +23,23 @@ namespace lucid
 
     public:
 		constexpr
-		Vector() {}
+		Vector() noexcept {}
 
 		constexpr
-		Vector(const Vector& rhs) : m_data(rhs.m_data) {}
+		Vector(const Vector& rhs) noexcept : m_data(rhs.m_data) {}
 
 		constexpr
-		Vector(Vector&& rhs) : m_data(std::move(rhs.m_data)) {}
+		Vector(Vector&& rhs) noexcept : m_data(std::move(rhs.m_data)) {}
 
 		explicit constexpr
-		Vector(const Data& rhs) : m_data(rhs) {}
+		Vector(const Data& rhs) noexcept : m_data(rhs) {}
 
 		explicit constexpr
-		Vector(Data&& rhs) : m_data(std::move(rhs)) {}
+		Vector(Data&& rhs) noexcept : m_data(std::move(rhs)) {}
 
         template <typename ... Ts>
         explicit constexpr
-        Vector(Ts&& ... rhs) : m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...)) {}
+        Vector(Ts&& ... rhs) noexcept : m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...)) {}
 
 		constexpr Vector&
 		operator=(const Vector& rhs) noexcept

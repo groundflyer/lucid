@@ -22,31 +22,31 @@ namespace lucid
 
     public:
 		constexpr
-		PointN_() {}
+		PointN_() noexcept {}
 
 		constexpr
-		PointN_(const PointN_& rhs) : m_data(rhs.m_data) {}
+		PointN_(const PointN_& rhs) noexcept : m_data(rhs.m_data) {}
 
 		constexpr
-		PointN_(PointN_&& rhs) : m_data(std::move(rhs.m_data)) {}
+		PointN_(PointN_&& rhs) noexcept : m_data(std::move(rhs.m_data)) {}
 
         template <template <typename, std::size_t> typename Container2>
         constexpr
-        PointN_(const PointN_<T, N, Container2>& rhs) : m_data(vector_constructor<0>(m_data, rhs)) {}
+        PointN_(const PointN_<T, N, Container2>& rhs) noexcept : m_data(vector_constructor<0>(m_data, rhs)) {}
 
         template <template <typename, std::size_t> typename Container2>
         constexpr
-        PointN_(PointN_<T, N, Container2>&& rhs) : m_data(vector_constructor<0>(m_data, std::move(rhs))) {}
+        PointN_(PointN_<T, N, Container2>&& rhs) noexcept : m_data(vector_constructor<0>(m_data, std::move(rhs))) {}
 
 		explicit constexpr
-		PointN_(const Data& rhs) : m_data(rhs) {}
+		PointN_(const Data& rhs) noexcept : m_data(rhs) {}
 
 		explicit constexpr
-		PointN_(Data&& rhs) : m_data(std::move(rhs)) {}
+		PointN_(Data&& rhs) noexcept : m_data(std::move(rhs)) {}
 
         template <typename ... Ts>
         explicit constexpr
-        PointN_(Ts&& ... rhs) : m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...))
+        PointN_(Ts&& ... rhs) noexcept : m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...))
         {}
 
 		constexpr PointN_&

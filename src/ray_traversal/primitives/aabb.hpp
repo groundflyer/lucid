@@ -21,13 +21,13 @@ namespace lucid
         Point_<Container> vmax;
 
         constexpr
-		AABB_() {};
+		AABB_() noexcept {};
 
 		template <template <typename, size_t> typename Container1,
 				  template <typename, size_t> typename Container2>
 		constexpr
 		AABB_(const Point_<Container1>& _vmin,
-			  const Point_<Container2>& _vmax) : vmin(lucid::min(_vmin, _vmax)), vmax(lucid::max(_vmin, _vmax)) {}
+			  const Point_<Container2>& _vmax) noexcept : vmin(lucid::min(_vmin, _vmax)), vmax(lucid::max(_vmin, _vmax)) {}
 
         constexpr const auto&
         operator[](const bool i) const noexcept

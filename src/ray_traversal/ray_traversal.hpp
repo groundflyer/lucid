@@ -17,13 +17,13 @@ namespace lucid
 		Normal_<Container> dir;
 
 		constexpr
-		Ray_() {};
+		Ray_() noexcept {};
 
 		template <template <typename, size_t> typename Container1,
 				  template <typename, size_t> typename Container2>
 		constexpr
 		Ray_(const Point_<Container1>& _origin,
-			 const Normal_<Container2>& _dir) : origin(_origin), dir(_dir) {}
+			 const Normal_<Container2>& _dir) noexcept : origin(_origin), dir(_dir) {}
     };
 
 	template <template <typename, size_t> typename Container>
@@ -36,7 +36,7 @@ namespace lucid
 			  template <typename, size_t> typename RayContainer>
     constexpr auto
     apply_transform(const Mat4_<MatContainer>& t,
-					const Ray_<RayContainer>& ray)
+					const Ray_<RayContainer>& ray) noexcept
     { return Ray(apply_transform(t, ray.origin), apply_transform(t, ray.dir)); }
 
     template <template <typename, size_t> typename Container>
@@ -47,16 +47,16 @@ namespace lucid
         Vec2_<Container> st;
 
         constexpr
-        Intersection_() : intersect(false),
-                          t(std::numeric_limits<real>::max()),
-                          st(Vec2(0))
+        Intersection_() noexcept : intersect(false),
+            t(std::numeric_limits<real>::max()),
+            st(Vec2(0))
         {}
 
 		template <template <typename, size_t> typename Container2>
 		constexpr
 		Intersection_(const bool _intersect,
                       const real& _t,
-                      const Vec2_<Container2>& _st) :
+                      const Vec2_<Container2>& _st) noexcept :
             intersect(_intersect),
             t(intersect ? _t : std::numeric_limits<real>::max()),
             st(_st) {}

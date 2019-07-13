@@ -16,14 +16,14 @@ namespace lucid
         real radius;
 
         constexpr
-        Disk_() {}
+        Disk_() noexcept {}
 
 		template <template <typename, size_t> typename Container1,
                   template <typename, size_t> typename Container2>
         constexpr
         Disk_(const Point_<Container1>& _position,
               const Normal_<Container2>& _normal,
-              const real _radius) :
+              const real _radius) noexcept :
             position(_position),
             normal(_normal),
             radius(_radius)

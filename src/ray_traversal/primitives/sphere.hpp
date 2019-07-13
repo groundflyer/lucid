@@ -17,12 +17,12 @@ namespace lucid
 		real radius;
 
         constexpr
-		Sphere_() {}
+		Sphere_() noexcept {}
 
 		template <template <typename, size_t> typename Container1>
 		constexpr
 		Sphere_(const Point_<Container1>& _center,
-				const real& _radius) :
+				const real& _radius) noexcept :
 		center(_center),
 			radius(_radius)
 		{}

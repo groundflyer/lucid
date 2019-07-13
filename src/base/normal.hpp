@@ -21,34 +21,34 @@ namespace lucid
 
     public:
 		constexpr
-		NormalN_() {}
+		NormalN_() noexcept {}
 
         // don't call normalize when copying
         // this allows normals to have length != 1
         // in many cases it's convenient
 		constexpr
-		NormalN_(const NormalN_& rhs) : m_data(rhs.m_data) {}
+		NormalN_(const NormalN_& rhs) noexcept : m_data(rhs.m_data) {}
 
 		constexpr
-		NormalN_(NormalN_&& rhs) : m_data(std::move(rhs.m_data)) {}
+		NormalN_(NormalN_&& rhs) noexcept : m_data(std::move(rhs.m_data)) {}
 
         template <template <typename, std::size_t> typename Container2>
         constexpr
-        NormalN_(const NormalN_<T, 3, Container2>& rhs) : m_data(vector_constructor<0>(m_data, rhs)) {}
+        NormalN_(const NormalN_<T, 3, Container2>& rhs) noexcept : m_data(vector_constructor<0>(m_data, rhs)) {}
 
         template <template <typename, std::size_t> typename Container2>
         constexpr
-        NormalN_(NormalN_<T, 3, Container2>&& rhs) : m_data(vector_constructor<0>(m_data, std::move(rhs))) {}
+        NormalN_(NormalN_<T, 3, Container2>&& rhs) noexcept : m_data(vector_constructor<0>(m_data, std::move(rhs))) {}
 
 		explicit constexpr
-		NormalN_(const Data& rhs) : m_data(rhs) { normalize(); }
+		NormalN_(const Data& rhs) noexcept : m_data(rhs) { normalize(); }
 
 		explicit constexpr
-		NormalN_(Data&& rhs) : m_data(std::move(rhs)) { normalize(); }
+		NormalN_(Data&& rhs) noexcept : m_data(std::move(rhs)) { normalize(); }
 
         template <typename ... Ts>
         explicit constexpr
-        NormalN_(Ts&& ... rhs) : m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...)) { normalize(); }
+        NormalN_(Ts&& ... rhs) noexcept : m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...)) { normalize(); }
 
         NormalN_&
         operator=(const NormalN_& rhs) noexcept

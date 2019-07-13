@@ -73,7 +73,7 @@ namespace lucid
 		// variyng template sink
         template <size_t>
 		constexpr void
-        unpack() const {}
+        unpack() const noexcept {}
 
         template <size_t idx, typename ... Ts>
         constexpr void
@@ -141,31 +141,31 @@ namespace lucid
 
     public:
 		constexpr
-    	Matrix() {}
+    	Matrix() noexcept {}
 
         constexpr
-        Matrix(const Matrix& rhs) : m_data(rhs.m_data) {}
+        Matrix(const Matrix& rhs) noexcept : m_data(rhs.m_data) {}
 
         constexpr
-        Matrix(Matrix&& rhs) : m_data(std::move(rhs.m_data)) {}
+        Matrix(Matrix&& rhs) noexcept : m_data(std::move(rhs.m_data)) {}
 
 		// single scalar construcor
     	explicit constexpr
-    	Matrix(T&& rhs)
+    	Matrix(T&& rhs) noexcept
     	{ for (auto & elem : *this) elem = rhs;	}
 
     	explicit constexpr
-    	Matrix(Data&& rhs) : m_data(std::move(rhs)) {}
+    	Matrix(Data&& rhs) noexcept : m_data(std::move(rhs)) {}
 
     	explicit constexpr
-    	Matrix(Data& rhs) : m_data(rhs) {}
+    	Matrix(Data& rhs) noexcept : m_data(rhs) {}
 
     	explicit constexpr
-    	Matrix(const Data& rhs) : m_data(rhs) {}
+    	Matrix(const Data& rhs) noexcept : m_data(rhs) {}
 
 		template <typename ... Ts>
 		explicit constexpr
-		Matrix(Ts&& ... rhs)
+		Matrix(Ts&& ... rhs) noexcept
 		{ unpack<0>(std::forward<Ts>(rhs)...); }
 
 		constexpr Matrix&

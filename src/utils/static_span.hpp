@@ -21,28 +21,28 @@ namespace lucid
 		StaticSpan() = delete;
 
         constexpr
-        StaticSpan(const StaticSpan& rhs) : p_data(rhs.p_data) {}
+        StaticSpan(const StaticSpan& rhs) noexcept : p_data(rhs.p_data) {}
 
         constexpr
-        StaticSpan(StaticSpan&& rhs) : p_data(rhs.p_data) {}
+        StaticSpan(StaticSpan&& rhs) noexcept : p_data(rhs.p_data) {}
 
 		constexpr
-		StaticSpan(T& rhs) : p_data(&rhs) {}
+		StaticSpan(T& rhs) noexcept : p_data(&rhs) {}
 
 		constexpr
-		StaticSpan(T* rhs) : p_data(rhs) {}
+		StaticSpan(T* rhs) noexcept : p_data(rhs) {}
 
 		constexpr
-		StaticSpan(const T& rhs) : p_data(const_cast<T*>(&rhs)) {}
+		StaticSpan(const T& rhs) noexcept : p_data(const_cast<T*>(&rhs)) {}
 
 		constexpr
-		StaticSpan(const T* rhs) : p_data(const_cast<T*>(rhs)) {}
+		StaticSpan(const T* rhs) noexcept : p_data(const_cast<T*>(rhs)) {}
 
         constexpr
-        StaticSpan(T (&rhs) [N]) : p_data(const_cast<T*>(rhs)) {}
+        StaticSpan(T (&rhs) [N]) noexcept : p_data(const_cast<T*>(rhs)) {}
 
         constexpr
-        StaticSpan(const T(&rhs) [N]) : p_data(const_cast<T*>(rhs)) {}
+        StaticSpan(const T(&rhs) [N]) noexcept : p_data(const_cast<T*>(rhs)) {}
 
 		constexpr iterator
 		begin() const noexcept
