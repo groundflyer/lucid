@@ -26,5 +26,8 @@ namespace lucid
     {
         using variant = typename std::variant<Ts...>;
         using tuple = typename std::tuple<Ts...>;
+
+        template <template <typename> typename Array>
+        using tuple_of_arrays = std::tuple<Array<Ts>...>;
     };
 }
