@@ -4,8 +4,9 @@
 
 #pragma once
 
+#include "typelist.hpp"
+
 #include <type_traits>
-#include <tuple>
 
 namespace lucid
 {
@@ -40,16 +41,23 @@ namespace lucid
         enumerate_impl(Tuple&& tuple, std::index_sequence<Ids...>) noexcept
         { return std::tuple{std::pair{Ids, std::get<Ids>(tuple)}...}; }
 
-        template <typename EnumItem, typename TupleArgs, typename ... RestItems>
-        constexpr decltype(auto)
-        switcher_impl(const std::size_t lookup, TupleArgs&& tuple_args, EnumItem&& enum_item, RestItems&& ... rest) noexcept
+        template <typename TupleArgs, typename ... Fncs>
+        struct
+        switcher_ret
+        {
+            using types = typelist<std::decay_t<decltype(std::apply(std::declval<Fncs>().second, std::declval<TupleArgs>()))>...>;
+        };
+
+        template <typename Ret, typename Idx, typename EnumItem, typename TupleArgs, typename ... RestItems>
+        constexpr Ret
+        switcher_impl(const Idx lookup, TupleArgs&& tuple_args, EnumItem&& enum_item, RestItems&& ... rest) noexcept
         {
             auto&& [idx, item] = enum_item;
             if (idx == lookup || sizeof...(rest) == 0)
                 return std::apply(std::forward<decltype(item)>(item), std::forward<TupleArgs>(tuple_args));
 
             if constexpr (sizeof...(rest) > 0)
-                return switcher_impl(lookup, std::forward<TupleArgs>(tuple_args), std::forward<RestItems>(rest)...);
+                return switcher_impl<Ret>(lookup, std::forward<TupleArgs>(tuple_args), std::forward<RestItems>(rest)...);
         }
 
         template <std::size_t I, typename T, std::size_t N1, std::size_t N2>
@@ -81,17 +89,17 @@ namespace lucid
     enumerate(Tuple&& tuple) noexcept
     { return detail::enumerate_impl(std::forward<Tuple>(tuple), std::make_index_sequence<std::tuple_size_v<std::decay_t<Tuple>>>{}); }
 
-    template <typename Tuple, typename ... Args>
+    template <typename Idx, typename Tuple, typename ... Args>
     constexpr decltype(auto)
-    switcher(const std::size_t idx, Tuple&& tuple, Args&& ... args) noexcept
+    switcher(const Idx idx, Tuple&& tuple, const Args& ... args) noexcept
     {
-        return std::apply([lookup=idx, args_tuple=std::forward_as_tuple(args...)](auto&& ... items) mutable
-                          {
-                              return detail::switcher_impl(lookup,
-                                                           args_tuple,
-                                                           std::forward<decltype(items)>(items)...);
-                          },
-            enumerate(std::forward<Tuple>(tuple)));
+        return std::apply([lookup = idx, args_tuple = std::forward_as_tuple(args...)](auto &&... items) mutable
+                        {
+                            using tpl = typename detail::switcher_ret<decltype(args_tuple), decltype(items)...>::types;
+                            using ret = std::conditional_t<tpl::same, typename tpl::head, typename tpl::variant>;
+                            return detail::switcher_impl<ret>(lookup, args_tuple, std::forward<decltype(items)>(items)...);
+                        },
+          enumerate(std::forward<Tuple>(tuple)));
     }
 
     template <typename T, std::size_t N1, std::size_t N2, typename ... Rest>
@@ -101,7 +109,7 @@ namespace lucid
               const Rest& ... rest) noexcept
     {
         const auto ret = detail::array_cat_impl(first, second,
-                                                std::make_index_sequence<N1+N2>{});
+                                                std::make_index_sequence<N1 + N2>{});
 
         if constexpr (sizeof...(rest))
             return array_cat(ret, rest...);

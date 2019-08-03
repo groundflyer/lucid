@@ -25,7 +25,7 @@ radius(const AABB& prim) noexcept
 
 int main(int argc, char *argv[])
 {
-     const size_t num_tests = argc == 2 ? stoul(argv[1]) : 1000000;
+    const size_t num_tests = argc == 2 ? stoul(argv[1]) : 1000000;
 
     random_device rd;
     default_random_engine g(rd());
@@ -106,14 +106,14 @@ int main(int argc, char *argv[])
                               return apply_transform(t, Quad{v00, v01, v11, v10});
                           };
 
-    const auto aabb_gen_l = [&](const real max_rad, const Normal&) -> GenericPrimitive
+    const auto aabb_gen_l = [&](const real max_rad, const Normal&)
                             { return AABB(-Point(rand<real, 3>(g)) * max_rad * 0.5_r,
                                           Point(rand<real, 3>(g)) * max_rad * 0.5_r); };
-    const auto sphere_gen_l = [&](const real max_rad, const Normal&) -> GenericPrimitive
+    const auto sphere_gen_l = [&](const real max_rad, const Normal&)
                               { return Sphere(Point(0), rand<real>(g) * max_rad); };
-    const auto disk_gen_l = [&](const real, const Normal& n) -> GenericPrimitive
+    const auto disk_gen_l = [&](const real, const Normal& n)
                             { return Disk(Point(0), n, rad_dist(g)); };
-    const auto triangle_gen_l = [&](const real, const Normal& n) -> GenericPrimitive
+    const auto triangle_gen_l = [&](const real, const Normal& n)
                                 {
                                     const Point v0{-rad_dist(g), -rad_dist(g), 0};
                                     const Point v1{0, rad_dist(g), 0};
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
                                     t[3][3] = 1;
                                     return apply_transform(t, Triangle{v0, v1, v2});
                                 };
-    const auto quad_gen_l = [&](const real, const Normal& n) -> GenericPrimitive
+    const auto quad_gen_l = [&](const real, const Normal& n)
                           {
                               const real x = rad_dist(g);
                               const real y = rad_dist(g);
@@ -135,15 +135,11 @@ int main(int argc, char *argv[])
                               return apply_transform(t, Quad{v00, v01, v11, v10});
                           };
 
-    const auto gp_gen =
-        tuple{[&]() { return GenericPrimitive(sphere_gen()); },
-              [&]() { return GenericPrimitive(triangle_gen()); },
-              [&]() { return GenericPrimitive(quad_gen()); },
-              [&]() { return GenericPrimitive(disk_gen()); }};
+    const auto gp_gen = tuple{sphere_gen, triangle_gen, quad_gen, disk_gen};
     const auto gp_gen_l = tuple{sphere_gen_l, triangle_gen_l, quad_gen_l, disk_gen_l, aabb_gen_l};
 
-    RandomDistribution<size_t> gp_choose(0, std::tuple_size_v<decltype(gp_gen)>);
-    RandomDistribution<size_t> gp_choose_l(0, std::tuple_size_v<decltype(gp_gen_l)>);
+    RandomDistribution<size_t> gp_choose(0ul, std::tuple_size_v<decltype(gp_gen)>);
+    RandomDistribution<size_t> gp_choose_l(0ul, std::tuple_size_v<decltype(gp_gen_l)>);
 
     const auto rand_prim_gen = [&](){ return switcher(gp_choose(g), gp_gen); };
     const auto rand_prim_gen_l = [&](const real m, const Normal& n){ return switcher(gp_choose_l(g), gp_gen_l, m, n); };
@@ -187,7 +183,7 @@ int main(int argc, char *argv[])
                              for(size_t i = 1; i < num_prims; ++i)
                                  positions[i] = positions[i - 1] + d * (radiuses[i - 1] + radiuses[i]);
 
-                             array<GenericPrimitive, num_prims> prims;
+                             array<decltype(rand_prim_gen_l(radiuses[0], -d)), num_prims> prims;
                              for(size_t i = 0; i < num_prims; ++i)
                                  prims[i] = apply_transform(translate(positions[i]), rand_prim_gen_l(radiuses[i], -d));
 
