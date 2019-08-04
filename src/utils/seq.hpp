@@ -41,23 +41,15 @@ namespace lucid
         enumerate_impl(Tuple&& tuple, std::index_sequence<Ids...>) noexcept
         { return std::tuple{std::pair{Ids, std::get<Ids>(tuple)}...}; }
 
-        template <typename TupleArgs, typename ... Fncs>
-        struct
-        switcher_ret
-        {
-            using types = typelist<std::decay_t<decltype(std::apply(std::declval<Fncs>().second, std::declval<TupleArgs>()))>...>;
-        };
-
-        template <typename Ret, typename Idx, typename EnumItem, typename TupleArgs, typename ... RestItems>
+        template <typename Ret, std::size_t Idx, typename TupleArgs, typename Func, typename ... RestFuncs>
         constexpr Ret
-        switcher_impl(const Idx lookup, TupleArgs&& tuple_args, EnumItem&& enum_item, RestItems&& ... rest) noexcept
+        switcher_impl(const std::size_t case_, TupleArgs&& tuple_args, Func&& func, RestFuncs&& ... rest) noexcept
         {
-            auto&& [idx, item] = enum_item;
-            if (idx == lookup || sizeof...(rest) == 0)
-                return std::apply(std::forward<decltype(item)>(item), std::forward<TupleArgs>(tuple_args));
+            if (Idx == case_ || sizeof...(rest) == 0)
+                return std::apply(std::forward<Func>(func), std::forward<TupleArgs>(tuple_args));
 
             if constexpr (sizeof...(rest) > 0)
-                return switcher_impl<Ret>(lookup, std::forward<TupleArgs>(tuple_args), std::forward<RestItems>(rest)...);
+                return switcher_impl<Ret, Idx + 1>(case_, std::forward<TupleArgs>(tuple_args), std::forward<RestFuncs>(rest)...);
         }
 
         template <std::size_t I, typename T, std::size_t N1, std::size_t N2>
@@ -89,17 +81,17 @@ namespace lucid
     enumerate(Tuple&& tuple) noexcept
     { return detail::enumerate_impl(std::forward<Tuple>(tuple), std::make_index_sequence<std::tuple_size_v<std::decay_t<Tuple>>>{}); }
 
-    template <typename Idx, typename Tuple, typename ... Args>
+    template <typename Tuple, typename ... Args>
     constexpr decltype(auto)
-    switcher(const Idx idx, Tuple&& tuple, const Args& ... args) noexcept
+    switcher(const std::size_t case_, Tuple&& funcs, Args&& ... args) noexcept
     {
-        return std::apply([lookup = idx, args_tuple = std::forward_as_tuple(args...)](auto &&... items) mutable
+        return std::apply([case_, args_tuple = std::forward_as_tuple(args...)](auto &&... items) mutable
                         {
-                            using tpl = typename detail::switcher_ret<decltype(args_tuple), decltype(items)...>::types;
+                            using tpl = typename typelist<decltype(items)...>::template result_of<Args...>;
                             using ret = std::conditional_t<tpl::same, typename tpl::head, typename tpl::variant>;
-                            return detail::switcher_impl<ret>(lookup, args_tuple, std::forward<decltype(items)>(items)...);
+                            return detail::switcher_impl<ret, 0>(case_, args_tuple, std::forward<decltype(items)>(items)...);
                         },
-          enumerate(std::forward<Tuple>(tuple)));
+            std::forward<Tuple>(funcs));
     }
 
     template <typename T, std::size_t N1, std::size_t N2, typename ... Rest>

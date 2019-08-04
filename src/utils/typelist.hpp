@@ -48,10 +48,14 @@ namespace lucid
 
         using indicies = std::make_index_sequence<size>;
 
-        constexpr
-        typelist(std::tuple<Ts...>) noexcept {}
+        template <typename ... Args>
+        using result_of = typelist<std::invoke_result_t<head, Args...>,
+                                   std::invoke_result_t<Ts, Args...>...>;
 
         constexpr
-        typelist(std::variant<Ts...>) noexcept {}
+        typelist(std::tuple<Head, Ts...>) noexcept {}
+
+        constexpr
+        typelist(std::variant<Head, Ts...>) noexcept {}
     };
 }

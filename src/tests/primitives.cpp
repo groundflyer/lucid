@@ -141,8 +141,8 @@ int main(int argc, char *argv[])
     RandomDistribution<size_t> gp_choose(0ul, std::tuple_size_v<decltype(gp_gen)>);
     RandomDistribution<size_t> gp_choose_l(0ul, std::tuple_size_v<decltype(gp_gen_l)>);
 
-    const auto rand_prim_gen = [&](){ return switcher(gp_choose(g), gp_gen); };
-    const auto rand_prim_gen_l = [&](const real m, const Normal& n){ return switcher(gp_choose_l(g), gp_gen_l, m, n); };
+    const auto rand_prim_gen = [&](){ return switcher_func(gp_choose(g), gp_gen); };
+    const auto rand_prim_gen_l = [&](const real m, const Normal& n){ return switcher_func(gp_choose_l(g), gp_gen_l, m, n); };
 
     ret += intersect_test_prim("Disk: sample/trace",
                                disk_gen,
