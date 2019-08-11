@@ -43,13 +43,24 @@ namespace lucid
 
         template <typename Ret, std::size_t Idx, typename TupleArgs, typename Func, typename ... RestFuncs>
         constexpr Ret
-        switcher_impl(const std::size_t case_, TupleArgs&& tuple_args, Func&& func, RestFuncs&& ... rest) noexcept
+        switcher_func_impl(const std::size_t case_, TupleArgs&& tuple_args, Func&& func, RestFuncs&& ... rest) noexcept
         {
             if (Idx == case_ || sizeof...(rest) == 0)
                 return std::apply(std::forward<Func>(func), std::forward<TupleArgs>(tuple_args));
 
             if constexpr (sizeof...(rest) > 0)
-                return switcher_impl<Ret, Idx + 1>(case_, std::forward<TupleArgs>(tuple_args), std::forward<RestFuncs>(rest)...);
+                return switcher_func_impl<Ret, Idx + 1>(case_, std::forward<TupleArgs>(tuple_args), std::forward<RestFuncs>(rest)...);
+        }
+
+        template <typename Ret, std::size_t Idx, typename Visitor, typename Tuple>
+        constexpr Ret
+        visit_impl(const std::size_t case_, Visitor&& visitor, const Tuple& tuple) noexcept
+        {
+            if (Idx == case_ || Idx == std::tuple_size_v<Tuple> - 1)
+                return visitor(std::get<Idx>(tuple));
+
+            if constexpr (Idx < std::tuple_size_v<Tuple> - 1)
+                return visit_impl<Ret, Idx + 1>(case_, std::forward<Visitor>(visitor), tuple);
         }
 
         template <std::size_t I, typename T, std::size_t N1, std::size_t N2>
@@ -83,15 +94,25 @@ namespace lucid
 
     template <typename Tuple, typename ... Args>
     constexpr decltype(auto)
-    switcher(const std::size_t case_, Tuple&& funcs, Args&& ... args) noexcept
+    switcher_func(const std::size_t case_, Tuple&& funcs, Args&& ... args) noexcept
     {
         return std::apply([case_, args_tuple = std::forward_as_tuple(args...)](auto &&... items) mutable
                         {
                             using tpl = typename typelist<decltype(items)...>::template result_of<Args...>;
                             using ret = std::conditional_t<tpl::same, typename tpl::head, typename tpl::variant>;
-                            return detail::switcher_impl<ret, 0>(case_, args_tuple, std::forward<decltype(items)>(items)...);
+                            return detail::switcher_func_impl<ret, 0>(case_, args_tuple, std::forward<decltype(items)>(items)...);
                         },
             std::forward<Tuple>(funcs));
+    }
+
+    template <typename Visitor, typename ... Ts>
+    constexpr decltype(auto)
+    visit(const std::size_t case_, Visitor&& visitor, const std::tuple<Ts...>& tuple) noexcept
+    {
+        using tpl = typelist<std::invoke_result_t<Visitor, Ts>...>;
+        using ret = std::conditional_t<tpl::same, typename tpl::head, typename tpl::variant>;
+
+        return detail::visit_impl<ret, 0>(case_, std::forward<Visitor>(visitor), tuple);
     }
 
     template <typename T, std::size_t N1, std::size_t N2, typename ... Rest>

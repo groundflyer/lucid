@@ -273,7 +273,7 @@ make_wall_geo(std::index_sequence<Pns...>) noexcept
 constexpr auto
 make_room() noexcept
 {
-    return std::apply([](auto ... pns){ return std::array<CBPrim, sizeof...(pns)>{make_wall_geo(pns)...}; },
+    return std::apply([](auto ... pns){ return std::tuple{make_wall_geo(pns)...}; },
                       box_geo_descr);
 }
 
@@ -292,11 +292,11 @@ int main(/*int argc, char *argv[]*/)
         return 1;
     }
 
-    const auto room_geo = array_cat(make_room(),
-                                    std::array<CBPrim, 2>
+    const auto room_geo = tuple_cat(make_room(),
+                                    std::tuple
                                     {
-                                        CBPrim{Sphere(Point(0.5_r, -0.6_r, 0.2_r), 0.4_r)},
-                                        CBPrim{Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r)}
+                                        Sphere(Point(0.5_r, -0.6_r, 0.2_r), 0.4_r),
+                                        Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r)
                                     });
 
     const auto room_mat_ids = array_cat(box_mat_idxs, std::array<std::size_t, 2>{4, 1});
@@ -315,11 +315,11 @@ int main(/*int argc, char *argv[]*/)
         const auto ray = cam(dc);
         const auto& [ro, rd] = ray;
         const auto [isect, pid] = hider(ray, room_geo);
-        const auto& prim = room_geo[pid];
         const auto& mat_color = materials[room_mat_ids[pid]];
 
         // const Normal i = Normal(-rd);
-        const Normal n = normal(ray, isect, prim);
+        // THERE IS A BUG IN THE STANDARD: capture of bindings is not allowed FUCKING LOL
+        const Normal n = lucid::visit(pid, [&, &iss=isect](const auto& prim){ return normal(ray, iss, prim); }, room_geo);
         const Point p(ro + rd * isect.t);
 
         RGB c{};
