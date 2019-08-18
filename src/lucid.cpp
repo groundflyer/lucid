@@ -6,9 +6,9 @@
 #include <cameras/utils.hpp>
 #include <image/io.hpp>
 #include <utils/seq.hpp>
+#include <utils/logging.hpp>
+#include <utils/timer.hpp>
 #include <base/rng.hpp>
-
-#include <format>
 
 #include <GLFW/glfw3.h>
 
@@ -282,15 +282,19 @@ int main(/*int argc, char *argv[]*/)
 {
     perspective::shoot cam(radians(60_r), look_at(Point(0, 0, 4), Point(0, 0, 0), Normal(0, 1, 0)));
 
+    Logger logger(Logger::DEBUG);
+
     try
     {
         vp::init();
     }
     catch (const std::runtime_error& ex)
     {
-        fmt::print(stderr, "OpenGL Error: {}", ex.what());
+        logger.critical("OpenGL Error: {}", ex.what());
         return 1;
     }
+
+    logger.info("OpenGL initialized");
 
     const auto room_geo = tuple_cat(make_room(),
                                     std::tuple
@@ -308,6 +312,10 @@ int main(/*int argc, char *argv[]*/)
     const constexpr std::size_t lid = 6;
 
     Image<unsigned char, 3> img(vp::res);
+
+    logger.debug("Rendering image...");
+
+    ElapsedTimer<> timer;
 
     for(auto it = img.begin(); it != img.end(); ++it)
     {
@@ -366,6 +374,8 @@ int main(/*int argc, char *argv[]*/)
         const RGB8 c8 = RGB8{c * 255};
         *it = c8;
     }
+
+    logger.info("Image is rendered in {:.3}", std::chrono::duration_cast<std::chrono::duration<float>>(timer.elapsed()));
 
     vp::load_img(img);
 
