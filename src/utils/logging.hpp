@@ -12,38 +12,23 @@ namespace lucid
 {
     class Logger
     {
-        // static const constexpr char DEFAULT[] = "\033[39m";
-        // static const constexpr char RED[] = "\033[31m";
-        // static const constexpr char GREEN[] = "\033[32m";
-        // static const constexpr char YELLOW[] = "\033[33m";
-        // static const constexpr char BOLD_RED[] = "\033[1m\033[31m";
-        // static const constexpr char RESET[] = "\033[0m";
-
-        void timestamp(const fmt::text_style& ts) const noexcept
+        static void
+        timestamp(const fmt::text_style& ts,
+                       const char i) noexcept
         {
             const std::time_t date = std::time(nullptr);
-            fmt::print(ts, "[{:%T}] ", *std::localtime(&date));
+            fmt::print(ts, "[{:%T}][{}] ", *std::localtime(&date), i);
         }
 
-        template <std::size_t N, typename ... Args>
-        void
-        std_out(const fmt::text_style& ts,
-                const char (&fmt_str)[N],
-                Args&& ... args) const noexcept
+        template <typename Output, typename ... Args>
+        static void
+        message(Output&& out,
+                const fmt::text_style& ts,
+                const char i,
+                Args&& ... args) noexcept
         {
-            timestamp(ts);
-            fmt::print(fmt_str, std::forward<Args>(args)...);
-            fmt::print("\n");
-        }
-
-        template <std::size_t N, typename ... Args>
-        void
-        std_error(const fmt::text_style& ts,
-                  const char (&fmt_str)[N],
-                  Args&& ... args) const noexcept
-        {
-            timestamp(ts);
-            fmt::print(stderr, fmt_str, std::forward<Args>(args)...);
+            timestamp(ts, i);
+            fmt::print(std::forward<Output>(out), std::forward<Args>(args)...);
             fmt::print("\n");
         }
 
@@ -65,7 +50,9 @@ namespace lucid
         debug(Args&& ... args) const noexcept
         {
             if (lvl <= Level::DEBUG)
-                std_out(fmt::fg(fmt::terminal_color::white),
+                message(stdout,
+                        fmt::fg(fmt::terminal_color::white),
+                        'D',
                         std::forward<Args>(args)...);
         }
 
@@ -74,7 +61,9 @@ namespace lucid
         info(Args&& ... args) const noexcept
         {
             if (lvl <= Level::INFO)
-                std_out(fmt::fg(fmt::terminal_color::green),
+                message(stdout,
+                        fmt::fg(fmt::terminal_color::green),
+                        'I',
                         std::forward<Args>(args)...);
         }
 
@@ -83,8 +72,10 @@ namespace lucid
         warning(Args&& ... args) const noexcept
         {
             if (lvl <= Level::WARNING)
-                std_error(fmt::fg(fmt::terminal_color::yellow),
-                          std::forward<Args>(args)...);
+                message(stderr,
+                        fmt::fg(fmt::terminal_color::yellow),
+                        'I',
+                        std::forward<Args>(args)...);
         }
 
         template <typename ... Args>
@@ -92,8 +83,9 @@ namespace lucid
         error(Args&& ... args) const noexcept
         {
             if (lvl <= Level::ERROR)
-                std_error(fmt::fg(fmt::terminal_color::red),
-                          std::forward<Args>(args)...);
+                message(stderr,
+                        fmt::fg(fmt::terminal_color::red),
+                        std::forward<Args>(args)...);
         }
 
         template <typename ... Args>
@@ -101,8 +93,10 @@ namespace lucid
         critical(Args&& ... args) const noexcept
         {
             if (lvl <= Level::CRITICAL)
-                std_error(fmt::emphasis::bold | fmt::fg(fmt::terminal_color::red),
-                          std::forward<Args>(args)...);
+                message(stderr,
+                        fmt::emphasis::bold | fmt::fg(fmt::terminal_color::red),
+                        'C',
+                        std::forward<Args>(args)...);
         }
 
     private:
