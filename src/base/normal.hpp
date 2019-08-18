@@ -50,14 +50,14 @@ namespace lucid
         explicit constexpr
         NormalN_(Ts&& ... rhs) noexcept : m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...)) { normalize(); }
 
-        NormalN_&
+        constexpr NormalN_&
         operator=(const NormalN_& rhs) noexcept
         {
             m_data = rhs.m_data;
             return *this;
         }
 
-        NormalN_&
+        constexpr NormalN_&
         operator=(NormalN_&& rhs) noexcept
         {
             m_data = std::move(rhs.m_data);
