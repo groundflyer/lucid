@@ -375,7 +375,7 @@ int main(/*int argc, char *argv[]*/)
         *it = c8;
     }
 
-    logger.info("Image is rendered in {:.3}", std::chrono::duration_cast<std::chrono::duration<float>>(timer.elapsed()));
+    logger.info("Image is rendered in {:12%H:%M:%S}", timer.elapsed());
 
     vp::load_img(img);
 

@@ -29,11 +29,8 @@
 
 #pragma once
 
-#include <chrono>
-#include <ratio>
-#include <string>
-#include <utility>
-
+#include <fmt/chrono.h>
+#include <type_traits>
 
 namespace lucid
 {
@@ -98,62 +95,19 @@ namespace lucid
     };
 
     template <typename F, typename Clock = std::chrono::steady_clock, typename ... Args>
-    std::chrono::duration<typename Clock::rep, typename Clock::period>
+    decltype(auto)
     measure(F && callable, Args && ...args)
     {
         ElapsedTimer<Clock> timer;
 
-        callable(std::forward<Args>(args)...);
+        if constexpr (std::is_void_v<std::invoke_result_t<F, Args...>>)
+        {
+            callable(std::forward<Args>(args)...);
 
-        return timer.elapsed();
+            return timer.elapsed();
+        }
+        else
+            return std::pair{callable(std::forward<Args>(args)...),
+                    timer.elapsed()};
     }
 }
-
-
-// namespace std
-// {
-//     namespace chrono
-//     {
-//         typedef duration<int64_t, ratio<86400>> days;
-//     }
-
-//     template <typename Rep, intmax_t Num, intmax_t Denom>
-//     string
-//     to_string(chrono::duration<Rep, ratio<Num, Denom>> duration,
-//               const tinytimer::FF flag = tinytimer::DAY,
-//               const streamsize precision = 3)
-//     {
-//         stringstream ss;
-//     	ss << setfill('0');
-
-//         switch (flag) {
-//         case tinytimer::DAY:
-//             {
-//                 auto days = chrono::duration_cast<chrono::days>(duration);
-//                 ss << days.count() << ':';
-//                 duration -= days;
-//             }
-//         case tinytimer::HOUR:
-//             {
-//                 auto hours = chrono::duration_cast<chrono::hours>(duration);
-//                 ss << setw(2) << hours.count() << ':';
-//                 duration -= hours;
-//             }
-//         case tinytimer::MINUTE:
-//             {
-//                 auto minutes = chrono::duration_cast<chrono::minutes>(duration);
-//                 ss << setw(2) << minutes.count() << ':';
-//                 duration -= minutes;
-//             }
-//         case tinytimer::SECOND:
-//             break;
-//         }
-
-//         auto dseconds = chrono::duration_cast<chrono::seconds>(duration);
-//         duration -= dseconds;
-//         double fseconds = static_cast<double>(dseconds.count()) + static_cast<double>(duration.count()) / Denom;
-//         ss << setprecision(precision) << setw(3 + precision) << fixed << fseconds;
-
-//         return ss.str();
-//     }
-// }
