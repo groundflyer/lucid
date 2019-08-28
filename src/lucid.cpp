@@ -224,40 +224,40 @@ sample_hemisphere(const Normal& n, const Vec2& u) noexcept
                                     u1));
 }
 
-static const constexpr std::array<Point, 8> box_points
-    {Point(-1, -1, 1),
-            Point(-1, -1, -1),
-            Point(1, -1, -1),
-            Point(1, -1, 1),
-            Point(-1, 1, 1),
-            Point(-1, 1, -1),
-            Point(1, 1, -1),
-            Point(1, 1, 1)};
+static const constexpr std::array<Point, 8> box_points{
+    Point(-1, -1, 1), Point(-1, -1, -1), Point(1, -1, -1), Point(1, -1, 1),
+    Point(-1, 1, 1),  Point(-1, 1, -1),  Point(1, 1, -1),  Point(1, 1, 1)};
 
-static const constexpr RGB materials[]
-    {RGB{0, 0, 0},              // black default
-     RGB{1, 1, 1},              // white
-     RGB{1, 0.1_r, 0.1_r},      // red
-     RGB{0.1_r, 1, 0.1_r},      // green
-     RGB{0.1_r, 0.5_r, 0.7_r}};
+struct Material
+{
+    RGB diffuse{0, 0, 0};
+    RGB emission{0, 0, 0};
+};
 
-static const constexpr std::tuple box_geo_descr
-    {
-     std::index_sequence<0, 3, 2, 1>{}, // floor
-     std::index_sequence<0, 1, 5, 4>{}, // left wall
-     std::index_sequence<2, 3, 7, 6>{}, // right wall
-     std::index_sequence<4, 5, 6, 7>{}, // ceiling
-     std::index_sequence<1, 2, 6, 5>{}  // back wall
-    };
+static const constexpr Material materials[]{
+    Material{RGB{0}, RGB{0}},                   // black default
+    Material{RGB{1}, RGB{0}},                   // white
+    Material{RGB{1, 0.1_r, 0.1_r}, RGB{0}},     // red
+    Material{RGB{0.1_r, 1, 0.1_r}, RGB{0}},     // green
+    Material{RGB{0.1_r, 0.5_r, 0.7_r}, RGB{0}}, // sphere
+    Material{RGB{0}, RGB{1}}                    // light
+};
 
-static const constexpr std::array<std::size_t, 5> box_mat_idxs
-    {
-     1,                         // white
-     2,                         // red
-     3,                         // green
-     1,                         // white
-     1                          // white
-    };
+static const constexpr std::tuple box_geo_descr{
+    std::index_sequence<0, 3, 2, 1>{}, // floor
+    std::index_sequence<0, 1, 5, 4>{}, // left wall
+    std::index_sequence<2, 3, 7, 6>{}, // right wall
+    std::index_sequence<4, 5, 6, 7>{}, // ceiling
+    std::index_sequence<1, 2, 6, 5>{}  // back wall
+};
+
+static const constexpr std::array<std::size_t, 5> box_mat_idxs{
+      1, // white
+      2, // red
+      3, // green
+      1, // white
+      1  // white
+};
 
 // Cornell Box Primitives
 using QuadRef = Quad_<StaticSpan>;
@@ -265,7 +265,7 @@ using CBPrimTypes = typelist<Sphere, QuadRef, Disk>;
 using CBPrim = typename CBPrimTypes::variant;
 using ObjectData = std::pair<CBPrim, std::size_t>;
 
-template <std::size_t ... Pns>
+template <std::size_t... Pns>
 constexpr decltype(auto)
 make_wall_geo(std::index_sequence<Pns...>) noexcept
 { return QuadRef{ref(std::get<Pns>(box_points))...}; }
@@ -277,6 +277,44 @@ make_room() noexcept
                       box_geo_descr);
 }
 
+template <typename RandomEngine, typename Scene, typename MaterialGetter>
+auto path_trace(Ray ray, RandomEngine& g, const Scene& scene, MaterialGetter&& mat_getter,
+                const std::size_t max_depth, const real bias) noexcept
+{
+    RGB radiance{1};
+    bool has_rad = false;
+
+    for (std::size_t depth = 0; depth < max_depth; ++depth)
+    {
+        const auto& [ro, rd] = ray;
+        const auto [isect, pid] = hider(ray, scene);
+
+        if (!isect)
+        {
+            if (!has_rad)
+                radiance = 0;
+            break;
+        }
+
+        const auto& mat = mat_getter(pid);
+        const auto& mat_color = mat.diffuse;
+        const auto& emit_color = mat.emission;
+
+        // const Normal i = Normal(-rd);
+        const Normal n = lucid::visit(
+            pid, [&, &iss = isect](const auto& prim) { return normal(ray, iss, prim); }, scene);
+
+        const Point p = ro + rd * isect.t;
+        const Normal new_dir = Normal(sample_hemisphere(n, Vec2(rand<real, 2>(g))));
+
+        radiance *= mat_color * std::max(dot(n, new_dir), 0_r) + emit_color;
+        has_rad |= any(emit_color > 0_r);
+
+        ray = Ray(p + new_dir * bias, new_dir);
+    }
+
+    return radiance;
+}
 
 int main(/*int argc, char *argv[]*/)
 {
@@ -296,20 +334,15 @@ int main(/*int argc, char *argv[]*/)
 
     logger.info("OpenGL initialized");
 
-    const auto room_geo = tuple_cat(make_room(),
-                                    std::tuple
-                                    {
-                                        Sphere(Point(0.5_r, -0.6_r, 0.2_r), 0.4_r),
-                                        Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r)
-                                    });
+    const auto room_geo =
+        tuple_cat(make_room(), std::tuple{Sphere(Point(0.5_r, -0.6_r, 0.2_r), 0.4_r),
+                                          Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r)});
 
-    const auto room_mat_ids = array_cat(box_mat_idxs, std::array<std::size_t, 2>{4, 1});
+    const auto room_mat_ids = array_cat(box_mat_idxs, std::array<std::size_t, 2>{4, 5});
 
     const real bias = 0.001_r;
     std::random_device rd;
     std::default_random_engine g(rd());
-
-    const constexpr std::size_t lid = 6;
 
     Image<unsigned char, 3> img(vp::res);
 
@@ -317,60 +350,15 @@ int main(/*int argc, char *argv[]*/)
 
     ElapsedTimer<> timer;
 
-    for(auto it = img.begin(); it != img.end(); ++it)
+    for (auto it = img.begin(); it != img.end(); ++it)
     {
         const auto dc = to_device_coords(Vec2(it.pos()), Vec2(img.res()));
         const auto ray = cam(dc);
-        const auto& [ro, rd] = ray;
-        const auto [isect, pid] = hider(ray, room_geo);
-        const auto& mat_color = materials[room_mat_ids[pid]];
 
-        // const Normal i = Normal(-rd);
-        // THERE IS A BUG IN THE STANDARD: capture of bindings is not allowed FUCKING LOL
-        const Normal n = lucid::visit(pid, [&, &iss=isect](const auto& prim){ return normal(ray, iss, prim); }, room_geo);
-        const Point p(ro + rd * isect.t);
+        const auto c = path_trace(
+            ray, g, room_geo, [&](const std::size_t pid) { return materials[room_mat_ids[pid]]; },
+            32, bias);
 
-        RGB c{};
-
-        if (isect)
-        {
-            if (pid != lid)
-            {
-                // const Normal gidir(sample_hemisphere(n, Vec2(rand<real, 2>(g))));
-                // const Ray raygi(p, gidir);
-                // const auto [gi_isect, gi_hitid] = traverse_scene(raygi, room);
-                // RGB gi_color{};
-                // if (gi_isect)
-                // {
-                //     if(gi_hitid == lid)
-                //         gi_color = std::max(dot(gidir, n), 0_r);
-                //     else
-                //     {
-                //         const auto& [gi_prim, gi_mat] = room[gi_hitid];
-                //         const Normal gi_n = normal(raygi, gi_isect, gi_prim);
-                //         const Point gi_p = p + gidir * gi_isect.t;
-                //         const Point gi_nee_p = sample(Vec2(rand<real, 2>(g)), std::get<lid>(room).first);
-                //         const Normal gi_nee_dir(gi_nee_p - gi_p);
-                //         const Ray gi_nee_ray(gi_p, gi_nee_dir);
-                //         const auto [gi_nee_isect, gi_nee_id] = traverse_scene(gi_nee_ray, room);
-                //         if(gi_nee_isect && gi_nee_id == lid)
-                //             gi_color = materials[gi_mat] * std::max(dot(gi_nee_dir, gi_n), 0_r);
-                        
-                //     }
-                // }
-                const Point lp = sample(Vec2(rand<real, 2>(g)), std::get<lid>(room_geo));
-                const Normal shray_dir = Normal(lp - p);
-                const Ray shadow_ray(p + shray_dir * bias, shray_dir);
-                const auto [si, spid] = hider(shadow_ray, room_geo);
-                if (si && spid == lid)
-                    c = mat_color * std::max(dot(shray_dir, n), 0_r) / (1 + pow<2>(si.t));
-            }
-            else
-                c = RGB{1};
-        }
-        // const auto dd = dot(i, n);
-        // const RGB c(materials[pm.second] * dd);
-        // const RGB c(isect.t * 0.1);
         const RGB8 c8 = RGB8{c * 255};
         *it = c8;
     }
@@ -379,7 +367,7 @@ int main(/*int argc, char *argv[]*/)
 
     vp::load_img(img);
 
-    while(vp::active())
+    while (vp::active())
         vp::draw();
 
     vp::cleanup();
