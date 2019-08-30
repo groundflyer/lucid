@@ -1,217 +1,234 @@
 // -*- C++ -*-
 // lucid.cpp
 
-#include <ray_traversal/primitives/generic.hpp>
-#include <cameras/perspective.hpp>
-#include <cameras/utils.hpp>
-#include <image/io.hpp>
-#include <utils/seq.hpp>
-#include <utils/logging.hpp>
-#include <utils/timer.hpp>
 #include <base/rng.hpp>
+#include <cameras/perspective.hpp>
+#include <image/io.hpp>
+#include <ray_traversal/primitives/generic.hpp>
+#include <utils/logging.hpp>
+#include <utils/seq.hpp>
+#include <utils/timer.hpp>
 
 #include <GLFW/glfw3.h>
 
-#include <string>
 #include <stdexcept>
-
+#include <string>
 
 using namespace lucid;
+using namespace std::literals;
 
 namespace vp
 {
-    static const constexpr char* vertex_shader_src =
-        "#version 330 core\n"
-        "layout (location = 0) in vec3 inP;"
-        "layout (location = 1) in vec2 inUV;"
-        "out vec2 UV;"
-        "void main(){"
-        "gl_Position = vec4(inP, 1.0);"
-        "UV = inUV;}";
+static const constexpr char* vertex_shader_src = "#version 330 core\n"
+                                                 "layout (location = 0) in vec3 inP;"
+                                                 "layout (location = 1) in vec2 inUV;"
+                                                 "out vec2 UV;"
+                                                 "void main(){"
+                                                 "gl_Position = vec4(inP, 1.0);"
+                                                 "UV = inUV;}";
 
-    static const constexpr char* fragment_shader_src =
-        "#version 330 core\n"
-        "out vec4 Cf;"
-        "in vec2 UV;"
-        "uniform sampler2D img;"
-        "void main(){Cf = texture(img, UV);}";
-        // "void main(){Cf = vec4(UV, 0, 1);}";
+static const constexpr char* fragment_shader_src = "#version 330 core\n"
+                                                   "out vec4 Cf;"
+                                                   "in vec2 UV;"
+                                                   "uniform sampler2D img;"
+                                                   "void main(){Cf = texture(img, UV);}";
+// "void main(){Cf = vec4(UV, 0, 1);}";
 
-    static const constexpr float vertex_data[] = {
-        // positions    // texture coordinates
-        -1.f,  1.f, 0,       0, 0,
-        1.f, 1.f, 0,       1.f, 0,
-        1.f, -1.f, 0,      1.f, 1.f,
-        -1.f, -1.f, 0,      0, 1.f
-    };
+static const constexpr float vertex_data[] = {
+    // positions    // texture coordinates
+    -1.f, 1.f, 0, 0, 0, 1.f, 1.f, 0, 1.f, 0, 1.f, -1.f, 0, 1.f, 1.f, -1.f, -1.f, 0, 0, 1.f};
 
-    static const constexpr unsigned indices[] = {
-        0, 1, 2, // first triangle
-        2, 3, 0  // second triangle
-    };
+static const constexpr unsigned indices[] = {
+    0,
+    1,
+    2, // first triangle
+    2,
+    3,
+    0 // second triangle
+};
 
-    static GLFWwindow* window;
+static GLFWwindow* window;
 
-    static unsigned shader_program;
-    static unsigned VBO;
-    static unsigned VAO;
-    static unsigned EBO;
-    static unsigned texture;
+static unsigned shader_program;
+static unsigned VBO;
+static unsigned VAO;
+static unsigned EBO;
+static unsigned texture;
+// static unsigned    PBO;
 
-    static lucid::Vec2u res;
+static lucid::Vec2u res;
 
-    static void
-    resize(GLFWwindow*, int width, int height) noexcept
-    {
-        res = Vec2u(width, height);
-        glViewport(0, 0, width, height);
-    }
-
-    static void
-    init()
-    {
-        if(!glfwInit())
-            throw std::runtime_error("Failed to initialize GLFW");
-
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-        window = glfwCreateWindow(640, 640, "Lucid", nullptr, nullptr);
-
-        if(!window)
-        {
-            glfwTerminate();
-            throw std::runtime_error("Failed to create window");
-        }
-
-        glfwMakeContextCurrent(window);
-        glfwSetFramebufferSizeCallback(window, resize);
-
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-        res = lucid::Vec2u(width, height);
-        glViewport(0, 0, width, height);
-
-        int shader_status;
-        auto vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertex_shader, 1, &vertex_shader_src, nullptr);
-        glCompileShader(vertex_shader);
-        glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &shader_status);
-        if(!shader_status)
-        {
-            char info_log[512];
-            glGetShaderInfoLog(vertex_shader, 512, nullptr, info_log);
-            glfwTerminate();
-            throw std::runtime_error(info_log);
-        }
-
-        auto fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragment_shader, 1, &fragment_shader_src, nullptr);
-        glCompileShader(fragment_shader);
-        glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &shader_status);
-        if(!shader_status)
-        {
-            char info_log[512];
-            glGetShaderInfoLog(fragment_shader, 512, nullptr, info_log);
-            glfwTerminate();
-            throw std::runtime_error(info_log);
-        }
-
-        shader_program = glCreateProgram();
-        glAttachShader(shader_program, vertex_shader);
-        glAttachShader(shader_program, fragment_shader);
-        glLinkProgram(shader_program);
-        glGetProgramiv(shader_program, GL_LINK_STATUS, &shader_status);
-        if(!shader_status)
-        {
-            char info_log[512];
-            glGetProgramInfoLog(shader_program, 512, nullptr, info_log);
-            glfwTerminate();
-            throw std::runtime_error(info_log);
-        }
-
-        glDeleteShader(vertex_shader);
-        glDeleteShader(fragment_shader);
-
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
-        glGenBuffers(1, &EBO);
-
-        glBindVertexArray(VAO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-        // position
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), static_cast<void*>(0));
-        glEnableVertexAttribArray(0);
-
-        // uv
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<void*>(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
-
-        // texture
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    }
-
-    static void
-    load_img(const Image<unsigned char, 3>& img) noexcept
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img.res()[0], img.res()[1], 0, GL_RGB, GL_UNSIGNED_BYTE, img.data());
-        // glGenerateMipmap(GL_TEXTURE_2D);
-    }
-
-    // static void
-    // load_img(const unsigned char* data, int width, int height) noexcept
-    // {
-    //     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    //     // glGenerateMipmap(GL_TEXTURE_2D);
-    // }
-
-    static bool
-    active() noexcept
-    { return !glfwWindowShouldClose(window); }
-
-    static void
-    draw() noexcept
-    {
-        if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(window, true);
-
-        glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glBindTexture(GL_TEXTURE_2D, texture);
-
-        glUseProgram(shader_program);
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-    static void
-    cleanup() noexcept
-    {
-        if(window)
-            glfwDestroyWindow(window);
-
-        glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
-        glDeleteBuffers(1, &EBO);
-
-        glfwTerminate();
-    }
+static void
+resize(GLFWwindow*, int width, int height) noexcept
+{
+    res = Vec2u(width, height);
+    glViewport(0, 0, width, height);
 }
+
+static void
+init()
+{
+    if (!glfwInit()) throw std::runtime_error("Failed to initialize GLFW");
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    window = glfwCreateWindow(640, 640, "Lucid", nullptr, nullptr);
+
+    if (!window)
+    {
+        glfwTerminate();
+        throw std::runtime_error("Failed to create window");
+    }
+
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, resize);
+
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    res = lucid::Vec2u(width, height);
+    glViewport(0, 0, width, height);
+
+    int  shader_status;
+    auto vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertex_shader, 1, &vertex_shader_src, nullptr);
+    glCompileShader(vertex_shader);
+    glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &shader_status);
+    if (!shader_status)
+    {
+        char info_log[512];
+        glGetShaderInfoLog(vertex_shader, 512, nullptr, info_log);
+        glfwTerminate();
+        throw std::runtime_error(info_log);
+    }
+
+    auto fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragment_shader, 1, &fragment_shader_src, nullptr);
+    glCompileShader(fragment_shader);
+    glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &shader_status);
+    if (!shader_status)
+    {
+        char info_log[512];
+        glGetShaderInfoLog(fragment_shader, 512, nullptr, info_log);
+        glfwTerminate();
+        throw std::runtime_error(info_log);
+    }
+
+    shader_program = glCreateProgram();
+    glAttachShader(shader_program, vertex_shader);
+    glAttachShader(shader_program, fragment_shader);
+    glLinkProgram(shader_program);
+    glGetProgramiv(shader_program, GL_LINK_STATUS, &shader_status);
+    if (!shader_status)
+    {
+        char info_log[512];
+        glGetProgramInfoLog(shader_program, 512, nullptr, info_log);
+        glfwTerminate();
+        throw std::runtime_error(info_log);
+    }
+
+    glDeleteShader(vertex_shader);
+    glDeleteShader(fragment_shader);
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+    // glGenBuffers(1, &PBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    // position
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), static_cast<void*>(0));
+    glEnableVertexAttribArray(0);
+
+    // uv
+    glVertexAttribPointer(
+        1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<void*>(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    // texture
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+}
+
+template <typename Format>
+static void
+load_img(const Image<Format, 3>& img) noexcept
+{
+    const constexpr auto type_flag =
+        std::is_same_v<Format, unsigned char> ?
+            GL_UNSIGNED_BYTE :
+            (std::is_same_v<Format, float> ? GL_FLOAT : GL_UNSIGNED_INT);
+    const auto [width, height] = img.res();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, type_flag, img.data());
+}
+
+template <typename Format>
+static void
+reload_img(const Image<Format, 3>& img)
+{
+    const constexpr auto type_flag =
+        std::is_same_v<Format, unsigned char> ?
+            GL_UNSIGNED_BYTE :
+            (std::is_same_v<Format, float> ? GL_FLOAT : GL_UNSIGNED_INT);
+    const auto [width, height] = img.res();
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, type_flag, img.data());
+    auto glerror = glGetError();
+    if (glerror) { throw glerror; }
+}
+
+static bool
+active() noexcept
+{
+    return !glfwWindowShouldClose(window);
+}
+
+static void
+draw() noexcept
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) glfwSetWindowShouldClose(window, true);
+
+    glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glUseProgram(shader_program);
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+}
+
+static void
+check_errors()
+{
+    auto glerror = glGetError();
+    if (glerror) { throw glerror; }
+}
+
+static void
+cleanup() noexcept
+{
+    if (window) glfwDestroyWindow(window);
+
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+    // glDeleteBuffers(1, &PBO);
+
+    glfwTerminate();
+}
+} // namespace vp
 
 auto
 sample_hemisphere(const Normal& n, const Vec2& u) noexcept
@@ -278,46 +295,89 @@ make_room() noexcept
 }
 
 template <typename RandomEngine, typename Scene, typename MaterialGetter>
-auto path_trace(Ray ray, RandomEngine& g, const Scene& scene, MaterialGetter&& mat_getter,
-                const std::size_t max_depth, const real bias) noexcept
+RGB
+path_trace(Ray               ray,
+           RandomEngine&     g,
+           const Scene&      scene,
+           MaterialGetter&&  mat_getter,
+           const std::size_t max_depth,
+           const real        bias) noexcept
 {
-    RGB radiance{1};
+    RGB  radiance{1};
     bool has_rad = false;
 
     for (std::size_t depth = 0; depth < max_depth; ++depth)
     {
-        const auto& [ro, rd] = ray;
+        const auto& [ro, rd]    = ray;
         const auto [isect, pid] = hider(ray, scene);
 
-        if (!isect)
+        if (!isect) break;
+
+        const auto& [color, emission] = mat_getter(pid);
+        has_rad |= any(emission > 0_r);
+
+        if (all(almost_equal(color, 0_r, 10)))
         {
-            if (!has_rad)
-                radiance = 0;
+            radiance *= emission;
             break;
         }
-
-        const auto& mat = mat_getter(pid);
-        const auto& mat_color = mat.diffuse;
-        const auto& emit_color = mat.emission;
 
         // const Normal i = Normal(-rd);
         const Normal n = lucid::visit(
             pid, [&, &iss = isect](const auto& prim) { return normal(ray, iss, prim); }, scene);
 
-        const Point p = ro + rd * isect.t;
-        const Normal new_dir = Normal(sample_hemisphere(n, Vec2(rand<real, 2>(g))));
+        const Point  p = ro + rd * isect.t;
+        const Normal new_dir(sample_hemisphere(n, Vec2(rand<real, 2>(g))));
 
-        radiance *= mat_color * std::max(dot(n, new_dir), 0_r) + emit_color;
-        has_rad |= any(emit_color > 0_r);
+        radiance = radiance * color * std::max(dot(n, new_dir), 0_r) + emission;
 
         ray = Ray(p + new_dir * bias, new_dir);
     }
 
-    return radiance;
+    return radiance * has_rad;
 }
 
-int main(/*int argc, char *argv[]*/)
+using Sample = std::pair<Vec2, RGB>;
+
+template <typename Filter, typename Samples>
+void
+reconstruct(Image<float, 3>& img,
+            const real       max_dist,
+            Filter&&         filter,
+            const Samples&   samples) noexcept
 {
+    for (auto it = img.begin(); it != img.end(); ++it)
+    {
+        const auto ppos = to_device_coords(it.pos(), img.res());
+
+        real weight{0};
+        RGB  accum{0};
+        for (const auto& [spos, sval] : samples)
+        {
+            const auto dist = distance(ppos, spos);
+            if (dist < max_dist)
+            {
+                const real ww = filter(dist);
+                weight += ww;
+                accum += sval * ww;
+            }
+        }
+
+        if (weight > 0_r) accum /= weight;
+
+        const auto contr_w = srgb_luminance(accum);
+        const auto img_w   = srgb_luminance(*it);
+        const auto ws      = contr_w + img_w;
+
+        if (ws > 0) *it = accum * contr_w + (*it * img_w) / ws;
+    }
+}
+
+int
+main(int argc, char* argv[])
+{
+    const std::size_t max_depth = argc > 1 ? std::stoll(argv[1]) : 4;
+
     perspective::shoot cam(radians(60_r), look_at(Point(0, 0, 4), Point(0, 0, 0), Normal(0, 1, 0)));
 
     Logger logger(Logger::DEBUG);
@@ -328,47 +388,80 @@ int main(/*int argc, char *argv[]*/)
     }
     catch (const std::runtime_error& ex)
     {
-        logger.critical("OpenGL Error: {}", ex.what());
+        logger.critical("OpenGL Error during initialization: {}", ex.what());
         return 1;
     }
 
     logger.info("OpenGL initialized");
 
-    const auto room_geo =
-        tuple_cat(make_room(), std::tuple{Sphere(Point(0.5_r, -0.6_r, 0.2_r), 0.4_r),
-                                          Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r)});
+    const auto room_geo = tuple_cat(make_room(),
+                                    std::tuple{Sphere(Point(0.5_r, -0.6_r, 0.2_r), 0.4_r),
+                                               Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r)});
 
     const auto room_mat_ids = array_cat(box_mat_idxs, std::array<std::size_t, 2>{4, 5});
 
-    const real bias = 0.001_r;
-    std::random_device rd;
+    const real                 bias = 0.001_r;
+    std::random_device         rd;
     std::default_random_engine g(rd());
 
-    Image<unsigned char, 3> img(vp::res);
-
-    logger.debug("Rendering image...");
-
-    ElapsedTimer<> timer;
-
-    for (auto it = img.begin(); it != img.end(); ++it)
+    try
     {
-        const auto dc = to_device_coords(Vec2(it.pos()), Vec2(img.res()));
-        const auto ray = cam(dc);
+        Image<float, 3> img(vp::res);
 
-        const auto c = path_trace(
-            ray, g, room_geo, [&](const std::size_t pid) { return materials[room_mat_ids[pid]]; },
-            32, bias);
+        const constexpr std::size_t spp = 512;
+        ImageSampler                img_sampler(img.res());
+        const real                  pixel_size = 1_r / lucid::max(vp::res);
 
-        const RGB8 c8 = RGB8{c * 255};
-        *it = c8;
+        logger.debug("Rendering image {}x{} with {} spp...", vp::res[0], vp::res[1], spp);
+        vp::load_img(img);
+
+        vp::check_errors();
+
+        ElapsedTimer<> timer;
+        ElapsedTimer<> update_timer;
+
+        while (vp::active())
+        {
+            std::array<Sample, spp> samples;
+            for (auto& [spos, sval] : samples)
+            {
+                spos = img_sampler(g);
+                sval =
+                    path_trace(cam(spos),
+                               g,
+                               room_geo,
+                               [&](const std::size_t pid) { return materials[room_mat_ids[pid]]; },
+                               max_depth,
+                               bias);
+            }
+
+            reconstruct(
+                img,
+                pixel_size * 3,
+                [pixel_size](const real dist) { return 1_r / pow<2>(1_r + dist / pixel_size); },
+                samples);
+
+            if (update_timer.has_expired(100ms))
+            {
+                vp::reload_img(img);
+                vp::draw();
+                update_timer.restart();
+            }
+
+            // vp::check_errors();
+            // logger.info(Logger::flush, "Progress: {:.1%}", static_cast<float>(i) / num_pixels);
+        }
+
+        // vp::reload_img(img);
+
+        logger.info("Image is rendered in {:12%H:%M:%S}", timer.elapsed());
+
+        // while (vp::active()) vp::draw();
     }
-
-    logger.info("Image is rendered in {:12%H:%M:%S}", timer.elapsed());
-
-    vp::load_img(img);
-
-    while (vp::active())
-        vp::draw();
+    catch (GLenum er)
+    {
+        logger.critical("OpenGL error: {}", er);
+    }
 
     vp::cleanup();
 

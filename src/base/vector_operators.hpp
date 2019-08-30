@@ -327,135 +327,213 @@ namespace lucid
     	return ret;
     }
 
-    template <typename T, std::size_t N,
-              template <typename, std::size_t> typename Container,
-              template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType>
+    template <typename T,
+              std::size_t N,
+              template <typename, std::size_t>
+              typename Container,
+              template <typename, std::size_t, template <typename, std::size_t> typename>
+              typename VectorType>
     constexpr auto
     ref(const VectorType<T, N, Container>& v) noexcept
-    { return VectorType<T, N, StaticSpan>(StaticSpan<T, N>(v[0])); }
+    {
+        return VectorType<T, N, StaticSpan>(StaticSpan<T, N>(v[0]));
+    }
 
-    template <typename T, std::size_t N,
-              template <typename, std::size_t> typename Container,
-              template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType>
+    template <typename T,
+              std::size_t N,
+              template <typename, std::size_t>
+              typename Container,
+              template <typename, std::size_t, template <typename, std::size_t> typename>
+              typename VectorType>
+    constexpr auto
+    srgb_luminance(const VectorType<T, N, Container>& rgb) noexcept
+    {
+        return rgb.dot(VectorType<T, N, std::array>{T{0.2126}, T{0.7152}, T{0.0722}});
+    }
+
+    template <typename T,
+              std::size_t N,
+              template <typename, std::size_t>
+              typename Container,
+              template <typename, std::size_t, template <typename, std::size_t> typename>
+              typename VectorType>
     class ImmutableVectorOperators
     {
-		static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");
+        static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");
 
         constexpr const VectorType<T, N, Container>&
         this_vec() const noexcept
-        { return static_cast<const VectorType<T, N, Container>&>(*this); }
+        {
+            return static_cast<const VectorType<T, N, Container>&>(*this);
+        }
 
-    public:
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr auto
-		operator+(const VectorType2<T, N, Container2>& rhs) const noexcept
-		{ return transform(std::plus<T>(), this_vec(), rhs); }
-		constexpr auto
-		operator+(const T& rhs) const noexcept
-		{ return transform([&rhs](const T& a){ return a + rhs; }, this_vec()); }
-
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr auto
-		operator-(const VectorType2<T, N, Container2>& rhs) const noexcept
-		{ return transform(std::minus<T>(), this_vec(), rhs); }
-		constexpr auto
-		operator-(const T& rhs) const noexcept
-		{ return transform([&rhs](const T& a){ return a - rhs; }, this_vec()); }
-		constexpr auto
-		operator-() const noexcept
-		{ return transform(std::negate<T>(), this_vec()); }
-
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr auto
-		operator*(const VectorType2<T, N, Container2> & rhs) const noexcept
-		{ return transform(std::multiplies<T>(), this_vec(), rhs); }
-		constexpr auto
-		operator*(const T & rhs) const noexcept
-		{ return transform([&rhs](const T& a){ return a * rhs; }, this_vec()); }
-
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr auto
-		operator/(const VectorType2<T, N, Container2> & rhs) const noexcept
-		{ return transform(std::divides<T>(), this_vec(), rhs); }
-		constexpr auto
-		operator/(const T & rhs) const noexcept
-		{ return transform([&rhs](const T& a){ return a / rhs; }, this_vec()); }
-
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr auto
-		operator==(const VectorType2<T, N, Container2> & rhs) const noexcept
-		{ return transform(std::equal_to<T>(), this_vec(), rhs); }
-		constexpr auto
-		operator==(const T& rhs) const noexcept
-		{ return transform([&rhs](const T& elem){ return elem == rhs; }, this_vec()); }
-
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr auto
-		operator!=(const VectorType2<T, N, Container2> & rhs) const noexcept
-		{ return transform(std::not_equal_to<T>(), this_vec(), rhs); }
-		constexpr auto
-		operator!=(const T& rhs) const noexcept
-		{ return transform([&rhs](const T& elem){ return elem != rhs; }, this_vec()); }
-
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr auto
-		operator>(const VectorType2<T, N, Container2> & rhs) const noexcept
-		{ return transform(std::greater<T>(), this_vec(), rhs); }
-		constexpr auto
-		operator>(const T& rhs) const noexcept
-		{ return transform([&rhs](const T& elem){ return elem > rhs; }, this_vec()); }
-
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr auto
-		operator<(const VectorType2<T, N, Container2> & rhs) const noexcept
-		{ return transform(std::less<T>(), this_vec(), rhs); }
-		constexpr auto
-		operator<(const T& rhs) const noexcept
-		{ return transform([&rhs](const T& elem){ return elem < rhs; }, this_vec()); }
-
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr auto
-		operator>=(const VectorType2<T, N, Container2> & rhs) const noexcept
-		{ return transform(std::greater_equal<T>(), this_vec(), rhs); }
-		constexpr auto
-		operator>=(const T& rhs) const noexcept
-		{ return transform([&rhs](const T& elem){ return elem >= rhs; }, this_vec()); }
-
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr auto
-		operator<=(const VectorType2<T, N, Container2> & rhs) const noexcept
-		{ return transform(std::less_equal<T>(), this_vec(), rhs); }
-		constexpr auto
-		operator<=(const T& rhs) const noexcept
-		{ return transform([&rhs](const T& elem){ return elem <= rhs; }, this_vec()); }
-
+      public:
+        template <template <typename, std::size_t> typename Container2,
+                  template <typename, std::size_t, template <typename, std::size_t> typename>
+                  typename VectorType2>
         constexpr auto
-        operator!() const noexcept
-        { return transform(std::logical_not<T>(), this_vec()); }
+        operator+(const VectorType2<T, N, Container2>& rhs) const noexcept
+        {
+            return transform(std::plus<T>(), this_vec(), rhs);
+        }
+        constexpr auto
+        operator+(const T& rhs) const noexcept
+        {
+            return transform([&rhs](const T& a) { return a + rhs; }, this_vec());
+        }
 
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
+        template <template <typename, std::size_t> typename Container2,
+                  template <typename, std::size_t, template <typename, std::size_t> typename>
+                  typename VectorType2>
+        constexpr auto
+        operator-(const VectorType2<T, N, Container2>& rhs) const noexcept
+        {
+            return transform(std::minus<T>(), this_vec(), rhs);
+        }
+        constexpr auto
+        operator-(const T& rhs) const noexcept
+        {
+            return transform([&rhs](const T& a) { return a - rhs; }, this_vec());
+        }
+        constexpr auto
+        operator-() const noexcept
+        {
+            return transform(std::negate<T>(), this_vec());
+        }
+
+        template <template <typename, std::size_t> typename Container2,
+                  template <typename, std::size_t, template <typename, std::size_t> typename>
+                  typename VectorType2>
+        constexpr auto operator*(const VectorType2<T, N, Container2>& rhs) const noexcept
+        {
+            return transform(std::multiplies<T>(), this_vec(), rhs);
+        }
+        constexpr auto operator*(const T& rhs) const noexcept
+        {
+            return transform([&rhs](const T& a) { return a * rhs; }, this_vec());
+        }
+
+        template <template <typename, std::size_t> typename Container2,
+                  template <typename, std::size_t, template <typename, std::size_t> typename>
+                  typename VectorType2>
+        constexpr auto
+        operator/(const VectorType2<T, N, Container2>& rhs) const noexcept
+        {
+            return transform(std::divides<T>(), this_vec(), rhs);
+        }
+        constexpr auto
+        operator/(const T& rhs) const noexcept
+        {
+            return transform([&rhs](const T& a) { return a / rhs; }, this_vec());
+        }
+
+        template <template <typename, std::size_t> typename Container2,
+                  template <typename, std::size_t, template <typename, std::size_t> typename>
+                  typename VectorType2>
+        constexpr auto
+        operator==(const VectorType2<T, N, Container2>& rhs) const noexcept
+        {
+            return transform(std::equal_to<T>(), this_vec(), rhs);
+        }
+        constexpr auto
+        operator==(const T& rhs) const noexcept
+        {
+            return transform([&rhs](const T& elem) { return elem == rhs; }, this_vec());
+        }
+
+        template <template <typename, std::size_t> typename Container2,
+                  template <typename, std::size_t, template <typename, std::size_t> typename>
+                  typename VectorType2>
+        constexpr auto
+        operator!=(const VectorType2<T, N, Container2>& rhs) const noexcept
+        {
+            return transform(std::not_equal_to<T>(), this_vec(), rhs);
+        }
+        constexpr auto
+        operator!=(const T& rhs) const noexcept
+        {
+            return transform([&rhs](const T& elem) { return elem != rhs; }, this_vec());
+        }
+
+        template <template <typename, std::size_t> typename Container2,
+                  template <typename, std::size_t, template <typename, std::size_t> typename>
+                  typename VectorType2>
+        constexpr auto
+        operator>(const VectorType2<T, N, Container2>& rhs) const noexcept
+        {
+            return transform(std::greater<T>(), this_vec(), rhs);
+        }
+        constexpr auto
+        operator>(const T& rhs) const noexcept
+        {
+            return transform([&rhs](const T& elem) { return elem > rhs; }, this_vec());
+        }
+
+        template <template <typename, std::size_t> typename Container2,
+                  template <typename, std::size_t, template <typename, std::size_t> typename>
+                  typename VectorType2>
+        constexpr auto
+        operator<(const VectorType2<T, N, Container2>& rhs) const noexcept
+        {
+            return transform(std::less<T>(), this_vec(), rhs);
+        }
+        constexpr auto
+        operator<(const T& rhs) const noexcept
+        {
+            return transform([&rhs](const T& elem) { return elem < rhs; }, this_vec());
+        }
+
+        template <template <typename, std::size_t> typename Container2,
+                  template <typename, std::size_t, template <typename, std::size_t> typename>
+                  typename VectorType2>
+        constexpr auto
+        operator>=(const VectorType2<T, N, Container2>& rhs) const noexcept
+        {
+            return transform(std::greater_equal<T>(), this_vec(), rhs);
+        }
+        constexpr auto
+        operator>=(const T& rhs) const noexcept
+        {
+            return transform([&rhs](const T& elem) { return elem >= rhs; }, this_vec());
+        }
+
+        template <template <typename, std::size_t> typename Container2,
+                  template <typename, std::size_t, template <typename, std::size_t> typename>
+                  typename VectorType2>
+        constexpr auto
+        operator<=(const VectorType2<T, N, Container2>& rhs) const noexcept
+        {
+            return transform(std::less_equal<T>(), this_vec(), rhs);
+        }
+        constexpr auto
+        operator<=(const T& rhs) const noexcept
+        {
+            return transform([&rhs](const T& elem) { return elem <= rhs; }, this_vec());
+        }
+
+        constexpr auto operator!() const noexcept
+        {
+            return transform(std::logical_not<T>(), this_vec());
+        }
+
+        template <template <typename, std::size_t> typename Container2,
+                  template <typename, std::size_t, template <typename, std::size_t> typename>
+                  typename VectorType2>
         constexpr auto
         dot(const VectorType2<T, N, Container2>& rhs) const noexcept
-        { return lucid::dot(this_vec(), rhs); }
+        {
+            return lucid::dot(this_vec(), rhs);
+        }
 
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
+        template <template <typename, std::size_t> typename Container2,
+                  template <typename, std::size_t, template <typename, std::size_t> typename>
+                  typename VectorType2>
         constexpr auto
         cross(const VectorType2<T, N, Container2>& rhs) const noexcept
-        { return lucid::cross(this_vec(), rhs); }
+        {
+            return lucid::cross(this_vec(), rhs);
+        }
     };
-
 
     template <typename T, std::size_t N,
               template <typename, std::size_t> typename Container,
