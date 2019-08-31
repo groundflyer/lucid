@@ -18,9 +18,8 @@ template <typename T, std::size_t NC, typename Allocator = std::allocator<T>>
 class Image
 {
     Vec2u     m_res;
-    Allocator m_alloc  = Allocator();
-    T*        p_data   = nullptr;
-    bool      prealloc = false;
+    Allocator m_alloc = Allocator();
+    T*        p_data  = nullptr;
 
     std::size_t
     pos(const std::size_t row, const std::size_t column) const noexcept
@@ -187,15 +186,11 @@ class Image
         std::copy(rhs.p_data, rhs.p_data + rhs.size(), p_data);
     }
 
-    Image(Image&& rhs) :
-        m_alloc(std::move(rhs.m_alloc)), m_res(rhs.m_res), p_data(rhs.p_data),
-        prealloc(rhs.prealloc)
+    Image(Image&& rhs) : m_alloc(std::move(rhs.m_alloc)), m_res(rhs.m_res), p_data(rhs.p_data)
     {
         rhs.p_data = nullptr;
         rhs.m_res  = Vec2u(0);
     }
-
-    Image(const Vec2u res, T* ptr) : m_res(res), p_data(ptr), prealloc(true) {}
 
     Image&
     operator=(const Image& rhs)
@@ -223,8 +218,6 @@ class Image
 
     virtual ~Image() noexcept
     {
-        if (prealloc) return;
-
         for (std::size_t i = 0; i < size(); ++i)
             std::allocator_traits<Allocator>::destroy(m_alloc, p_data + i);
 
