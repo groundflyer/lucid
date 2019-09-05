@@ -206,7 +206,6 @@ draw() noexcept
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     glfwSwapBuffers(window);
-    glfwPollEvents();
 }
 
 static void
@@ -229,6 +228,41 @@ cleanup() noexcept
     glfwTerminate();
 }
 } // namespace vp
+
+// convert image coordinates to device coordinates
+constexpr auto
+to_device_coords(const Vec2& pos, const Vec2& res) noexcept
+{
+    return (pos - res * 0.5_r) / res;
+}
+
+constexpr auto
+to_device_coords(const Vec2u& pos, const Vec2u& res) noexcept
+{
+    return to_device_coords(Vec2(pos), Vec2(res));
+}
+
+// class ImageSampler
+// {
+//     std::uniform_real_distribution<real> width;
+//     std::uniform_real_distribution<real> height;
+
+//   public:
+//     ImageSampler() = delete;
+
+//     ImageSampler(const Vec2u& res) noexcept :
+//         width(to_device_coords(Vec2u{0}, res)[0], to_device_coords(res - 1, res)[0]),
+//         height(to_device_coords(Vec2u{0}, res)[1], to_device_coords(res - 1, res)[1])
+//     {
+//     }
+
+//     template <typename Generator>
+//     Vec2
+//     operator()(Generator& g) noexcept
+//     {
+//         return Vec2{width(g), height(g)};
+//     }
+// };
 
 auto
 sample_hemisphere(const Normal& n, const Vec2& u) noexcept
@@ -257,7 +291,7 @@ static const constexpr Material materials[]{
     Material{RGB{1, 0.1_r, 0.1_r}, RGB{0}},     // red
     Material{RGB{0.1_r, 1, 0.1_r}, RGB{0}},     // green
     Material{RGB{0.1_r, 0.5_r, 0.7_r}, RGB{0}}, // sphere
-    Material{RGB{0}, RGB{1}}                    // light
+    Material{RGB{0}, RGB{10}}                   // light
 };
 
 static const constexpr std::tuple box_geo_descr{
@@ -306,17 +340,17 @@ path_trace(Ray               ray,
     RGB  radiance{1};
     bool has_rad = false;
 
-    for (std::size_t depth = 0; depth < max_depth; ++depth)
+    for(std::size_t depth = 0; depth < max_depth; ++depth)
     {
         const auto& [ro, rd]    = ray;
         const auto [isect, pid] = hider(ray, scene);
 
-        if (!isect) break;
+        if(!isect) break;
 
         const auto& [color, emission] = mat_getter(pid);
         has_rad |= any(emission > 0_r);
 
-        if (all(almost_equal(color, 0_r, 10)))
+        if(all(almost_equal(color, 0_r, 10)))
         {
             radiance *= emission;
             break;
@@ -339,46 +373,85 @@ path_trace(Ray               ray,
 
 using Sample = std::pair<Vec2, RGB>;
 
-template <typename Filter, typename Samples>
-void
-reconstruct(Image<float, 3>& img,
-            const real       max_dist,
-            Filter&&         filter,
-            const Samples&   samples) noexcept
+template <typename Generator>
+Vec2
+sample_pixel(Generator& g, const real size, const Vec2& ndc) noexcept
 {
-    for (auto it = img.begin(); it != img.end(); ++it)
-    {
-        const auto ppos = to_device_coords(it.pos(), img.res());
-
-        real weight{0};
-        RGB  accum{0};
-        for (const auto& [spos, sval] : samples)
-        {
-            const auto dist = distance(ppos, spos);
-            if (dist < max_dist)
-            {
-                const real ww = filter(dist);
-                weight += ww;
-                accum += sval * ww;
-            }
-        }
-
-        if (weight > 0_r) accum /= weight;
-
-        const auto contr_w = srgb_luminance(accum);
-        const auto img_w   = srgb_luminance(*it);
-        const auto ws      = contr_w + img_w;
-
-        if (ws > 0) *it = accum * contr_w + (*it * img_w) / ws;
-    }
+    Vec2 s{rand<real, 2>(g)};
+    s *= size;
+    return ndc + s;
 }
+
+template <template <typename, std::size_t> typename Container>
+auto
+update_pixel(const RGB_<Container>& color,
+             const real             size,
+             const Vec2&            ndc,
+             const Sample&          sample) noexcept
+{
+    const auto& [sndc, sval] = sample;
+    auto dist                = distance(ndc, sndc);
+    dist /= size;
+    const auto weight = 1_r - dist;
+    return (color + sval * weight) / (1_r + weight);
+}
+
+auto
+reset_pixel(const real size, const Vec2& ndc, const Sample& sample) noexcept
+{
+    const auto& [sndc, sval] = sample;
+    auto dist                = distance(ndc, sndc);
+    dist /= size;
+    const auto weight = 1_r - dist;
+    return sval * weight;
+}
+
+// template <typename Filter, typename Samples>
+// void
+// reconstruct(Image<float, 3>& img,
+//             const real       max_dist,
+//             Filter&&         filter,
+//             const Samples&   samples) noexcept
+// {
+//     for (auto it = img.begin(); it != img.end(); ++it)
+//     {
+//         const auto ppos = to_device_coords(it.pos(), img.res());
+
+//         real weight{0};
+//         RGB  accum{0};
+//         bool contributed = false;
+//         for (const auto& [spos, sval] : samples)
+//         {
+//             const auto dist = distance(ppos, spos);
+//             if (dist < max_dist)
+//             {
+//                 const real ww = filter(dist);
+//                 weight += ww;
+//                 accum += sval * ww;
+//                 contributed = true;
+//             }
+//         }
+
+//         if (contributed && weight > 0_r) accum /= weight;
+
+//         // const auto contr_w = srgb_luminance(accum);
+//         // const auto img_w   = srgb_luminance(*it);
+//         // const auto ws      = contr_w + img_w;
+
+//         if (contributed) *it = (*it + accum) * 0.5f;
+//     }
+// }
 
 int
 main(int argc, char* argv[])
 {
     const std::size_t max_depth = argc > 1 ? std::stoll(argv[1]) : 4;
+    // const std::size_t spp       = argc > 2 ? std::stoll(argv[2]) : 16;
 
-    perspective::shoot cam(radians(60_r), look_at(Point(0, 0, 4), Point(0, 0, 0), Normal(0, 1, 0)));
+    const auto& [w, h]       = vp::res;
+    const auto         ratio = static_cast<real>(w) / static_cast<real>(h);
+    perspective::shoot cam(
+        radians(60_r), ratio, look_at(Point(0, 0, 4), Point(0, 0, 0), Normal(0, 1, 0)));
 
     Logger logger(Logger::DEBUG);
 
@@ -386,7 +459,7 @@ main(int argc, char* argv[])
     {
         vp::init();
     }
-    catch (const std::runtime_error& ex)
+    catch(const std::runtime_error& ex)
     {
         logger.critical("OpenGL Error during initialization: {}", ex.what());
         return 1;
@@ -408,57 +481,65 @@ main(int argc, char* argv[])
     {
         Image<float, 3> img(vp::res);
 
-        const constexpr std::size_t spp = 512;
-        ImageSampler                img_sampler(img.res());
-        const real                  pixel_size = 1_r / lucid::max(vp::res);
+        const real pixel_size = 1_r / lucid::max(vp::res);
 
-        logger.debug("Rendering image {}x{} with {} spp...", vp::res[0], vp::res[1], spp);
+        // logger.debug("Rendering image {}x{} with {} spp...", vp::res[0], vp::res[1], spp);
         vp::load_img(img);
 
         vp::check_errors();
 
         ElapsedTimer<> timer;
-        ElapsedTimer<> update_timer;
 
-        while (vp::active())
+        for(auto it = img.begin(); it != img.end(); ++it)
         {
-            std::array<Sample, spp> samples;
-            for (auto& [spos, sval] : samples)
+            const auto ndc  = to_device_coords(it.pos(), vp::res);
+            const auto spos = sample_pixel(g, pixel_size, ndc);
+
+            const auto sval =
+                path_trace(cam(spos),
+                           g,
+                           room_geo,
+                           [&](const std::size_t pid) { return materials[room_mat_ids[pid]]; },
+                           max_depth,
+                           bias);
+
+            *it = reset_pixel(pixel_size, ndc, Sample{spos, sval});
+        }
+
+        vp::reload_img(img);
+        vp::draw();
+        glfwPollEvents();
+
+        std::size_t spp = 1;
+
+        while(vp::active())
+        {
+            for(auto it = img.begin(); it != img.end(); ++it)
             {
-                spos = img_sampler(g);
-                sval =
+                const auto ndc  = to_device_coords(it.pos(), vp::res);
+                const auto spos = sample_pixel(g, pixel_size, ndc);
+
+                const auto sval =
                     path_trace(cam(spos),
                                g,
                                room_geo,
                                [&](const std::size_t pid) { return materials[room_mat_ids[pid]]; },
                                max_depth,
                                bias);
+
+                *it = update_pixel(*it, pixel_size, ndc, Sample{spos, sval});
             }
 
-            reconstruct(
-                img,
-                pixel_size * 3,
-                [pixel_size](const real dist) { return 1_r / pow<2>(1_r + dist / pixel_size); },
-                samples);
-
-            if (update_timer.has_expired(100ms))
-            {
-                vp::reload_img(img);
-                vp::draw();
-                update_timer.restart();
-            }
-
-            // vp::check_errors();
-            // logger.info(Logger::flush, "Progress: {:.1%}", static_cast<float>(i) / num_pixels);
+            ++spp;
+            vp::reload_img(img);
+            vp::draw();
+            glfwPollEvents();
         }
 
-        // vp::reload_img(img);
-
-        logger.info("Image is rendered in {:12%H:%M:%S}", timer.elapsed());
-
-        // while (vp::active()) vp::draw();
+        logger.info("Rendering time {:12%H:%M:%S}", timer.elapsed());
+        logger.info("Total pixel samples: {}", spp);
     }
-    catch (GLenum er)
+    catch(GLenum er)
     {
         logger.critical("OpenGL error: {}", er);
     }
