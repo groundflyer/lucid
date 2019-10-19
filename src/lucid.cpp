@@ -6,8 +6,8 @@
 #include <image/io.hpp>
 #include <ray_traversal/primitives/generic.hpp>
 #include <utils/logging.hpp>
-#include <utils/seq.hpp>
 #include <utils/timer.hpp>
+#include <utils/tuple.hpp>
 
 #include <GLFW/glfw3.h>
 
@@ -68,7 +68,7 @@ resize(GLFWwindow*, int width, int height) noexcept
 static void
 init()
 {
-    if (!glfwInit()) throw std::runtime_error("Failed to initialize GLFW");
+    if(!glfwInit()) throw std::runtime_error("Failed to initialize GLFW");
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -76,7 +76,7 @@ init()
 
     window = glfwCreateWindow(640, 640, "Lucid", nullptr, nullptr);
 
-    if (!window)
+    if(!window)
     {
         glfwTerminate();
         throw std::runtime_error("Failed to create window");
@@ -95,7 +95,7 @@ init()
     glShaderSource(vertex_shader, 1, &vertex_shader_src, nullptr);
     glCompileShader(vertex_shader);
     glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &shader_status);
-    if (!shader_status)
+    if(!shader_status)
     {
         char info_log[512];
         glGetShaderInfoLog(vertex_shader, 512, nullptr, info_log);
@@ -107,7 +107,7 @@ init()
     glShaderSource(fragment_shader, 1, &fragment_shader_src, nullptr);
     glCompileShader(fragment_shader);
     glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &shader_status);
-    if (!shader_status)
+    if(!shader_status)
     {
         char info_log[512];
         glGetShaderInfoLog(fragment_shader, 512, nullptr, info_log);
@@ -120,7 +120,7 @@ init()
     glAttachShader(shader_program, fragment_shader);
     glLinkProgram(shader_program);
     glGetProgramiv(shader_program, GL_LINK_STATUS, &shader_status);
-    if (!shader_status)
+    if(!shader_status)
     {
         char info_log[512];
         glGetProgramInfoLog(shader_program, 512, nullptr, info_log);
@@ -184,7 +184,7 @@ reload_img(const Image<Format, 3>& img)
     const auto [width, height] = img.res();
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, type_flag, img.data());
     auto glerror = glGetError();
-    if (glerror) { throw glerror; }
+    if(glerror) { throw glerror; }
 }
 
 static bool
@@ -196,7 +196,7 @@ active() noexcept
 static void
 draw() noexcept
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) glfwSetWindowShouldClose(window, true);
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) glfwSetWindowShouldClose(window, true);
 
     glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -212,13 +212,13 @@ static void
 check_errors()
 {
     auto glerror = glGetError();
-    if (glerror) { throw glerror; }
+    if(glerror) { throw glerror; }
 }
 
 static void
 cleanup() noexcept
 {
-    if (window) glfwDestroyWindow(window);
+    if(window) glfwDestroyWindow(window);
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
@@ -242,37 +242,13 @@ to_device_coords(const Vec2u& pos, const Vec2u& res) noexcept
     return to_device_coords(Vec2(pos), Vec2(res));
 }
 
-// class ImageSampler
-// {
-//     std::uniform_real_distribution<real> width;
-//     std::uniform_real_distribution<real> height;
-
-//   public:
-//     ImageSampler() = delete;
-
-//     ImageSampler(const Vec2u& res) noexcept :
-//         width(to_device_coords(Vec2u{0}, res)[0], to_device_coords(res - 1, res)[0]),
-//         height(to_device_coords(Vec2u{0}, res)[1], to_device_coords(res - 1, res)[1])
-//     {
-//     }
-
-//     template <typename Generator>
-//     Vec2
-//     operator()(Generator& g) noexcept
-//     {
-//         return Vec2{width(g), height(g)};
-//     }
-// };
-
 auto
 sample_hemisphere(const Normal& n, const Vec2& u) noexcept
 {
     const auto& [u1, u2] = u;
-    const auto r = 2_r * Pi * u2;
-    const auto phi = math::sqrt(1_r - pow<2>(u1));
-    return basis_matrix(n).dot(Vec3(math::cos(r) * phi,
-                                    math::sin(r) * phi,
-                                    u1));
+    const auto r         = 2_r * Pi * u2;
+    const auto phi       = math::sqrt(1_r - pow<2>(u1));
+    return basis_matrix(n).dot(Vec3(math::cos(r) * phi, math::sin(r) * phi, u1));
 }
 
 static const constexpr std::array<Point, 8> box_points{
@@ -406,47 +382,10 @@ reset_pixel(const real size, const Vec2& ndc, const Sample& sample) noexcept
     return sval * weight;
 }
 
-// template <typename Filter, typename Samples>
-// void
-// reconstruct(Image<float, 3>& img,
-//             const real       max_dist,
-//             Filter&&         filter,
-//             const Samples&   samples) noexcept
-// {
-//     for (auto it = img.begin(); it != img.end(); ++it)
-//     {
-//         const auto ppos = to_device_coords(it.pos(), img.res());
-
-//         real weight{0};
-//         RGB  accum{0};
-//         bool contributed = false;
-//         for (const auto& [spos, sval] : samples)
-//         {
-//             const auto dist = distance(ppos, spos);
-//             if (dist < max_dist)
-//             {
-//                 const real ww = filter(dist);
-//                 weight += ww;
-//                 accum += sval * ww;
-//                 contributed = true;
-//             }
-//         }
-
-//         if (contributed && weight > 0_r) accum /= weight;
-
-//         // const auto contr_w = srgb_luminance(accum);
-//         // const auto img_w   = srgb_luminance(*it);
-//         // const auto ws      = contr_w + img_w;
-
-//         if (contributed) *it = (*it + accum) * 0.5f;
-//     }
-// }
-
 int
 main(int argc, char* argv[])
 {
     const std::size_t max_depth = argc > 1 ? std::stoll(argv[1]) : 4;
-    // const std::size_t spp       = argc > 2 ? std::stoll(argv[2]) : 16;
 
     const auto& [w, h]       = vp::res;
     const auto         ratio = static_cast<real>(w) / static_cast<real>(h);

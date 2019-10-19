@@ -9,7 +9,7 @@
 #include <ray_traversal/primitives/generic.hpp>
 #include <base/rng.hpp>
 
-#include <utils/seq.hpp>
+#include <utils/tuple.hpp>
 
 using namespace std;
 using namespace lucid;
