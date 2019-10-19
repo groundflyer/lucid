@@ -186,12 +186,17 @@ namespace lucid
     any(const VectorType<T, N, Container> & a) noexcept
     { return reduce(std::logical_or<bool>(), a, false); }
 
-    template <typename T, std::size_t N,
-    	      template <typename, std::size_t> class Container,
-              template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType>
+    template <typename T,
+              std::size_t N,
+              template <typename, std::size_t>
+              class Container,
+              template <typename, std::size_t, template <typename, std::size_t> typename>
+              typename VectorType>
     constexpr auto
-    avg(const VectorType<T, N, Container> & a) noexcept
-    { return sum(a) / N; }
+    avg(const VectorType<T, N, Container>& a) noexcept
+    {
+        return sum(a) / T{N};
+    }
 
     template <typename T, std::size_t N,
     	      template <typename, std::size_t> class Container,
