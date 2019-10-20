@@ -10,24 +10,26 @@
 
 namespace lucid
 {
-template <typename Head, typename... Ts>
-class typelist
+namespace detail
 {
-    template <std::size_t idx, typename Sought>
-    static constexpr std::size_t
-    index_impl() noexcept
-    {
-        const constexpr bool recurse = sizeof...(Ts) > 0ul;
+template <std::size_t idx, typename Sought, typename Head, typename... Rest>
+constexpr std::size_t
+index_impl() noexcept
+{
+    const constexpr bool recurse = sizeof...(Rest) > 0ul;
 
-        if constexpr(std::is_same_v<Sought, Head>)
-            return idx;
-        else if constexpr(recurse)
-            return index_impl<idx + 1, Sought, Ts...>();
-        else
-            static_assert(recurse, "There is no such type in the typelist.");
-    }
+    if constexpr(std::is_same_v<Sought, Head>)
+        return idx;
+    else if constexpr(recurse)
+        return index_impl<idx + 1, Sought, Rest...>();
+    else
+        static_assert(recurse, "There is no such type in the typelist.");
+}
+} // namespace detail
 
-  public:
+template <typename Head, typename... Ts>
+struct typelist
+{
     using head    = Head;
     using variant = typename std::variant<head, Ts...>;
     using tuple   = typename std::tuple<head, Ts...>;
@@ -43,7 +45,7 @@ class typelist
     static constexpr std::size_t
     index() noexcept
     {
-        return index_impl<0, Type>();
+        return detail::index_impl<0, Type, Head, Ts...>();
     }
 
     static const constexpr std::size_t size = sizeof...(Ts) + 1;
@@ -58,6 +60,8 @@ class typelist
     constexpr typelist(std::tuple<Head, Ts...>) noexcept {}
 
     constexpr typelist(std::variant<Head, Ts...>) noexcept {}
+
+    constexpr typelist() noexcept {}
 };
 
 template <typename Seq1, typename Seq2>
