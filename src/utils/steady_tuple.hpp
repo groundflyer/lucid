@@ -125,5 +125,19 @@ class steady_tuple
     {
         return static_cast<detail::steady_tuple_leaf<I, typename Tl::template get<I>>&>(data).get();
     }
+
+    template <typename T>
+    constexpr decltype(auto)
+    get() const noexcept
+    {
+        return static_cast<detail::steady_tuple_leaf<Tl::template index<T>(), T>&>(data).get();
+    }
+
+    template <typename T>
+    constexpr decltype(auto)
+    get() noexcept
+    {
+        return static_cast<detail::steady_tuple_leaf<Tl::template index<T>(), T>&>(data).get();
+    }
 };
 } // namespace lucid

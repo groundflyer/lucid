@@ -84,6 +84,14 @@ array_cat_impl(const std::array<T, N1>& first,
 {
     return std::array<T, N1 + N2>{array_cat_idx<Is>(first, second)...};
 }
+
+template <typename F, typename Tuple, std::size_t... I>
+constexpr decltype(auto)
+apply_impl(F&& f, Tuple&& tuple, std::index_sequence<I...>) noexcept(
+    std::invoke(std::forward<F>(f), tuple.template get<I>()...))
+{
+    return std::invoke(std::forward<F>(f), tuple.template get<I>()...);
+}
 } // namespace detail
 
 template <typename BinaryOp, typename Init, typename... Args>
@@ -135,5 +143,23 @@ array_cat(const std::array<T, N1>& first,
     if constexpr(sizeof...(rest)) return array_cat(ret, rest...);
 
     return ret;
+}
+
+template <std::size_t N, typename T>
+constexpr auto
+repeat(const T value) noexcept
+{
+    if constexpr(N == 1)
+        return std::tuple{value};
+    else
+        return std::tuple_cat(std::tuple{value}, repeat<(N - 1)>(value));
+}
+
+template <typename F, typename... Ts, template <typename...> typename Tuple>
+constexpr decltype(auto)
+apply(F&& f, Tuple<Ts...>&& tuple) noexcept(f)
+{
+    return detail::apply_impl(
+        std::forward<F>(f), std::forward<Tuple<Ts...>>(tuple), std::index_sequence_for<Ts...>{});
 }
 } // namespace lucid
