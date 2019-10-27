@@ -8,6 +8,10 @@
 
 namespace lucid
 {
+struct uniform_init
+{
+};
+
 namespace detail
 {
 template <size_t I, typename T>
@@ -79,6 +83,15 @@ class steady_tuple_impl<std::index_sequence<Idxs...>, Ts...> : public steady_tup
         steady_tuple_leaf<LeafIdxs, LeafTs>(pc, std::forward<ValueTs>(values))...
     {
     }
+
+    template <size_t... LeafIdxs, typename... LeafTs, typename Val>
+    constexpr steady_tuple_impl(std::index_sequence<LeafIdxs...>,
+                                typelist<LeafTs...>,
+                                uniform_init,
+                                Val&& val) :
+        steady_tuple_leaf<LeafIdxs, LeafTs>(std::forward<Val>(val))...
+    {
+    }
 };
 } // namespace detail
 
@@ -108,6 +121,12 @@ class steady_tuple
     template <typename... Args>
     constexpr steady_tuple(std::piecewise_construct_t pc, Args&&... args) :
         data(Idxs{}, Tl{}, pc, std::forward<Args>(args)...)
+    {
+    }
+
+    template <typename... Args>
+    constexpr steady_tuple(uniform_init ui, Args&&... args) :
+        data(Idxs{}, Tl{}, ui, std::forward<Args>(args)...)
     {
     }
 
