@@ -87,8 +87,14 @@ array_cat_impl(const std::array<T, N1>& first,
 
 template <typename F, typename Tuple, std::size_t... I>
 constexpr decltype(auto)
-apply_impl(F&& f, Tuple&& tuple, std::index_sequence<I...>) noexcept(
-    std::invoke(std::forward<F>(f), tuple.template get<I>()...))
+apply_impl(F&& f, Tuple&& tuple, std::index_sequence<I...>) noexcept
+{
+    return std::invoke(std::forward<F>(f), tuple.template get<I>()...);
+}
+
+template <typename F, typename Tuple, std::size_t... I>
+constexpr decltype(auto)
+apply_impl(F&& f, Tuple& tuple, std::index_sequence<I...>) noexcept
 {
     return std::invoke(std::forward<F>(f), tuple.template get<I>()...);
 }
@@ -157,9 +163,16 @@ repeat(const T value) noexcept
 
 template <typename F, typename... Ts, template <typename...> typename Tuple>
 constexpr decltype(auto)
-apply(F&& f, Tuple<Ts...>&& tuple) noexcept(f)
+apply(F&& f, Tuple<Ts...>&& tuple)
 {
     return detail::apply_impl(
         std::forward<F>(f), std::forward<Tuple<Ts...>>(tuple), std::index_sequence_for<Ts...>{});
+}
+
+template <typename F, typename... Ts, template <typename...> typename Tuple>
+constexpr decltype(auto)
+apply(F&& f, Tuple<Ts...>& tuple) noexcept
+{
+    return detail::apply_impl(std::forward<F>(f), tuple, std::index_sequence_for<Ts...>{});
 }
 } // namespace lucid
