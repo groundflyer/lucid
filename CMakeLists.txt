@@ -36,7 +36,7 @@ option(USE_DOUBLE_PRECISION "Use double precision floating-point format" OFF)
 option(BUILD_TESTS "Build tests" OFF)
 
 # Use GCC/Clang pipe
-add_compile_options(-Wall -Wpedantic -Wextra -pipe)
+add_compile_options(-Wall -Wpedantic -Wextra -pipe -fno-rtti)
 
 # Optimize for the host machine
 add_compile_options($<$<CONFIG:Release>:-march=native>)
@@ -57,14 +57,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
   endif()
 endif()
 
-# Don't optimize Debug build
-add_compile_options($<$<CONFIG:Debug>:-O0>)
-add_compile_options($<$<CONFIG:Debug>:-g>)
-
 # RelWithDebInfo
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "")
-add_compile_options($<$<CONFIG:RelWithDebInfo>:-O3>)
-add_compile_options($<$<CONFIG:RelWithDebInfo>:-g>)
 add_compile_options($<$<CONFIG:RelWithDebInfo>:-march=native>)
 add_compile_options($<$<CONFIG:RelWithDebInfo>:-ffast-math>)
 
@@ -81,7 +75,10 @@ message(STATUS "Floating-point format: ${_precision} precision")
 
 # fmt
 set(BUILD_SHARED_LIBS FALSE)
-add_subdirectory(fmt EXCLUDE_ALL)
-# include_directories(${CMAKE_CURRENT_SOURCE_DIR}/fmt/include)
+add_definitions(-DFMT_USE_GRISU=1)
+add_subdirectory(fmt EXCLUDE_FROM_ALL)
+
+# Concurrent Queue
+include_directories(concurrentqueue)
 
 add_subdirectory(src)
