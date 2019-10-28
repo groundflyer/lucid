@@ -16,14 +16,12 @@ template <std::size_t idx, typename Sought, typename Head, typename... Rest>
 constexpr std::size_t
 index_impl() noexcept
 {
-    const constexpr bool recurse = sizeof...(Rest) > 0ul;
-
     if constexpr(std::is_same_v<Sought, Head>)
         return idx;
-    else if constexpr(recurse)
+    else if constexpr(sizeof...(Rest) > 0ul)
         return index_impl<idx + 1, Sought, Rest...>();
     else
-        static_assert(recurse, "There is no such type in the typelist.");
+        static_assert(sizeof...(Rest) > 0ul, "There is no such type in the typelist.");
 }
 } // namespace detail
 
