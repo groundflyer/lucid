@@ -6,6 +6,7 @@
 
 #include "typelist.hpp"
 
+#include <functional>
 #include <type_traits>
 
 namespace lucid
