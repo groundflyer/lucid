@@ -176,7 +176,7 @@ class Image
     {
         p_data = std::allocator_traits<Allocator>::allocate(m_alloc, size());
 
-        for (std::size_t i = 0; i < size(); ++i)
+        for(std::size_t i = 0; i < size(); ++i)
             std::allocator_traits<Allocator>::construct(m_alloc, p_data + i);
     }
 
@@ -195,13 +195,13 @@ class Image
     Image&
     operator=(const Image& rhs)
     {
-        if (&rhs == this) return *this;
+        if(&rhs == this) return *this;
 
-        if (size() != rhs.size())
+        if(size() != rhs.size())
         {
-            if (p_data)
+            if(p_data)
             {
-                for (std::size_t i = 0; i < size(); ++i)
+                for(std::size_t i = 0; i < size(); ++i)
                     std::allocator_traits<Allocator>::destroy(m_alloc, p_data + i);
 
                 std::allocator_traits<Allocator>::deallocate(m_alloc, p_data, size());
@@ -218,7 +218,7 @@ class Image
 
     virtual ~Image() noexcept
     {
-        for (std::size_t i = 0; i < size(); ++i)
+        for(std::size_t i = 0; i < size(); ++i)
             std::allocator_traits<Allocator>::destroy(m_alloc, p_data + i);
 
         std::allocator_traits<Allocator>::deallocate(m_alloc, p_data, size());
@@ -327,41 +327,6 @@ class Image
     data() const noexcept
     {
         return p_data;
-    }
-};
-
-// convert image coordinates to device coordinates
-constexpr auto
-to_device_coords(const Vec2& pos, const Vec2& res) noexcept
-{
-    return (pos - res * 0.5_r) / res[0];
-}
-
-constexpr auto
-to_device_coords(const Vec2u& pos, const Vec2u& res) noexcept
-{
-    return to_device_coords(Vec2(pos), Vec2(res));
-}
-
-class ImageSampler
-{
-    std::uniform_real_distribution<real> width;
-    std::uniform_real_distribution<real> height;
-
-  public:
-    ImageSampler() = delete;
-
-    ImageSampler(const Vec2u& res) noexcept :
-        width(to_device_coords(Vec2u{0}, res)[0], to_device_coords(res - 1, res)[0]),
-        height(to_device_coords(Vec2u{0}, res)[1], to_device_coords(res - 1, res)[1])
-    {
-    }
-
-    template <typename Generator>
-    Vec2
-    operator()(Generator& g) noexcept
-    {
-        return Vec2{width(g), height(g)};
     }
 };
 } // namespace lucid
