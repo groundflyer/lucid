@@ -12,6 +12,10 @@ static_assert(std::is_same_v<std::integer_sequence<int, -10, 15, 20, -900>,
 
 static_assert(std::is_same_v<std::integer_sequence<int, 10, 10, 10, 10, 10>, typename repeat_integer<5, int, 10>::type>);
 
+static_assert(std::is_same_v<typename typelist<bool, int, float, double>::template get<2>, float>);
+
+static_assert(typelist<bool, int, float, double>::template index<float>() == 2);
+
 
 int main()
 {
