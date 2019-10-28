@@ -56,6 +56,19 @@ switcher_func_impl(const std::size_t case_,
             case_, std::forward<TupleArgs>(tuple_args), std::forward<RestFuncs>(rest)...);
 }
 
+template <typename Ret, std::size_t Idx, typename TupleArgs, typename Func, typename... RestFuncs>
+constexpr Ret
+switcher_func_impl(const std::size_t case_,
+                   const TupleArgs&  tuple_args,
+                   const Func&       func,
+                   const RestFuncs&... rest) noexcept
+{
+    if(Idx == case_ || sizeof...(rest) == 0) return std::apply(func, tuple_args);
+
+    if constexpr(sizeof...(rest) > 0)
+        return switcher_func_impl<Ret, Idx + 1>(case_, tuple_args, rest...);
+}
+
 template <typename Ret, std::size_t Idx, typename Visitor, typename Tuple>
 constexpr Ret
 visit_impl(const std::size_t case_, Visitor&& visitor, const Tuple& tuple) noexcept
@@ -123,9 +136,22 @@ switcher_func(const std::size_t case_, Tuple<Funcs...>&& funcs, Args&&... args) 
             using tpl = typename typelist<Funcs...>::template result_of<Args...>;
             using ret = std::conditional_t<tpl::same, typename tpl::head, typename tpl::variant>;
             return detail::switcher_func_impl<ret, 0>(
-                case_, args_tuple, std::forward<decltype(items)>(items)...);
+                case_, args_tuple, std::forward<Funcs>(items)...);
         },
         std::forward<Tuple<Funcs...>>(funcs));
+}
+
+template <typename... Args, typename... Funcs, template <typename...> typename Tuple = std::tuple>
+constexpr decltype(auto)
+switcher_func(const std::size_t case_, const Tuple<Funcs...>& funcs, const Args&... args) noexcept
+{
+    return std::apply(
+        [case_, args_tuple = std::tuple{args...}](const Funcs&... items) mutable {
+            using tpl = typename typelist<Funcs...>::template result_of<Args...>;
+            using ret = std::conditional_t<tpl::same, typename tpl::head, typename tpl::variant>;
+            return detail::switcher_func_impl<ret, 0>(case_, args_tuple, items...);
+        },
+        funcs);
 }
 
 template <typename Visitor, typename... Ts, template <typename...> typename Tuple = std::tuple>
