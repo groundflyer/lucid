@@ -301,15 +301,16 @@ make_wall_geo(std::index_sequence<Pns...>) noexcept
 constexpr auto
 make_room() noexcept
 {
-    return std::apply([](auto ... pns){ return std::tuple{make_wall_geo(pns)...}; },
-                      box_geo_descr);
+    return std::apply([](auto... pns) { return std::tuple{make_wall_geo(pns)...}; }, box_geo_descr);
 }
 
-template <typename RandomEngine, typename Scene, typename MaterialGetter>
+static std::random_device                      rd;
+static thread_local std::default_random_engine g(rd());
+
+template <typename Scene, typename MaterialGetter>
 struct PathTracer_
 {
     Ray                       ray;
-    RandomEngine*             g;
     Scene const*              scene;
     MaterialGetter const*     material_getter;
     std::uint8_t              max_depth;
@@ -346,7 +347,7 @@ struct PathTracer_
                 *scene);
 
             const Point  p = ro + rd * isect.t;
-            const Normal new_dir(sample_hemisphere(n, Vec2(rand<real, 2>(*g))));
+            const Normal new_dir(sample_hemisphere(n, Vec2(rand<real, 2>(g))));
 
             radiance = radiance * color * std::max(dot(n, new_dir), 0_r) + emission;
 
@@ -414,8 +415,6 @@ main(int argc, char* argv[])
         return 1;
     }
 
-    logger.info("OpenGL initialized");
-
     const auto room_geo = tuple_cat(make_room(),
                                     std::tuple{Sphere(Point(0.5_r, -0.6_r, 0.2_r), 0.4_r),
                                                Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r)});
@@ -424,13 +423,10 @@ main(int argc, char* argv[])
 
     const auto mat_getter = [&](const std::size_t pid) { return materials[room_mat_ids[pid]]; };
 
-    const real                 bias = 0.001_r;
-    std::random_device         rd;
-    std::default_random_engine g(rd());
+    const real bias = 0.001_r;
 
-    using PathTracer = PathTracer_<std::default_random_engine,
-                                   std::decay_t<decltype(room_geo)>,
-                                   std::decay_t<decltype(mat_getter)>>;
+    using PathTracer =
+        PathTracer_<std::decay_t<decltype(room_geo)>, std::decay_t<decltype(mat_getter)>>;
 
     Dispatcher<PathTracer> dispatcher;
 
@@ -450,12 +446,11 @@ main(int argc, char* argv[])
                     const Vec2 spos = sample_pixel(g, pixel_size, ndc);
 
                     PathTracer path_tracer{
-                        cam(spos), &g, &room_geo, &mat_getter, max_depth, bias, ndc, spos, it};
+                        cam(spos), &room_geo, &mat_getter, max_depth, bias, ndc, spos, it};
                     while(!dispatcher.try_submit(path_tracer)) {}
                 }
         };
 
-        // logger.debug("Rendering image {}x{} with {} spp...", vp::res[0], vp::res[1], spp);
         vp::load_img(img);
 
         vp::check_errors();
@@ -468,7 +463,7 @@ main(int argc, char* argv[])
             const auto spos = sample_pixel(g, pixel_size, ndc);
 
             PathTracer path_tracer{
-                cam(spos), &g, &room_geo, &mat_getter, max_depth, bias, ndc, spos, it};
+                cam(spos), &room_geo, &mat_getter, max_depth, bias, ndc, spos, it};
             const auto ret  = path_tracer();
             const auto sval = std::get<0>(ret);
 
@@ -485,16 +480,11 @@ main(int argc, char* argv[])
 
         while(vp::active())
         {
-            for(std::size_t _ = 0; _ < 1024; ++_)
+            while(const auto ret = dispatcher.fetch_result<PathTracer>())
             {
-                const auto ret = dispatcher.fetch_result<PathTracer>();
-
-                if(ret)
-                {
-                    const auto& [sval, ndc, spos, it] = ret.value();
-                    *it = update_pixel(*it, pixel_size, ndc, Sample{spos, sval});
-                    ++spp;
-                }
+                const auto& [sval, ndc, spos, it] = ret.value();
+                *it = update_pixel(*it, pixel_size, ndc, Sample{spos, sval});
+                ++spp;
             }
 
             vp::reload_img(img);
