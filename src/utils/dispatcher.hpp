@@ -23,8 +23,14 @@ class Dispatcher
     using ResultQueuePool = typename ResultTypeList::template tuple_of_arrays<cqueue, steady_tuple>;
 
     template <typename Task>
-    using ResultQueue =
-        cqueue<typename ResultTypeList::template get<TaskTypeList::template index<Task>()>>;
+    static constexpr std::size_t
+    result_index() noexcept
+    {
+        return TaskTypeList::template index<Task>();
+    }
+
+    template <typename Task>
+    using ResultQueue = cqueue<typename ResultTypeList::template get<result_index<Task>()>>;
 
     template <typename T>
     struct result_helper;
@@ -52,7 +58,7 @@ class Dispatcher
         void
         run_task(cqueue<Task>& task_queue) noexcept
         {
-            auto& result_queue = result_queue_pool.template get<ResultQueue<Task>>();
+            auto& result_queue = result_queue_pool.template get<result_index<Task>()>();
 
             Task task;
             if(task_queue.try_dequeue(task))
@@ -94,7 +100,8 @@ class Dispatcher
     bool
     try_submit(Task&& task) noexcept
     {
-        cqueue<Task>& task_queue = task_queue_pool.template get<cqueue<Task>>();
+        cqueue<std::decay_t<Task>>& task_queue =
+            task_queue_pool.template get<cqueue<std::decay_t<Task>>>();
         return task_queue.try_enqueue(std::move(task));
     }
 
@@ -103,7 +110,7 @@ class Dispatcher
     fetch_result() noexcept
     {
         using ResultType        = typename result_helper<ResultQueue<Task>>::type;
-        auto&      result_queue = result_queue_pool.template get<ResultQueue<Task>>();
+        auto&      result_queue = result_queue_pool.template get<result_index<Task>()>();
         ResultType result;
         if(result_queue.try_dequeue(result)) return result;
 

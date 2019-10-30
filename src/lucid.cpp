@@ -5,6 +5,7 @@
 #include <cameras/perspective.hpp>
 #include <image/io.hpp>
 #include <ray_traversal/primitives/generic.hpp>
+#include <utils/dispatcher.hpp>
 #include <utils/logging.hpp>
 #include <utils/timer.hpp>
 #include <utils/tuple.hpp>
@@ -305,47 +306,56 @@ make_room() noexcept
 }
 
 template <typename RandomEngine, typename Scene, typename MaterialGetter>
-RGB
-path_trace(Ray               ray,
-           RandomEngine&     g,
-           const Scene&      scene,
-           MaterialGetter&&  mat_getter,
-           const std::size_t max_depth,
-           const real        bias) noexcept
+struct PathTracer_
 {
-    RGB  radiance{1};
-    bool has_rad = false;
+    Ray                       ray;
+    RandomEngine*             g;
+    Scene const*              scene;
+    MaterialGetter const*     material_getter;
+    std::uint8_t              max_depth;
+    real                      bias;
+    Vec2                      ndc;
+    Vec2                      sample_pos;
+    Image<float, 3>::iterator it;
 
-    for(std::size_t depth = 0; depth < max_depth; ++depth)
+    auto
+    operator()() noexcept
     {
-        const auto& [ro, rd]    = ray;
-        const auto [isect, pid] = hider(ray, scene);
+        RGB  radiance{1};
+        bool has_rad = false;
 
-        if(!isect) break;
-
-        const auto& [color, emission] = mat_getter(pid);
-        has_rad |= any(emission > 0_r);
-
-        if(all(almost_equal(color, 0_r, 10)))
+        for(std::size_t depth = 0; depth < max_depth; ++depth)
         {
-            radiance *= emission;
-            break;
+            const auto& [ro, rd]    = ray;
+            const auto [isect, pid] = hider(ray, *scene);
+
+            if(!isect) break;
+
+            const auto& [color, emission] = (*material_getter)(pid);
+            has_rad |= any(emission > 0_r);
+
+            if(all(almost_equal(color, 0_r, 10)))
+            {
+                radiance *= emission;
+                break;
+            }
+
+            const Normal n = lucid::visit(
+                pid,
+                [&, &iss = isect](const auto& prim) { return normal(ray, iss, prim); },
+                *scene);
+
+            const Point  p = ro + rd * isect.t;
+            const Normal new_dir(sample_hemisphere(n, Vec2(rand<real, 2>(*g))));
+
+            radiance = radiance * color * std::max(dot(n, new_dir), 0_r) + emission;
+
+            ray = Ray(p + new_dir * bias, new_dir);
         }
 
-        // const Normal i = Normal(-rd);
-        const Normal n = lucid::visit(
-            pid, [&, &iss = isect](const auto& prim) { return normal(ray, iss, prim); }, scene);
-
-        const Point  p = ro + rd * isect.t;
-        const Normal new_dir(sample_hemisphere(n, Vec2(rand<real, 2>(g))));
-
-        radiance = radiance * color * std::max(dot(n, new_dir), 0_r) + emission;
-
-        ray = Ray(p + new_dir * bias, new_dir);
+        return std::tuple{radiance * has_rad, ndc, sample_pos, it};
     }
-
-    return radiance * has_rad;
-}
+};
 
 using Sample = std::pair<Vec2, RGB>;
 
@@ -385,7 +395,7 @@ reset_pixel(const real size, const Vec2& ndc, const Sample& sample) noexcept
 int
 main(int argc, char* argv[])
 {
-    const std::size_t max_depth = argc > 1 ? std::stoll(argv[1]) : 4;
+    const std::uint8_t max_depth = argc > 1 ? std::stoi(argv[1]) : 4;
 
     const auto& [w, h]       = vp::res;
     const auto         ratio = static_cast<real>(w) / static_cast<real>(h);
@@ -412,15 +422,38 @@ main(int argc, char* argv[])
 
     const auto room_mat_ids = array_cat(box_mat_idxs, std::array<std::size_t, 2>{4, 5});
 
+    const auto mat_getter = [&](const std::size_t pid) { return materials[room_mat_ids[pid]]; };
+
     const real                 bias = 0.001_r;
     std::random_device         rd;
     std::default_random_engine g(rd());
+
+    using PathTracer = PathTracer_<std::default_random_engine,
+                                   std::decay_t<decltype(room_geo)>,
+                                   std::decay_t<decltype(mat_getter)>>;
+
+    Dispatcher<PathTracer> dispatcher;
 
     try
     {
         Image<float, 3> img(vp::res);
 
         const real pixel_size = 1_r / lucid::max(vp::res);
+
+        std::atomic_bool produce{true};
+
+        const auto producer = [&]() {
+            while(produce.load(std::memory_order_relaxed))
+                for(auto it = img.begin(); it != img.end(); ++it)
+                {
+                    const Vec2 ndc  = to_device_coords(it.pos(), vp::res);
+                    const Vec2 spos = sample_pixel(g, pixel_size, ndc);
+
+                    PathTracer path_tracer{
+                        cam(spos), &g, &room_geo, &mat_getter, max_depth, bias, ndc, spos, it};
+                    while(!dispatcher.try_submit(path_tracer)) {}
+                }
+        };
 
         // logger.debug("Rendering image {}x{} with {} spp...", vp::res[0], vp::res[1], spp);
         vp::load_img(img);
@@ -434,16 +467,15 @@ main(int argc, char* argv[])
             const auto ndc  = to_device_coords(it.pos(), vp::res);
             const auto spos = sample_pixel(g, pixel_size, ndc);
 
-            const auto sval =
-                path_trace(cam(spos),
-                           g,
-                           room_geo,
-                           [&](const std::size_t pid) { return materials[room_mat_ids[pid]]; },
-                           max_depth,
-                           bias);
+            PathTracer path_tracer{
+                cam(spos), &g, &room_geo, &mat_getter, max_depth, bias, ndc, spos, it};
+            const auto ret  = path_tracer();
+            const auto sval = std::get<0>(ret);
 
             *it = reset_pixel(pixel_size, ndc, Sample{spos, sval});
         }
+
+        std::thread producer_thread(producer);
 
         vp::reload_img(img);
         vp::draw();
@@ -453,23 +485,18 @@ main(int argc, char* argv[])
 
         while(vp::active())
         {
-            for(auto it = img.begin(); it != img.end(); ++it)
+            for(std::size_t _ = 0; _ < 1024; ++_)
             {
-                const auto ndc  = to_device_coords(it.pos(), vp::res);
-                const auto spos = sample_pixel(g, pixel_size, ndc);
+                const auto ret = dispatcher.fetch_result<PathTracer>();
 
-                const auto sval =
-                    path_trace(cam(spos),
-                               g,
-                               room_geo,
-                               [&](const std::size_t pid) { return materials[room_mat_ids[pid]]; },
-                               max_depth,
-                               bias);
-
-                *it = update_pixel(*it, pixel_size, ndc, Sample{spos, sval});
+                if(ret)
+                {
+                    const auto& [sval, ndc, spos, it] = ret.value();
+                    *it = update_pixel(*it, pixel_size, ndc, Sample{spos, sval});
+                    ++spp;
+                }
             }
 
-            ++spp;
             vp::reload_img(img);
             vp::draw();
             glfwPollEvents();
@@ -477,6 +504,8 @@ main(int argc, char* argv[])
 
         logger.info("Rendering time {:12%H:%M:%S}", timer.elapsed());
         logger.info("Total pixel samples: {}", spp);
+        produce.store(false, std::memory_order_relaxed);
+        producer_thread.join();
     }
     catch(GLenum er)
     {

@@ -29,6 +29,7 @@ class Image
         return NC * (row * width() + column);
     }
 
+  public:
     class iterator
     {
         T*          p_data;
@@ -42,7 +43,7 @@ class Image
         }
 
       public:
-        iterator() = delete;
+        iterator(){};
 
         explicit iterator(T* data, const Vec2u& res, std::size_t pos = 0) :
             p_data(data), m_res(res), m_pos(pos)
@@ -122,7 +123,6 @@ class Image
         }
     };
 
-  public:
     class view
     {
         T*    p_data;
