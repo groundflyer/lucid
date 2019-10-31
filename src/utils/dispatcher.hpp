@@ -64,7 +64,9 @@ class Dispatcher
             if(task_queue.try_dequeue(task))
             {
                 const auto result = task();
-                while(!result_queue.try_enqueue(std::move(result))) {}
+                while(!result_queue.try_enqueue(std::move(result)) &&
+                      active_flag.load(std::memory_order_relaxed))
+                {}
             }
         }
 

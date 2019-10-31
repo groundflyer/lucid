@@ -428,10 +428,10 @@ main(int argc, char* argv[])
     using PathTracer =
         PathTracer_<std::decay_t<decltype(room_geo)>, std::decay_t<decltype(mat_getter)>>;
 
-    Dispatcher<PathTracer> dispatcher;
-
     try
     {
+        Dispatcher<PathTracer> dispatcher;
+
         Image<float, 3> img(vp::res);
 
         const real pixel_size = 1_r / lucid::max(vp::res);
@@ -440,14 +440,14 @@ main(int argc, char* argv[])
 
         const auto producer = [&]() {
             while(produce.load(std::memory_order_relaxed))
-                for(auto it = img.begin(); it != img.end(); ++it)
+                for(auto it = img.begin();
+                    it != img.end() && produce.load(std::memory_order_relaxed);
+                    ++it)
                 {
                     const Vec2 ndc  = to_device_coords(it.pos(), vp::res);
                     const Vec2 spos = sample_pixel(g, pixel_size, ndc);
-
-                    PathTracer path_tracer{
-                        cam(spos), &room_geo, &mat_getter, max_depth, bias, ndc, spos, it};
-                    while(!dispatcher.try_submit(path_tracer)) {}
+                    dispatcher.try_submit(PathTracer{
+                        cam(spos), &room_geo, &mat_getter, max_depth, bias, ndc, spos, it});
                 }
         };
 
