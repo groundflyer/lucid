@@ -159,13 +159,11 @@ class Image
 
         auto operator[](const std::size_t i) noexcept
         {
-            CHECK_INDEX(i, num_pixels());
             return Vector(StaticSpan<T, NC>(p_data + i * NC));
         }
 
         decltype(auto) operator[](const std::size_t i) const noexcept
         {
-            CHECK_INDEX(i, num_pixels());
             return Vector(StaticSpan<T, NC>(p_data + i * NC));
         }
     };
@@ -216,7 +214,7 @@ class Image
         return *this;
     }
 
-    virtual ~Image() noexcept
+    ~Image() noexcept
     {
         for(std::size_t i = 0; i < size(); ++i)
             std::allocator_traits<Allocator>::destroy(m_alloc, p_data + i);
@@ -267,6 +265,18 @@ class Image
         return view(p_data + pos(i, 0), m_res);
     }
 
+    decltype(auto) operator[](const Vec2u pos) noexcept
+    {
+        const auto& [i, j] = pos;
+        return at(i, j);
+    }
+
+    decltype(auto) operator[](const Vec2u pos) const noexcept
+    {
+        const auto& [i, j] = pos;
+        return at(i, j);
+    }
+
     auto
     at(const std::size_t i) noexcept
     {
@@ -293,13 +303,13 @@ class Image
         return Vector(StaticSpan<T, NC>(p_data + pos(i, j)));
     }
 
-    const std::size_t&
+    std::size_t
     width() const noexcept
     {
         return m_res[0];
     }
 
-    const std::size_t&
+    std::size_t
     height() const noexcept
     {
         return m_res[1];

@@ -15,31 +15,14 @@
 using namespace lucid;
 using namespace std::literals;
 
-// convert image coordinates to device coordinates
-constexpr Vec2
-to_device_coords(const Vec2& pos, const Vec2& res) noexcept
-{
-    return (pos - res * 0.5_r) / res;
-}
-
-constexpr Vec2
-to_device_coords(const Vec2u& pos, const Vec2u& res) noexcept
-{
-    return to_device_coords(Vec2(pos), Vec2(res));
-}
-
-Vec3
-sample_hemisphere(const Normal& n, const Vec2& u) noexcept
-{
-    const auto& [u1, u2] = u;
-    const auto r         = 2_r * Pi * u2;
-    const auto phi       = math::sqrt(1_r - pow<2>(u1));
-    return basis_matrix(n).dot(Vec3(math::cos(r) * phi, math::sin(r) * phi, u1));
-}
-
-static const constexpr std::array<Point, 8> box_points{
-    Point(-1, -1, 1), Point(-1, -1, -1), Point(1, -1, -1), Point(1, -1, 1),
-    Point(-1, 1, 1),  Point(-1, 1, -1),  Point(1, 1, -1),  Point(1, 1, 1)};
+static const constexpr std::array<Point, 8> box_points{Point(-1, -1, 1),
+                                                       Point(-1, -1, -1),
+                                                       Point(1, -1, -1),
+                                                       Point(1, -1, 1),
+                                                       Point(-1, 1, 1),
+                                                       Point(-1, 1, -1),
+                                                       Point(1, 1, -1),
+                                                       Point(1, 1, 1)};
 
 struct Material
 {
@@ -94,17 +77,26 @@ make_room() noexcept
 static std::random_device                      rd;
 static thread_local std::default_random_engine g(rd());
 
+Vec3
+sample_hemisphere(const Normal& n, const Vec2& u) noexcept
+{
+    const auto& [u1, u2] = u;
+    const auto r         = 2_r * Pi * u2;
+    const auto phi       = math::sqrt(1_r - pow<2>(u1));
+    return basis_matrix(n).dot(Vec3(math::cos(r) * phi, math::sin(r) * phi, u1));
+}
+
+using Sample = std::pair<Vec2, RGB>;
+
 template <typename Scene, typename MaterialGetter>
 struct PathTracer_
 {
-    Ray                       ray;
-    Scene const*              scene;
-    MaterialGetter const*     material_getter;
-    std::uint8_t              max_depth;
-    real                      bias;
-    Vec2                      ndc;
-    Vec2                      sample_pos;
-    Image<float, 3>::iterator it;
+    Ray                   ray;
+    Scene const*          scene;
+    MaterialGetter const* material_getter;
+    std::uint8_t          max_depth;
+    real                  bias;
+    Vec2                  sample_pos;
 
     auto
     operator()() noexcept
@@ -141,33 +133,131 @@ struct PathTracer_
             ray = Ray(p + new_dir * bias, new_dir);
         }
 
-        return std::tuple{radiance * has_rad, ndc, sample_pos, it};
+        return Sample{sample_pos, radiance * has_rad};
     }
 };
 
-using Sample = std::pair<Vec2, RGB>;
+// convert image coordinates to device coordinates (-0.5 to 0.5)
+constexpr Vec2
+device_coords(const Vec2& pos, const Vec2& res, const Vec2& size) noexcept
+{
+    return (pos - res * 0.5_r) / res + size * 0.5_r;
+}
 
+constexpr Vec2
+device_coords(const Vec2u& pos, const Vec2& res, const Vec2& size) noexcept
+{
+    return device_coords(Vec2(pos), res, size);
+}
+
+constexpr Vec2u
+pixel_pos(const Vec2& ndc, const Vec2& res) noexcept
+{
+    return Vec2u(transform(static_cast<real (*)(real)>(round), (ndc + 0.5_r) * res));
+}
+
+// radius of pixel bounding sphere
+real
+pixel_radius(const Vec2 pixel_size) noexcept
+{
+    return sqrt(sum(pow<2>(pixel_size))) * 0.5_r;
+}
+
+constexpr auto
+filter_bound(const Vec2& pos, const Vec2& res, const Vec2& pixel_size, const real radius) noexcept
+{
+    const Vec2 bmin = lucid::max(pos - radius, Vec2(-0.5_r));
+    const Vec2 bmax = lucid::min(pos + radius, Vec2(0.5_r) - pixel_size);
+    return std::pair{pixel_pos(bmin, res), pixel_pos(bmax, res)};
+}
+
+class filter_iterator
+{
+    Vec2u bmin;
+    Vec2u size;
+    Vec2u pos{0};
+
+  public:
+    struct end
+    {
+    };
+    filter_iterator() = delete;
+
+    filter_iterator(const Vec2u& bmin_, const Vec2u& bmax_) :
+        bmin(bmin_), size((bmax_ - bmin_) + 1u)
+    {
+    }
+
+    filter_iterator(end, const Vec2u& bmin_, const Vec2u& bmax_) : pos((bmax_ - bmin_) + 1u) {}
+
+    Vec2u operator*() noexcept { return bmin + pos; }
+
+    filter_iterator&
+    operator++() noexcept
+    {
+        const auto& [si, sj] = size;
+        auto& [i, j]         = pos;
+        const unsigned incr  = i + 1u;
+        i                    = incr % si;
+        j += incr == si;
+        return *this;
+    }
+
+    bool
+    operator!=(const filter_iterator& rhs) const noexcept
+    {
+        return all(pos != rhs.pos);
+    }
+
+    bool
+    operator<(const filter_iterator& rhs) const noexcept
+    {
+        return all(pos < rhs.pos);
+    }
+};
+
+// sample a random position inside square
 template <typename Generator>
 Vec2
-sample_pixel(Generator& g, const real size, const Vec2& ndc) noexcept
+sample_pixel(Generator& g, const Vec2& size, const Vec2& pos) noexcept
 {
-    Vec2 s{rand<real, 2>(g)};
-    s *= size;
-    return ndc + s;
+    return (pos - size * 0.5_r) + Vec2(rand<real, 2>(g)) * size;
 }
 
 template <template <typename, std::size_t> typename Container>
-RGB
-update_pixel(const RGB_<Container>& color,
-             const real             size,
-             const Vec2&            ndc,
-             const Sample&          sample) noexcept
+RGBA
+update_pixel(const RGBA_<Container>& old_rgba,
+             const real              filter_radius,
+             const Vec2&             pixel_pos,
+             const Sample&           sample) noexcept
 {
-    const auto& [sndc, sval] = sample;
-    real dist                = distance(ndc, sndc);
-    dist /= size;
+    const auto& [sample_pos, sample_val] = sample;
+    real dist                            = distance(pixel_pos, sample_pos);
+    dist /= filter_radius;
     const real weight = 1_r - dist;
-    return (color + sval * weight) / (1_r + weight);
+    const RGB  old_color{old_rgba};
+    const real old_weight = old_rgba.template get<3>();
+    const real new_weight = old_weight + weight;
+    const RGB  val        = (old_color * old_weight + sample_val * weight) / new_weight;
+    return RGBA(val, new_weight);
+}
+
+void update_pixels(Image<real, 4>& img,
+                   const Vec2&     res,
+                   const Vec2&     pixel_size,
+                   const Sample&   sample,
+                   const real      filter_radius) noexcept
+{
+    const auto& [sample_pos, sample_val] = sample;
+    const auto [bmin, bmax]              = filter_bound(sample_pos, res, pixel_size, filter_radius);
+    const auto end                       = filter_iterator(filter_iterator::end{}, bmin, bmax);
+    for(auto it = filter_iterator(bmin, bmax); it < end; ++it)
+    {
+        const auto& [i, j] = *it;
+        // FIXME: investigate why we need to flip i and j
+        decltype(auto) pixel = img.at(j, i);
+        pixel                = update_pixel(pixel, filter_radius, Vec2(*it), sample);
+    }
 }
 
 RGB
@@ -215,63 +305,53 @@ main(int argc, char* argv[])
     using PathTracer =
         PathTracer_<std::decay_t<decltype(room_geo)>, std::decay_t<decltype(mat_getter)>>;
 
+    Dispatcher<PathTracer> dispatcher;
+
+    Image<float, 4> img(vp::res);
+
+    // convert image resolution to real as we usually need it
+    const Vec2 img_res(img.res());
+    const Vec2 pixel_size = Vec2(1_r) / img_res;
+    const real filter_rad = pixel_radius(pixel_size) * 2_r;
+
+    // logger.debug("img res = {}, {}", img.res()[0], img.res()[1]);
+
+    std::atomic_bool produce{true};
+
+    const auto producer = [&]() {
+        while(produce.load(std::memory_order_relaxed))
+            for(auto it = img.begin(); it != img.end() && produce.load(std::memory_order_relaxed);
+                ++it)
+            {
+                const Vec2 ndc        = device_coords(it.pos(), img_res, pixel_size);
+                const Vec2 sample_pos = sample_pixel(g, pixel_size, ndc);
+                dispatcher.try_submit(PathTracer{
+                    cam(sample_pos), &room_geo, &mat_getter, max_depth, bias, sample_pos});
+            }
+    };
+
     try
     {
-        Dispatcher<PathTracer> dispatcher;
-
-        Image<float, 3> img(vp::res);
-
-        const real pixel_size = 1_r / lucid::max(vp::res);
-
-        std::atomic_bool produce{true};
-
-        const auto producer = [&]() {
-            while(produce.load(std::memory_order_relaxed))
-                for(auto it = img.begin();
-                    it != img.end() && produce.load(std::memory_order_relaxed);
-                    ++it)
-                {
-                    const Vec2 ndc  = to_device_coords(it.pos(), vp::res);
-                    const Vec2 spos = sample_pixel(g, pixel_size, ndc);
-                    dispatcher.try_submit(PathTracer{
-                        cam(spos), &room_geo, &mat_getter, max_depth, bias, ndc, spos, it});
-                }
-        };
-
         vp::load_img(img);
-
         vp::check_errors();
-
-        ElapsedTimer<> timer;
-
-        for(auto it = img.begin(); it != img.end(); ++it)
-        {
-            const Vec2 ndc  = to_device_coords(it.pos(), vp::res);
-            const Vec2 spos = sample_pixel(g, pixel_size, ndc);
-
-            PathTracer path_tracer{
-                cam(spos), &room_geo, &mat_getter, max_depth, bias, ndc, spos, it};
-            const auto ret  = path_tracer();
-            const RGB  sval = std::get<0>(ret);
-
-            *it = reset_pixel(pixel_size, ndc, Sample{spos, sval});
-        }
-
         std::thread producer_thread(producer);
-
-        vp::reload_img(img);
-        vp::draw();
-        glfwPollEvents();
-
-        std::size_t spp = 1;
 
         while(vp::active())
         {
+            // for(auto it = img.begin(); it != img.end(); ++it)
+            // {
+            //     const Vec2 ndc        = device_coords(it.pos(), img_res, pixel_size);
+            //     const Vec2 sample_pos = sample_pixel(g, pixel_size, ndc);
+            //     PathTracer pt{cam(sample_pos), &room_geo, &mat_getter, max_depth, bias,
+            //     sample_pos}; const Sample sample = pt();
+            //     // *it                 = update_pixel(*it, filter_rad, ndc, sample);
+            //     update_pixels(img, img_res, pixel_size, sample, filter_rad);
+            // }
+
             while(const auto ret = dispatcher.fetch_result<PathTracer>())
             {
-                const auto& [sval, ndc, spos, it] = ret.value();
-                *it = update_pixel(*it, pixel_size, ndc, Sample{spos, sval});
-                ++spp;
+                const Sample& sample = ret.value();
+                update_pixels(img, img_res, pixel_size, sample, filter_rad);
             }
 
             vp::reload_img(img);
@@ -279,8 +359,6 @@ main(int argc, char* argv[])
             glfwPollEvents();
         }
 
-        logger.info("Rendering time {:12%H:%M:%S}", timer.elapsed());
-        logger.info("Total pixel samples: {}", spp);
         produce.store(false, std::memory_order_relaxed);
         producer_thread.join();
     }

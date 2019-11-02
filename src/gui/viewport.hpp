@@ -156,26 +156,26 @@ init()
 
 template <typename Format>
 static void
-load_img(const lucid::Image<Format, 3>& img) noexcept
+load_img(const lucid::Image<Format, 4>& img) noexcept
 {
     const constexpr auto type_flag =
         std::is_same_v<Format, unsigned char> ?
             GL_UNSIGNED_BYTE :
             (std::is_same_v<Format, float> ? GL_FLOAT : GL_UNSIGNED_INT);
     const auto [width, height] = img.res();
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, type_flag, img.data());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, type_flag, img.data());
 }
 
 template <typename Format>
 static void
-reload_img(const lucid::Image<Format, 3>& img)
+reload_img(const lucid::Image<Format, 4>& img)
 {
     const constexpr auto type_flag =
         std::is_same_v<Format, unsigned char> ?
             GL_UNSIGNED_BYTE :
             (std::is_same_v<Format, float> ? GL_FLOAT : GL_UNSIGNED_INT);
     const auto [width, height] = img.res();
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, type_flag, img.data());
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, type_flag, img.data());
     auto glerror = glGetError();
     if(glerror) { throw glerror; }
 }
