@@ -41,14 +41,7 @@ class Dispatcher
         using type = ResultType;
     };
 
-    TaskQueuePool   task_queue_pool;
-    ResultQueuePool result_queue_pool;
-
-    std::atomic_bool         active_flag{true};
-    std::vector<std::thread> threads;
-    std::atomic_size_t       count{0};
-
-    class ThreadWorker
+    struct ThreadWorker
     {
         std::atomic_bool& active_flag;
         TaskQueuePool&    task_queue_pool;
@@ -70,12 +63,6 @@ class Dispatcher
             }
         }
 
-      public:
-        ThreadWorker(std::atomic_bool& af, TaskQueuePool& tq, ResultQueuePool& rq) :
-            active_flag(af), task_queue_pool(tq), result_queue_pool(rq)
-        {
-        }
-
         void
         operator()() noexcept
         {
@@ -87,6 +74,13 @@ class Dispatcher
         }
     };
 
+    TaskQueuePool   task_queue_pool;
+    ResultQueuePool result_queue_pool;
+
+    std::atomic_bool         active_flag{true};
+    std::vector<std::thread> threads;
+    std::atomic_size_t       count{0};
+
   public:
     Dispatcher(const unsigned    num_threads = std::thread::hardware_concurrency(),
                const std::size_t queue_size  = 10000) noexcept :
@@ -95,7 +89,7 @@ class Dispatcher
     {
         threads.reserve(num_threads);
         for(unsigned t_idx = 0; t_idx < num_threads; ++t_idx)
-            threads.emplace_back(ThreadWorker(active_flag, task_queue_pool, result_queue_pool));
+            threads.emplace_back(ThreadWorker{active_flag, task_queue_pool, result_queue_pool});
     }
 
     template <typename Task>
