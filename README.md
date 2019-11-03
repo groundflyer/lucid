@@ -11,3 +11,8 @@ with active waiting thread pool.
 
 This task dispatcher doesn't erase type information as thread pools usually do,
 allowing compilers to apply more aggressive optimizations and also we can group tasks naturally with their types.
+
+# Building
+
+* CMake 3.9 or newer
+* Clang 7.1.0 or newer

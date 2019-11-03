@@ -311,7 +311,7 @@ template <typename T,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType2,
           typename ULP>
-constexpr bool
+constexpr auto
 almost_equal(const VectorType1<T, N, Container1>& va,
              const VectorType2<T, N, Container2>& vb,
              const ULP                            ulp)
