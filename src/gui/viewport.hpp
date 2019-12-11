@@ -9,8 +9,6 @@
 
 #include <GLFW/glfw3.h>
 
-#include <stdexcept>
-
 namespace vp
 {
 static const constexpr char* vertex_shader_src = "#version 330 core\n"
@@ -59,15 +57,16 @@ resize(GLFWwindow*, int width, int height) noexcept
 }
 
 static void
-init()
+init(const int iwidth, const int iheight)
 {
-    if(!glfwInit()) throw std::runtime_error("Failed to initialize GLFW");
+    const int status = glfwInit();
+    if(!status) throw status;
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(640, 640, "Lucid", nullptr, nullptr);
+    window = glfwCreateWindow(iwidth, iheight, "Lucid", nullptr, nullptr);
 
     if(!window)
     {
@@ -156,7 +155,7 @@ init()
 
 template <typename Format>
 static void
-load_img(const lucid::Image<Format, 4>& img) noexcept
+load_img(const lucid::ScanlineImage<Format, 4>& img) noexcept
 {
     const constexpr auto type_flag =
         std::is_same_v<Format, unsigned char> ?
@@ -168,7 +167,7 @@ load_img(const lucid::Image<Format, 4>& img) noexcept
 
 template <typename Format>
 static void
-reload_img(const lucid::Image<Format, 4>& img)
+reload_img(const lucid::ScanlineImage<Format, 4>& img)
 {
     const constexpr auto type_flag =
         std::is_same_v<Format, unsigned char> ?

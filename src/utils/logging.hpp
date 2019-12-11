@@ -25,7 +25,7 @@ class Logger
     struct Flush
     {
     };
-    static const constexpr Flush flush;
+    static const constexpr Flush flush{};
 
     explicit Logger(const Level lvl_) : lvl(lvl_) {}
 
@@ -57,8 +57,8 @@ class Logger
     void
     error(Args&&... args) const noexcept
     {
-        if (lvl <= Level::ERROR)
-            message(stderr, fmt::fg(fmt::terminal_color::red), std::forward<Args>(args)...);
+        if(lvl <= Level::ERROR)
+            message(stderr, fmt::fg(fmt::terminal_color::red), 'E', std::forward<Args>(args)...);
     }
 
     template <typename... Args>
