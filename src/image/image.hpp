@@ -62,8 +62,6 @@ class ScanlineImage
     std::size_t
     pos(const std::size_t x, const std::size_t y) const noexcept
     {
-        if(x >= width() || y >= height())
-            printf("Wrong x or y pos %02dx%02d of (%02dx%02d)\n", x, y, width(), height());
         CHECK_INDEX(x, width());
         CHECK_INDEX(y, height());
         return NC * (y * width() + x);
