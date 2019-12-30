@@ -138,22 +138,15 @@ struct PixelReset
 };
 
 template <typename Image, typename Updater>
-void
+Film<Image>&
 update_pixels(Film<Image>& film, Updater&& update, const Sample& sample) noexcept
 {
-    const auto& [sample_ndc, sample_val] = sample;
-    // for(auto it = img.begin(); it != img.end(); ++it)
-    // {
-    //     const Vec2 pp = device_coords(it.pos(), res, pixel_size);
-    //     *it           = update(*it, pp, sample);
-    // }
-    // for(auto it = img.begin(); it != img.end(); ++it) *it = RGBA(1_r, 0_r, 0_r, 1_r);
-
-    for(const Vec2u pos: filter_iterate(film, sample_ndc, update.filter.radius))
+    for(const Vec2u pos: filter_iterate(film, sample.first, update.filter.radius))
     {
         const Vec2     pixel_ndc = film.device_coords(pos);
         decltype(auto) pixel_val = film.img[pos];
         pixel_val                = update(pixel_val, pixel_ndc, sample);
     }
+    return film;
 }
 } // namespace lucid

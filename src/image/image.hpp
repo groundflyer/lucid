@@ -36,6 +36,15 @@ struct scanline_iterator
         return *this;
     }
 
+    constexpr scanline_iterator
+    operator++(int) noexcept
+    {
+        scanline_iterator tmp(*this);
+                          operator++();
+        return tmp;
+        ;
+    }
+
     constexpr bool
     operator!=(const scanline_iterator& rhs) const noexcept
     {
@@ -75,13 +84,14 @@ class ScanlineImage
         scanline_iterator iter;
 
       public:
-        _iterator()                 = delete;
-        _iterator(const _iterator&) = delete;
-        _iterator(_iterator&&)      = delete;
+        _iterator()            = delete;
+        _iterator(_iterator&&) = delete;
         _iterator&
         operator=(const _iterator&) = delete;
 
-        explicit _iterator(ImageRef _img, const unsigned pos) : img(_img), iter(_img.res(), pos) {}
+        _iterator(ImageRef _img, const unsigned pos) : img(_img), iter(_img.res(), pos) {}
+
+        _iterator(const _iterator& rhs) : img(rhs.img), iter(rhs.iter) {}
 
         Vec2u
         pos() const noexcept
@@ -94,6 +104,14 @@ class ScanlineImage
         {
             ++iter;
             return *this;
+        }
+
+        _iterator
+        operator++(int) noexcept
+        {
+            _iterator tmp(*this);
+                      operator++();
+            return tmp;
         }
 
         bool
