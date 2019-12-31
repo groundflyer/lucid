@@ -16,7 +16,7 @@ namespace detail
 template <typename BinaryOp, typename Operand>
 struct fold_wrapper
 {
-    using ResultType = typename std::result_of_t<BinaryOp(const Operand&, const Operand&)>;
+    using ResultType = typename std::invoke_result_t<BinaryOp, const Operand&, const Operand&>;
 
     BinaryOp   op;
     ResultType operand;
@@ -180,12 +180,22 @@ array_cat(const std::array<T, N1>& first,
 
 template <std::size_t N, typename T>
 constexpr auto
-repeat(const T value) noexcept
+repeat_to_tuple(const T& value) noexcept
 {
     if constexpr(N == 1)
         return std::tuple{value};
     else
-        return std::tuple_cat(std::tuple{value}, repeat<(N - 1)>(value));
+        return std::tuple_cat(std::tuple{value}, repeat_to_tuple<(N - 1)>(value));
+}
+
+template <std::size_t N, typename T>
+constexpr auto
+repeat_to_array(const T& value) noexcept
+{
+    if constexpr(N == 1)
+        return std::array<T, 1>{value};
+    else
+        return array_cat(std::array<T, 1>{value}, repeat_to_array<(N - 1)>(value));
 }
 
 template <typename F, typename... Ts, template <typename...> typename Tuple>
