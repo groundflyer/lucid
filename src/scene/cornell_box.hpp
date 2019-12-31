@@ -72,7 +72,7 @@ class CornellBox
                                                     Material{red, black},
                                                     Material{green, black},
                                                     Material{green, black},
-                                                    Material{black, RGB(1_r)}};
+                                                    Material{black, RGB(10_r)}};
 
       public:
         constexpr const Material&
