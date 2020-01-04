@@ -17,10 +17,12 @@ using cqueue = moodycamel::ConcurrentQueue<T>;
 template <typename... Tasks>
 class Dispatcher
 {
-    using TaskTypeList    = typelist<Tasks...>;
-    using ResultTypeList  = typename TaskTypeList::template result_of<>;
-    using TaskQueuePool   = typename TaskTypeList::template tuple_of_arrays<cqueue, steady_tuple>;
-    using ResultQueuePool = typename ResultTypeList::template tuple_of_arrays<cqueue, steady_tuple>;
+    using TaskTypeList = typelist<Tasks...>;
+    template <typename T>
+    using no_args         = std::invoke_result_t<T>;
+    using ResultTypeList  = typename TaskTypeList::template map<no_args, typelist>;
+    using TaskQueuePool   = typename TaskTypeList::template map<cqueue, steady_tuple>;
+    using ResultQueuePool = typename ResultTypeList::template map<cqueue, steady_tuple>;
 
     template <typename Task>
     static constexpr std::size_t
@@ -30,7 +32,7 @@ class Dispatcher
     }
 
     template <typename Task>
-    using ResultQueue = cqueue<typename ResultTypeList::template get<result_index<Task>()>>;
+    using ResultQueue = cqueue<typename ResultTypeList::template at<result_index<Task>()>>;
 
     template <typename T>
     struct result_helper;

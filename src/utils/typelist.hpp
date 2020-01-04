@@ -25,39 +25,38 @@ index_impl() noexcept
 }
 } // namespace detail
 
-template <typename Head, typename... Ts>
+template <typename... Ts>
 struct typelist
 {
-    using head    = Head;
-    using variant = typename std::variant<head, Ts...>;
-    using tuple   = typename std::tuple<head, Ts...>;
+    template <template <typename...> typename Container>
+    using repack = Container<Ts...>;
 
-    template <template <typename> typename Array,
-              template <typename...> typename Tuple = std::tuple>
-    using tuple_of_arrays = Tuple<Array<head>, Array<Ts>...>;
+    template <template <typename> typename Func, template <typename...> typename Container>
+    using map = Container<Func<Ts>...>;
+
+    using variant = repack<std::variant>;
+    using tuple   = repack<std::tuple>;
 
     template <std::size_t I>
-    using get = std::tuple_element_t<I, tuple>;
+    using at = std::tuple_element_t<I, tuple>;
 
     template <typename Type>
     static constexpr std::size_t
     index() noexcept
     {
-        return detail::index_impl<0, Type, Head, Ts...>();
+        return detail::index_impl<0, Type, Ts...>();
     }
 
-    static const constexpr std::size_t size = sizeof...(Ts) + 1;
-    static const constexpr bool        same = (true && ... && std::is_same_v<head, Ts>);
+    using front = at<0>;
+
+    static const constexpr std::size_t size = sizeof...(Ts);
+    static const constexpr bool        same = (true && ... && std::is_same_v<front, Ts>);
 
     using indices = std::make_index_sequence<size>;
 
-    template <typename... Args>
-    using result_of =
-        typelist<std::invoke_result_t<head, Args...>, std::invoke_result_t<Ts, Args...>...>;
+    constexpr typelist(std::tuple<Ts...>) noexcept {}
 
-    constexpr typelist(std::tuple<Head, Ts...>) noexcept {}
-
-    constexpr typelist(std::variant<Head, Ts...>) noexcept {}
+    constexpr typelist(std::variant<Ts...>) noexcept {}
 
     constexpr typelist() noexcept {}
 };
