@@ -47,9 +47,11 @@ struct typelist
         return detail::index_impl<0, Type, Ts...>();
     }
 
-    using front = at<0>;
-
     static const constexpr std::size_t size = sizeof...(Ts);
+
+    using front = at<0>;
+    using back  = at<size - 1>;
+
     static const constexpr bool        same = (true && ... && std::is_same_v<front, Ts>);
 
     using indices = std::make_index_sequence<size>;
