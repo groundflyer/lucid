@@ -148,7 +148,7 @@ class ScanlineImage
     }
 
     ScanlineImage(ScanlineImage&& rhs) :
-        m_alloc(std::move(rhs.m_alloc)), m_res(rhs.m_res), p_data(rhs.p_data)
+        m_res(rhs.m_res), m_alloc(std::move(rhs.m_alloc)), p_data(rhs.p_data)
     {
         rhs.p_data = nullptr;
         rhs.m_res  = Vec2u(0u);

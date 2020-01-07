@@ -116,7 +116,7 @@ operator<<(std::ostream& os, pair<T1, T2> arg)
 }
 
 template <typename Testing, typename Property, typename Generator>
-auto
+bool
 test_property(const size_t n,
               const double threshold,
               std::string_view property_name,
@@ -128,8 +128,9 @@ test_property(const size_t n,
     for(size_t i = 0; i < n; ++i)
     {
         auto&& feed = generator();
-        const bool result = property(testing(std::forward<decltype(feed)>(feed)),
-                                     std::forward<decltype(feed)>(feed));
+        using FeedType = std::decay_t<decltype(feed)>;
+        const bool result = property(testing(std::forward<FeedType>(feed)),
+                                     std::forward<FeedType>(feed));
         sum += static_cast<size_t>(result);
     }
 
