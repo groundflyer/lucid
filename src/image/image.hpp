@@ -6,9 +6,7 @@
 
 #include <base/types.hpp>
 
-#include <iterator>
 #include <memory>
-#include <random>
 
 namespace lucid
 {
@@ -42,7 +40,6 @@ struct scanline_iterator
         scanline_iterator tmp(*this);
                           operator++();
         return tmp;
-        ;
     }
 
     constexpr bool
@@ -130,7 +127,7 @@ class ScanlineImage
     using iterator       = _iterator<false>;
     using const_iterator = _iterator<true>;
 
-    explicit ScanlineImage(const Allocator& alloc) : m_alloc(alloc) {}
+    explicit ScanlineImage(const Allocator& alloc) noexcept : m_alloc(alloc) {}
 
     ScanlineImage(const Vec2u& res, const Allocator& alloc = Allocator()) :
         m_res(res), m_alloc(alloc)
@@ -147,7 +144,7 @@ class ScanlineImage
         std::copy(rhs.p_data, rhs.p_data + rhs.size(), p_data);
     }
 
-    ScanlineImage(ScanlineImage&& rhs) :
+    ScanlineImage(ScanlineImage&& rhs) noexcept :
         m_res(rhs.m_res), m_alloc(std::move(rhs.m_alloc)), p_data(rhs.p_data)
     {
         rhs.p_data = nullptr;

@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
     std::random_device rd;
     std::default_random_engine g(rd());
     RandomDistribution<real> pos_dist(-0.5_r, 0.5_r);
-    RandomDistribution<unsigned> count_dist(3u, 100u);
+    RandomDistribution<unsigned> count_dist(3u, 400u);
 
     const auto color_gen = [&](){ return RGB{rand<float, 3>(g)}; };
     const auto pos_gen = [&](){ return Vec2(pos_dist.template operator()<2>(g)); };
@@ -63,15 +63,11 @@ int main(int argc, char* argv[])
                               auto iter2 = film_valid.img.begin();
                               int ret = 0;
                               for (const auto val : film_test.img)
-                                  ret += all(!almost_equal(val, *(iter2++), 3u));
+                                  ret += all(!almost_equal(val, *(iter2++), 100u));
                               return ret;
-                              // return accumulate(views::zip(film_test, film_valid) | views::transform([](const auto& pixels){
-                              //                                                                 const auto& [test_p, valid_p] = pixels;
-                              //                                                                 return all(test_p != valid_p);
-                              //                                                                        })) > 0u;
                           };
 
-    const bool ret = test_property(num_tests, 0.001, "Update Pixels",
+    const bool ret = test_property(num_tests, 0.05, "Update Pixels",
                                    generator, testing, property);
     
     return ret;
