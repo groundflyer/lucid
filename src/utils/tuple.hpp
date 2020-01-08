@@ -135,7 +135,7 @@ switcher_func(const std::size_t case_, Tuple<Funcs...>&& funcs, Args&&... args) 
     return std::apply(
         [case_, args_tuple = std::forward_as_tuple(args...)](Funcs&&... items) mutable {
             using tpl = typename typelist<Funcs...>::template result_of<Args...>;
-            using ret = std::conditional_t<tpl::same, typename tpl::head, typename tpl::variant>;
+            using ret = std::conditional_t<tpl::same, typename tpl::front, typename tpl::variant>;
             return detail::switcher_func_impl<ret, 0>(
                 case_, args_tuple, std::forward<Funcs>(items)...);
         },
@@ -149,7 +149,7 @@ switcher_func(const std::size_t case_, const Tuple<Funcs...>& funcs, const Args&
     return std::apply(
         [case_, args_tuple = std::tuple{args...}](const Funcs&... items) mutable {
             using tpl = typename typelist<Funcs...>::template result_of<Args...>;
-            using ret = std::conditional_t<tpl::same, typename tpl::head, typename tpl::variant>;
+            using ret = std::conditional_t<tpl::same, typename tpl::front, typename tpl::variant>;
             return detail::switcher_func_impl<ret, 0>(case_, args_tuple, items...);
         },
         funcs);
@@ -160,7 +160,7 @@ constexpr decltype(auto)
 visit(const std::size_t case_, Visitor&& visitor, const Tuple<Ts...>& tuple) noexcept
 {
     using tpl = typelist<std::invoke_result_t<Visitor, Ts>...>;
-    using ret = std::conditional_t<tpl::same, typename tpl::head, typename tpl::variant>;
+    using ret = std::conditional_t<tpl::same, typename tpl::front, typename tpl::variant>;
 
     return detail::visit_impl<ret, 0>(case_, std::forward<Visitor>(visitor), tuple);
 }
