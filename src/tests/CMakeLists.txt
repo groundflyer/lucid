@@ -13,9 +13,9 @@ foreach(src ${test_srcs})
     target_compile_definitions(${name} PUBLIC ${GL_DEFS})
   elseif(${name} STREQUAL "dispatcher")
     target_link_libraries(${name} PRIVATE fmt-header-only Threads::Threads)
-  else()
-    target_link_libraries(${name} PRIVATE fmt-header-only)
   endif()
+
+  target_link_libraries(${name} PRIVATE fmt-header-only)
 
   add_test(NAME ${name} COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${name})
   message(STATUS "Added test: ${name}")

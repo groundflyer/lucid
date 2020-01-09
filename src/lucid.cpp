@@ -28,8 +28,7 @@ main(int argc, char* argv[])
     const std::uint8_t   max_depth = 4u;
 
     const Vec2u res(width, height);
-    const auto& [w, h] = res;
-    const real ratio   = static_cast<real>(w) / static_cast<real>(h);
+    const real  ratio = static_cast<real>(width) / static_cast<real>(height);
 
     Logger logger(Logger::DEBUG);
 
@@ -46,8 +45,8 @@ main(int argc, char* argv[])
 
     try
     {
-        Viewport::init(w, h);
-        Film<ScanlineImage<float, 4>> film{Vec2u(Viewport::get_res())};
+        Viewport::init(width, height);
+        Film<ScanlineImage<float, 4>> film{Vec2u(Viewport::get_res()), ratio};
         const real                    filter_rad = film.pixel_radius() * 4_r;
 
         Viewport::load_img(film.img);

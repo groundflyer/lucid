@@ -5,6 +5,8 @@
 #include <integrators/basic.hpp>
 #include <sampling/film.hpp>
 #include <scene/cornell_box.hpp>
+#include <utils/printing.hpp>
+#include <utils/logging.hpp>
 
 using namespace lucid;
 
@@ -17,12 +19,13 @@ int main(int argc, char* argv[])
     const unsigned short width     = argc > 1 ? std::stoi(argv[1]) : 640u;
     const unsigned short height    = argc > 2 ? std::stoi(argv[2]) : 480u;
 
+    Logger logger(Logger::DEBUG);
+
     Viewport::init(width, height);
+    const real         ratio = static_cast<real>(width) / static_cast<real>(height);
 
-    Film<ScanlineImage<float, 4>> film{Vec2u(Viewport::get_res())};
-
-    const auto& [w, h]       = Viewport::get_res();
-    const real         ratio = static_cast<real>(w) / static_cast<real>(h);
+    Film<ScanlineImage<float, 4>> film{Vec2u(Viewport::get_res()), ratio};
+    logger.debug("pixel size = {}", film.pixel_size);
     const perspective::shoot cam   = CornellBox::camera(ratio);
     const auto         room_geo   = CornellBox::geometry();
     const auto         mat_getter = CornellBox::mat_getter();

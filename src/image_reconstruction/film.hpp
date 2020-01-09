@@ -15,7 +15,10 @@ struct Film
     Vec2  res;
     Vec2  pixel_size;
 
-    Film(const Vec2u res_u) : img(res_u), res(res_u), pixel_size(Vec2(1_r) / res) {}
+    Film(const Vec2u& res_u, const real& ratio) :
+        img(res_u), res(res_u), pixel_size(Vec2(ratio, 1_r) / res)
+    {
+    }
 
     // radius of pixel bounding ellipse
     real
