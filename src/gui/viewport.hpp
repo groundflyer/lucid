@@ -46,7 +46,7 @@ class Viewport
     static inline unsigned    VAO;
     static inline unsigned    EBO;
     static inline unsigned    texture;
-    static inline Vec2u       res;
+    static inline Vec2i       res;
 
   public:
     Viewport()                = delete;
@@ -59,7 +59,7 @@ class Viewport
     static void
     resize(GLFWwindow*, int width, int height) noexcept
     {
-        res = Vec2u(width, height);
+        res = Vec2i(width, height);
         glViewport(0, 0, width, height);
     }
 
@@ -84,9 +84,8 @@ class Viewport
         glfwMakeContextCurrent(window);
         glfwSetFramebufferSizeCallback(window, resize);
 
-        int width, height;
+        auto& [width, height] = res;
         glfwGetFramebufferSize(window, &width, &height);
-        res = lucid::Vec2u(width, height);
         glViewport(0, 0, width, height);
 
         int    shader_status;
@@ -164,7 +163,7 @@ class Viewport
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     }
 
-    static const Vec2u&
+    static const Vec2i&
     get_res() noexcept
     {
         return res;
