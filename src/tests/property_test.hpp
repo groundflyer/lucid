@@ -4,116 +4,14 @@
 
 #pragma once
 
-#include <base/vector.hpp>
-#include <base/normal.hpp>
-#include <base/point.hpp>
-#include <base/matrix.hpp>
+#include <utils/printing.hpp>
 
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-
-#include <tuple>
-#include <sstream>
 #include <utility>
-#include <iostream>
 #include <string_view>
 
 using namespace fmt::literals;
 
 
-namespace lucid
-{
-    template <typename T, size_t N,
-              template <typename, size_t> typename Container>
-    std::ostream&
-    operator<<(std::ostream& os, const Vector<T, N, Container>& rhs) noexcept
-    {
-        os << '[';
-        for (size_t i = 0; i < N - 1; ++i)
-            os << rhs[i] << ", ";
-        os << rhs[N - 1] << ']';
-
-        return os;
-    }
-
-    template <typename T, size_t N,
-              template <typename, size_t> typename Container>
-    std::ostream&
-    operator<<(std::ostream& os, const NormalN_<T, N, Container>& rhs) noexcept
-    {
-        os << '[';
-        for (size_t i = 0; i < N - 1; ++i)
-            os << rhs[i] << ", ";
-        os << rhs[N - 1] << ']';
-
-        return os;
-    }
-
-    template <typename T, size_t N,
-              template <typename, size_t> typename Container>
-    std::ostream&
-    operator<<(std::ostream& os, const PointN_<T, N, Container>& rhs) noexcept
-    {
-        os << '[';
-        for (size_t i = 0; i < N - 1; ++i)
-            os << rhs[i] << ", ";
-        os << rhs[N - 1] << ']';
-
-        return os;
-    }
-
-    template <typename T, size_t R, size_t C,
-			  template <typename, size_t> typename Container>
-    std::ostream&
-    operator<<(std::ostream& os, const Matrix<T, R, C, Container>& rhs) noexcept
-    {
-        os << '[';
-        for (size_t i = 0; i < R - 1; ++i)
-            os << rhs[i] << ", ";
-        os << rhs[R - 1] << ']';
-
-        return os;
-    }
-}
-
-namespace std
-{
-template <typename T, size_t N>
-ostream&
-operator<<(std::ostream& os, const array<T, N>& rhs) noexcept
-{
-    os << '[';
-    for (size_t i = 0; i < N - 1; ++i)
-        os << rhs[i] << ", ";
-    os << rhs[N-1] << ']';
-    return os;
-}
-
-template<typename Tuple, size_t... I>
-ostream&
-print_tuple(ostream& os, const Tuple& t, index_sequence<I...>)
-{
-    os << '(';
-    (..., (os << (I == 0? "" : ", ") << get<I>(t)));
-    os << ')';
-    return os;
-}
-
-template<typename... Ts>
-ostream&
-operator<<(ostream& os, const tuple<Ts...>& t)
-{
-    return print_tuple(os, t, make_index_sequence<sizeof...(Ts)>());
-}
-
-template <typename T1, typename T2>
-ostream&
-operator<<(std::ostream& os, pair<T1, T2> arg)
-{
-    os << '(' << arg.first << ", " << arg.second << ')';
-    return os;
-}
-}
 
 template <typename Testing, typename Property, typename Generator>
 bool
