@@ -23,9 +23,11 @@ static thread_local std::default_random_engine g(rd());
 int
 main(int argc, char* argv[])
 {
-    const std::uint8_t max_depth = argc > 1 ? std::stoi(argv[1]) : 4;
+    const unsigned short width     = argc > 1 ? std::stoi(argv[1]) : 640;
+    const unsigned short height    = argc > 2 ? std::stoi(argv[2]) : 640;
+    const std::uint8_t   max_depth = 4u;
 
-    const Vec2u res(640, 640);
+    const Vec2u res(width, height);
     const auto& [w, h] = res;
     const real ratio   = static_cast<real>(w) / static_cast<real>(h);
 
@@ -45,7 +47,7 @@ main(int argc, char* argv[])
     try
     {
         Viewport::init(w, h);
-        Film<ScanlineImage<float, 4>> film(Viewport::get_res());
+        Film<ScanlineImage<float, 4>> film{Vec2u(Viewport::get_res())};
         const real                    filter_rad = film.pixel_radius() * 4_r;
 
         Viewport::load_img(film.img);
