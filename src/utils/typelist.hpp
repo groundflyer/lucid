@@ -56,9 +56,12 @@ struct typelist
 
     using indices = std::make_index_sequence<size>;
 
-    constexpr typelist(std::tuple<Ts...>) noexcept {}
+    template <typename... Args>
+    using result_of = typelist<std::invoke_result_t<Ts, Args...>...>;
 
-    constexpr typelist(std::variant<Ts...>) noexcept {}
+    constexpr explicit typelist(std::tuple<Ts...>) noexcept {}
+
+    constexpr explicit typelist(std::variant<Ts...>) noexcept {}
 
     constexpr typelist() noexcept {}
 };
