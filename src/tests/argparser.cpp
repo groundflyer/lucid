@@ -23,6 +23,11 @@ class ArgRange : public ranges::view_facade<ArgRange>
     int _argc = 0;
     char **_argv = nullptr;
 
+public:
+    ArgRange() = default;
+
+    ArgRange(int argc, char* argv[]) : _argc(argc), _argv(argv) {}
+
     std::string_view
     read() const
     {
@@ -34,11 +39,6 @@ class ArgRange : public ranges::view_facade<ArgRange>
     {
         return current == _argc;
     }
-
-public:
-    ArgRange() = default;
-
-    ArgRange(int argc, char* argv[]) : _argc(argc), _argv(argv) {}
 
     void
     next()
@@ -203,54 +203,56 @@ parse(const std::tuple<Options...>& options, ArgRange args)
          VALWORD
         };
 
-    auto process_word = [&](std::string_view word)
-                       {
-                           logger.debug("checking word {}", word);
-                           WordType word_type = WordType::VALWORD;
+    while(!args.equal(ranges::default_sentinel))
+    {
+        std::string_view word = args.read();
 
-                           auto word_iter = word.cbegin();
-                           while (*word_iter == '-')
-                           {
-                               if (word_type != WordType::KEYCHAR)
-                                   word_type = WordType::KEYCHAR;
-                               else
-                                   word_type = WordType::KEYWORD;
+        logger.debug("checking word {}", word);
+        WordType word_type = WordType::VALWORD;
 
-                               ++word_iter;
-                           }
+        auto word_iter = word.cbegin();
+        while (*word_iter == '-')
+        {
+            if (word_type != WordType::KEYCHAR)
+                word_type = WordType::KEYCHAR;
+            else
+                word_type = WordType::KEYWORD;
 
-                           auto visitor = [](auto& value){ value = "test"; };
-                           auto update_values = [&](const auto& key)
-                                                {
-                                                    const std::size_t token = tokenize(key, options);
-                                                    visit(token, visitor, values);                             
-                                                };
+            ++word_iter;
+        }
 
-                           switch (word_type)
-                           {
-                           case WordType::KEYCHAR:
-                               {
-                                   const char key = *word_iter;
-                                   logger.debug("Found key: {}", key);
-                                   update_values(key);
-                                   break;
-                               }
-                           case WordType::KEYWORD:
-                               {
-                                   auto keyword = word.substr(2);
-                                   logger.debug("Found keyword {}", keyword);
-                                   update_values(keyword);
-                                   break;
-                               }
-                           case WordType::VALWORD:
-                               {
-                                   logger.debug("Found value {}", word);
-                                   break;
-                               }
-                           }
-                       };
+        auto visitor = [](auto& value){ value = "test"; };
+        auto update_values = [&](const auto& key)
+                             {
+                                 const std::size_t token = tokenize(key, options);
+                                 visit(token, visitor, values);                             
+                             };
 
-    ranges::for_each(args, process_word);
+        switch (word_type)
+        {
+        case WordType::KEYCHAR:
+            {
+                const char key = *word_iter;
+                logger.debug("Found key: {}", key);
+                update_values(key);
+                break;
+            }
+        case WordType::KEYWORD:
+            {
+                auto keyword = word.substr(2);
+                logger.debug("Found keyword {}", keyword);
+                update_values(keyword);
+                break;
+            }
+        case WordType::VALWORD:
+            {
+                logger.debug("Found value {}", word);
+                break;
+            }
+        }
+
+        args.next();
+    }
 
     return values;
 }
