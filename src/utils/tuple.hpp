@@ -80,6 +80,16 @@ visit_impl(const std::size_t case_, Visitor&& visitor, const Tuple& tuple) noexc
         return visit_impl<Ret, Idx + 1>(case_, std::forward<Visitor>(visitor), tuple);
 }
 
+template <std::size_t Idx, typename Visitor, typename Tuple>
+constexpr void
+visit_impl(const std::size_t case_, Visitor&& visitor, Tuple& tuple) noexcept
+{
+    if(Idx == case_ || Idx == std::tuple_size_v<Tuple> - 1) return visitor(std::get<Idx>(tuple));
+
+    if constexpr(Idx < std::tuple_size_v<Tuple> - 1)
+        visit_impl<Idx + 1>(case_, std::forward<Visitor>(visitor), tuple);
+}
+
 template <std::size_t I, typename T, std::size_t N1, std::size_t N2>
 constexpr decltype(auto)
 array_cat_idx(const std::array<T, N1>& first, const std::array<T, N2>& second)
@@ -128,7 +138,7 @@ enumerate(const std::tuple<Ts...>& tuple) noexcept
     return detail::enumerate_impl(tuple, std::index_sequence_for<Ts...>{});
 }
 
-template <typename... Args, typename... Funcs, template <typename...> typename Tuple = std::tuple>
+template <typename... Args, typename... Funcs, template <typename...> typename Tuple>
 constexpr decltype(auto)
 switcher_func(const std::size_t case_, Tuple<Funcs...>&& funcs, Args&&... args) noexcept
 {
@@ -142,7 +152,7 @@ switcher_func(const std::size_t case_, Tuple<Funcs...>&& funcs, Args&&... args) 
         std::forward<Tuple<Funcs...>>(funcs));
 }
 
-template <typename... Args, typename... Funcs, template <typename...> typename Tuple = std::tuple>
+template <typename... Args, typename... Funcs, template <typename...> typename Tuple>
 constexpr decltype(auto)
 switcher_func(const std::size_t case_, const Tuple<Funcs...>& funcs, const Args&... args) noexcept
 {
@@ -155,7 +165,7 @@ switcher_func(const std::size_t case_, const Tuple<Funcs...>& funcs, const Args&
         funcs);
 }
 
-template <typename Visitor, typename... Ts, template <typename...> typename Tuple = std::tuple>
+template <typename Visitor, typename... Ts, template <typename...> typename Tuple>
 constexpr decltype(auto)
 visit(const std::size_t case_, Visitor&& visitor, const Tuple<Ts...>& tuple) noexcept
 {
@@ -163,6 +173,13 @@ visit(const std::size_t case_, Visitor&& visitor, const Tuple<Ts...>& tuple) noe
     using ret = std::conditional_t<tpl::same, typename tpl::front, typename tpl::variant>;
 
     return detail::visit_impl<ret, 0>(case_, std::forward<Visitor>(visitor), tuple);
+}
+
+template <typename Visitor, typename... Ts, template <typename...> typename Tuple>
+constexpr void
+visit(const std::size_t case_, Visitor&& visitor, Tuple<Ts...>& tuple) noexcept
+{
+    detail::visit_impl<0>(case_, std::forward<Visitor>(visitor), tuple);
 }
 
 template <typename T, std::size_t N1, std::size_t N2, typename... Rest>
