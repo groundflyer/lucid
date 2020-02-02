@@ -221,11 +221,11 @@ parse(const std::tuple<Options...>& options, ArgRange args)
             ++word_iter;
         }
 
-        auto visitor = [](auto& value){ value = "test"; };
-        auto update_values = [&](const auto& key)
+        auto update_values = [&](const auto& key, std::string_view value_word)
                              {
                                  const std::size_t token = tokenize(key, options);
-                                 visit(token, visitor, values);                             
+                                 logger.debug("setting {} to {}", key, value_word);
+                                 visit(token, [&value_word](auto& value){ value = value_word; }, values);
                              };
 
         switch (word_type)
@@ -234,14 +234,16 @@ parse(const std::tuple<Options...>& options, ArgRange args)
             {
                 const char key = *word_iter;
                 logger.debug("Found key: {}", key);
-                update_values(key);
+                args.next();
+                update_values(key, args.read());
                 break;
             }
         case WordType::KEYWORD:
             {
                 auto keyword = word.substr(2);
                 logger.debug("Found keyword {}", keyword);
-                update_values(keyword);
+                args.next();
+                update_values(keyword, args.read());
                 break;
             }
         case WordType::VALWORD:
