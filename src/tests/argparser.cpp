@@ -192,12 +192,9 @@ static inline Logger logger(Logger::DEBUG);
 
 template <typename ... Options>
 auto
-parse(const std::tuple<Options...>& options, int argc, char* argv[])
+parse(const std::tuple<Options...>& options, ArgRange args)
 {
     auto values = make_values(options);
-
-    if (argc == 1)
-        return values;
 
     enum class WordType
         {
@@ -206,50 +203,54 @@ parse(const std::tuple<Options...>& options, int argc, char* argv[])
          VALWORD
         };
 
-    int option_word_idx = 1;
-    char const* word = argv[option_word_idx];
-    logger.debug("starting word {}", word);
-    WordType word_type = WordType::VALWORD;
+    auto process_word = [&](std::string_view word)
+                       {
+                           logger.debug("checking word {}", word);
+                           WordType word_type = WordType::VALWORD;
 
-    while (*word == '-')
-    {
-        if (word_type != WordType::KEYCHAR)
-            word_type = WordType::KEYCHAR;
-        else
-            word_type = WordType::KEYWORD;
+                           auto word_iter = word.cbegin();
+                           while (*word_iter == '-')
+                           {
+                               if (word_type != WordType::KEYCHAR)
+                                   word_type = WordType::KEYCHAR;
+                               else
+                                   word_type = WordType::KEYWORD;
 
-        ++word;
-        logger.debug("iterating word {}", word);
-    }
+                               ++word_iter;
+                           }
 
-    auto visitor = [](auto& value){ value = "test"; };
-    auto update_values = [&](const auto& key)
-                         {
-                             const std::size_t token = tokenize(key, options);
-                             visit(token, visitor, values);                             
-                         };
+                           auto visitor = [](auto& value){ value = "test"; };
+                           auto update_values = [&](const auto& key)
+                                                {
+                                                    const std::size_t token = tokenize(key, options);
+                                                    visit(token, visitor, values);                             
+                                                };
 
-    switch (word_type)
-    {
-    case WordType::KEYCHAR:
-        {
-            const char key = word[0];
-            logger.debug("Found key: {}", key);
-            update_values(key);
-            break;
-        }
-    case WordType::KEYWORD:
-        {
-            logger.debug("Found keyword {}", word);
-            update_values(word);
-            break;
-        }
-    case WordType::VALWORD:
-        {
-            logger.debug("Found value {}", word);
-            break;
-        }
-    }
+                           switch (word_type)
+                           {
+                           case WordType::KEYCHAR:
+                               {
+                                   const char key = *word_iter;
+                                   logger.debug("Found key: {}", key);
+                                   update_values(key);
+                                   break;
+                               }
+                           case WordType::KEYWORD:
+                               {
+                                   auto keyword = word.substr(2);
+                                   logger.debug("Found keyword {}", keyword);
+                                   update_values(keyword);
+                                   break;
+                               }
+                           case WordType::VALWORD:
+                               {
+                                   logger.debug("Found value {}", word);
+                                   break;
+                               }
+                           }
+                       };
+
+    ranges::for_each(args, process_word);
 
     return values;
 }
@@ -260,9 +261,9 @@ using namespace std;
 using namespace lucid;
 using namespace lucid::argparse;
 
-constexpr tuple options{Option<'a', identity>("foo", 1, identity{}, "", "", ""),
-                        Option<'b', identity>("bar", 1, identity{}, "", "", ""),
-                        Option<'c', identity>("foo2", 1, identity{}, "", "", "")};
+constexpr tuple options{Option<'a', identity>("foo", 1, identity{}, "foo", "", ""),
+                        Option<'b', identity>("bar", 1, identity{}, "bar", "", ""),
+                        Option<'c', identity>("foo2", 1, identity{}, "foo2", "", "")};
 
 static_assert(!has_repeating<decay_t<decltype(options)>>::value);
 
@@ -270,10 +271,10 @@ int main(int argc, char *argv[])
 {
     ArgRange args(argc, argv);
     args.next();
-    ranges::for_each(args, [](std::string_view arg){ logger.debug("found arg: {}", arg); });
+    // ranges::for_each(args, [](std::string_view arg){ logger.debug("found arg: {}", arg); });
     try
     {
-        parse(options, argc, argv);
+        parse(options, args);
     }
     catch (const KeyException& ex)
     {
