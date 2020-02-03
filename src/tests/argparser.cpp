@@ -26,24 +26,30 @@ class ArgRange : public ranges::view_facade<ArgRange>
 public:
     ArgRange() = default;
 
-    ArgRange(int argc, char* argv[]) : _argc(argc), _argv(argv) {}
+    ArgRange(int argc, char* argv[]) noexcept : _argc(argc), _argv(argv) {}
 
     std::string_view
-    read() const
+    read() const noexcept
     {
         return _argv[current];
     }
 
     bool
-    equal(ranges::default_sentinel_t) const
+    equal(ranges::default_sentinel_t) const noexcept
     {
         return current == _argc;
     }
 
     void
-    next()
+    next() noexcept
     {
         ++current;
+    }
+
+    void
+    advance(const std::ptrdiff_t n) noexcept
+    {
+        current += n;
     }
 };
 
@@ -181,11 +187,18 @@ struct has_repeating<std::tuple<Options...>>
 };
 
 
+template <typename ... Pairs>
+constexpr auto
+make_values(const std::tuple<Pairs...>& converters) noexcept
+{
+    return std::apply([](const Pairs&... conv_val){ return std::tuple{conv_val.second...}; }, converters);
+}
+
 template <typename ... Options>
 constexpr auto
-make_values(const std::tuple<Options...>& options) noexcept
+make_converters(const std::tuple<Options...>& options) noexcept
 {
-    return std::apply([](const Options&... option){ return std::tuple{option.value...}; }, options);
+    return std::apply([](const Options&... option){ return std::tuple{std::pair{option.converter, option.value}...}; }, options);
 }
 
 static inline Logger logger(Logger::DEBUG);
@@ -194,7 +207,7 @@ template <typename ... Options>
 auto
 parse(const std::tuple<Options...>& options, ArgRange args)
 {
-    auto values = make_values(options);
+    auto converters = make_converters(options);
 
     enum class WordType
         {
@@ -225,7 +238,7 @@ parse(const std::tuple<Options...>& options, ArgRange args)
                              {
                                  const std::size_t token = tokenize(key, options);
                                  logger.debug("setting {} to {}", key, value_word);
-                                 visit(token, [&value_word](auto& value){ value = value_word; }, values);
+                                 visit(token, [&value_word](auto& pair){ pair.second = pair.first(value_word); }, converters);
                              };
 
         switch (word_type)
@@ -256,7 +269,7 @@ parse(const std::tuple<Options...>& options, ArgRange args)
         args.next();
     }
 
-    return values;
+    return make_values(converters);
 }
 
 } // namespace lucid::argparse
