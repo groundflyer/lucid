@@ -9,8 +9,9 @@
 #include <type_traits>
 #include <utility>
 
-#include <range/v3/view/facade.hpp>
 #include <range/v3/algorithm/for_each.hpp>
+#include <range/v3/view/facade.hpp>
+#include <range/v3/view/slice.hpp>
 
 
 namespace lucid::argparse
@@ -203,6 +204,20 @@ make_converters(const std::tuple<Options...>& options) noexcept
 
 static inline Logger logger(Logger::DEBUG);
 
+std::size_t
+values_extent(ArgRange args) noexcept
+{
+    std::size_t ret = 0ul;
+
+    while(!args.equal(ranges::default_sentinel) && args.read()[0] != '-')
+    {
+        ++ret;
+        args.next();
+    }
+
+    return ret;
+}
+
 template <typename ... Options>
 auto
 parse(const std::tuple<Options...>& options, ArgRange args)
@@ -288,7 +303,8 @@ int main(int argc, char *argv[])
 {
     ArgRange args(argc, argv);
     args.next();
-    // ranges::for_each(args, [](std::string_view arg){ logger.debug("found arg: {}", arg); });
+    logger.debug("Values extent {}", values_extent(args));
+    // ranges::for_each(ranges::views::slice(args, 1, 4), [](std::string_view arg){ logger.debug("found arg: {}", arg); });
     try
     {
         parse(options, args);
