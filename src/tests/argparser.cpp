@@ -16,7 +16,7 @@
 
 namespace lucid::argparse
 {
-class ArgRange : public ranges::view_facade<ArgRange>
+class ArgsRange : public ranges::view_facade<ArgsRange>
 {
     friend ranges::range_access;
 
@@ -25,9 +25,11 @@ class ArgRange : public ranges::view_facade<ArgRange>
     char **_argv = nullptr;
 
 public:
-    ArgRange() = default;
+    ArgsRange() = default;
 
-    ArgRange(int argc, char* argv[]) noexcept : _argc(argc), _argv(argv) {}
+    ArgsRange(int argc, char* argv[]) noexcept : _argc(argc), _argv(argv) {}
+
+    ArgsRange(ArgsRange range, int extent) noexcept : current(range.current), _argc(current + extent), _argv(range._argv) {}
 
     std::string_view
     read() const noexcept
@@ -46,31 +48,130 @@ public:
     {
         ++current;
     }
+};
 
-    void
-    advance(const std::ptrdiff_t n) noexcept
+struct FlagConverter
+{
+    struct Exception
     {
-        current += n;
+        std::string_view word;
+    };
+
+    constexpr bool
+    operator()(std::string_view word) const
+    {
+        if (word == "yes")
+            return true;
+
+        if (word == "no")
+            return false;
+
+        throw Exception{word};
     }
 };
+
+
+template <typename Converter>
+class Binding
+{
+    using value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
+
+    value_type default_value;
+    Converter converter;
+    std::string_view word;
+    bool is_set = false;
+
+public:
+    explicit constexpr
+    Binding(const value_type& value) noexcept : default_value(value) {}
+
+    void
+    set(std::string_view new_word) noexcept
+    {
+        is_set = true;
+        word = new_word;
+    }
+
+    value_type
+    operator()() const
+    {
+        if constexpr (std::is_same_v<value_type, bool>)
+            // flip default bool value or convert word if it's available
+            return word.empty() ? default_value ^ is_set : converter(word);
+        else
+            return is_set ? converter(word) : default_value;
+    }
+};
+
+
+template <typename Converter>
+class BindingRange : public ranges::view_facade<BindingRange<Converter>>
+{
+    using value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
+
+    friend ranges::range_access;
+
+    Converter converter;
+
+    value_type
+    read() const noexcept
+    {
+        return converter(words_range.read());
+    }
+
+    bool
+    equal(ranges::default_sentinel_t sentinel) const noexcept
+    {
+        return words_range.equal(sentinel);
+    }
+
+    void
+    next() noexcept
+    {
+        words_range.next();
+    }
+
+public:
+    BindingRange() = default;
+
+    ArgsRange words_range;
+};
+
 
 template <char Key, typename Converter>
 struct Option
 {
-    using Value = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
+    static constexpr char key = Key;
+    using converter = Converter;
+    using value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
 
-    Value value;
-    std::size_t nargs;
-    Converter converter;
+    value_type value;
     std::string_view keyword;
     std::string_view doc;
     std::string_view var;
 
     constexpr
-    Option(const Value& _value, const std::size_t _nargs, Converter _converter, const std::string_view _keyword, std::string_view _doc, const std::string_view _var) noexcept :
-        value(_value), nargs(_nargs), converter(_converter), keyword(_keyword), doc(_doc), var(_var)
+    Option(const value_type& _value, const std::string_view _keyword, const std::string_view _doc, const std::string_view _var) noexcept :
+        value(_value), keyword(_keyword), doc(_doc), var(_var)
     {}
+
+    constexpr Binding<Converter>
+    binding() const noexcept
+    {
+        return Binding<Converter>(value);
+    }
 };
+
+template <char Key>
+using Flag = Option<Key, FlagConverter>;
+
+// template <char Key, typename Converter, std::size_t min_n, std::size_t max_n>
+// struct MultiOption
+// {
+//     static constexpr char key = Key;
+//     using converter = Converter;
+//     using value_type = BindingRange<Converter>;
+// };
 
 struct KeyException
 {
@@ -82,35 +183,16 @@ struct KeywordException
     std::string_view value;
 };
 
-template <bool Value>
-struct OptionSwitcher
-{
-    template <typename ... Args>
-    constexpr bool
-    operator()(Args...) const noexcept
-    {
-        return Value;
-    }
-};
 
 namespace detail
 {
-template <typename _Option>
-struct extract_key;
-
-template <char Key, typename _>
-struct extract_key<Option<Key, _>>
-{
-    static constexpr char value = Key;
-};
-
 template <char Key, std::size_t Idx, typename Options>
 struct key_index_impl;
 
 template <char Key, std::size_t Idx, typename _Option, typename ... Rest>
 struct key_index_impl<Key, Idx, std::tuple<_Option, Rest...>>
 {
-    static constexpr std::size_t value = (Key == extract_key<_Option>::value) ? Idx : key_index_impl<Key, Idx + 1, std::tuple<Rest...>>::value;
+    static constexpr std::size_t value = (Key == _Option::key) ? Idx : key_index_impl<Key, Idx + 1, std::tuple<Rest...>>::value;
 };
 
 template <typename ... Options>
@@ -119,7 +201,7 @@ struct has_repeating_impl;
 template <typename First, typename ... Rest>
 struct has_repeating_impl<First, Rest...>
 {
-    static constexpr bool value = (false || ... || (extract_key<First>::value == extract_key<Rest>::value)) || has_repeating_impl<Rest...>::value;
+    static constexpr bool value = (false || ... || (First::key == Rest::key)) || has_repeating_impl<Rest...>::value;
 };
 
 template <typename Last>
@@ -132,7 +214,7 @@ template <std::size_t Idx, typename FirstOption, typename ... RestOptions>
 constexpr std::size_t
 tokenize_impl(const char key)
 {
-    if (key == extract_key<FirstOption>::value)
+    if (key == FirstOption::key)
         return Idx;
 
     if constexpr (sizeof...(RestOptions) > 0ul)
@@ -153,7 +235,7 @@ tokenize_impl(const std::string_view keyword, const std::tuple<Options...>& opti
 
     throw KeywordException{keyword};
 }
-}
+} // detail
 
 template <char Key, typename Options>
 struct key_index;
@@ -188,103 +270,90 @@ struct has_repeating<std::tuple<Options...>>
 };
 
 
-template <typename ... Pairs>
-constexpr auto
-make_values(const std::tuple<Pairs...>& converters) noexcept
-{
-    return std::apply([](const Pairs&... conv_val){ return std::tuple{conv_val.second...}; }, converters);
-}
-
-template <typename ... Options>
-constexpr auto
-make_converters(const std::tuple<Options...>& options) noexcept
-{
-    return std::apply([](const Options&... option){ return std::tuple{std::pair{option.converter, option.value}...}; }, options);
-}
-
 static inline Logger logger(Logger::DEBUG);
-
-std::size_t
-values_extent(ArgRange args) noexcept
-{
-    std::size_t ret = 0ul;
-
-    while(!args.equal(ranges::default_sentinel) && args.read()[0] != '-')
-    {
-        ++ret;
-        args.next();
-    }
-
-    return ret;
-}
 
 template <typename ... Options>
 auto
-parse(const std::tuple<Options...>& options, ArgRange args)
+parse(const std::tuple<Options...>& options, ArgsRange args)
 {
-    auto converters = make_converters(options);
+    auto bindings = std::apply([](const Options& ... options)
+                               {
+                                   return std::tuple{options.binding()...};
+                               }, options);
 
-    enum class WordType
+    auto update_bindings = [&](const auto& key, std::string_view value_word)
+                           {
+                               const std::size_t token = tokenize(key, options);
+                               logger.debug("setting {} to {}", key, value_word);
+                               visit(token, [&value_word](auto& binding){ binding.set(value_word); }, bindings);
+                           };
+
+    enum class WordType : std::uint8_t
         {
-         KEYCHAR,
-         KEYWORD,
-         VALWORD
+         KEY,
+         VALUE
         };
 
-    while(!args.equal(ranges::default_sentinel))
+    WordType expected_type = WordType::KEY;
+    std::size_t token = -1ul;
+    bool iterate = true;
+    bool new_word = true;
+    bool iter_char = false;
+    std::string_view word = args.read();
+    std::size_t pos = 0ul;
+
+    auto next_word = [&]()
+            {
+                iter_char = false;
+                args.next();
+                iterate = !args.equal(ranges::default_sentinel);
+                if (iterate)
+                    word = args.read();
+            };
+
+    while(iterate)
     {
-        std::string_view word = args.read();
+        WordType current_type = WordType::VALUE;
 
-        logger.debug("checking word {}", word);
-        WordType word_type = WordType::VALWORD;
-
-        auto word_iter = word.cbegin();
-        while (*word_iter == '-')
+        if (new_word)
         {
-            if (word_type != WordType::KEYCHAR)
-                word_type = WordType::KEYCHAR;
+            while (word[pos] == '-' && pos <= 2u)
+                ++pos;
+
+            if (pos)
+            {
+                current_type = WordType::KEY;
+                iter_char = (pos == 1u);
+            }
+        }
+
+        if (current_type != expected_type)
+            throw KeywordException{word};
+
+        switch (current_type)
+        {
+        case WordType::KEY: token = iter_char ? tokenize(word[pos], options) : tokenize(word.substr(pos), options); break;
+        case WordType::VALUE: visit(token, [&](auto& binding){ binding.set(iter_char ? word.substr(pos, 1) : word); }, options); break;
+        }
+
+        if (iter_char)
+        {
+            if (pos != word.size() - 1)
+            {
+                ++pos;
+                new_word = false;
+            }
             else
-                word_type = WordType::KEYWORD;
-
-            ++word_iter;
-        }
-
-        auto update_values = [&](const auto& key, std::string_view value_word)
-                             {
-                                 const std::size_t token = tokenize(key, options);
-                                 logger.debug("setting {} to {}", key, value_word);
-                                 visit(token, [&value_word](auto& pair){ pair.second = pair.first(value_word); }, converters);
-                             };
-
-        switch (word_type)
-        {
-        case WordType::KEYCHAR:
             {
-                const char key = *word_iter;
-                logger.debug("Found key: {}", key);
-                args.next();
-                update_values(key, args.read());
-                break;
-            }
-        case WordType::KEYWORD:
-            {
-                auto keyword = word.substr(2);
-                logger.debug("Found keyword {}", keyword);
-                args.next();
-                update_values(keyword, args.read());
-                break;
-            }
-        case WordType::VALWORD:
-            {
-                logger.debug("Found value {}", word);
-                break;
+                next_word();
+                new_word = true;
             }
         }
-
-        args.next();
+        else
+            next_word();
     }
 
-    return make_values(converters);
+    return bindings;
 }
 
 } // namespace lucid::argparse
@@ -293,29 +362,30 @@ using namespace std;
 using namespace lucid;
 using namespace lucid::argparse;
 
-constexpr tuple options{Option<'a', identity>("foo", 1, identity{}, "foo", "", ""),
-                        Option<'b', identity>("bar", 1, identity{}, "bar", "", ""),
-                        Option<'c', identity>("foo2", 1, identity{}, "foo2", "", "")};
+constexpr tuple options{Option<'a', identity>("foo", "foo", "", ""),
+                        Option<'b', identity>("bar", "bar", "", ""),
+                        Option<'c', identity>("foo2", "foo2", "", ""),
+                        Flag<'d'>(false, "flag", "", "")};
 
 static_assert(!has_repeating<decay_t<decltype(options)>>::value);
 
 int main(int argc, char *argv[])
 {
-    ArgRange args(argc, argv);
+    ArgsRange args(argc, argv);
     args.next();
-    logger.debug("Values extent {}", values_extent(args));
+    // logger.debug("Values extent {}", values_extent(args));
     // ranges::for_each(ranges::views::slice(args, 1, 4), [](std::string_view arg){ logger.debug("found arg: {}", arg); });
-    try
-    {
-        parse(options, args);
-    }
-    catch (const KeyException& ex)
-    {
-        logger.critical("Unknown key: {}", ex.value);
-    }
-    catch (const KeywordException& ex)
-    {
-        logger.critical("Unknown keyword: {}", ex.value);
-    }
+    // try
+    // {
+    //     parse(options, args);
+    // }
+    // catch (const KeyException& ex)
+    // {
+    //     logger.critical("Unknown key: {}", ex.value);
+    // }
+    // catch (const KeywordException& ex)
+    // {
+    //     logger.critical("Unknown keyword: {}", ex.value);
+    // }
     return 0;
 }
