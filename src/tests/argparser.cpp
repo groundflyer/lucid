@@ -186,13 +186,19 @@ struct KeywordException
 
 namespace detail
 {
-template <char Key, std::size_t Idx, typename Options>
+template <char Key, std::size_t Idx, typename ... Options>
 struct key_index_impl;
 
-template <char Key, std::size_t Idx, typename _Option, typename ... Rest>
-struct key_index_impl<Key, Idx, std::tuple<_Option, Rest...>>
+template <char Key, std::size_t Idx>
+struct key_index_impl<Key, Idx>
 {
-    static constexpr std::size_t value = (Key == _Option::key) ? Idx : key_index_impl<Key, Idx + 1, std::tuple<Rest...>>::value;
+    static constexpr std::size_t value = -1ul;
+};
+
+template <char Key, std::size_t Idx, typename _Option, typename ... Rest>
+struct key_index_impl<Key, Idx, _Option, Rest...>
+{
+    static constexpr std::size_t value = (Key == _Option::key) ? Idx : key_index_impl<Key, Idx + 1, Rest...>::value;
 };
 
 template <typename ... Options>
@@ -243,7 +249,7 @@ struct key_index;
 template <char Key, typename ... Options>
 struct key_index<Key, std::tuple<Options...>>
 {
-    static constexpr std::size_t value = detail::key_index_impl<Key, 0ul, std::tuple<Options...>>::value;
+    static const constexpr std::size_t value = detail::key_index_impl<Key, 0ul, Options...>::value;
 };
 
 template <typename ... Options>
@@ -270,6 +276,23 @@ struct has_repeating<std::tuple<Options...>>
 };
 
 
+template <typename Bindings, typename Options>
+struct ParseResults
+{
+    Bindings bindings;
+
+    constexpr
+    ParseResults(const Bindings& _bindings, const Options&) : bindings(_bindings) {}
+
+    template <char Key>
+    decltype(auto)
+    get() const noexcept
+    {
+        return std::get<key_index<Key, Options>::value>(bindings)();
+    }
+};
+
+
 static inline Logger logger(Logger::DEBUG);
 
 template <typename ... Options>
@@ -281,79 +304,30 @@ parse(const std::tuple<Options...>& options, ArgsRange args)
                                    return std::tuple{options.binding()...};
                                }, options);
 
-    auto update_bindings = [&](const auto& key, std::string_view value_word)
-                           {
-                               const std::size_t token = tokenize(key, options);
-                               logger.debug("setting {} to {}", key, value_word);
-                               visit(token, [&value_word](auto& binding){ binding.set(value_word); }, bindings);
-                           };
-
-    enum class WordType : std::uint8_t
-        {
-         KEY,
-         VALUE
-        };
-
-    WordType expected_type = WordType::KEY;
     std::size_t token = -1ul;
-    bool iterate = true;
-    bool new_word = true;
-    bool iter_char = false;
-    std::string_view word = args.read();
-    std::size_t pos = 0ul;
 
-    auto next_word = [&]()
-            {
-                iter_char = false;
-                args.next();
-                iterate = !args.equal(ranges::default_sentinel);
-                if (iterate)
-                    word = args.read();
-            };
-
-    while(iterate)
+    while(!args.equal(ranges::default_sentinel))
     {
-        WordType current_type = WordType::VALUE;
+        std::string_view word = args.read();
+        bool is_key = false;
+        std::size_t pos = 0ul;
 
-        if (new_word)
-        {
-            while (word[pos] == '-' && pos <= 2u)
-                ++pos;
+        while (word[pos] == '-' && pos <= 2u)
+            ++pos;
 
-            if (pos)
-            {
-                current_type = WordType::KEY;
-                iter_char = (pos == 1u);
-            }
-        }
+        is_key = pos > 0;
 
-        if (current_type != expected_type)
-            throw KeywordException{word};
+        logger.debug("Iterating word {}", word);
 
-        switch (current_type)
-        {
-        case WordType::KEY: token = iter_char ? tokenize(word[pos], options) : tokenize(word.substr(pos), options); break;
-        case WordType::VALUE: visit(token, [&](auto& binding){ binding.set(iter_char ? word.substr(pos, 1) : word); }, options); break;
-        }
-
-        if (iter_char)
-        {
-            if (pos != word.size() - 1)
-            {
-                ++pos;
-                new_word = false;
-            }
-            else
-            {
-                next_word();
-                new_word = true;
-            }
-        }
+        if (is_key)
+            token = tokenize(word[pos], options);
         else
-            next_word();
+            visit(token, [&](auto& binding){ binding.set(word); }, bindings);
+
+        args.next();
     }
 
-    return bindings;
+    return ParseResults(bindings, options);
 }
 
 } // namespace lucid::argparse
@@ -373,19 +347,22 @@ int main(int argc, char *argv[])
 {
     ArgsRange args(argc, argv);
     args.next();
-    // logger.debug("Values extent {}", values_extent(args));
     // ranges::for_each(ranges::views::slice(args, 1, 4), [](std::string_view arg){ logger.debug("found arg: {}", arg); });
-    // try
-    // {
-    //     parse(options, args);
-    // }
-    // catch (const KeyException& ex)
-    // {
-    //     logger.critical("Unknown key: {}", ex.value);
-    // }
-    // catch (const KeywordException& ex)
-    // {
-    //     logger.critical("Unknown keyword: {}", ex.value);
-    // }
+    try
+    {
+        const auto results = parse(options, args);
+        logger.debug("a = {}", results.get<'a'>());
+        logger.debug("b = {}", results.get<'b'>());
+        logger.debug("c = {}", results.get<'c'>());
+        logger.debug("d = {}", results.get<'d'>());
+    }
+    catch (const KeyException& ex)
+    {
+        logger.critical("Unknown key: {}", ex.value);
+    }
+    catch (const KeywordException& ex)
+    {
+        logger.critical("Unknown keyword: {}", ex.value);
+    }
     return 0;
 }
