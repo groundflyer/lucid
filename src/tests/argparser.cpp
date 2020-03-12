@@ -344,10 +344,17 @@ KeyChar
 
     template <typename Options, typename Bindings>
     constexpr KeyInfo
-    operator()(Bindings&, const Options& options, const std::size_t) const
+    operator()(Bindings& bindings, const Options& options, const std::size_t) const
     {
         logger.debug("doing key {}", key);
-        return key_info(options, key);
+        const KeyInfo ret = key_info(options, key);
+        const auto& [token, min_vals] = ret;
+
+        // boolean flag case
+        if (min_vals == 0ul)
+            set_binding(bindings, token, "");
+
+        return ret;
     }
 };
 
