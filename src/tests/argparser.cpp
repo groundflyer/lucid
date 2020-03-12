@@ -16,6 +16,83 @@
 
 namespace lucid::argparse
 {
+struct KeyException
+{
+    char value;
+};
+
+struct KeywordException
+{
+    std::string_view value;
+};
+
+struct NumValuesException
+{
+    std::string_view parameter;
+    std::size_t expected;
+    std::size_t got;
+};
+
+namespace detail
+{
+template <char Key, std::size_t Idx, typename ... Options>
+struct key_index_impl;
+
+template <char Key, std::size_t Idx>
+struct key_index_impl<Key, Idx>
+{
+    static constexpr std::size_t value = -1ul;
+};
+
+template <char Key, std::size_t Idx, typename _Option, typename ... Rest>
+struct key_index_impl<Key, Idx, _Option, Rest...>
+{
+    static constexpr std::size_t value = (Key == _Option::key) ? Idx : key_index_impl<Key, Idx + 1, Rest...>::value;
+};
+
+template <typename ... Options>
+struct has_repeating_impl;
+
+template <typename First, typename ... Rest>
+struct has_repeating_impl<First, Rest...>
+{
+    static constexpr bool value = (false || ... || (First::key == Rest::key)) || has_repeating_impl<Rest...>::value;
+};
+
+template <typename Last>
+struct has_repeating_impl<Last>
+{
+    static constexpr bool value = false;
+};
+
+template <std::size_t Idx, typename FirstOption, typename ... RestOptions>
+constexpr std::size_t
+tokenize_impl(const char key)
+{
+    if (key == FirstOption::key)
+        return Idx;
+
+    if constexpr (sizeof...(RestOptions) > 0ul)
+        return tokenize_impl<Idx + 1, RestOptions...>(key);
+
+    throw KeyException{key};
+}
+
+template <std::size_t Idx, typename ... Options>
+constexpr std::size_t
+tokenize_impl(const std::string_view keyword, const std::tuple<Options...>& options)
+{
+    if (keyword == std::get<Idx>(options).keyword)
+        return Idx;
+
+    if constexpr (Idx < sizeof...(Options) - 1)
+        return tokenize_impl<Idx+1>(keyword, options);
+
+    throw KeywordException{keyword};
+}
+} // detail
+
+
 class ArgsRange : public ranges::view_facade<ArgsRange>
 {
     friend ranges::range_access;
@@ -141,9 +218,9 @@ public:
 template <char Key, typename Converter>
 struct Option
 {
-    static constexpr char key = Key;
     using converter = Converter;
     using value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
+    static constexpr char key = Key;
 
     value_type value;
     std::string_view keyword;
@@ -160,12 +237,19 @@ struct Option
     {
         return Binding<Converter>(value);
     }
+
+    constexpr std::size_t
+    min_vals() const noexcept
+    {
+        // no values required if is Flag
+        return std::is_same_v<bool, value_type> ? 0ul : 1ul;
+    }
 };
 
 template <char Key>
 using Flag = Option<Key, FlagConverter>;
 
-// template <char Key, typename Converter, std::size_t min_n, std::size_t max_n>
+// template <char Key, typename Converter>
 // struct MultiOption
 // {
 //     static constexpr char key = Key;
@@ -173,75 +257,6 @@ using Flag = Option<Key, FlagConverter>;
 //     using value_type = BindingRange<Converter>;
 // };
 
-struct KeyException
-{
-    char value;
-};
-
-struct KeywordException
-{
-    std::string_view value;
-};
-
-
-namespace detail
-{
-template <char Key, std::size_t Idx, typename ... Options>
-struct key_index_impl;
-
-template <char Key, std::size_t Idx>
-struct key_index_impl<Key, Idx>
-{
-    static constexpr std::size_t value = -1ul;
-};
-
-template <char Key, std::size_t Idx, typename _Option, typename ... Rest>
-struct key_index_impl<Key, Idx, _Option, Rest...>
-{
-    static constexpr std::size_t value = (Key == _Option::key) ? Idx : key_index_impl<Key, Idx + 1, Rest...>::value;
-};
-
-template <typename ... Options>
-struct has_repeating_impl;
-
-template <typename First, typename ... Rest>
-struct has_repeating_impl<First, Rest...>
-{
-    static constexpr bool value = (false || ... || (First::key == Rest::key)) || has_repeating_impl<Rest...>::value;
-};
-
-template <typename Last>
-struct has_repeating_impl<Last>
-{
-    static constexpr bool value = false;
-};
-
-template <std::size_t Idx, typename FirstOption, typename ... RestOptions>
-constexpr std::size_t
-tokenize_impl(const char key)
-{
-    if (key == FirstOption::key)
-        return Idx;
-
-    if constexpr (sizeof...(RestOptions) > 0ul)
-        return tokenize_impl<Idx + 1, RestOptions...>(key);
-
-    throw KeyException{key};
-}
-
-template <std::size_t Idx, typename ... Options>
-constexpr std::size_t
-tokenize_impl(const std::string_view keyword, const std::tuple<Options...>& options)
-{
-    if (keyword == std::get<Idx>(options).keyword)
-        return Idx;
-
-    if constexpr (Idx < sizeof...(Options) - 1)
-        return tokenize_impl<Idx+1>(keyword, options);
-
-    throw KeywordException{keyword};
-}
-} // detail
 
 template <char Key, typename Options>
 struct key_index;
@@ -293,7 +308,159 @@ struct ParseResults
 };
 
 
+template <typename ... Options>
+std::size_t
+min_vals(const std::size_t token, const std::tuple<Options...> options)
+{
+    return visit(token, [](const auto& option){ return option.min_vals(); }, options);
+}
+
+
+template <typename ... Bindings>
+auto
+set_binding(std::tuple<Bindings...>& bindings, const std::size_t token, const std::string_view word)
+{
+    return visit(token, [&](auto& binding){ binding.set(word); }, bindings);
+}
+
+using KeyInfo = std::pair<std::size_t, std::size_t>;
+
+
+template <typename Options, typename Key>
+constexpr KeyInfo
+key_info(const Options& options, const Key key)
+{
+    std::size_t token = tokenize(key, options);
+    std::size_t num_expected = min_vals(token, options);
+    return KeyInfo{token, num_expected};
+}
+
 static inline Logger logger(Logger::DEBUG);
+
+struct
+KeyChar
+{
+    char key;
+
+    template <typename Options, typename Bindings>
+    constexpr KeyInfo
+    operator()(Bindings&, const Options& options, const std::size_t) const
+    {
+        logger.debug("doing key {}", key);
+        return key_info(options, key);
+    }
+};
+
+struct
+Keyword
+{
+    std::string_view keyword;
+
+    template <typename Options, typename Bindings>
+    constexpr KeyInfo
+    operator()(Bindings&, const Options& options, const std::size_t) const
+    {
+        logger.debug("doing keyword {}", keyword);
+        return key_info(options, keyword);
+    }
+};
+
+struct
+KeywordValue
+{
+    std::string_view keyword;
+    std::string_view value;
+
+    template <typename Options, typename Bindings>
+    constexpr KeyInfo
+    operator()(Bindings& bindings, const Options& options, const std::size_t) const
+    {
+        logger.debug("doing keyword=value: {}={}", keyword, value);
+        const KeyInfo ret = key_info(options, keyword);
+        const auto& [token, min_vals] = ret;
+
+        if (min_vals > 1ul)
+            throw NumValuesException{keyword, min_vals, 1ul};
+
+        set_binding(bindings, token, value);
+
+        return ret;
+    }
+};
+
+struct
+Value
+{
+    std::string_view value;
+
+    template <typename Options, typename Bindings>
+    constexpr KeyInfo
+    operator()(Bindings& bindings, const Options&, const std::size_t token) const
+    {
+        logger.debug("doing value {}", value);
+        set_binding(bindings, token, value);
+        return KeyInfo{token, 1ul};
+    }
+};
+
+struct
+KeyCharSeq
+{
+    std::string_view seq;
+
+    template <typename Options, typename Bindings>
+    constexpr KeyInfo
+    operator()(Bindings&, const Options&, const std::size_t) const
+    {
+        logger.debug("doing keys sequence {}", seq);
+
+        return KeyInfo{1ul, 1ul};
+    }
+};
+
+
+using Case = std::variant<KeyChar, KeyCharSeq, Keyword, KeywordValue, Value>;
+
+Case
+arg_case(std::string_view word) noexcept
+{
+    std::size_t pos = 0ul;
+
+    while (word[pos] == '-' && pos <= 2ul)
+        ++pos;
+
+    Case ret = Value{word};
+
+    switch (pos)
+    {
+        // -
+    case 1ul:
+        {
+        if (word.size() > 2ul)
+            // -abcd
+            ret = KeyCharSeq{word.substr(pos)};
+        else
+            // -a
+            ret = KeyChar{word[pos]};
+        }
+        break;
+            // --
+    case 2ul:
+        {
+            const std::size_t eq_pos = word.find('=');
+            if (eq_pos == std::string_view::npos)
+                // --keyword
+                ret = Keyword{word.substr(pos)};
+            else
+                // --keyword=value
+                ret = KeywordValue{word.substr(pos), word.substr(eq_pos + 1ul)};
+        }
+        break;
+    }
+
+    return ret;
+}
+
 
 template <typename ... Options>
 auto
@@ -305,24 +472,17 @@ parse(const std::tuple<Options...>& options, ArgsRange args)
                                }, options);
 
     std::size_t token = -1ul;
+    std::size_t min_vals = 1ul;
 
     while(!args.equal(ranges::default_sentinel))
     {
         std::string_view word = args.read();
-        bool is_key = false;
-        std::size_t pos = 0ul;
-
-        while (word[pos] == '-' && pos <= 2u)
-            ++pos;
-
-        is_key = pos > 0;
 
         logger.debug("Iterating word {}", word);
 
-        if (is_key)
-            token = tokenize(word[pos], options);
-        else
-            visit(token, [&](auto& binding){ binding.set(word); }, bindings);
+        const auto parsed_word = arg_case(word);
+
+        std::tie(token, min_vals) = std::visit([&](const auto& arg){ return arg(bindings, options, token); }, parsed_word);
 
         args.next();
     }
