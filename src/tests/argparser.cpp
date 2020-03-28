@@ -237,7 +237,7 @@ struct Option
     }
 
     constexpr std::size_t
-    min_vals() const noexcept
+    num_vals() const noexcept
     {
         // no values required if is Flag
         return std::is_same_v<bool, value_type> ? 0ul : 1ul;
@@ -300,9 +300,25 @@ struct ParseResults
 
 template <typename ... Options>
 std::size_t
-min_vals(const std::size_t token, const std::tuple<Options...> options)
+num_vals(const std::size_t token, const std::tuple<Options...> options)
 {
-    return visit(token, [](const auto& option){ return option.min_vals(); }, options);
+    return visit(token, [](const auto& option){ return option.num_vals(); }, options);
+}
+
+struct
+KeyInfo
+{
+    std::size_t token;
+    std::size_t nvals;
+};
+
+template <typename Key, typename Options>
+KeyInfo
+key_info(const Key key, const Options& options)
+{
+    const std::size_t token = tokenize(key, options);
+    const std::size_t nvals = num_vals(token, options);
+    return KeyInfo{token, nvals};
 }
 
 
@@ -378,7 +394,7 @@ arg_case(std::string_view word) noexcept
                 ret = Keyword{word.substr(pos)};
             else
                 // --keyword=value
-                ret = KeywordValue{word.substr(pos), word.substr(eq_pos + 1ul)};
+                ret = KeywordValue{word.substr(pos, eq_pos-2ul), word.substr(eq_pos + 1ul)};
         }
         break;
     }
@@ -405,12 +421,11 @@ Visitor
     using Bindings = std::decay_t<decltype(make_bindings(std::declval<Options>()))>;
     Bindings bindings;
     const Options& options;
-    std::size_t token;
-    std::size_t nvals;
+    KeyInfo current_key{-1ul, 0ul};
 
     constexpr
-    Visitor(const Options& _options, const std::size_t _token, const std::size_t _nvals) :
-        bindings(make_bindings(_options)), options(_options), token(_token), nvals(_nvals) {}
+    Visitor(const Options& _options) :
+        bindings(make_bindings(_options)), options(_options) {}
 
     Visitor() = delete;
     Visitor(const Visitor&) = delete;
@@ -420,8 +435,15 @@ Visitor
     void
     expectation_check() const
     {
-        if (token != -1ul)
+        const auto& [token, nvals] = current_key;
+        if (token != -1ul && nvals > 0ul)
             throw Exception{"Expected value, got key"};
+    }
+
+    void
+    reset_key()
+    {
+        current_key = KeyInfo{-1ul, 0ul};
     }
 
     template <typename T>
@@ -432,21 +454,20 @@ Visitor
 
         logger.debug("Found key {}", key.value);
 
-        const std::size_t new_token = tokenize(key.value, options);
-        const std::size_t new_nvals = min_vals(new_token, options);
+        const KeyInfo new_key = key_info(key.value, options);
+        const auto& [new_token, new_nvals] = new_key;
 
         // is flag
         if (new_nvals == 0ul)
         {
             logger.debug("Flipping flag {}", key.value);
             set_binding(bindings, new_token, "");
-            token = -1ul;
+            reset_key();
         }
         else
         {
             logger.debug("Saving token {}", new_token);
-            token = new_token;
-            nvals = new_nvals;
+            current_key = new_key;
         }
     }
 
@@ -458,17 +479,17 @@ Visitor
 
         const std::size_t new_token = tokenize(keyval.keyword, options);
         set_binding(bindings, new_token, keyval.value);
-        token = -1ul;
+        reset_key();
     }
 
     void
     operator()(const Value& value)
     {
         logger.debug("Found value {}", value.value);
-        set_binding(bindings, token, value.value);
-        --nvals;
-        if (nvals == 0ul)
-            token = -1ul;
+        set_binding(bindings, current_key.token, value.value);
+        --current_key.nvals;
+        if (current_key.nvals == 0ul)
+            reset_key();
     }
 
     void
@@ -484,7 +505,7 @@ template <typename ... Options>
 auto
 parse(const std::tuple<Options...>& options, ArgsRange args)
 {
-    Visitor visitor{options, -1ul, 0};
+    Visitor visitor{options};
 
     while(!args.equal(ranges::default_sentinel))
     {
