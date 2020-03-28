@@ -7,6 +7,7 @@
 #include <string_view>
 #include <tuple>
 #include <type_traits>
+#include <variant>
 #include <utility>
 
 #include <range/v3/algorithm/for_each.hpp>
@@ -16,21 +17,18 @@
 
 namespace lucid::argparse
 {
-struct KeyException
+
+template <typename Key>
+struct
+KeyException
 {
-    char value;
+    Key value;
 };
 
-struct KeywordException
+struct
+Exception
 {
-    std::string_view value;
-};
-
-struct NumValuesException
-{
-    std::string_view parameter;
-    std::size_t expected;
-    std::size_t got;
+    std::string_view what;
 };
 
 namespace detail
@@ -75,7 +73,7 @@ tokenize_impl(const char key)
     if constexpr (sizeof...(RestOptions) > 0ul)
         return tokenize_impl<Idx + 1, RestOptions...>(key);
 
-    throw KeyException{key};
+    throw KeyException<char>{key};
 }
 
 template <std::size_t Idx, typename ... Options>
@@ -88,7 +86,7 @@ tokenize_impl(const std::string_view keyword, const std::tuple<Options...>& opti
     if constexpr (Idx < sizeof...(Options) - 1)
         return tokenize_impl<Idx+1>(keyword, options);
 
-    throw KeywordException{keyword};
+    throw KeyException<std::string_view>{keyword};
 }
 } // detail
 
@@ -249,14 +247,6 @@ struct Option
 template <char Key>
 using Flag = Option<Key, FlagConverter>;
 
-// template <char Key, typename Converter>
-// struct MultiOption
-// {
-//     static constexpr char key = Key;
-//     using converter = Converter;
-//     using value_type = BindingRange<Converter>;
-// };
-
 
 template <char Key, typename Options>
 struct key_index;
@@ -323,53 +313,14 @@ set_binding(std::tuple<Bindings...>& bindings, const std::size_t token, const st
     return visit(token, [&](auto& binding){ binding.set(word); }, bindings);
 }
 
-using KeyInfo = std::pair<std::size_t, std::size_t>;
-
-
-template <typename Options, typename Key>
-constexpr KeyInfo
-key_info(const Options& options, const Key key)
-{
-    std::size_t token = tokenize(key, options);
-    std::size_t num_expected = min_vals(token, options);
-    return KeyInfo{token, num_expected};
-}
 
 static inline Logger logger(Logger::DEBUG);
 
+template <typename KeyType>
 struct
-KeyChar
+Key
 {
-    char key;
-
-    template <typename Options, typename Bindings>
-    constexpr KeyInfo
-    operator()(Bindings& bindings, const Options& options, const std::size_t) const
-    {
-        logger.debug("doing key {}", key);
-        const KeyInfo ret = key_info(options, key);
-        const auto& [token, min_vals] = ret;
-
-        // boolean flag case
-        if (min_vals == 0ul)
-            set_binding(bindings, token, "");
-
-        return ret;
-    }
-};
-
-struct
-Keyword
-{
-    std::string_view keyword;
-
-    template <typename Options, typename Bindings>
-    constexpr KeyInfo
-    operator()(Bindings&, const Options& options, const std::size_t) const
-    {
-        logger.debug("doing keyword {}", keyword);
-        return key_info(options, keyword);
-    }
+    KeyType value;
 };
 
 struct
@@ -377,58 +328,25 @@ KeywordValue
 {
     std::string_view keyword;
     std::string_view value;
-
-    template <typename Options, typename Bindings>
-    constexpr KeyInfo
-    operator()(Bindings& bindings, const Options& options, const std::size_t) const
-    {
-        logger.debug("doing keyword=value: {}={}", keyword, value);
-        const KeyInfo ret = key_info(options, keyword);
-        const auto& [token, min_vals] = ret;
-
-        if (min_vals > 1ul)
-            throw NumValuesException{keyword, min_vals, 1ul};
-
-        set_binding(bindings, token, value);
-
-        return ret;
-    }
 };
 
 struct
 Value
 {
     std::string_view value;
-
-    template <typename Options, typename Bindings>
-    constexpr KeyInfo
-    operator()(Bindings& bindings, const Options&, const std::size_t token) const
-    {
-        logger.debug("doing value {}", value);
-        set_binding(bindings, token, value);
-        return KeyInfo{token, 1ul};
-    }
 };
 
 struct
 KeyCharSeq
 {
     std::string_view seq;
-
-    template <typename Options, typename Bindings>
-    constexpr KeyInfo
-    operator()(Bindings&, const Options&, const std::size_t) const
-    {
-        logger.debug("doing keys sequence {}", seq);
-
-        return KeyInfo{1ul, 1ul};
-    }
 };
 
+using KeyChar = Key<char>;
+using Keyword = Key<std::string_view>;
+using ParsedWord = std::variant<KeyChar, KeyCharSeq, Keyword, KeywordValue, Value>;
 
-using Case = std::variant<KeyChar, KeyCharSeq, Keyword, KeywordValue, Value>;
-
-Case
+ParsedWord
 arg_case(std::string_view word) noexcept
 {
     std::size_t pos = 0ul;
@@ -436,7 +354,7 @@ arg_case(std::string_view word) noexcept
     while (word[pos] == '-' && pos <= 2ul)
         ++pos;
 
-    Case ret = Value{word};
+    ParsedWord ret = Value{word};
 
     switch (pos)
     {
@@ -471,15 +389,102 @@ arg_case(std::string_view word) noexcept
 
 template <typename ... Options>
 auto
+make_bindings(const std::tuple<Options...>& options) noexcept
+{
+    return std::apply([](const Options& ... options)
+                      {
+                          return std::tuple{options.binding()...};
+                      }, options);
+}
+
+
+template <typename Options>
+struct
+Visitor
+{
+    using Bindings = std::decay_t<decltype(make_bindings(std::declval<Options>()))>;
+    Bindings bindings;
+    const Options& options;
+    std::size_t token;
+    std::size_t nvals;
+
+    constexpr
+    Visitor(const Options& _options, const std::size_t _token, const std::size_t _nvals) :
+        bindings(make_bindings(_options)), options(_options), token(_token), nvals(_nvals) {}
+
+    Visitor() = delete;
+    Visitor(const Visitor&) = delete;
+    Visitor(Visitor&&) = delete;
+    Visitor& operator=(const Visitor&) = delete;
+
+    void
+    expectation_check() const
+    {
+        if (token != -1ul)
+            throw Exception{"Expected value, got key"};
+    }
+
+    template <typename T>
+    void
+    operator()(const Key<T>& key)
+    {
+        expectation_check();
+
+        logger.debug("Found key {}", key.value);
+
+        const std::size_t new_token = tokenize(key.value, options);
+        const std::size_t new_nvals = min_vals(new_token, options);
+
+        // is flag
+        if (new_nvals == 0ul)
+        {
+            logger.debug("Flipping flag {}", key.value);
+            set_binding(bindings, new_token, "");
+            token = -1ul;
+        }
+        else
+        {
+            logger.debug("Saving token {}", new_token);
+            token = new_token;
+            nvals = new_nvals;
+        }
+    }
+
+    void
+    operator()(const KeywordValue& keyval)
+    {
+        logger.debug("Found {}={}", keyval.keyword, keyval.value);
+        expectation_check();
+
+        const std::size_t new_token = tokenize(keyval.keyword, options);
+        set_binding(bindings, new_token, keyval.value);
+        token = -1ul;
+    }
+
+    void
+    operator()(const Value& value)
+    {
+        logger.debug("Found value {}", value.value);
+        set_binding(bindings, token, value.value);
+        --nvals;
+        if (nvals == 0ul)
+            token = -1ul;
+    }
+
+    void
+    operator()(const KeyCharSeq& value)
+    {
+        expectation_check();
+        logger.debug("found keychar sequence {}", value.seq);
+    }
+};
+
+
+template <typename ... Options>
+auto
 parse(const std::tuple<Options...>& options, ArgsRange args)
 {
-    auto bindings = std::apply([](const Options& ... options)
-                               {
-                                   return std::tuple{options.binding()...};
-                               }, options);
-
-    std::size_t token = -1ul;
-    std::size_t min_vals = 1ul;
+    Visitor visitor{options, -1ul, 0};
 
     while(!args.equal(ranges::default_sentinel))
     {
@@ -489,12 +494,12 @@ parse(const std::tuple<Options...>& options, ArgsRange args)
 
         const auto parsed_word = arg_case(word);
 
-        std::tie(token, min_vals) = std::visit([&](const auto& arg){ return arg(bindings, options, token); }, parsed_word);
+        std::visit(visitor, parsed_word);
 
         args.next();
     }
 
-    return ParseResults(bindings, options);
+    return ParseResults(visitor.bindings, options);
 }
 
 } // namespace lucid::argparse
@@ -523,11 +528,11 @@ int main(int argc, char *argv[])
         logger.debug("c = {}", results.get<'c'>());
         logger.debug("d = {}", results.get<'d'>());
     }
-    catch (const KeyException& ex)
+    catch (const KeyException<char>& ex)
     {
         logger.critical("Unknown key: {}", ex.value);
     }
-    catch (const KeywordException& ex)
+    catch (const KeyException<std::string_view>& ex)
     {
         logger.critical("Unknown keyword: {}", ex.value);
     }
