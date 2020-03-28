@@ -497,6 +497,30 @@ Visitor
     {
         expectation_check();
         logger.debug("found keychar sequence {}", value.seq);
+        for (std::size_t i = 0ul; i < value.seq.size(); ++i)
+        {
+            const KeyInfo cki = key_info(value.seq[i], options);
+            const auto [token, nvals] = cki;
+
+            if (nvals == 1ul)
+            {
+                if (i == value.seq.size() - 1)
+                {
+                    // at the end
+                    current_key = cki;
+                }
+                else
+                {
+                    set_binding(bindings, token, value.seq.substr(i + 1));
+                    break;
+                }
+            }
+            else
+            {
+                // flip flag
+                set_binding(bindings, token, "");
+            }
+        }
     }
 };
 
