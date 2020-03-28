@@ -530,6 +530,7 @@ auto
 parse(const std::tuple<Options...>& options, ArgsRange args)
 {
     Visitor visitor{options};
+    bool only_values = false;
 
     while(!args.equal(ranges::default_sentinel))
     {
@@ -537,7 +538,13 @@ parse(const std::tuple<Options...>& options, ArgsRange args)
 
         logger.debug("Iterating word {}", word);
 
-        const auto parsed_word = arg_case(word);
+        if (word == "--")
+        {
+            only_values = true;
+            continue;
+        }
+
+        const ParsedWord parsed_word = only_values ? Value{word} : arg_case(word);
 
         std::visit(visitor, parsed_word);
 
