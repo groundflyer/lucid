@@ -448,22 +448,13 @@ make_bindings(const std::tuple<Options...>& options) noexcept
 
 
 template <typename Options>
-struct
+class
 Visitor
 {
     using Bindings = std::decay_t<decltype(make_bindings(std::declval<Options>()))>;
     Bindings bindings;
     const Options& options;
     KeyInfo current_key{-1ul, 0ul};
-
-    constexpr
-    Visitor(const Options& _options) :
-        bindings(make_bindings(_options)), options(_options) {}
-
-    Visitor() = delete;
-    Visitor(const Visitor&) = delete;
-    Visitor(Visitor&&) = delete;
-    Visitor& operator=(const Visitor&) = delete;
 
     void
     expectation_check() const
@@ -477,6 +468,26 @@ Visitor
     reset_key()
     {
         current_key = KeyInfo{-1ul, 0ul};
+    }
+
+public:
+    constexpr
+    Visitor(const Options& _options) :
+        bindings(make_bindings(_options)), options(_options) {}
+
+    Visitor() = delete;
+    Visitor(const Visitor&) = delete;
+    Visitor(Visitor&&) = delete;
+    Visitor& operator=(const Visitor&) = delete;
+
+    constexpr Bindings
+    get_bindings() const
+    {
+        const auto& [token, nvals] = current_key;
+        if (token != -1ul && nvals != 0ul)
+            throw Exception{"Required arguments not set"};
+            
+        return bindings;
     }
 
     template <typename T>
@@ -584,7 +595,7 @@ parse(const std::tuple<Options...>& options, ArgsRange args)
         args.next();
     }
 
-    return ParseResults(visitor.bindings, options);
+    return ParseResults(visitor.get_bindings(), options);
 }
 
 } // namespace lucid::argparse
@@ -623,6 +634,10 @@ int main(int argc, char *argv[])
     catch (const KeyException<std::string_view>& ex)
     {
         logger.critical("Unknown keyword: {}", ex.value);
+    }
+    catch (const Exception& ex)
+    {
+        logger.critical("Error: {}", ex.what);
     }
     return 0;
 }
