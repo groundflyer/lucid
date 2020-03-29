@@ -4,6 +4,7 @@
 #include <utils/tuple.hpp>
 #include <utils/logging.hpp>
 
+#include <array>
 #include <string_view>
 #include <tuple>
 #include <type_traits>
@@ -146,8 +147,39 @@ struct FlagConverter
 };
 
 
-template <typename Converter>
+template <typename Converter, std::size_t nvals>
 class Binding
+{
+    using value_type = std::array<std::decay_t<std::invoke_result_t<Converter, std::string_view>>, nvals>;
+
+    value_type default_value;
+    Converter converter;
+    std::array<std::string_view, nvals> words;
+    std::size_t idx = 0ul;
+    bool is_set = false;
+
+public:
+    explicit constexpr
+    Binding(const value_type& value) noexcept : default_value(value) {}
+
+    void
+    set(std::string_view new_word) noexcept
+    {
+        is_set |= idx == (nvals - 1);
+        words[idx] = new_word;
+        idx = (idx + 1ul) % nvals;
+    }
+
+    value_type
+    operator()() const
+    {
+        return is_set ? std::apply([&](const auto ... word){ return value_type{converter(word)...}; }, words) : default_value;
+    }
+};
+
+
+template <typename Converter>
+class Binding<Converter, 1>
 {
     using value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
 
@@ -172,75 +204,76 @@ public:
     {
         if constexpr (std::is_same_v<value_type, bool>)
             // flip default bool value or convert word if it's available
-            return word.empty() ? default_value ^ is_set : converter(word);
+            return word.empty() ? (default_value ^ is_set) : converter(word);
         else
             return is_set ? converter(word) : default_value;
     }
 };
 
 
-template <typename Converter>
-class BindingRange : public ranges::view_facade<BindingRange<Converter>>
-{
-    using value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
+// template <typename Converter>
+// class Binding<Converter, -1ul> : public ranges::view_facade<Binding<Converter, -1ul>>
+// {
+//     using value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
 
-    friend ranges::range_access;
+//     friend ranges::range_access;
 
-    Converter converter;
+//     Converter converter;
 
-    value_type
-    read() const noexcept
-    {
-        return converter(words_range.read());
-    }
+//     value_type
+//     read() const noexcept
+//     {
+//         return converter(words_range.read());
+//     }
 
-    bool
-    equal(ranges::default_sentinel_t sentinel) const noexcept
-    {
-        return words_range.equal(sentinel);
-    }
+//     bool
+//     equal(ranges::default_sentinel_t sentinel) const noexcept
+//     {
+//         return words_range.equal(sentinel);
+//     }
 
-    void
-    next() noexcept
-    {
-        words_range.next();
-    }
+//     void
+//     next() noexcept
+//     {
+//         words_range.next();
+//     }
 
-public:
-    BindingRange() = default;
+// public:
+//     Binding() = default;
 
-    ArgsRange words_range;
-};
+//     ArgsRange words_range;
+// };
 
 
-template <char Key, typename Converter>
+template <char Key, typename Converter, std::size_t nvals = 1>
 struct Option
 {
     using converter = Converter;
-    using value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
+    using singular_value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
+    using value_type = std::conditional_t<(nvals > 1), std::array<singular_value_type, nvals>, singular_value_type>;
     static constexpr char key = Key;
 
-    value_type value;
+    value_type default_value;
     std::string_view keyword;
     std::string_view doc;
     std::string_view var;
 
     constexpr
-    Option(const value_type& _value, const std::string_view _keyword, const std::string_view _doc, const std::string_view _var) noexcept :
-        value(_value), keyword(_keyword), doc(_doc), var(_var)
+    Option(const value_type& _default_value, const std::string_view _keyword, const std::string_view _doc, const std::string_view _var) noexcept :
+        default_value(_default_value), keyword(_keyword), doc(_doc), var(_var)
     {}
 
-    constexpr Binding<Converter>
+    constexpr Binding<Converter, nvals>
     binding() const noexcept
     {
-        return Binding<Converter>(value);
+        return Binding<Converter, nvals>(default_value);
     }
 
     constexpr std::size_t
     num_vals() const noexcept
     {
         // no values required if is Flag
-        return std::is_same_v<bool, value_type> ? 0ul : 1ul;
+        return (std::is_same_v<bool, value_type> && (nvals == 1ul)) ? 0ul : nvals;
     }
 };
 
@@ -563,7 +596,8 @@ using namespace lucid::argparse;
 constexpr tuple options{Option<'a', identity>("foo", "foo", "", ""),
                         Option<'b', identity>("bar", "bar", "", ""),
                         Option<'c', identity>("foo2", "foo2", "", ""),
-                        Flag<'d'>(false, "flag", "", "")};
+                        Flag<'d'>(false, "flag", "", ""),
+                        Option<'f', identity, 2>({"defval1", "defval2"}, "multival", "", "")};
 
 static_assert(!has_repeating<decay_t<decltype(options)>>::value);
 
@@ -575,10 +609,12 @@ int main(int argc, char *argv[])
     try
     {
         const auto results = parse(options, args);
+        const auto [f1, f2] = results.get<'f'>();
         logger.debug("a = {}", results.get<'a'>());
         logger.debug("b = {}", results.get<'b'>());
         logger.debug("c = {}", results.get<'c'>());
         logger.debug("d = {}", results.get<'d'>());
+        logger.debug("multival = {}, {}", f1, f2);
     }
     catch (const KeyException<char>& ex)
     {
