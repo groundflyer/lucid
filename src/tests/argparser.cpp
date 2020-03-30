@@ -27,9 +27,9 @@ KeyException
 };
 
 struct
-Exception
+ExpectedValues
 {
-    std::string_view what;
+    std::string_view keyword;
 };
 
 namespace detail
@@ -96,7 +96,7 @@ class ArgsRange : public ranges::view_facade<ArgsRange>
 {
     friend ranges::range_access;
 
-    int current = 0;
+    int idx = 0;
     int _argc = 0;
     char **_argv = nullptr;
 
@@ -105,24 +105,22 @@ public:
 
     ArgsRange(int argc, char* argv[]) noexcept : _argc(argc), _argv(argv) {}
 
-    ArgsRange(ArgsRange range, int extent) noexcept : current(range.current), _argc(current + extent), _argv(range._argv) {}
-
-    std::string_view
+    char**
     read() const noexcept
     {
-        return _argv[current];
+        return _argv + idx;
     }
 
     bool
     equal(ranges::default_sentinel_t) const noexcept
     {
-        return current == _argc;
+        return idx == _argc;
     }
 
     void
     next() noexcept
     {
-        ++current;
+        ++idx;
     }
 };
 
@@ -154,26 +152,46 @@ class Binding
 
     value_type default_value;
     Converter converter;
-    std::array<std::string_view, nvals> words;
+    char ** words = nullptr;
     std::size_t idx = 0ul;
     bool is_set = false;
+
+    constexpr void
+    increment() noexcept
+    {
+        is_set |= idx == (nvals - 1);
+        idx = (idx + 1ul) % nvals;        
+    }
+
+    template <std::size_t ... Idxs>
+    constexpr value_type
+    convert(std::index_sequence<Idxs...>) const noexcept
+    {
+        return value_type{converter(words[Idxs])...};
+    }
 
 public:
     explicit constexpr
     Binding(const value_type& value) noexcept : default_value(value) {}
 
-    void
-    set(std::string_view new_word) noexcept
+    constexpr void
+    set(std::string_view) noexcept
     {
-        is_set |= idx == (nvals - 1);
-        words[idx] = new_word;
-        idx = (idx + 1ul) % nvals;
+        increment();
+    }
+
+    constexpr void
+    set(char **data) noexcept
+    {
+        if (!words)
+            words = data;
+        increment();
     }
 
     value_type
     operator()() const
     {
-        return is_set ? std::apply([&](const auto ... word){ return value_type{converter(word)...}; }, words) : default_value;
+        return is_set ? convert(std::make_index_sequence<nvals>{}) : default_value;
     }
 };
 
@@ -192,14 +210,20 @@ public:
     explicit constexpr
     Binding(const value_type& value) noexcept : default_value(value) {}
 
-    void
+    constexpr void
     set(std::string_view new_word) noexcept
     {
         is_set = true;
         word = new_word;
     }
 
-    value_type
+    constexpr void
+    set(char **new_word) noexcept
+    {
+        set(*new_word);
+    }
+
+    constexpr value_type
     operator()() const
     {
         if constexpr (std::is_same_v<value_type, bool>)
@@ -211,38 +235,75 @@ public:
 };
 
 
-// template <typename Converter>
-// class Binding<Converter, -1ul> : public ranges::view_facade<Binding<Converter, -1ul>>
-// {
-//     using value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
+template <typename Converter>
+class Binding<Converter, -1ul>
+{
+    class value_range : public ranges::view_facade<value_range>
+    {
+        friend ranges::range_access;
+        using value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
 
-//     friend ranges::range_access;
+        Converter converter;
+        char** data = nullptr;
+        std::size_t size = 0ul;
+        std::size_t idx = 0ul;
 
-//     Converter converter;
+        value_type
+        read() const noexcept
+        {
+            return converter(data[idx]);
+        }
 
-//     value_type
-//     read() const noexcept
-//     {
-//         return converter(words_range.read());
-//     }
+        bool
+        equal(ranges::default_sentinel_t) const noexcept
+        {
+            return idx == size;
+        }
 
-//     bool
-//     equal(ranges::default_sentinel_t sentinel) const noexcept
-//     {
-//         return words_range.equal(sentinel);
-//     }
+        void
+        next() noexcept
+        {
+            ++idx;
+        }
 
-//     void
-//     next() noexcept
-//     {
-//         words_range.next();
-//     }
+    public:
+        value_range() = default;
 
-// public:
-//     Binding() = default;
+        value_range(char** _data, std::size_t _size) : data(_data), size(_size) {}
+    };
 
-//     ArgsRange words_range;
-// };
+    Converter converter;
+    char** data;
+    std::size_t size = 0ul;
+
+    constexpr void
+    increment() noexcept
+    {
+        ++size;
+    }
+
+public:
+    constexpr void
+    set(std::string_view) noexcept
+    {
+        increment();
+    }
+
+    constexpr void
+    set(char** _data) noexcept
+    {
+        if(!data)
+            data = _data;
+
+        increment();
+    }
+
+    constexpr value_range
+    operator()() const noexcept
+    {
+        return value_range(data, size);
+    }
+};
 
 
 template <char Key, typename Converter, std::size_t nvals = 1>
@@ -274,6 +335,32 @@ struct Option
     {
         // no values required if is Flag
         return (std::is_same_v<bool, value_type> && (nvals == 1ul)) ? 0ul : nvals;
+    }
+};
+
+template <char Key, typename Converter>
+struct Option<Key, Converter, -1ul>
+{
+    using converter = Converter;
+    static constexpr char key = Key;
+
+    std::string_view keyword;
+    std::string_view doc;
+    std::string_view var;
+
+    constexpr
+    Option(const std::string_view _keyword, const std::string_view _doc, const std::string_view _var) noexcept : keyword(_keyword), doc(_doc), var(_var) {}
+
+    constexpr Binding<Converter, -1ul>
+    binding() const noexcept
+    {
+        return Binding<Converter, -1ul>();
+    }
+
+    constexpr std::size_t
+    num_vals() const noexcept
+    {
+        return -1ul;
     }
 };
 
@@ -323,7 +410,7 @@ struct ParseResults
     ParseResults(const Bindings& _bindings, const Options&) : bindings(_bindings) {}
 
     template <char Key>
-    decltype(auto)
+    constexpr decltype(auto)
     get() const noexcept
     {
         return std::get<key_index<Key, Options>::value>(bindings)();
@@ -355,9 +442,9 @@ key_info(const Key key, const Options& options)
 }
 
 
-template <typename ... Bindings>
-auto
-set_binding(std::tuple<Bindings...>& bindings, const std::size_t token, const std::string_view word)
+template <typename ... Bindings, typename Word>
+constexpr auto
+set_binding(std::tuple<Bindings...>& bindings, const std::size_t token, Word word)
 {
     return visit(token, [&](auto& binding){ binding.set(word); }, bindings);
 }
@@ -382,7 +469,13 @@ KeywordValue
 struct
 Value
 {
-    std::string_view value;
+    char **data;
+
+    std::string_view
+    value() const noexcept
+    {
+        return *data;
+    }
 };
 
 struct
@@ -396,14 +489,15 @@ using Keyword = Key<std::string_view>;
 using ParsedWord = std::variant<KeyChar, KeyCharSeq, Keyword, KeywordValue, Value>;
 
 ParsedWord
-arg_case(std::string_view word) noexcept
+arg_case(char **data) noexcept
 {
+    std::string_view word{*data};
     std::size_t pos = 0ul;
 
     while (word[pos] == '-' && pos <= 2ul)
         ++pos;
 
-    ParsedWord ret = Value{word};
+    ParsedWord ret = Value{data};
 
     switch (pos)
     {
@@ -427,7 +521,7 @@ arg_case(std::string_view word) noexcept
                 ret = Keyword{word.substr(pos)};
             else
                 // --keyword=value
-                ret = KeywordValue{word.substr(pos, eq_pos-2ul), word.substr(eq_pos + 1ul)};
+                ret = KeywordValue{word.substr(pos, eq_pos - 2ul), word.substr(eq_pos + 1ul)};
         }
         break;
     }
@@ -460,8 +554,8 @@ Visitor
     expectation_check() const
     {
         const auto& [token, nvals] = current_key;
-        if (token != -1ul && nvals > 0ul)
-            throw Exception{"Expected value, got key"};
+        if (token != -1ul && nvals != -1ul && nvals > 0ul)
+            throw ExpectedValues{visit(token, [](const auto& option){ return option.keyword; }, options)};
     }
 
     void
@@ -483,10 +577,7 @@ public:
     constexpr Bindings
     get_bindings() const
     {
-        const auto& [token, nvals] = current_key;
-        if (token != -1ul && nvals != 0ul)
-            throw Exception{"Required arguments not set"};
-            
+        expectation_check();
         return bindings;
     }
 
@@ -510,7 +601,6 @@ public:
         }
         else
         {
-            logger.debug("Saving token {}", new_token);
             current_key = new_key;
         }
     }
@@ -529,10 +619,15 @@ public:
     void
     operator()(const Value& value)
     {
-        logger.debug("Found value {}", value.value);
-        set_binding(bindings, current_key.token, value.value);
-        --current_key.nvals;
-        if (current_key.nvals == 0ul)
+        logger.debug("Found value {}", value.value());
+        auto& [token, nvals] = current_key;
+        // we send char** data here because we need
+        // to have access to neigbour args
+        // in multi arg options
+        set_binding(bindings, token, value.data);
+        if (nvals != -1ul)
+            --nvals;
+        if (nvals == 0ul)
             reset_key();
     }
 
@@ -578,9 +673,8 @@ parse(const std::tuple<Options...>& options, ArgsRange args)
 
     while(!args.equal(ranges::default_sentinel))
     {
-        std::string_view word = args.read();
-
-        logger.debug("Iterating word {}", word);
+        char **data = args.read();
+        std::string_view word{*data};
 
         if (word == "--")
         {
@@ -588,7 +682,7 @@ parse(const std::tuple<Options...>& options, ArgsRange args)
             continue;
         }
 
-        const ParsedWord parsed_word = only_values ? Value{word} : arg_case(word);
+        const ParsedWord parsed_word = only_values ? Value{data} : arg_case(data);
 
         std::visit(visitor, parsed_word);
 
@@ -608,7 +702,8 @@ constexpr tuple options{Option<'a', identity>("foo", "foo", "", ""),
                         Option<'b', identity>("bar", "bar", "", ""),
                         Option<'c', identity>("foo2", "foo2", "", ""),
                         Flag<'d'>(false, "flag", "", ""),
-                        Option<'f', identity, 2>({"defval1", "defval2"}, "multival", "", "")};
+                        Option<'f', identity, 2>({"defval1", "defval2"}, "2val", "", ""),
+                        Option<'m', identity, -1ul>("multi_val", "", "")};
 
 static_assert(!has_repeating<decay_t<decltype(options)>>::value);
 
@@ -621,11 +716,14 @@ int main(int argc, char *argv[])
     {
         const auto results = parse(options, args);
         const auto [f1, f2] = results.get<'f'>();
+        auto multi_range = results.get<'m'>();
         logger.debug("a = {}", results.get<'a'>());
         logger.debug("b = {}", results.get<'b'>());
         logger.debug("c = {}", results.get<'c'>());
         logger.debug("d = {}", results.get<'d'>());
         logger.debug("multival = {}, {}", f1, f2);
+        logger.debug("multirange values:");
+        ranges::for_each(multi_range, [&](auto&& val){ logger.debug("{}", val); });
     }
     catch (const KeyException<char>& ex)
     {
@@ -635,9 +733,9 @@ int main(int argc, char *argv[])
     {
         logger.critical("Unknown keyword: {}", ex.value);
     }
-    catch (const Exception& ex)
+    catch (const ExpectedValues& ex)
     {
-        logger.critical("Error: {}", ex.what);
+        logger.critical("Expected values for {}", ex.keyword);
     }
     return 0;
 }
