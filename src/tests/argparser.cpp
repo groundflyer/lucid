@@ -124,34 +124,14 @@ public:
     }
 };
 
-struct FlagConverter
-{
-    struct Exception
-    {
-        std::string_view word;
-    };
-
-    constexpr bool
-    operator()(std::string_view word) const
-    {
-        if (word == "yes")
-            return true;
-
-        if (word == "no")
-            return false;
-
-        throw Exception{word};
-    }
-};
-
 
 template <typename Converter, std::size_t nvals>
 class Binding
 {
     using value_type = std::array<std::decay_t<std::invoke_result_t<Converter, std::string_view>>, nvals>;
 
-    value_type default_value;
     Converter converter;
+    value_type default_value;
     char ** words = nullptr;
     std::size_t idx = 0ul;
     bool is_set = false;
@@ -172,7 +152,7 @@ class Binding
 
 public:
     explicit constexpr
-    Binding(const value_type& value) noexcept : default_value(value) {}
+    Binding(const Converter& _converter, const value_type& value) noexcept : converter(_converter), default_value(value) {}
 
     constexpr void
     set(std::string_view) noexcept
@@ -201,14 +181,14 @@ class Binding<Converter, 1>
 {
     using value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
 
-    value_type default_value;
     Converter converter;
+    value_type default_value;
     std::string_view word;
     bool is_set = false;
 
 public:
     explicit constexpr
-    Binding(const value_type& value) noexcept : default_value(value) {}
+    Binding(const Converter& _converter, const value_type& value) noexcept : converter(_converter), default_value(value) {}
 
     constexpr void
     set(std::string_view new_word) noexcept
@@ -269,7 +249,8 @@ class Binding<Converter, -1ul>
     public:
         value_range() = default;
 
-        value_range(char** _data, std::size_t _size) : data(_data), size(_size) {}
+        explicit
+        value_range(const Converter& _converter, char** _data, std::size_t _size) noexcept : converter(_converter), data(_data), size(_size) {}
     };
 
     Converter converter;
@@ -283,6 +264,9 @@ class Binding<Converter, -1ul>
     }
 
 public:
+    constexpr explicit
+    Binding(const Converter& _converter) noexcept : converter(_converter) {}
+
     constexpr void
     set(std::string_view) noexcept
     {
@@ -301,33 +285,37 @@ public:
     constexpr value_range
     operator()() const noexcept
     {
-        return value_range(data, size);
+        return value_range(converter, data, size);
     }
 };
 
 
-template <char Key, typename Converter, std::size_t nvals = 1>
+template <char Key, typename Converter, std::size_t nvals>
 struct Option
 {
-    using converter = Converter;
     using singular_value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
     using value_type = std::conditional_t<(nvals > 1), std::array<singular_value_type, nvals>, singular_value_type>;
     static constexpr char key = Key;
 
+    Converter converter;
     value_type default_value;
     std::string_view keyword;
     std::string_view doc;
     std::string_view var;
 
     constexpr
-    Option(const value_type& _default_value, const std::string_view _keyword, const std::string_view _doc, const std::string_view _var) noexcept :
-        default_value(_default_value), keyword(_keyword), doc(_doc), var(_var)
+    Option(Converter&& _converter,
+           const value_type& _default_value,
+           const std::string_view _keyword,
+           const std::string_view _doc,
+           const std::string_view _var) noexcept :
+        converter(_converter), default_value(_default_value), keyword(_keyword), doc(_doc), var(_var)
     {}
 
     constexpr Binding<Converter, nvals>
     binding() const noexcept
     {
-        return Binding<Converter, nvals>(default_value);
+        return Binding<Converter, nvals>(converter, default_value);
     }
 
     constexpr std::size_t
@@ -341,20 +329,24 @@ struct Option
 template <char Key, typename Converter>
 struct Option<Key, Converter, -1ul>
 {
-    using converter = Converter;
     static constexpr char key = Key;
 
+    Converter converter;
     std::string_view keyword;
     std::string_view doc;
     std::string_view var;
 
     constexpr
-    Option(const std::string_view _keyword, const std::string_view _doc, const std::string_view _var) noexcept : keyword(_keyword), doc(_doc), var(_var) {}
+    Option(Converter&& _converter,
+           const std::string_view _keyword,
+           const std::string_view _doc,
+           const std::string_view _var) noexcept :
+        converter(_converter), keyword(_keyword), doc(_doc), var(_var) {}
 
     constexpr Binding<Converter, -1ul>
     binding() const noexcept
     {
-        return Binding<Converter, -1ul>();
+        return Binding<Converter, -1ul>(converter);
     }
 
     constexpr std::size_t
@@ -363,9 +355,6 @@ struct Option<Key, Converter, -1ul>
         return -1ul;
     }
 };
-
-template <char Key>
-using Flag = Option<Key, FlagConverter>;
 
 
 template <char Key, typename Options>
@@ -692,18 +681,68 @@ parse(const std::tuple<Options...>& options, ArgsRange args)
     return ParseResults(visitor.get_bindings(), options);
 }
 
+struct FlagConverter
+{
+    struct Exception
+    {
+        std::string_view word;
+    };
+
+    constexpr bool
+    operator()(std::string_view word) const
+    {
+        if (word == "yes")
+            return true;
+
+        if (word == "no")
+            return false;
+
+        throw Exception{word};
+    }
+};
+
+template <char Key, typename Converter, typename ... Args>
+constexpr Option<Key, Converter, 1ul>
+option(Converter&& converter, Args&& ... args) noexcept
+{
+    return Option<Key, Converter, 1ul>(std::forward<Converter>(converter), std::forward<Args>(args)...);
+}
+
+template <char Key, std::size_t N, typename Converter, typename ... Args>
+constexpr Option<Key, Converter, N>
+option(Converter&& converter, const std::array<std::decay_t<std::invoke_result_t<Converter, std::string_view>>, N>& def_vals, Args&& ... args) noexcept
+{
+    static_assert(N > 1ul && N != -1ul, "Use option without N argument");
+    return Option<Key, Converter, N>(std::forward<Converter>(converter), def_vals, std::forward<Args>(args)...);
+}
+
+template <char Key, typename Converter, typename ... Args>
+constexpr Option<Key, Converter, -1ul>
+option_list(Converter&& converter, Args&& ... args) noexcept
+{
+    return Option<Key, Converter, -1ul>(std::forward<Converter>(converter), std::forward<Args>(args)...);
+}
+
+template <char Key, typename ... Args>
+constexpr Option<Key, FlagConverter, 1ul>
+flag(Args&& ... args) noexcept
+{
+    return Option<Key, FlagConverter, 1ul>(FlagConverter{}, std::forward<Args>(args)...);
+}
+
+
 } // namespace lucid::argparse
 
 using namespace std;
 using namespace lucid;
 using namespace lucid::argparse;
 
-constexpr tuple options{Option<'a', identity>("foo", "foo", "", ""),
-                        Option<'b', identity>("bar", "bar", "", ""),
-                        Option<'c', identity>("foo2", "foo2", "", ""),
-                        Flag<'d'>(false, "flag", "", ""),
-                        Option<'f', identity, 2>({"defval1", "defval2"}, "2val", "", ""),
-                        Option<'m', identity, -1ul>("multi_val", "", "")};
+constexpr tuple options{option<'a'>(identity{}, "default value for foo", "foo", "", ""),
+                        option<'b'>(identity{}, "default value for bar", "bar", "", ""),
+                        option<'c'>(identity{}, "default value for foo2", "foo2", "", ""),
+                        flag<'d'>(false, "flag", "", ""),
+                        option<'f', 2ul>(identity{}, {"defval1", "defval2"}, "2val", "", ""),
+                        option_list<'m'>(identity{}, "multi_val", "", "")};
 
 static_assert(!has_repeating<decay_t<decltype(options)>>::value);
 
