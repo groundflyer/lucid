@@ -98,7 +98,7 @@ tokenize_impl(const std::string_view keyword, const std::tuple<Options...>& opti
 
 template <typename Converter, std::size_t ... Idxs>
 constexpr auto
-argc2array(char** argc, Converter converter, std::index_sequence<Idxs...>) noexcept
+argc2array(char* argc[], Converter converter, std::index_sequence<Idxs...>) noexcept
 {
     using value_type = std::array<std::decay_t<std::invoke_result_t<Converter, std::string_view>>, sizeof...(Idxs)>;
     return value_type{converter(argc[Idxs])...};
@@ -256,17 +256,11 @@ class Binding<Converter, -1ul>
         value_range() = default;
 
         explicit
-        value_range(const Converter& _converter, char** _data, std::size_t _size) noexcept : converter(_converter), data(_data), size(_size) {}
-
-        // std::size_t
-        // get_size() const noexcept
-        // {
-        //     return size;
-        // }
+        value_range(const Converter& _converter, char*_data[], std::size_t _size) noexcept : converter(_converter), data(_data), size(_size) {}
     };
 
     Converter converter;
-    char** data;
+    char** data = nullptr;
     std::size_t size = 0ul;
 
     constexpr void
@@ -524,8 +518,6 @@ set_binding(std::tuple<Bindings...>& bindings, const std::size_t token, Word wor
 }
 
 
-static inline Logger logger(Logger::DEBUG);
-
 template <typename KeyType>
 struct
 Key
@@ -657,7 +649,6 @@ Visitor
     bool
     pos_not_set() const noexcept
     {
-        logger.debug("pos_token = {}", pos_token);
         return has_pos && pos_token < num_pos;
     }
 
@@ -717,14 +708,11 @@ public:
     {
         check_opt();
 
-        // logger.debug("Found key {}", key.value);
-
         const auto [new_token, new_nvals] = key_info(key.value);
 
         // is flag
         if (new_nvals == 0ul)
         {
-            // logger.debug("Flipping flag {}", key.value);
             set_binding(opt_bindings, new_token, "");
             reset_opt();
         }
@@ -739,7 +727,6 @@ public:
     void
     operator()(const KeywordValue& keyval)
     {
-        // logger.debug("Found {}={}", keyval.keyword, keyval.value);
         check_opt();
 
         const auto [new_token, new_nvals] = key_info(keyval.keyword);
@@ -754,7 +741,6 @@ public:
     void
     operator()(const Value& value)
     {
-        // logger.debug("Found value {}", value.string());
         // we send char** data here because we need
         // to have access to neigbour args
         // in multi arg options
@@ -775,8 +761,6 @@ public:
             if (opt_token == -1ul)
                 throw UnexpectedValue{value.string()};
 
-            logger.debug("setting value {} for {}", value.string(), get_keyword(opt_token));
-
             set_binding(opt_bindings, opt_token, value.data);
 
             opt_nvals -= (opt_nvals != -1ul);
@@ -789,7 +773,6 @@ public:
     operator()(const KeyCharSeq& value)
     {
         check_opt();
-        // logger.debug("found keychar sequence {}", value.seq);
         for (std::size_t i = 0ul; i < value.seq.size(); ++i)
         {
             const auto [new_token, new_nvals] = key_info(value.seq[i]);
@@ -935,6 +918,8 @@ constexpr tuple options{option<'a'>(identity{}, "default value for foo", "foo", 
 
 constexpr tuple positionals{positional<2ul>(identity{}, "doc for 1st positional", "pos1"),
                             positional(identity{}, "doc for 2nd positional", "pos2")};
+
+static inline Logger logger(Logger::DEBUG);
 
 int main(int argc, char *argv[])
 {
