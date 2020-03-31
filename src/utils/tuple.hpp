@@ -11,6 +11,12 @@
 
 namespace lucid
 {
+struct out_of_range
+{
+    std::size_t idx;
+    std::size_t size;
+};
+
 namespace detail
 {
 template <typename BinaryOp, typename Operand>
@@ -72,22 +78,49 @@ switcher_func_impl(const std::size_t case_,
 
 template <typename Ret, std::size_t Idx, typename Visitor, typename Tuple>
 constexpr Ret
-visit_impl(const std::size_t case_, Visitor&& visitor, const Tuple& tuple) noexcept
+visit_impl(const std::size_t case_, Visitor&& visitor, const Tuple& tuple)
 {
-    if(Idx == case_ || Idx == std::tuple_size_v<Tuple> - 1) return visitor(std::get<Idx>(tuple));
+    if(Idx == case_) return visitor(std::get<Idx>(tuple));
 
     if constexpr(Idx < std::tuple_size_v<Tuple> - 1)
         return visit_impl<Ret, Idx + 1>(case_, std::forward<Visitor>(visitor), tuple);
+
+    // throwing from here to avoid
+    // "Reaching the end of non-void function" warning
+    throw out_of_range{case_, std::tuple_size_v<Tuple>};
 }
 
 template <std::size_t Idx, typename Visitor, typename Tuple>
 constexpr void
 visit_impl(const std::size_t case_, Visitor&& visitor, Tuple& tuple) noexcept
 {
-    if(Idx == case_ || Idx == std::tuple_size_v<Tuple> - 1) return visitor(std::get<Idx>(tuple));
+    // because return type is void
+    // we check case_ before calling this
+    // and we don't throw out_of_range here
+    if(Idx == case_) return visitor(std::get<Idx>(tuple));
 
     if constexpr(Idx < std::tuple_size_v<Tuple> - 1)
         visit_impl<Idx + 1>(case_, std::forward<Visitor>(visitor), tuple);
+}
+
+template <typename Ret, std::size_t Idx, typename Visitor, typename Tuple>
+constexpr Ret
+visit_clamped_impl(const std::size_t case_, Visitor&& visitor, const Tuple& tuple) noexcept
+{
+    if(Idx == case_ || Idx == std::tuple_size_v<Tuple> - 1) return visitor(std::get<Idx>(tuple));
+
+    if constexpr(Idx < std::tuple_size_v<Tuple> - 1)
+        return visit_clamped_impl<Ret, Idx + 1>(case_, std::forward<Visitor>(visitor), tuple);
+}
+
+template <std::size_t Idx, typename Visitor, typename Tuple>
+constexpr void
+visit_clamped_impl(const std::size_t case_, Visitor&& visitor, Tuple& tuple) noexcept
+{
+    if(Idx == case_ || Idx == std::tuple_size_v<Tuple> - 1) return visitor(std::get<Idx>(tuple));
+
+    if constexpr(Idx < std::tuple_size_v<Tuple> - 1)
+        visit_clamped_impl<Idx + 1>(case_, std::forward<Visitor>(visitor), tuple);
 }
 
 template <std::size_t I, typename T, std::size_t N1, std::size_t N2>
@@ -140,8 +173,10 @@ enumerate(const std::tuple<Ts...>& tuple) noexcept
 
 template <typename... Args, typename... Funcs, template <typename...> typename Tuple>
 constexpr decltype(auto)
-switcher_func(const std::size_t case_, Tuple<Funcs...>&& funcs, Args&&... args) noexcept
+switcher_func(const std::size_t case_, Tuple<Funcs...>&& funcs, Args&&... args)
 {
+    if(case_ >= sizeof...(Funcs)) throw out_of_range{case_, sizeof...(Funcs)};
+
     return std::apply(
         [case_, args_tuple = std::forward_as_tuple(args...)](Funcs&&... items) mutable {
             using tpl = typename typelist<Funcs...>::template result_of<Args...>;
@@ -154,8 +189,10 @@ switcher_func(const std::size_t case_, Tuple<Funcs...>&& funcs, Args&&... args) 
 
 template <typename... Args, typename... Funcs, template <typename...> typename Tuple>
 constexpr decltype(auto)
-switcher_func(const std::size_t case_, const Tuple<Funcs...>& funcs, const Args&... args) noexcept
+switcher_func(const std::size_t case_, const Tuple<Funcs...>& funcs, const Args&... args)
 {
+    if(case_ >= sizeof...(Funcs)) throw out_of_range{case_, sizeof...(Funcs)};
+
     return std::apply(
         [case_, args_tuple = std::tuple{args...}](const Funcs&... items) mutable {
             using tpl = typename typelist<Funcs...>::template result_of<Args...>;
@@ -167,7 +204,7 @@ switcher_func(const std::size_t case_, const Tuple<Funcs...>& funcs, const Args&
 
 template <typename Visitor, typename... Ts, template <typename...> typename Tuple>
 constexpr decltype(auto)
-visit(const std::size_t case_, Visitor&& visitor, const Tuple<Ts...>& tuple) noexcept
+visit(const std::size_t case_, Visitor&& visitor, const Tuple<Ts...>& tuple)
 {
     using tpl = typelist<std::invoke_result_t<Visitor, Ts>...>;
     using ret = std::conditional_t<tpl::same, typename tpl::front, typename tpl::variant>;
@@ -177,9 +214,28 @@ visit(const std::size_t case_, Visitor&& visitor, const Tuple<Ts...>& tuple) noe
 
 template <typename Visitor, typename... Ts, template <typename...> typename Tuple>
 constexpr void
-visit(const std::size_t case_, Visitor&& visitor, Tuple<Ts...>& tuple) noexcept
+visit(const std::size_t case_, Visitor&& visitor, Tuple<Ts...>& tuple)
 {
+    if(case_ >= std::tuple_size_v<Tuple>) throw out_of_range{case_, std::tuple_size_v<Tuple>};
+
     detail::visit_impl<0>(case_, std::forward<Visitor>(visitor), tuple);
+}
+
+template <typename Visitor, typename... Ts, template <typename...> typename Tuple>
+constexpr decltype(auto)
+visit_clamped(const std::size_t case_, Visitor&& visitor, const Tuple<Ts...>& tuple) noexcept
+{
+    using tpl = typelist<std::invoke_result_t<Visitor, Ts>...>;
+    using ret = std::conditional_t<tpl::same, typename tpl::front, typename tpl::variant>;
+
+    return detail::visit_clamped_impl<ret, 0>(case_, std::forward<Visitor>(visitor), tuple);
+}
+
+template <typename Visitor, typename... Ts, template <typename...> typename Tuple>
+constexpr void
+visit_clamped(const std::size_t case_, Visitor&& visitor, Tuple<Ts...>& tuple) noexcept
+{
+    detail::visit_clamped_impl<0>(case_, std::forward<Visitor>(visitor), tuple);
 }
 
 template <typename T, std::size_t N1, std::size_t N2, typename... Rest>
