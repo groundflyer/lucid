@@ -27,9 +27,15 @@ KeyException
 };
 
 struct
-ExpectedValues
+FewArgumentsException
 {
     std::string_view keyword;
+};
+
+struct
+UnexpectedValue
+{
+    std::string_view value;
 };
 
 namespace detail
@@ -89,6 +95,14 @@ tokenize_impl(const std::string_view keyword, const std::tuple<Options...>& opti
 
     throw KeyException<std::string_view>{keyword};
 }
+
+template <typename Converter, std::size_t ... Idxs>
+constexpr auto
+argc2array(char** argc, Converter converter, std::index_sequence<Idxs...>) noexcept
+{
+    using value_type = std::array<std::decay_t<std::invoke_result_t<Converter, std::string_view>>, sizeof...(Idxs)>;
+    return value_type{converter(argc[Idxs])...};
+}
 } // detail
 
 
@@ -143,13 +157,6 @@ class Binding
         idx = (idx + 1ul) % nvals;        
     }
 
-    template <std::size_t ... Idxs>
-    constexpr value_type
-    convert(std::index_sequence<Idxs...>) const noexcept
-    {
-        return value_type{converter(words[Idxs])...};
-    }
-
 public:
     explicit constexpr
     Binding(const Converter& _converter, const value_type& value) noexcept : converter(_converter), default_value(value) {}
@@ -168,10 +175,10 @@ public:
         increment();
     }
 
-    value_type
+    constexpr value_type
     operator()() const
     {
-        return is_set ? convert(std::make_index_sequence<nvals>{}) : default_value;
+        return is_set ? detail::argc2array(words, converter, std::make_index_sequence<nvals>{}) : default_value;
     }
 };
 
@@ -221,14 +228,13 @@ class Binding<Converter, -1ul>
     class value_range : public ranges::view_facade<value_range>
     {
         friend ranges::range_access;
-        using value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
 
         Converter converter;
         char** data = nullptr;
         std::size_t size = 0ul;
         std::size_t idx = 0ul;
 
-        value_type
+        decltype(auto)
         read() const noexcept
         {
             return converter(data[idx]);
@@ -251,6 +257,12 @@ class Binding<Converter, -1ul>
 
         explicit
         value_range(const Converter& _converter, char** _data, std::size_t _size) noexcept : converter(_converter), data(_data), size(_size) {}
+
+        // std::size_t
+        // get_size() const noexcept
+        // {
+        //     return size;
+        // }
     };
 
     Converter converter;
@@ -286,6 +298,68 @@ public:
     operator()() const noexcept
     {
         return value_range(converter, data, size);
+    }
+};
+
+
+template <typename Converter, std::size_t nvals>
+class PositionalBinding
+{
+    Converter converter;
+    char ** words = nullptr;
+    std::size_t idx = 0ul;
+
+public:
+    explicit constexpr
+    PositionalBinding(const Converter& _converter) noexcept : converter(_converter) {}
+
+    constexpr void
+    set(std::string_view) noexcept
+    {
+        ++idx;
+    }
+
+    constexpr void
+    set(char **data) noexcept
+    {
+        if (!words)
+            words = data;
+        ++idx;
+    }
+
+    constexpr auto
+    operator()() const
+    {
+        return detail::argc2array(words, converter, std::make_index_sequence<nvals>{});
+    }
+};
+
+template <typename Converter>
+class PositionalBinding<Converter, 1>
+{
+    Converter converter;
+    std::string_view word;
+
+public:
+    explicit constexpr
+    PositionalBinding(const Converter& _converter) noexcept : converter(_converter) {};
+
+    constexpr void
+    set(std::string_view new_word) noexcept
+    {
+        word = new_word;
+    }
+
+    constexpr void
+    set(char** data) noexcept
+    {
+        set(*data);
+    }
+
+    constexpr auto
+    operator()() const
+    {
+        return converter(word);
     }
 };
 
@@ -356,6 +430,36 @@ struct Option<Key, Converter, -1ul>
     }
 };
 
+template <typename Converter, std::size_t nvals>
+struct
+Positional
+{
+    Converter converter;
+    std::string_view doc;
+    std::string_view var;
+
+    constexpr
+    Positional(Converter&& _converter,
+               const std::string_view _doc,
+               const std::string_view _var) noexcept :
+        converter(_converter), doc(_doc), var(_var) {}
+
+    constexpr auto
+    binding() const noexcept
+    {
+        if constexpr (nvals == -1ul)
+            return Binding<Converter, -1ul>(converter);
+        else
+            return PositionalBinding<Converter, nvals>(converter);
+    }
+
+    constexpr std::size_t
+    num_vals() const noexcept
+    {
+        return nvals;
+    }
+};
+
 
 template <char Key, typename Options>
 struct key_index;
@@ -380,62 +484,43 @@ tokenize(const std::string_view keyword, const std::tuple<Options...>& options)
     return detail::tokenize_impl<0ul>(keyword, options);
 }
 
-template <typename Options>
-struct has_repeating;
-
 template <typename ... Options>
-struct has_repeating<std::tuple<Options...>>
+struct has_repeating
 {
     static constexpr bool value = detail::has_repeating_impl<Options...>::value;
 };
 
 
-template <typename Bindings, typename Options>
+template <typename OptBindings, typename PosBindings, typename Options>
 struct ParseResults
 {
-    Bindings bindings;
+    OptBindings opt_bindings;
+    PosBindings pos_bindings;
 
     constexpr
-    ParseResults(const Bindings& _bindings, const Options&) : bindings(_bindings) {}
+    ParseResults(const std::pair<OptBindings, PosBindings>& _bindings, const Options&) : opt_bindings(_bindings.first), pos_bindings(_bindings.second) {}
 
     template <char Key>
     constexpr decltype(auto)
-    get() const noexcept
+    get_opt() const noexcept
     {
-        return std::get<key_index<Key, Options>::value>(bindings)();
+        return std::get<key_index<Key, Options>::value>(opt_bindings)();
+    }
+
+    template <std::size_t Idx>
+    constexpr decltype(auto)
+    get_pos() const noexcept
+    {
+        return std::get<Idx>(pos_bindings)();
     }
 };
 
 
-template <typename ... Options>
-std::size_t
-num_vals(const std::size_t token, const std::tuple<Options...> options)
-{
-    return visit(token, [](const auto& option){ return option.num_vals(); }, options);
-}
-
-struct
-KeyInfo
-{
-    std::size_t token;
-    std::size_t nvals;
-};
-
-template <typename Key, typename Options>
-KeyInfo
-key_info(const Key key, const Options& options)
-{
-    const std::size_t token = tokenize(key, options);
-    const std::size_t nvals = num_vals(token, options);
-    return KeyInfo{token, nvals};
-}
-
-
 template <typename ... Bindings, typename Word>
 constexpr auto
-set_binding(std::tuple<Bindings...>& bindings, const std::size_t token, Word word)
+set_binding(std::tuple<Bindings...>& bindings, const std::size_t token, Word word) noexcept
 {
-    return visit(token, [&](auto& binding){ binding.set(word); }, bindings);
+    return visit_clamped(token, [&](auto& binding){ binding.set(word); }, bindings);
 }
 
 
@@ -461,7 +546,7 @@ Value
     char **data;
 
     std::string_view
-    value() const noexcept
+    string() const noexcept
     {
         return *data;
     }
@@ -530,134 +615,219 @@ make_bindings(const std::tuple<Options...>& options) noexcept
 }
 
 
-template <typename Options>
+template <typename Options, typename Positionals>
 class
 Visitor
 {
-    using Bindings = std::decay_t<decltype(make_bindings(std::declval<Options>()))>;
-    Bindings bindings;
-    const Options& options;
-    KeyInfo current_key{-1ul, 0ul};
+    using OptBindings = std::decay_t<decltype(make_bindings(std::declval<Options>()))>;
+    using PosBindings = std::decay_t<decltype(make_bindings(std::declval<Positionals>()))>;
+    static constexpr std::size_t num_pos = std::tuple_size_v<Positionals>;
+    static constexpr bool has_pos = num_pos > 0ul;
 
-    void
-    expectation_check() const
+    const Options& options;
+    const Positionals& positionals;
+    OptBindings opt_bindings;
+    PosBindings pos_bindings;
+    std::size_t opt_token = -1ul;
+    std::size_t opt_nvals = 0ul;
+    std::size_t pos_token = 0ul;
+    std::size_t pos_nvals = has_pos ? get_nvals(0ul, positionals) : 0ul;
+    bool is_pos = has_pos;
+
+    template <typename ... Opts>
+    static std::size_t
+    get_nvals(const std::size_t _token, const std::tuple<Opts...>& opts)
     {
-        const auto& [token, nvals] = current_key;
-        if (token != -1ul && nvals != -1ul && nvals > 0ul)
-            throw ExpectedValues{visit(token, [](const auto& option){ return option.keyword; }, options)};
+        return visit_clamped(_token, [](const auto& option){ return option.num_vals(); }, opts);
+    }
+
+    std::string_view
+    get_keyword(std::size_t _token) const noexcept
+    {
+        return visit_clamped(_token, [](const auto& option){ return option.keyword; }, options);
     }
 
     void
-    reset_key()
+    check_opt() const
     {
-        current_key = KeyInfo{-1ul, 0ul};
+        if (opt_token != -1ul && opt_nvals != -1ul && opt_nvals > 0ul)
+            throw FewArgumentsException{get_keyword(opt_token)};
+    }
+
+    bool
+    pos_not_set() const noexcept
+    {
+        logger.debug("pos_token = {}", pos_token);
+        return has_pos && pos_token < num_pos;
+    }
+
+    void
+    check_pos() const
+    {
+        if (pos_not_set())
+            throw FewArgumentsException{"Positional arguments not set"};
+    }
+
+    void
+    reset_opt() noexcept
+    {
+        opt_token = -1ul;
+        opt_nvals = 0ul;
+        is_pos = pos_not_set();
+    }
+
+    void
+    reset_pos() noexcept
+    {
+        ++pos_token;
+        pos_nvals = get_nvals(pos_token, positionals);
+        is_pos = pos_not_set();
+    }
+
+    template <typename Key>
+    constexpr auto
+    key_info(const Key key)
+    {
+        const std::size_t new_token = tokenize(key, options);
+        const std::size_t new_nvals = get_nvals(new_token, options);
+        return std::pair{new_token, new_nvals};
     }
 
 public:
     constexpr
-    Visitor(const Options& _options) :
-        bindings(make_bindings(_options)), options(_options) {}
+    Visitor(const Options& _options, const Positionals& _positionals) :
+        options(_options), positionals(_positionals), opt_bindings(make_bindings(_options)), pos_bindings(make_bindings(_positionals)) {}
 
     Visitor() = delete;
     Visitor(const Visitor&) = delete;
     Visitor(Visitor&&) = delete;
     Visitor& operator=(const Visitor&) = delete;
 
-    constexpr Bindings
+    constexpr std::pair<OptBindings, PosBindings>
     get_bindings() const
     {
-        expectation_check();
-        return bindings;
+        check_opt();
+        check_pos();
+        return std::pair{opt_bindings, pos_bindings};
     }
 
     template <typename T>
     void
     operator()(const Key<T>& key)
     {
-        expectation_check();
+        check_opt();
 
-        logger.debug("Found key {}", key.value);
+        // logger.debug("Found key {}", key.value);
 
-        const KeyInfo new_key = key_info(key.value, options);
-        const auto& [new_token, new_nvals] = new_key;
+        const auto [new_token, new_nvals] = key_info(key.value);
 
         // is flag
         if (new_nvals == 0ul)
         {
-            logger.debug("Flipping flag {}", key.value);
-            set_binding(bindings, new_token, "");
-            reset_key();
+            // logger.debug("Flipping flag {}", key.value);
+            set_binding(opt_bindings, new_token, "");
+            reset_opt();
         }
         else
         {
-            current_key = new_key;
+            opt_token = new_token;
+            opt_nvals = new_nvals;
+            is_pos = false;
         }
     }
 
     void
     operator()(const KeywordValue& keyval)
     {
-        logger.debug("Found {}={}", keyval.keyword, keyval.value);
-        expectation_check();
+        // logger.debug("Found {}={}", keyval.keyword, keyval.value);
+        check_opt();
 
-        const std::size_t new_token = tokenize(keyval.keyword, options);
-        set_binding(bindings, new_token, keyval.value);
-        reset_key();
+        const auto [new_token, new_nvals] = key_info(keyval.keyword);
+
+        if (new_nvals > 1ul)
+            throw FewArgumentsException{keyval.keyword};
+
+        set_binding(opt_bindings, new_token, keyval.value);
+        reset_opt();
     }
 
     void
     operator()(const Value& value)
     {
-        logger.debug("Found value {}", value.value());
-        auto& [token, nvals] = current_key;
+        // logger.debug("Found value {}", value.string());
         // we send char** data here because we need
         // to have access to neigbour args
         // in multi arg options
-        set_binding(bindings, token, value.data);
-        if (nvals != -1ul)
-            --nvals;
-        if (nvals == 0ul)
-            reset_key();
+        if (is_pos)
+        {
+            if (pos_token >= num_pos)
+                throw UnexpectedValue{value.string()};
+
+            set_binding(pos_bindings, pos_token, value.data);
+
+            pos_nvals -= (pos_nvals != -1ul);
+
+            if (pos_nvals == 0ul)
+                reset_pos();
+        }
+        else
+        {
+            if (opt_token == -1ul)
+                throw UnexpectedValue{value.string()};
+
+            logger.debug("setting value {} for {}", value.string(), get_keyword(opt_token));
+
+            set_binding(opt_bindings, opt_token, value.data);
+
+            opt_nvals -= (opt_nvals != -1ul);
+
+            if(opt_nvals == 0ul) reset_opt();
+        }
     }
 
     void
     operator()(const KeyCharSeq& value)
     {
-        expectation_check();
-        logger.debug("found keychar sequence {}", value.seq);
+        check_opt();
+        // logger.debug("found keychar sequence {}", value.seq);
         for (std::size_t i = 0ul; i < value.seq.size(); ++i)
         {
-            const KeyInfo cki = key_info(value.seq[i], options);
-            const auto [token, nvals] = cki;
+            const auto [new_token, new_nvals] = key_info(value.seq[i]);
 
-            if (nvals == 1ul)
+            if (new_nvals > 1ul)
+                throw FewArgumentsException{get_keyword(new_token)};
+
+            if (opt_nvals == 1ul)
             {
                 if (i == value.seq.size() - 1)
                 {
                     // at the end
-                    current_key = cki;
+                    opt_token = new_token;
+                    opt_nvals = new_nvals;
                 }
                 else
                 {
-                    set_binding(bindings, token, value.seq.substr(i + 1));
+                    set_binding(opt_bindings, new_token, value.seq.substr(i + 1ul));
                     break;
                 }
             }
             else
             {
                 // flip flag
-                set_binding(bindings, token, "");
+                set_binding(opt_bindings, new_token, "");
             }
         }
     }
 };
 
 
-template <typename ... Options>
+template <typename ... Options, typename ... Positionals>
 auto
-parse(const std::tuple<Options...>& options, ArgsRange args)
+parse(const std::tuple<Options...>& options, const std::tuple<Positionals...>& positionals, ArgsRange args)
 {
-    Visitor visitor{options};
+    static_assert(!has_repeating<Options...>::value, "All keys should be uinique");
+
+    Visitor visitor{options, positionals};
     bool only_values = false;
 
     while(!args.equal(ranges::default_sentinel))
@@ -730,7 +900,26 @@ flag(Args&& ... args) noexcept
     return Option<Key, FlagConverter, 1ul>(FlagConverter{}, std::forward<Args>(args)...);
 }
 
+template <typename Converter, typename ... Args>
+constexpr Positional<Converter, 1ul>
+positional(Converter&& converter, Args&& ... args) noexcept
+{
+    return Positional<Converter, 1ul>(std::forward<Converter>(converter), std::forward<Args>(args)...);
+}
 
+template <std::size_t nvals, typename Converter, typename ... Args>
+constexpr Positional<Converter, nvals>
+positional(Converter&& converter, Args&& ... args) noexcept
+{
+    return Positional<Converter, nvals>(std::forward<Converter>(converter), std::forward<Args>(args)...);
+}
+
+template <typename Converter, typename ... Args>
+constexpr Positional<Converter, -1ul>
+positional_list(Converter&& converter, Args&& ... args) noexcept
+{
+    return Positional<Converter, -1ul>(std::forward<Converter>(converter), std::forward<Args>(args)...);
+}
 } // namespace lucid::argparse
 
 using namespace std;
@@ -744,7 +933,8 @@ constexpr tuple options{option<'a'>(identity{}, "default value for foo", "foo", 
                         option<'f', 2ul>(identity{}, {"defval1", "defval2"}, "2val", "", ""),
                         option_list<'m'>(identity{}, "multi_val", "", "")};
 
-static_assert(!has_repeating<decay_t<decltype(options)>>::value);
+constexpr tuple positionals{positional<2ul>(identity{}, "doc for 1st positional", "pos1"),
+                            positional(identity{}, "doc for 2nd positional", "pos2")};
 
 int main(int argc, char *argv[])
 {
@@ -753,16 +943,19 @@ int main(int argc, char *argv[])
     // ranges::for_each(ranges::views::slice(args, 1, 4), [](std::string_view arg){ logger.debug("found arg: {}", arg); });
     try
     {
-        const auto results = parse(options, args);
-        const auto [f1, f2] = results.get<'f'>();
-        auto multi_range = results.get<'m'>();
-        logger.debug("a = {}", results.get<'a'>());
-        logger.debug("b = {}", results.get<'b'>());
-        logger.debug("c = {}", results.get<'c'>());
-        logger.debug("d = {}", results.get<'d'>());
+        const auto results = parse(options, positionals, args);
+        const auto [f1, f2] = results.get_opt<'f'>();
+        auto multi_range = results.get_opt<'m'>();
+        const auto [p1, p2] = results.get_pos<0>();
+        const auto p3 = results.get_pos<1>();
+        logger.debug("a = {}", results.get_opt<'a'>());
+        logger.debug("b = {}", results.get_opt<'b'>());
+        logger.debug("c = {}", results.get_opt<'c'>());
+        logger.debug("d = {}", results.get_opt<'d'>());
         logger.debug("multival = {}, {}", f1, f2);
         logger.debug("multirange values:");
-        ranges::for_each(multi_range, [&](auto&& val){ logger.debug("{}", val); });
+        ranges::for_each(multi_range, [&](const auto& val){ logger.debug("{}", val); });
+        logger.debug("positionals: {}, {}, {}", p1, p2, p3);
     }
     catch (const KeyException<char>& ex)
     {
@@ -772,7 +965,7 @@ int main(int argc, char *argv[])
     {
         logger.critical("Unknown keyword: {}", ex.value);
     }
-    catch (const ExpectedValues& ex)
+    catch (const FewArgumentsException& ex)
     {
         logger.critical("Expected values for {}", ex.keyword);
     }
