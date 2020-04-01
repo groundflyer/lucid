@@ -14,7 +14,6 @@
 
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/facade.hpp>
-#include <range/v3/view/slice.hpp>
 
 
 namespace lucid::argparse
@@ -115,11 +114,6 @@ class ArgsRange : public ranges::view_facade<ArgsRange>
     int _argc = 0;
     char **_argv = nullptr;
 
-public:
-    ArgsRange() = default;
-
-    ArgsRange(int argc, char* argv[]) noexcept : _argc(argc), _argv(argv) {}
-
     char**
     read() const noexcept
     {
@@ -131,6 +125,11 @@ public:
     {
         return idx == _argc;
     }
+
+public:
+    ArgsRange() = default;
+
+    ArgsRange(int argc, char* argv[]) noexcept : _argc(argc), _argv(argv) {}
 
     void
     next() noexcept
@@ -821,23 +820,17 @@ parse(const std::tuple<Options...>& options, const std::tuple<Positionals...>& p
     Visitor visitor{options, positionals};
     bool only_values = false;
 
-    while(!args.equal(ranges::default_sentinel))
+    auto update = [&](char** data)
     {
-        char **data = args.read();
         std::string_view word{*data};
 
         if (word == "--")
-        {
             only_values = true;
-            continue;
-        }
+        else
+            std::visit(visitor, only_values ? Value{data} : arg_case(data));
+    };
 
-        const ParsedWord parsed_word = only_values ? Value{data} : arg_case(data);
-
-        std::visit(visitor, parsed_word);
-
-        args.next();
-    }
+    ranges::for_each(args, update);
 
     return ParseResults(visitor.get_bindings(), options);
 }
@@ -933,7 +926,6 @@ int main(int argc, char *argv[])
 {
     ArgsRange args(argc, argv);
     args.next();
-    // ranges::for_each(ranges::views::slice(args, 1, 4), [](std::string_view arg){ logger.debug("found arg: {}", arg); });
     try
     {
         const auto results = parse(options, positionals, args);
