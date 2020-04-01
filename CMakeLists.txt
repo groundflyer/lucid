@@ -87,6 +87,6 @@ add_subdirectory(fmt EXCLUDE_FROM_ALL)
 include_directories(concurrentqueue)
 
 # range-v3
-include_directories(range-v3/range)
+include_directories(range-v3/include)
 
 add_subdirectory(src)
