@@ -484,6 +484,16 @@ struct has_repeating
     static constexpr bool value = detail::has_repeating_impl<Options...>::value;
 };
 
+template <typename ... Options>
+constexpr bool
+keywords_have_space(const std::tuple<Options...>& options) noexcept
+{
+    return std::apply([](const Options& ... option)
+                      {
+                          return (false || ... || (option.keyword.find(' ') != std::string_view::npos));
+                      }, options);
+}
+
 
 template <typename OptBindings, typename PosBindings, typename Options>
 struct ParseResults
@@ -916,6 +926,8 @@ constexpr tuple options{option<'a'>(identity{}, "default value for foo", "foo", 
                         flag<'d'>(false, "flag", "", ""),
                         option<'f', 2ul>(identity{}, {"defval1", "defval2"}, "2val", "", ""),
                         option_list<'m'>(identity{}, "multi_val", "", "")};
+
+static_assert(!keywords_have_space(options));
 
 constexpr tuple positionals{positional<2ul>(identity{}, "doc for 1st positional", "pos1"),
                             positional(identity{}, "doc for 2nd positional", "pos2")};
