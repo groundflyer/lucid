@@ -5,6 +5,7 @@
 #include <utils/logging.hpp>
 
 #include <array>
+#include <functional>
 #include <string_view>
 #include <tuple>
 #include <type_traits>
@@ -607,49 +608,63 @@ make_bindings(const std::tuple<Options...>& options) noexcept
 }
 
 
-template <typename Options, typename Positionals>
+template <typename OptDesc, typename PosDesc>
 class
 Visitor
 {
-    using OptBindings = std::decay_t<decltype(make_bindings(std::declval<Options>()))>;
-    using PosBindings = std::decay_t<decltype(make_bindings(std::declval<Positionals>()))>;
-    static constexpr std::size_t num_pos = std::tuple_size_v<Positionals>;
+    using OptBindings = std::decay_t<decltype(make_bindings(std::declval<OptDesc>()))>;
+    using PosBindings = std::decay_t<decltype(make_bindings(std::declval<PosDesc>()))>;
+    static constexpr std::size_t num_pos = std::tuple_size_v<PosDesc>;
     static constexpr bool has_pos = num_pos > 0ul;
 
-    const Options& options;
-    const Positionals& positionals;
-    OptBindings opt_bindings;
-    PosBindings pos_bindings;
-    std::size_t opt_token = -1ul;
-    std::size_t opt_nvals = 0ul;
-    std::size_t pos_token = 0ul;
-    std::size_t pos_nvals = has_pos ? get_nvals(0ul, positionals) : 0ul;
+    template <typename Desc, typename Bindings>
+    struct
+    State
+    {
+        const Desc& desc;
+        Bindings bindings;
+        std::size_t token;
+        std::size_t remain;
+
+        constexpr
+        State(const Desc& _desc, std::size_t _token, std::size_t _remain) :
+            desc(_desc), bindings(make_bindings(_desc)), token(_token), remain(_remain) {}
+
+        State() = delete;
+        State(const State&) = delete;
+        State(State&&) = delete;
+        State& operator=(const State&) = delete;
+    };
+
+    State<OptDesc, OptBindings> opt_state;
+    State<PosDesc, PosBindings> pos_state;
     bool is_pos = has_pos;
 
-    template <typename ... Opts>
+    template <typename Desc>
     static std::size_t
-    get_nvals(const std::size_t _token, const std::tuple<Opts...>& opts)
+    get_nvals(const std::size_t _token, const Desc& desc)
     {
-        return visit_clamped(_token, [](const auto& option){ return option.num_vals(); }, opts);
+        return visit_clamped(_token, [](const auto& desc){ return desc.num_vals(); }, desc);
     }
 
+    template <typename Desc>
     std::string_view
-    get_keyword(std::size_t _token) const noexcept
+    get_keyword(std::size_t _token, const Desc& opts_desc) const noexcept
     {
-        return visit_clamped(_token, [](const auto& option){ return option.keyword; }, options);
+        return visit_clamped(_token, [](const auto& option){ return option.keyword; }, opts_desc);
     }
 
     void
     check_opt() const
     {
-        if (opt_token != -1ul && opt_nvals != -1ul && opt_nvals > 0ul)
-            throw FewArgumentsException{get_keyword(opt_token)};
+        if (opt_state.token != -1ul && opt_state.remain != -1ul && opt_state.remain > 0ul)
+            throw FewArgumentsException{get_keyword(opt_state.token, opt_state.desc)};
     }
 
     bool
     pos_not_set() const noexcept
     {
-        return has_pos && pos_token < num_pos;
+        return has_pos && pos_state.token < num_pos;
     }
 
     void
@@ -662,16 +677,8 @@ Visitor
     void
     reset_opt() noexcept
     {
-        opt_token = -1ul;
-        opt_nvals = 0ul;
-        is_pos = pos_not_set();
-    }
-
-    void
-    reset_pos() noexcept
-    {
-        ++pos_token;
-        pos_nvals = get_nvals(pos_token, positionals);
+        opt_state.token = -1ul;
+        opt_state.remain = 0ul;
         is_pos = pos_not_set();
     }
 
@@ -679,15 +686,16 @@ Visitor
     constexpr auto
     key_info(const Key key)
     {
-        const std::size_t new_token = tokenize(key, options);
-        const std::size_t new_nvals = get_nvals(new_token, options);
+        const std::size_t new_token = tokenize(key, opt_state.desc);
+        const std::size_t new_nvals = get_nvals(new_token, opt_state.desc);
         return std::pair{new_token, new_nvals};
     }
 
 public:
     constexpr
-    Visitor(const Options& _options, const Positionals& _positionals) :
-        options(_options), positionals(_positionals), opt_bindings(make_bindings(_options)), pos_bindings(make_bindings(_positionals)) {}
+    Visitor(const OptDesc& opt_desc, const PosDesc& pos_desc) :
+        opt_state(opt_desc, -1ul, 0ul),
+        pos_state(pos_desc, 0ul, has_pos ? get_nvals(0ul, pos_desc) : 0ul) {}
 
     Visitor() = delete;
     Visitor(const Visitor&) = delete;
@@ -699,7 +707,7 @@ public:
     {
         check_opt();
         check_pos();
-        return std::pair{opt_bindings, pos_bindings};
+        return std::pair{opt_state.bindings, pos_state.bindings};
     }
 
     template <typename T>
@@ -713,13 +721,13 @@ public:
         // is flag
         if (new_nvals == 0ul)
         {
-            set_binding(opt_bindings, new_token, "");
+            set_binding(opt_state.bindings, new_token, "");
             reset_opt();
         }
         else
         {
-            opt_token = new_token;
-            opt_nvals = new_nvals;
+            opt_state.token = new_token;
+            opt_state.remain = new_nvals;
             is_pos = false;
         }
     }
@@ -734,39 +742,39 @@ public:
         if (new_nvals > 1ul)
             throw FewArgumentsException{keyval.keyword};
 
-        set_binding(opt_bindings, new_token, keyval.value);
+        set_binding(opt_state.bindings, new_token, keyval.value);
         reset_opt();
     }
 
     void
     operator()(const Value& value)
     {
-        // we send char** data here because we need
-        // to have access to neigbour args
-        // in multi arg options
+        auto state_update = [&](auto& state, const auto& token_check, const auto& reset)
+                            {
+                                if (token_check(state.token))
+                                    throw UnexpectedValue{value.string()};
+
+                                // we send char** data here because we need
+                                // to have access to neigbour args
+                                // in multi arg options
+                                set_binding(state.bindings, state.token, value.data);
+
+                                state.remain -= (state.remain != -1ul);
+
+                                if (state.remain == 0ul)
+                                    reset(*this);
+                            };
+
         if (is_pos)
-        {
-            if (pos_token >= num_pos)
-                throw UnexpectedValue{value.string()};
-
-            set_binding(pos_bindings, pos_token, value.data);
-
-            pos_nvals -= (pos_nvals != -1ul);
-
-            if (pos_nvals == 0ul)
-                reset_pos();
-        }
+            state_update(pos_state,
+                         [&](std::size_t token){ return token >= num_pos; },
+                         [&](Visitor&){
+                             ++pos_state.token;
+                             pos_state.remain = get_nvals(pos_state.token, pos_state.desc);
+                             is_pos = pos_not_set();
+                         });
         else
-        {
-            if (opt_token == -1ul)
-                throw UnexpectedValue{value.string()};
-
-            set_binding(opt_bindings, opt_token, value.data);
-
-            opt_nvals -= (opt_nvals != -1ul);
-
-            if(opt_nvals == 0ul) reset_opt();
-        }
+            state_update(opt_state, [&](std::size_t token){ return token == -1ul; }, std::mem_fn(&Visitor::reset_opt));
     }
 
     void
@@ -778,26 +786,26 @@ public:
             const auto [new_token, new_nvals] = key_info(value.seq[i]);
 
             if (new_nvals > 1ul)
-                throw FewArgumentsException{get_keyword(new_token)};
+                throw FewArgumentsException{get_keyword(new_token, opt_state.desc)};
 
-            if (opt_nvals == 1ul)
+            if (opt_state.remain == 1ul)
             {
                 if (i == value.seq.size() - 1)
                 {
                     // at the end
-                    opt_token = new_token;
-                    opt_nvals = new_nvals;
+                    opt_state.token = new_token;
+                    opt_state.remain = new_nvals;
                 }
                 else
                 {
-                    set_binding(opt_bindings, new_token, value.seq.substr(i + 1ul));
+                    set_binding(opt_state.bindings, new_token, value.seq.substr(i + 1ul));
                     break;
                 }
             }
             else
             {
                 // flip flag
-                set_binding(opt_bindings, new_token, "");
+                set_binding(opt_state.bindings, new_token, "");
             }
         }
     }
