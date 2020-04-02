@@ -15,6 +15,7 @@
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view/facade.hpp>
 
+#include <fmt/printf.h>
 
 namespace lucid::argparse
 {
@@ -114,12 +115,6 @@ class ArgsRange : public ranges::view_facade<ArgsRange>
     int _argc = 0;
     char **_argv = nullptr;
 
-    char**
-    read() const noexcept
-    {
-        return _argv + idx;
-    }
-
     bool
     equal(ranges::default_sentinel_t) const noexcept
     {
@@ -130,6 +125,12 @@ public:
     ArgsRange() = default;
 
     ArgsRange(int argc, char* argv[]) noexcept : _argc(argc), _argv(argv) {}
+
+    char**
+    read() const noexcept
+    {
+        return _argv + idx;
+    }
 
     void
     next() noexcept
@@ -235,7 +236,7 @@ class Binding<Converter, -1ul>
         std::size_t idx = 0ul;
 
         decltype(auto)
-        read() const noexcept
+        read() const
         {
             return converter(data[idx]);
         }
@@ -363,20 +364,23 @@ struct Option
 {
     using singular_value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
     using value_type = std::conditional_t<(nvals > 1), std::array<singular_value_type, nvals>, singular_value_type>;
+    using var_type = std::conditional_t<(nvals > 1), std::array<std::string_view, nvals>, std::string_view>;
+    static constexpr bool is_flag = std::is_same_v<bool, value_type> && (nvals == 1ul);
     static constexpr char key = Key;
+    static constexpr std::size_t num_vals = is_flag ? 0ul : nvals;
 
     Converter converter;
     value_type default_value;
     std::string_view keyword;
     std::string_view doc;
-    std::string_view var;
+    var_type var;
 
     constexpr
     Option(Converter&& _converter,
            const value_type& _default_value,
            const std::string_view _keyword,
            const std::string_view _doc,
-           const std::string_view _var) noexcept :
+           const var_type& _var) noexcept :
         converter(_converter), default_value(_default_value), keyword(_keyword), doc(_doc), var(_var)
     {}
 
@@ -385,19 +389,15 @@ struct Option
     {
         return Binding<Converter, nvals>(converter, default_value);
     }
-
-    constexpr std::size_t
-    num_vals() const noexcept
-    {
-        // no values required if is Flag
-        return (std::is_same_v<bool, value_type> && (nvals == 1ul)) ? 0ul : nvals;
-    }
 };
 
 template <char Key, typename Converter>
 struct Option<Key, Converter, -1ul>
 {
+    static constexpr std::size_t num_vals = -1ul;
     static constexpr char key = Key;
+    static constexpr bool is_flag = false;
+    using value_type = std::decay_t<std::invoke_result_t<Converter, std::string_view>>;
 
     Converter converter;
     std::string_view keyword;
@@ -409,18 +409,12 @@ struct Option<Key, Converter, -1ul>
            const std::string_view _keyword,
            const std::string_view _doc,
            const std::string_view _var) noexcept :
-        converter(_converter), keyword(_keyword), doc(_doc), var(_var) {}
+        converter(_converter), keyword(_keyword), doc(_doc), var(_var.empty() ? _keyword : _var) {}
 
     constexpr Binding<Converter, -1ul>
     binding() const noexcept
     {
         return Binding<Converter, -1ul>(converter);
-    }
-
-    constexpr std::size_t
-    num_vals() const noexcept
-    {
-        return -1ul;
     }
 };
 
@@ -428,14 +422,17 @@ template <typename Converter, std::size_t nvals>
 struct
 Positional
 {
+    using var_type = std::conditional_t<(nvals > 1 && nvals != -1ul), std::array<std::string_view, nvals>, std::string_view>;
+    static constexpr std::size_t num_vals = nvals;
+
     Converter converter;
     std::string_view doc;
-    std::string_view var;
+    var_type var;
 
     constexpr
     Positional(Converter&& _converter,
                const std::string_view _doc,
-               const std::string_view _var) noexcept :
+               const var_type& _var) noexcept :
         converter(_converter), doc(_doc), var(_var) {}
 
     constexpr auto
@@ -446,13 +443,97 @@ Positional
         else
             return PositionalBinding<Converter, nvals>(converter);
     }
-
-    constexpr std::size_t
-    num_vals() const noexcept
-    {
-        return nvals;
-    }
 };
+
+
+template <char Key, typename Converter>
+constexpr Option<Key, Converter, 1ul>
+option(Converter&& converter,
+       const typename Option<Key, Converter, 1ul>::value_type& def_val,
+       const std::string_view keyword,
+       const std::string_view doc,
+       const typename Option<Key, Converter, 1ul>::var_type& var) noexcept
+{
+    return Option<Key, Converter, 1ul>(std::forward<Converter>(converter), def_val, keyword, doc, var);
+}
+
+template <char Key, std::size_t N, typename Converter>
+constexpr Option<Key, Converter, N>
+option(Converter&& converter,
+       const typename Option<Key, Converter, N>::value_type& def_val,
+       const std::string_view keyword,
+       const std::string_view doc,
+       const typename Option<Key, Converter, N>::var_type& var) noexcept
+{
+    static_assert(N > 1ul && N != -1ul, "Use option without N argument");
+    return Option<Key, Converter, N>(std::forward<Converter>(converter), def_val, keyword, doc, var);
+}
+
+template <char Key, typename Converter, typename ... Args>
+constexpr Option<Key, Converter, -1ul>
+option_list(Converter&& converter,
+            const std::string_view keyword,
+            const std::string_view doc,
+            const std::string_view var) noexcept
+{
+    return Option<Key, Converter, -1ul>(std::forward<Converter>(converter), keyword, doc, var);
+}
+
+template <char Key, typename ... Args>
+constexpr auto
+flag(const bool def_val,
+     const std::string_view keyword,
+     const std::string_view doc) noexcept
+{
+    struct FlagConverter
+    {
+        struct Exception
+        {
+            std::string_view word;
+        };
+
+        constexpr bool
+        operator()(std::string_view word) const
+        {
+            if (word == "yes")
+                return true;
+
+            if (word == "no")
+                return false;
+
+            throw Exception{word};
+        }
+    };
+
+    return Option<Key, FlagConverter, 1ul>(FlagConverter{}, def_val, keyword, doc, "");
+}
+
+template <typename Converter>
+constexpr Positional<Converter, 1ul>
+positional(Converter&& converter,
+           const std::string_view doc,
+           const std::string_view var) noexcept
+{
+    return Positional<Converter, 1ul>(std::forward<Converter>(converter), doc, var);
+}
+
+template <std::size_t nvals, typename Converter>
+constexpr Positional<Converter, nvals>
+positional(Converter&& converter,
+           const std::string_view doc,
+           const typename Positional<Converter, nvals>::var_type& var) noexcept
+{
+    return Positional<Converter, nvals>(std::forward<Converter>(converter), doc, var);
+}
+
+template <typename Converter>
+constexpr Positional<Converter, -1ul>
+positional_list(Converter&& converter,
+                const std::string_view doc,
+                const std::string_view var) noexcept
+{
+    return Positional<Converter, -1ul>(std::forward<Converter>(converter), doc, var);
+}
 
 
 template <char Key, typename Options>
@@ -653,7 +734,7 @@ Visitor
     static std::size_t
     get_nvals(const std::size_t _token, const Desc& desc)
     {
-        return visit_clamped(_token, [](const auto& desc){ return desc.num_vals(); }, desc);
+        return visit_clamped(_token, [](const auto& desc) noexcept { return std::decay_t<decltype(desc)>::num_vals; }, desc);
     }
 
     template <typename Desc>
@@ -663,24 +744,10 @@ Visitor
         return visit_clamped(_token, [](const auto& option){ return option.keyword; }, opts_desc);
     }
 
-    void
-    check_opt() const
-    {
-        if (opt_state.token != -1ul && opt_state.remain != -1ul && opt_state.remain > 0ul)
-            throw FewArgumentsException{get_keyword(opt_state.token, opt_state.desc)};
-    }
-
     bool
     pos_not_set() const noexcept
     {
         return has_pos && pos_state.token < num_pos;
-    }
-
-    void
-    check_pos() const
-    {
-        if (pos_not_set())
-            throw FewArgumentsException{"Positional arguments not set"};
     }
 
     void
@@ -711,11 +778,24 @@ public:
     Visitor(Visitor&&) = delete;
     Visitor& operator=(const Visitor&) = delete;
 
+    std::string_view
+    check_opt() const noexcept
+    {
+        if (opt_state.token != -1ul && opt_state.remain != -1ul && opt_state.remain > 0ul)
+            return get_keyword(opt_state.token, opt_state.desc);
+
+        return "";
+    }
+
+    bool
+    check_pos() const noexcept
+    {
+        return pos_not_set();
+    }
+
     constexpr std::pair<OptBindings, PosBindings>
     get_bindings() const
     {
-        check_opt();
-        check_pos();
         return std::pair{opt_state.bindings, pos_state.bindings};
     }
 
@@ -822,17 +902,161 @@ public:
 
 
 template <typename ... Options, typename ... Positionals>
+void
+show_help(std::string_view program_name, const std::tuple<Options...>& options, const std::tuple<Positionals...>& positionals, FILE* file = stderr) noexcept
+{
+    constexpr std::size_t line_width = 80;
+    constexpr bool has_flags = (false || ... || Options::is_flag);
+    std::size_t column = 0;
+
+    auto print = [&](const std::string_view format_string, const auto& ... args) noexcept
+                         {
+                             struct
+                             {
+                                 std::size_t
+                                 operator()(const std::string_view word) const noexcept
+                                 {
+                                     return word.size();
+                                 }
+
+                                 std::size_t
+                                 operator()(const char) const noexcept
+                                 {
+                                     return 1ul;
+                                 }
+                             } size_getter;
+
+                             fmt::print(file, format_string, args...);
+                             column += format_string.size() - (sizeof...(args) * 2ul) + (0ul + ... + size_getter(args));
+                         };
+
+    auto tuple_print = [](const auto& parm_tuple, const auto& elem_printer) noexcept
+                       {
+                           std::apply([&](const auto&... elems){ (..., (elem_printer(elems))); }, parm_tuple);
+                       };
+
+    print("{} ", program_name);
+
+    print("[-h");
+    column += 3ul;
+    if constexpr (has_flags)
+    {
+        auto flag_print = [&](const auto& option) noexcept
+                      {
+                          using OptType = std::decay_t<decltype(option)>;
+                          if constexpr (OptType::is_flag)
+                          {
+                              print("{}", OptType::key);
+                          }
+                      };
+
+        tuple_print(options, flag_print);
+    }
+    print("]");
+
+    auto vars_printer = [&](const auto& option) noexcept
+                        {
+                            constexpr std::size_t nvals = std::decay_t<decltype(option)>::num_vals;
+
+                            if constexpr (nvals == 1ul)
+                                print(" {}", option.var);
+                            else if constexpr (nvals == -1ul)
+                                print(" {}...", option.var);
+                            else
+                                for(const auto& var : option.var) print(" {}", var);
+                        };
+
+    {
+        auto width_checker = [&]() noexcept
+                             {
+                                 if(column > line_width)
+                                 {
+                                     fmt::print(file, "\n{:<{}}", ' ', program_name.size());
+                                     column = program_name.size() + 1;
+                                 }                                 
+                             };
+
+        auto opt_print = [&](const auto& option) noexcept
+                         {
+                             using OptType = std::decay_t<decltype(option)>;
+                             if constexpr (!std::is_same_v<typename OptType::value_type, bool>)
+                             {
+                                 width_checker();
+
+                                 print(" [-{}", OptType::key);
+                                 vars_printer(option);
+                                 print("]");
+                             }
+                         };
+
+        tuple_print(options, opt_print);
+
+        auto pos_print = [&](const auto& pos) noexcept
+                         {
+                             width_checker();
+                             vars_printer(pos);
+                         };
+
+        tuple_print(positionals, pos_print);
+    }
+
+    {
+        auto opt_print = [&](const auto& option) noexcept
+                         {
+                             using Type = std::decay_t<decltype(option)>;
+                             print("\n\t-{}, --{}", Type::key, option.keyword);
+
+                             if constexpr(!Type::is_flag)
+                                 vars_printer(option);
+
+                             print("\t{}", option.doc);
+                         };
+
+        print("\n\t-h, --help\tShow this help message and exit.");
+        tuple_print(options, opt_print);
+    }
+
+    {
+        auto pos_print = [&](const auto& pos) noexcept
+                         {
+                             print("\n\t");
+                             vars_printer(pos);
+                             print("\t{}", pos.doc);
+                         };
+        tuple_print(positionals, pos_print);
+    }
+
+    fmt::print(file, "\n");
+}
+
+
+template <typename ... Options, typename ... Positionals>
 auto
 parse(const std::tuple<Options...>& options, const std::tuple<Positionals...>& positionals, ArgsRange args)
 {
     static_assert(!has_repeating<Options...>::value, "All keys should be uinique");
+    constexpr std::string_view error_head = "Argument Parsing Error";
+
+    const std::string_view argv0{*args.read()};
+    const std::size_t slash_pos = argv0.rfind('/');
+    const std::string_view program_name = slash_pos == std::string_view::npos ? argv0 : argv0.substr(slash_pos + 1);
+    args.next();
 
     Visitor visitor{options, positionals};
     bool only_values = false;
 
+    struct need_help {};
+    const auto help = [&](FILE* file = stderr) noexcept
+                      {
+                          show_help(program_name, options, positionals, file);
+                      };
+
     auto update = [&](char** data)
     {
         std::string_view word{*data};
+
+        if (word == "-h" || word == "--help")
+            throw need_help{};
 
         if (word == "--")
             only_values = true;
@@ -840,79 +1064,38 @@ parse(const std::tuple<Options...>& options, const std::tuple<Positionals...>& p
             std::visit(visitor, only_values ? Value{data} : arg_case(data));
     };
 
-    ranges::for_each(args, update);
+    try
+    {
+        ranges::for_each(args, update);
+    }
+    catch (const need_help&)
+    {
+        help(stdout);
+        exit(0);
+    }
+    catch (const FewArgumentsException& ex)
+    {
+        fmt::print(stderr, "{}: too few arguments for parameter \"{}\"\nUsage:\n", error_head, ex.keyword);
+        help();
+        exit(1);
+    }
+
+    std::string_view problem_key = visitor.check_opt();
+    if(!problem_key.empty())
+    {
+        fmt::print(stderr, "{}: too few arguments for parameter \"{}\"\nUsage:\n", error_head, problem_key);
+        help();
+        exit(1);
+    }
+
+    if(visitor.check_pos())
+    {
+        fmt::print(stderr, "{}: too few positional arguments\nUsage:\n", error_head);
+        help();
+        exit(1);
+    }
 
     return ParseResults(visitor.get_bindings(), options);
-}
-
-struct FlagConverter
-{
-    struct Exception
-    {
-        std::string_view word;
-    };
-
-    constexpr bool
-    operator()(std::string_view word) const
-    {
-        if (word == "yes")
-            return true;
-
-        if (word == "no")
-            return false;
-
-        throw Exception{word};
-    }
-};
-
-template <char Key, typename Converter, typename ... Args>
-constexpr Option<Key, Converter, 1ul>
-option(Converter&& converter, Args&& ... args) noexcept
-{
-    return Option<Key, Converter, 1ul>(std::forward<Converter>(converter), std::forward<Args>(args)...);
-}
-
-template <char Key, std::size_t N, typename Converter, typename ... Args>
-constexpr Option<Key, Converter, N>
-option(Converter&& converter, const std::array<std::decay_t<std::invoke_result_t<Converter, std::string_view>>, N>& def_vals, Args&& ... args) noexcept
-{
-    static_assert(N > 1ul && N != -1ul, "Use option without N argument");
-    return Option<Key, Converter, N>(std::forward<Converter>(converter), def_vals, std::forward<Args>(args)...);
-}
-
-template <char Key, typename Converter, typename ... Args>
-constexpr Option<Key, Converter, -1ul>
-option_list(Converter&& converter, Args&& ... args) noexcept
-{
-    return Option<Key, Converter, -1ul>(std::forward<Converter>(converter), std::forward<Args>(args)...);
-}
-
-template <char Key, typename ... Args>
-constexpr Option<Key, FlagConverter, 1ul>
-flag(Args&& ... args) noexcept
-{
-    return Option<Key, FlagConverter, 1ul>(FlagConverter{}, std::forward<Args>(args)...);
-}
-
-template <typename Converter, typename ... Args>
-constexpr Positional<Converter, 1ul>
-positional(Converter&& converter, Args&& ... args) noexcept
-{
-    return Positional<Converter, 1ul>(std::forward<Converter>(converter), std::forward<Args>(args)...);
-}
-
-template <std::size_t nvals, typename Converter, typename ... Args>
-constexpr Positional<Converter, nvals>
-positional(Converter&& converter, Args&& ... args) noexcept
-{
-    return Positional<Converter, nvals>(std::forward<Converter>(converter), std::forward<Args>(args)...);
-}
-
-template <typename Converter, typename ... Args>
-constexpr Positional<Converter, -1ul>
-positional_list(Converter&& converter, Args&& ... args) noexcept
-{
-    return Positional<Converter, -1ul>(std::forward<Converter>(converter), std::forward<Args>(args)...);
 }
 } // namespace lucid::argparse
 
@@ -920,16 +1103,24 @@ using namespace std;
 using namespace lucid;
 using namespace lucid::argparse;
 
-constexpr tuple options{option<'a'>(identity{}, "default value for foo", "foo", "", ""),
-                        option<'b'>(identity{}, "default value for bar", "bar", "", ""),
-                        option<'c'>(identity{}, "default value for foo2", "foo2", "", ""),
-                        flag<'d'>(false, "flag", "", ""),
-                        option<'f', 2ul>(identity{}, {"defval1", "defval2"}, "2val", "", ""),
-                        option_list<'m'>(identity{}, "multi_val", "", "")};
+struct
+toint
+{
+    int
+    operator()(std::string_view word) const noexcept
+    {
+        return std::atoi(word.data());
+    }
+};
+
+constexpr tuple options{option<'a'>(identity{}, "default foo", "foo", "doc for foo", "FOO"),
+                        flag<'f'>(false, "flag", "doc for flag"),
+                        option<'d', 2ul>([](std::string_view arg){ return atoi(arg.data()); }, {1111, 2222}, "two-val", "doc for two-val", {"2val1", "2val2"}),
+                        option_list<'m'>(toint{}, "multi_val", "doc for multi_val", "VAL")};
 
 static_assert(!keywords_have_space(options));
 
-constexpr tuple positionals{positional<2ul>(identity{}, "doc for 1st positional", "pos1"),
+constexpr tuple positionals{positional<2ul>(identity{}, "doc for 1st positional", {"pos11", "pos12"}),
                             positional(identity{}, "doc for 2nd positional", "pos2")};
 
 static inline Logger logger(Logger::DEBUG);
@@ -937,18 +1128,15 @@ static inline Logger logger(Logger::DEBUG);
 int main(int argc, char *argv[])
 {
     ArgsRange args(argc, argv);
-    args.next();
     try
     {
         const auto results = parse(options, positionals, args);
-        const auto [f1, f2] = results.get_opt<'f'>();
+        const auto [f1, f2] = results.get_opt<'d'>();
         auto multi_range = results.get_opt<'m'>();
         const auto [p1, p2] = results.get_pos<0>();
         const auto p3 = results.get_pos<1>();
         logger.debug("a = {}", results.get_opt<'a'>());
-        logger.debug("b = {}", results.get_opt<'b'>());
-        logger.debug("c = {}", results.get_opt<'c'>());
-        logger.debug("d = {}", results.get_opt<'d'>());
+        logger.debug("d = {}", results.get_opt<'f'>());
         logger.debug("multival = {}, {}", f1, f2);
         logger.debug("multirange values:");
         ranges::for_each(multi_range, [&](const auto& val){ logger.debug("{}", val); });
@@ -961,10 +1149,6 @@ int main(int argc, char *argv[])
     catch (const KeyException<std::string_view>& ex)
     {
         logger.critical("Unknown keyword: {}", ex.value);
-    }
-    catch (const FewArgumentsException& ex)
-    {
-        logger.critical("Expected values for {}", ex.keyword);
     }
     return 0;
 }
