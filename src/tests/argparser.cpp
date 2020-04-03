@@ -935,10 +935,11 @@ show_help(std::string_view program_name, const std::tuple<Options...>& options, 
                            std::apply([&](const auto&... elems){ (..., (elem_printer(elems))); }, parm_tuple);
                        };
 
-    print("{} ", program_name);
+    print("Usage: {}", program_name);
+    const std::size_t margin = column;
 
-    print("[-h");
-    column += 3ul;
+    print(" [-h");
+    column += 4ul;
     if constexpr (has_flags)
     {
         auto flag_print = [&](const auto& option) noexcept
@@ -971,8 +972,8 @@ show_help(std::string_view program_name, const std::tuple<Options...>& options, 
                              {
                                  if(column > line_width)
                                  {
-                                     fmt::print(file, "\n{:<{}}", ' ', program_name.size());
-                                     column = program_name.size() + 1;
+                                     fmt::print(file, "\n{:<{}}", ' ', margin);
+                                     column = margin + 1;
                                  }                                 
                              };
 
@@ -1000,11 +1001,13 @@ show_help(std::string_view program_name, const std::tuple<Options...>& options, 
         tuple_print(positionals, pos_print);
     }
 
+    print("\n\nOptions:");
+
     {
         auto opt_print = [&](const auto& option) noexcept
                          {
                              using Type = std::decay_t<decltype(option)>;
-                             print("\n\t-{}, --{}", Type::key, option.keyword);
+                             print("\n -{}, --{}", Type::key, option.keyword);
 
                              if constexpr(!Type::is_flag)
                                  vars_printer(option);
@@ -1012,14 +1015,14 @@ show_help(std::string_view program_name, const std::tuple<Options...>& options, 
                              print("\t{}", option.doc);
                          };
 
-        print("\n\t-h, --help\tShow this help message and exit.");
+        print("\n -h, --help\tShow this help message and exit.");
         tuple_print(options, opt_print);
     }
 
     {
         auto pos_print = [&](const auto& pos) noexcept
                          {
-                             print("\n\t");
+                             print("\n ");
                              vars_printer(pos);
                              print("\t{}", pos.doc);
                          };
