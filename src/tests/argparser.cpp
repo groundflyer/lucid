@@ -3,10 +3,10 @@
 #include <utils/identity.hpp>
 #include <utils/argparse.hpp>
 
+#include <algorithm>
 #include <initializer_list>
 #include <string>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 using namespace lucid;
@@ -22,6 +22,7 @@ ArgvMock
     void
     update_argv()
     {
+        pointers.clear();
         std::generate_n(std::back_inserter(pointers), words.size(), [iter=words.cbegin()]() mutable { return const_cast<char*>((iter++)->data()); });
     }
 
@@ -69,7 +70,7 @@ int main()
     ArgsRange args(mock.argc(), mock.argv());
     try
     {
-        const auto results = parse(options, positionals, args);
+        const auto results = parse(options, positionals, args, StandardErrorHandler(options, positionals, args));
         const auto [f1, f2] = results.get_opt<'d'>();
         auto multi_range = results.get_opt<'m'>();
         const auto [p1, p2] = results.get_pos<0>();

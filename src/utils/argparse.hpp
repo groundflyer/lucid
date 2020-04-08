@@ -39,6 +39,10 @@ struct UnexpectedValue
     std::string_view value;
 };
 
+struct NeedHelpException
+{
+};
+
 namespace detail
 {
 template <char Key, std::size_t Idx, typename... Options>
@@ -1002,35 +1006,102 @@ show_help(std::string_view                  program_name,
     fmt::print(file, "\n");
 }
 
-template <typename... Options, typename... Positionals>
+template <typename Options, typename Positionals>
+class StandardErrorHandler
+{
+    static constexpr std::string_view error_head = "Argument Parsing Error";
+
+    static std::string_view
+    make_program_name(ArgsRange args) noexcept
+    {
+        const std::string_view argv0{*args.read()};
+        const std::size_t      slash_pos{argv0.rfind('/')};
+        return slash_pos == std::string_view::npos ? argv0 : argv0.substr(slash_pos + 1);
+    }
+
+    const Options&     options;
+    const Positionals& positionals;
+    std::string_view   program_name;
+
+    void
+    help(FILE* file = stderr) const noexcept
+    {
+        show_help(program_name, options, positionals, file);
+    };
+
+  public:
+    StandardErrorHandler(const Options& _options, const Positionals& _positionals, ArgsRange args) :
+        options(_options), positionals(_positionals), program_name(make_program_name(args))
+    {
+    }
+
+    StandardErrorHandler()                            = delete;
+    StandardErrorHandler(const StandardErrorHandler&) = delete;
+    StandardErrorHandler(StandardErrorHandler&&)      = delete;
+    StandardErrorHandler&
+    operator=(const StandardErrorHandler&) = delete;
+
+    void
+    operator()(const NeedHelpException&) const noexcept
+    {
+        help(stdout);
+        exit(0);
+    }
+
+    void
+    operator()(const FewArgumentsException& ex) const noexcept
+    {
+        fmt::print(
+            stderr, "{}: too few arguments for parameter \"{}\"\nUsage:\n", error_head, ex.keyword);
+        help(stderr);
+        exit(1);
+    }
+
+    void
+    operator()(const std::string_view problem_key) const noexcept
+    {
+        if(!problem_key.empty())
+        {
+            fmt::print(stderr,
+                       "{}: too few arguments for parameter \"{}\"\nUsage:\n",
+                       error_head,
+                       problem_key);
+            help(stderr);
+            exit(1);
+        }
+    }
+
+    void
+    operator()(bool pos_error) const noexcept
+    {
+        if(pos_error)
+        {
+            fmt::print(stderr, "{}: too few positional arguments\nUsage:\n", error_head);
+            help();
+            exit(1);
+        }
+    }
+};
+
+template <typename... Options, typename... Positionals, typename ErrorHandler>
 auto
 parse(const std::tuple<Options...>&     options,
       const std::tuple<Positionals...>& positionals,
-      ArgsRange                         args)
+      ArgsRange                         args,
+      ErrorHandler&&                    error_hander) noexcept
 {
     static_assert(!has_repeating<Options...>::value, "All keys should be uinique");
-    constexpr std::string_view error_head = "Argument Parsing Error";
 
-    const std::string_view argv0{*args.read()};
-    const std::size_t      slash_pos = argv0.rfind('/');
-    const std::string_view program_name =
-        slash_pos == std::string_view::npos ? argv0 : argv0.substr(slash_pos + 1);
     args.next();
 
     Visitor visitor{options, positionals};
     bool    only_values = false;
 
-    struct need_help
-    {
-    };
-    const auto help = [&](FILE* file = stderr) noexcept {
-        show_help(program_name, options, positionals, file);
-    };
-
     auto update = [&](char** data) {
         std::string_view word{*data};
 
-        if(word == "-h" || word == "--help") throw need_help{};
+        // very dirty way to stop iteration
+        if(word == "-h" || word == "--help") throw NeedHelpException{};
 
         if(word == "--")
             only_values = true;
@@ -1042,36 +1113,17 @@ parse(const std::tuple<Options...>&     options,
     {
         ranges::for_each(args, update);
     }
-    catch(const need_help&)
+    catch(const NeedHelpException& ex)
     {
-        help(stdout);
-        exit(0);
+        error_hander(ex);
     }
     catch(const FewArgumentsException& ex)
     {
-        fmt::print(
-            stderr, "{}: too few arguments for parameter \"{}\"\nUsage:\n", error_head, ex.keyword);
-        help();
-        exit(1);
+        error_hander(ex);
     }
 
-    std::string_view problem_key = visitor.check_opt();
-    if(!problem_key.empty())
-    {
-        fmt::print(stderr,
-                   "{}: too few arguments for parameter \"{}\"\nUsage:\n",
-                   error_head,
-                   problem_key);
-        help();
-        exit(1);
-    }
-
-    if(visitor.check_pos())
-    {
-        fmt::print(stderr, "{}: too few positional arguments\nUsage:\n", error_head);
-        help();
-        exit(1);
-    }
+    error_hander(visitor.check_opt());
+    error_hander(visitor.check_pos());
 
     return ParseResults(visitor.get_bindings(), options);
 }
