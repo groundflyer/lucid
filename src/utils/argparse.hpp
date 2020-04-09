@@ -1051,8 +1051,16 @@ class StandardErrorHandler
     void
     operator()(const FewArgumentsException& ex) const noexcept
     {
-        fmt::print(
-            stderr, "{}: too few arguments for parameter \"{}\"\nUsage:\n", error_head, ex.keyword);
+        fmt::print(stderr, "{}: too few arguments for parameter \"{}\"\n", error_head, ex.keyword);
+        help(stderr);
+        exit(1);
+    }
+
+    template <typename Key>
+    void
+    operator()(const KeyException<Key>& ex) const noexcept
+    {
+        fmt::print(stderr, "{}: unknown key \"{}\"\n", error_head, ex.value);
         help(stderr);
         exit(1);
     }
@@ -1088,7 +1096,7 @@ auto
 parse(const std::tuple<Options...>&     options,
       const std::tuple<Positionals...>& positionals,
       ArgsRange                         args,
-      ErrorHandler&&                    error_hander) noexcept
+      ErrorHandler&&                    error_handler) noexcept
 {
     static_assert(!has_repeating<Options...>::value, "All keys should be uinique");
 
@@ -1115,15 +1123,23 @@ parse(const std::tuple<Options...>&     options,
     }
     catch(const NeedHelpException& ex)
     {
-        error_hander(ex);
+        error_handler(ex);
     }
     catch(const FewArgumentsException& ex)
     {
-        error_hander(ex);
+        error_handler(ex);
+    }
+    catch(const KeyException<char>& ex)
+    {
+        error_handler(ex);
+    }
+    catch(const KeyException<std::string_view>& ex)
+    {
+        error_handler(ex);
     }
 
-    error_hander(visitor.check_opt());
-    error_hander(visitor.check_pos());
+    error_handler(visitor.check_opt());
+    error_handler(visitor.check_pos());
 
     return ParseResults(visitor.get_bindings(), options);
 }
