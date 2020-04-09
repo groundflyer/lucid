@@ -1103,9 +1103,8 @@ parse(const std::tuple<Options...>&     options,
     args.next();
 
     Visitor visitor{options, positionals};
-    bool    only_values = false;
 
-    auto update = [&](char** data) {
+    auto update = [&visitor, only_values = false](char** data) mutable {
         std::string_view word{*data};
 
         // very dirty way to stop iteration
