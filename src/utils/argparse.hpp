@@ -1068,26 +1068,19 @@ class StandardErrorHandler
     void
     operator()(const std::string_view problem_key) const noexcept
     {
-        if(!problem_key.empty())
-        {
-            fmt::print(stderr,
-                       "{}: too few arguments for parameter \"{}\"\nUsage:\n",
-                       error_head,
-                       problem_key);
-            help(stderr);
-            exit(1);
-        }
+        fmt::print(stderr,
+                   "{}: too few arguments for parameter \"{}\"\nUsage:\n",
+                   error_head,
+                   problem_key);
+        help(stderr);
     }
 
     void
-    operator()(bool pos_error) const noexcept
+    operator()(bool) const noexcept
     {
-        if(pos_error)
-        {
-            fmt::print(stderr, "{}: too few positional arguments\nUsage:\n", error_head);
-            help();
-            exit(1);
-        }
+        fmt::print(stderr, "{}: too few positional arguments\nUsage:\n", error_head);
+        help();
+        exit(1);
     }
 };
 
@@ -1137,8 +1130,10 @@ parse(const std::tuple<Options...>&     options,
         error_handler(ex);
     }
 
-    error_handler(visitor.check_opt());
-    error_handler(visitor.check_pos());
+    std::string_view incomplete_option = visitor.check_opt();
+    if(!incomplete_option.empty()) error_handler(incomplete_option);
+
+    if(visitor.check_pos()) error_handler(true);
 
     return ParseResults(visitor.get_bindings(), options);
 }
