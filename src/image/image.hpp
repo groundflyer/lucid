@@ -12,13 +12,9 @@ namespace lucid
 {
 struct scanline_iterator
 {
-    const unsigned size;
-    const unsigned width;
-    unsigned       pos;
-
-    scanline_iterator() = delete;
-    scanline_iterator&
-    operator=(const scanline_iterator&) = delete;
+    unsigned size;
+    unsigned width;
+    unsigned pos;
 
     constexpr scanline_iterator(const Vec2u& res, unsigned _pos) :
         size(product(res)), width(res.get<0>()), pos(_pos)
@@ -76,19 +72,25 @@ class ScanlineImage
     template <bool Const = false>
     class _iterator
     {
-        using ImageRef = std::conditional_t<Const, const ScanlineImage&, ScanlineImage&>;
-        ImageRef          img;
+        using ImageRef        = std::conditional_t<Const, const ScanlineImage&, ScanlineImage&>;
+        using ImagePtr        = std::conditional_t<Const, const ScanlineImage*, ScanlineImage*>;
+        ImagePtr          img = nullptr;
         scanline_iterator iter;
 
       public:
-        _iterator()            = delete;
-        _iterator(_iterator&&) = delete;
-        _iterator&
-        operator=(const _iterator&) = delete;
+        _iterator() = delete;
 
-        _iterator(ImageRef _img, const unsigned pos) : img(_img), iter(_img.res(), pos) {}
+        _iterator(ImageRef _img, const unsigned pos) : img(&_img), iter(_img.res(), pos) {}
 
         _iterator(const _iterator& rhs) : img(rhs.img), iter(rhs.iter) {}
+
+        _iterator&
+        operator=(const _iterator& rhs) noexcept
+        {
+            img  = rhs.img;
+            iter = rhs.iter;
+            return *this;
+        }
 
         Vec2u
         pos() const noexcept
@@ -119,8 +121,8 @@ class ScanlineImage
 
         decltype(auto) operator*() const noexcept
         {
-            CHECK_INDEX(iter.pos, img.size());
-            return img[*iter];
+            CHECK_INDEX(iter.pos, img->size());
+            return (*img)[*iter];
         }
     };
 
