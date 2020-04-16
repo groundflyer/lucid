@@ -7,15 +7,33 @@
 #include <integrators/basic.hpp>
 #include <sampling/film.hpp>
 #include <scene/cornell_box.hpp>
+#include <utils/argparse.hpp>
 #include <utils/dispatcher.hpp>
 #include <utils/logging.hpp>
 #include <utils/timer.hpp>
 #include <utils/tuple.hpp>
 
-#include <string>
-
 using namespace lucid;
 using namespace std::literals;
+using namespace argparse;
+
+struct to_unsigned
+{
+    unsigned
+    operator()(const std::string_view word) const noexcept
+    {
+        return std::atoi(word.data());
+    }
+};
+
+constexpr std::tuple options{option<'r', 2>(to_unsigned{},
+                                            {640, 640},
+                                            "resolution",
+                                            "Window resolution",
+                                            {"width", "height"}),
+                             option<'d'>(to_unsigned{}, 4, "depth", "Maximum bounces", "N")};
+
+static_assert(!keywords_have_space(options));
 
 static std::random_device                      rd;
 static thread_local std::default_random_engine g(rd());
@@ -23,12 +41,13 @@ static thread_local std::default_random_engine g(rd());
 int
 main(int argc, char* argv[])
 {
-    const unsigned short width     = argc > 1 ? std::stoi(argv[1]) : 640;
-    const unsigned short height    = argc > 2 ? std::stoi(argv[2]) : 640;
-    const std::uint8_t   max_depth = 4u;
+    ArgsRange          args(argc, argv);
+    const auto         parse_results = parse(options, args, StandardErrorHandler(args, options));
+    const std::uint8_t max_depth     = parse_results.get_opt<'d'>();
 
-    const Vec2u res(width, height);
-    const real  ratio = static_cast<real>(width) / static_cast<real>(height);
+    const Vec2u res(parse_results.get_opt<'r'>());
+    const auto& [width, height] = res;
+    const real ratio            = static_cast<real>(width) / static_cast<real>(height);
 
     Logger logger(Logger::DEBUG);
 
