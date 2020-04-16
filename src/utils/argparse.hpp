@@ -564,14 +564,19 @@ keywords_have_space(const std::tuple<Options...>& options) noexcept
         options);
 }
 
+template <typename Bindings, typename Options>
+struct ParseResults;
+
 template <typename OptBindings, typename PosBindings, typename Options>
-struct ParseResults
+struct ParseResults<std::pair<OptBindings, PosBindings>, Options>
 {
     OptBindings opt_bindings;
     PosBindings pos_bindings;
 
-    constexpr ParseResults(const std::pair<OptBindings, PosBindings>& _bindings, const Options&) :
-        opt_bindings(_bindings.first), pos_bindings(_bindings.second)
+    constexpr ParseResults(const std::pair<OptBindings, PosBindings>& _bindings,
+                           const Options&) noexcept :
+        opt_bindings(_bindings.first),
+        pos_bindings(_bindings.second)
     {
     }
 
@@ -589,6 +594,32 @@ struct ParseResults
         return std::get<Idx>(pos_bindings)();
     }
 };
+
+template <typename... OptBindings, typename Options>
+struct ParseResults<std::tuple<OptBindings...>, Options>
+{
+    std::tuple<OptBindings...> opt_bindings;
+
+    constexpr ParseResults(const std::tuple<OptBindings...>& _bindings, const Options&) noexcept :
+        opt_bindings(_bindings)
+    {
+    }
+
+    template <char Key>
+    constexpr decltype(auto)
+    get_opt() const noexcept
+    {
+        return std::get<key_index<Key, Options>::value>(opt_bindings)();
+    }
+};
+
+template <typename OptBindings, typename PosBindings, typename Options>
+ParseResults(const std::pair<OptBindings, PosBindings>&, const Options&)
+    ->ParseResults<std::pair<OptBindings, PosBindings>, Options>;
+
+template <typename... OptBindings, typename Options>
+ParseResults(const std::tuple<OptBindings...>&, const Options&)
+    ->ParseResults<std::tuple<OptBindings...>, Options>;
 
 template <typename... Bindings, typename Word>
 constexpr auto
@@ -681,10 +712,13 @@ make_bindings(const std::tuple<Options...>& options) noexcept
 template <typename OptDesc, typename PosDesc>
 class Visitor
 {
-    using OptBindings = std::decay_t<decltype(make_bindings(std::declval<OptDesc>()))>;
-    using PosBindings = std::decay_t<decltype(make_bindings(std::declval<PosDesc>()))>;
     static constexpr std::size_t num_pos = std::tuple_size_v<PosDesc>;
     static constexpr bool        has_pos = num_pos > 0ul;
+    using OptBindings = std::decay_t<decltype(make_bindings(std::declval<OptDesc>()))>;
+    using PosBindings =
+        std::conditional_t<has_pos,
+                           std::decay_t<decltype(make_bindings(std::declval<PosDesc>()))>,
+                           void>;
 
     template <typename Desc, typename Bindings>
     struct State
@@ -694,7 +728,7 @@ class Visitor
         std::size_t token;
         std::size_t remain;
 
-        constexpr State(const Desc& _desc, std::size_t _token, std::size_t _remain) :
+        constexpr State(const Desc& _desc, std::size_t _token, std::size_t _remain) noexcept :
             desc(_desc), bindings(make_bindings(_desc)), token(_token), remain(_remain)
         {
         }
@@ -706,18 +740,31 @@ class Visitor
         operator=(const State&) = delete;
     };
 
+    // empty state if we have no positional arguments
+    template <>
+    struct State<std::tuple<>, void>
+    {
+        template <typename... Args>
+        constexpr State(Args&&...) noexcept
+        {
+        }
+    };
+
     State<OptDesc, OptBindings> opt_state;
     State<PosDesc, PosBindings> pos_state;
     bool                        is_pos = has_pos;
 
-    template <typename Desc>
+    template <typename... Ts>
     static std::size_t
-    get_nvals(const std::size_t _token, const Desc& desc)
+    get_nvals(const std::size_t _token, const std::tuple<Ts...>& desc)
     {
-        return visit_clamped(
-            _token,
-            [](const auto& desc) noexcept { return std::decay_t<decltype(desc)>::num_vals; },
-            desc);
+        if constexpr(sizeof...(Ts) > 0)
+            return visit_clamped(
+                _token,
+                [](const auto& desc) noexcept { return std::decay_t<decltype(desc)>::num_vals; },
+                desc);
+        else
+            return 0ul;
     }
 
     template <typename Desc>
@@ -731,7 +778,10 @@ class Visitor
     bool
     pos_not_set() const noexcept
     {
-        return has_pos && pos_state.token < num_pos;
+        if constexpr(has_pos)
+            return pos_state.token < num_pos;
+        else
+            return false;
     }
 
     void
@@ -753,8 +803,7 @@ class Visitor
 
   public:
     constexpr Visitor(const OptDesc& opt_desc, const PosDesc& pos_desc) :
-        opt_state(opt_desc, -1ul, 0ul),
-        pos_state(pos_desc, 0ul, has_pos ? get_nvals(0ul, pos_desc) : 0ul)
+        opt_state(opt_desc, -1ul, 0ul), pos_state(pos_desc, 0ul, get_nvals(0ul, pos_desc))
     {
     }
 
@@ -779,10 +828,13 @@ class Visitor
         return pos_not_set();
     }
 
-    constexpr std::pair<OptBindings, PosBindings>
+    constexpr auto
     get_bindings() const
     {
-        return std::pair{opt_state.bindings, pos_state.bindings};
+        if constexpr(has_pos)
+            return std::pair{opt_state.bindings, pos_state.bindings};
+        else
+            return opt_state.bindings;
     }
 
     template <typename T>
@@ -837,14 +889,17 @@ class Visitor
         };
 
         if(is_pos)
-            state_update(
-                pos_state,
-                [&](std::size_t token) { return token >= num_pos; },
-                [&](Visitor&) {
-                    ++pos_state.token;
-                    pos_state.remain = get_nvals(pos_state.token, pos_state.desc);
-                    is_pos           = pos_not_set();
-                });
+        {
+            if constexpr(has_pos)
+                state_update(
+                    pos_state,
+                    [&](std::size_t token) { return token >= num_pos; },
+                    [&](Visitor&) {
+                        ++pos_state.token;
+                        pos_state.remain = get_nvals(pos_state.token, pos_state.desc);
+                        is_pos           = pos_not_set();
+                    });
+        }
         else
             state_update(
                 opt_state,
@@ -1006,7 +1061,7 @@ show_help(std::string_view                  program_name,
     fmt::print(file, "\n");
 }
 
-template <typename Options, typename Positionals>
+template <typename Options, typename Positionals = std::tuple<>>
 class StandardErrorHandler
 {
     static constexpr std::string_view error_head = "Argument Parsing Error";
@@ -1030,8 +1085,11 @@ class StandardErrorHandler
     };
 
   public:
-    StandardErrorHandler(const Options& _options, const Positionals& _positionals, ArgsRange args) :
-        options(_options), positionals(_positionals), program_name(make_program_name(args))
+    StandardErrorHandler(ArgsRange          args,
+                         const Options&     _options,
+                         const Positionals& _positionals = Positionals{}) :
+        options(_options),
+        positionals(_positionals), program_name(make_program_name(args))
     {
     }
 
@@ -1136,5 +1194,12 @@ parse(const std::tuple<Options...>&     options,
     if(visitor.check_pos()) error_handler(true);
 
     return ParseResults(visitor.get_bindings(), options);
+}
+
+template <typename... Options, typename ErrorHandler>
+auto
+parse(const std::tuple<Options...>& options, ArgsRange args, ErrorHandler&& error_handler) noexcept
+{
+    return parse(options, std::tuple<>{}, args, std::move(error_handler));
 }
 } // namespace lucid::argparse
