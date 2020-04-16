@@ -84,8 +84,8 @@ class Dispatcher
     std::atomic_size_t       count{0};
 
   public:
-    Dispatcher(const unsigned    num_threads = std::thread::hardware_concurrency(),
-               const std::size_t queue_size  = 10000) noexcept :
+    Dispatcher(const std::size_t queue_size  = 10000,
+               const unsigned    num_threads = std::thread::hardware_concurrency()) noexcept :
         task_queue_pool(uniform_init{}, queue_size),
         result_queue_pool(uniform_init{}, queue_size)
     {

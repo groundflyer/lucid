@@ -26,12 +26,14 @@ struct to_unsigned
     }
 };
 
-constexpr std::tuple options{option<'r', 2>(to_unsigned{},
-                                            {640, 640},
-                                            "resolution",
-                                            "Window resolution",
-                                            {"width", "height"}),
-                             option<'d'>(to_unsigned{}, 4, "depth", "Maximum bounces", "N")};
+constexpr std::tuple options{
+    option<'r', 2>(to_unsigned{},
+                   {640, 640},
+                   "resolution",
+                   "Image resolution.",
+                   {"width", "height"}),
+    option<'d'>(to_unsigned{}, 4, "depth", "Maximum bounces.", "N"),
+    option<'q'>(to_unsigned{}, 100000, "queue-size", "Task dispatcher queue size.", "Q")};
 
 static_assert(!keywords_have_space(options));
 
@@ -41,9 +43,11 @@ static thread_local std::default_random_engine g(rd());
 int
 main(int argc, char* argv[])
 {
-    ArgsRange          args(argc, argv);
-    const auto         parse_results = parse(options, args, StandardErrorHandler(args, options));
-    const std::uint8_t max_depth     = parse_results.get_opt<'d'>();
+    ArgsRange  args(argc, argv);
+    const auto parse_results = parse(options, args, StandardErrorHandler(args, options));
+
+    const std::uint8_t max_depth = parse_results.get_opt<'d'>();
+    const unsigned     qsize     = parse_results.get_opt<'q'>();
 
     const Vec2u res(parse_results.get_opt<'r'>());
     const auto& [width, height] = res;
@@ -72,28 +76,24 @@ main(int argc, char* argv[])
         Viewport::check_errors();
         logger.debug("OpenGL initialized");
 
-        std::atomic_bool               produce{true};
-        Dispatcher<PathTracer, Simple> dispatcher;
-        const auto                     producer = [&]() {
-            while(produce.load(std::memory_order_relaxed))
-                for(auto it = film.img.begin();
-                    it != film.img.end() && produce.load(std::memory_order_relaxed);
-                    ++it)
-                {
-                    const Vec2 pixel_pos = film.device_coords(it.pos());
-                    const Vec2 sample_pos = sample_pixel(g, film.pixel_size, pixel_pos);
-                    // dispatcher.try_submit(
-                    //     Simple{cam(sample_pos), &room_geo, &mat_getter, sample_pos});
-                    dispatcher.try_submit(PathTracer{
-                        &g, &room_geo, &mat_getter, cam(sample_pos), max_depth, bias, sample_pos});
-                }
-        };
-        std::thread producer_thread(producer);
+        Dispatcher<PathTracer, Simple> dispatcher(qsize);
+        const PixelUpdate              updater{TriangleFilter(filter_rad)};
 
-        const PixelUpdate updater{TriangleFilter(filter_rad)};
+        auto it = film.img.begin();
 
         while(Viewport::active())
         {
+            Vec2 sample_pos;
+            do
+            {
+                if(it != film.img.end())
+                    ++it;
+                else
+                    it = film.img.begin();
+                sample_pos = sample_pixel(g, film.pixel_size, film.device_coords(it.pos()));
+            } while(dispatcher.try_submit(PathTracer{
+                &g, &room_geo, &mat_getter, cam(sample_pos), max_depth, bias, sample_pos}));
+
             while(const auto ret = dispatcher.fetch_result<PathTracer>())
             {
                 const Sample& sample = ret.value();
@@ -104,9 +104,6 @@ main(int argc, char* argv[])
             Viewport::draw();
             glfwPollEvents();
         }
-
-        produce.store(false, std::memory_order_relaxed);
-        producer_thread.join();
     }
     catch(const GLenum& er)
     {
