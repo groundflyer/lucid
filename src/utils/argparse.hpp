@@ -62,17 +62,17 @@ struct key_index_impl<Key, Idx, _Option, Rest...>
 };
 
 template <typename... Options>
-struct has_repeating_impl;
+struct has_repeating_key_impl;
 
 template <typename First, typename... Rest>
-struct has_repeating_impl<First, Rest...>
+struct has_repeating_key_impl<First, Rest...>
 {
     static constexpr bool value =
-        (false || ... || (First::key == Rest::key)) || has_repeating_impl<Rest...>::value;
+        (false || ... || (First::key == Rest::key)) || has_repeating_key_impl<Rest...>::value;
 };
 
 template <typename Last>
-struct has_repeating_impl<Last>
+struct has_repeating_key_impl<Last>
 {
     static constexpr bool value = false;
 };
@@ -101,12 +101,46 @@ tokenize_impl(const std::string_view keyword, const std::tuple<Options...>& opti
 
 template <typename Converter, std::size_t... Idxs>
 constexpr auto
-argc2array(char* argc[], Converter converter, std::index_sequence<Idxs...>) noexcept
+argv2array(char* argc[], Converter converter, std::index_sequence<Idxs...>) noexcept
 {
     using value_type = std::array<std::decay_t<std::invoke_result_t<Converter, std::string_view>>,
                                   sizeof...(Idxs)>;
     return value_type{converter(argc[Idxs])...};
 }
+
+template <typename T>
+struct fmt_options
+{
+    const T& value;
+};
+
+template <typename T>
+struct fmt_pos
+{
+    const T& value;
+};
+
+template <typename Options, typename Positionals>
+struct fmt_data
+{
+    std::string_view     program_name;
+    fmt_options<Options> options;
+    fmt_pos<Positionals> positionals;
+
+    fmt_data()                = delete;
+    fmt_data(const fmt_data&) = delete;
+    fmt_data(fmt_data&&)      = delete;
+    fmt_data&
+    operator=(const fmt_data&) = delete;
+
+    constexpr fmt_data(std::string_view   _program_name,
+                       const Options&     _options,
+                       const Positionals& _positionals) noexcept :
+        program_name(_program_name),
+        options{_options}, positionals{_positionals}
+    {
+    }
+};
 } // namespace detail
 
 class ArgsRange : public ranges::view_facade<ArgsRange>
@@ -174,7 +208,7 @@ class Binding
     constexpr value_type
     operator()() const
     {
-        return is_set ? detail::argc2array(words, converter, std::make_index_sequence<nvals>{}) :
+        return is_set ? detail::argv2array(words, converter, std::make_index_sequence<nvals>{}) :
                         default_value;
     }
 };
@@ -312,7 +346,7 @@ class PositionalBinding
     constexpr auto
     operator()() const
     {
-        return detail::argc2array(words, converter, std::make_index_sequence<nvals>{});
+        return detail::argv2array(words, converter, std::make_index_sequence<nvals>{});
     }
 };
 
@@ -548,9 +582,9 @@ tokenize(const std::string_view keyword, const std::tuple<Options...>& options)
 }
 
 template <typename... Options>
-struct has_repeating
+struct has_repeating_key
 {
-    static constexpr bool value = detail::has_repeating_impl<Options...>::value;
+    static constexpr bool value = detail::has_repeating_key_impl<Options...>::value;
 };
 
 template <typename... Options>
@@ -940,208 +974,6 @@ class Visitor
     }
 };
 
-template <typename... Options, typename... Positionals>
-void
-show_help(std::string_view                  program_name,
-          const std::tuple<Options...>&     options,
-          const std::tuple<Positionals...>& positionals,
-          FILE*                             file = stderr) noexcept
-{
-    constexpr std::size_t line_width = 80;
-    constexpr bool        has_flags  = (false || ... || Options::is_flag);
-    std::size_t           column     = 0;
-
-    auto print = [&](const std::string_view format_string, const auto&... args) noexcept {
-        struct
-        {
-            std::size_t
-            operator()(const std::string_view word) const noexcept
-            {
-                return word.size();
-            }
-
-            std::size_t
-            operator()(const char) const noexcept
-            {
-                return 1ul;
-            }
-        } size_getter;
-
-        fmt::print(file, format_string, args...);
-        column += format_string.size() - (sizeof...(args) * 2ul) + (0ul + ... + size_getter(args));
-    };
-
-    auto tuple_print = [](const auto& parm_tuple, const auto& elem_printer) noexcept {
-        std::apply([&](const auto&... elems) { (..., (elem_printer(elems))); }, parm_tuple);
-    };
-
-    print("Usage: {}", program_name);
-    const std::size_t margin = column;
-
-    print(" [-h");
-    column += 4ul;
-    if constexpr(has_flags)
-    {
-        auto flag_print = [&](const auto& option) noexcept {
-            using OptType = std::decay_t<decltype(option)>;
-            if constexpr(OptType::is_flag) { print("{}", OptType::key); }
-        };
-
-        tuple_print(options, flag_print);
-    }
-    print("]");
-
-    auto vars_printer = [&](const auto& option) noexcept {
-        constexpr std::size_t nvals = std::decay_t<decltype(option)>::num_vals;
-
-        if constexpr(nvals == 1ul)
-            print(" {}", option.var);
-        else if constexpr(nvals == -1ul)
-            print(" {}...", option.var);
-        else
-            for(const auto& var: option.var) print(" {}", var);
-    };
-
-    {
-        auto width_checker = [&]() noexcept {
-            if(column > line_width)
-            {
-                fmt::print(file, "\n{:<{}}", ' ', margin);
-                column = margin + 1;
-            }
-        };
-
-        auto opt_print = [&](const auto& option) noexcept {
-            using OptType = std::decay_t<decltype(option)>;
-            if constexpr(!std::is_same_v<typename OptType::value_type, bool>)
-            {
-                width_checker();
-
-                print(" [-{}", OptType::key);
-                vars_printer(option);
-                print("]");
-            }
-        };
-
-        tuple_print(options, opt_print);
-
-        auto pos_print = [&](const auto& pos) noexcept {
-            width_checker();
-            vars_printer(pos);
-        };
-
-        tuple_print(positionals, pos_print);
-    }
-
-    print("\n\nOptions:");
-
-    {
-        auto opt_print = [&](const auto& option) noexcept {
-            using Type = std::decay_t<decltype(option)>;
-            print("\n -{}, --{}", Type::key, option.keyword);
-
-            if constexpr(!Type::is_flag) vars_printer(option);
-
-            print("\t{}", option.doc);
-        };
-
-        print("\n -h, --help\tShow this help message and exit.");
-        tuple_print(options, opt_print);
-    }
-
-    {
-        auto pos_print = [&](const auto& pos) noexcept {
-            print("\n ");
-            vars_printer(pos);
-            print("\t{}", pos.doc);
-        };
-        tuple_print(positionals, pos_print);
-    }
-
-    fmt::print(file, "\n");
-}
-
-template <typename Options, typename Positionals = std::tuple<>>
-class StandardErrorHandler
-{
-    static constexpr std::string_view error_head = "Argument Parsing Error";
-
-    static std::string_view
-    make_program_name(ArgsRange args) noexcept
-    {
-        const std::string_view argv0{*args.read()};
-        const std::size_t      slash_pos{argv0.rfind('/')};
-        return slash_pos == std::string_view::npos ? argv0 : argv0.substr(slash_pos + 1);
-    }
-
-    const Options&     options;
-    const Positionals& positionals;
-    std::string_view   program_name;
-
-    void
-    help(FILE* file = stderr) const noexcept
-    {
-        show_help(program_name, options, positionals, file);
-    };
-
-  public:
-    StandardErrorHandler(ArgsRange          args,
-                         const Options&     _options,
-                         const Positionals& _positionals = Positionals{}) :
-        options(_options),
-        positionals(_positionals), program_name(make_program_name(args))
-    {
-    }
-
-    StandardErrorHandler()                            = delete;
-    StandardErrorHandler(const StandardErrorHandler&) = delete;
-    StandardErrorHandler(StandardErrorHandler&&)      = delete;
-    StandardErrorHandler&
-    operator=(const StandardErrorHandler&) = delete;
-
-    void
-    operator()(const NeedHelpException&) const noexcept
-    {
-        help(stdout);
-        exit(0);
-    }
-
-    void
-    operator()(const FewArgumentsException& ex) const noexcept
-    {
-        fmt::print(stderr, "{}: too few arguments for parameter \"{}\"\n", error_head, ex.keyword);
-        help(stderr);
-        exit(1);
-    }
-
-    template <typename Key>
-    void
-    operator()(const KeyException<Key>& ex) const noexcept
-    {
-        fmt::print(stderr, "{}: unknown key \"{}\"\n", error_head, ex.value);
-        help(stderr);
-        exit(1);
-    }
-
-    void
-    operator()(const std::string_view problem_key) const noexcept
-    {
-        fmt::print(stderr,
-                   "{}: too few arguments for parameter \"{}\"\nUsage:\n",
-                   error_head,
-                   problem_key);
-        help(stderr);
-    }
-
-    void
-    operator()(bool) const noexcept
-    {
-        fmt::print(stderr, "{}: too few positional arguments\nUsage:\n", error_head);
-        help();
-        exit(1);
-    }
-};
-
 template <typename... Options, typename... Positionals, typename ErrorHandler>
 auto
 parse(const std::tuple<Options...>&     options,
@@ -1149,7 +981,7 @@ parse(const std::tuple<Options...>&     options,
       ArgsRange                         args,
       ErrorHandler&&                    error_handler) noexcept
 {
-    static_assert(!has_repeating<Options...>::value, "All keys should be uinique");
+    static_assert(!has_repeating_key<Options...>::value, "Keys must be unique");
 
     args.next();
 
@@ -1202,4 +1034,290 @@ parse(const std::tuple<Options...>& options, ArgsRange args, ErrorHandler&& erro
 {
     return parse(options, std::tuple<>{}, args, std::move(error_handler));
 }
+} // namespace lucid::argparse
+
+namespace fmt
+{
+namespace internal
+{
+template <typename IterOut>
+constexpr IterOut
+copy(IterOut out, const std::string_view word) noexcept
+{
+    return copy_str<char>(word.cbegin(), word.cend(), out);
+}
+
+template <std::size_t nvals, typename IterOut, typename Var>
+constexpr IterOut
+format_var(IterOut out, const Var& var) noexcept
+{
+    if constexpr(nvals == 1) { out = copy(out, var); }
+    else if constexpr(nvals == -1ul)
+    {
+        out = format_to(out, "{}...", var);
+    }
+    else
+    {
+        out = copy(out, var[0]);
+        for(std::size_t i = 1; i < nvals; ++i) { out = format_to(out, " {}", var[i]); }
+    }
+    return out;
+}
+
+template <typename Formatter, typename Tuple, std::size_t... Idxs>
+constexpr void
+format_tuple(Formatter&& formatter, const Tuple& tpl, std::index_sequence<Idxs...>)
+{
+    (..., formatter(std::get<Idxs>(tpl)));
+}
+} // namespace internal
+
+template <char Key, typename Converter, std::size_t nvals>
+struct formatter<lucid::argparse::Option<Key, Converter, nvals>>
+{
+  private:
+    char presentation = 's';
+
+  public:
+    constexpr auto
+    parse(format_parse_context& ctx)
+    {
+        auto it = ctx.begin(), end = ctx.end();
+
+        if(it != end && (*it == 's' || *it == 'l')) presentation = *it++;
+
+        if(it != end && *it != '}') throw format_error("invalid format");
+
+        return it;
+    }
+
+    template <typename FormatContext>
+    constexpr auto
+    format(const lucid::argparse::Option<Key, Converter, nvals>& desc, FormatContext& ctx) const
+    {
+        auto out = ctx.out();
+        if(presentation == 's')
+        {
+            out = format_to(out, "-{}", Key);
+            if constexpr(!lucid::argparse::Option<Key, Converter, nvals>::is_flag)
+            {
+                *out++ = ' ';
+                out    = internal::format_var<nvals>(out, desc.var);
+            }
+        }
+        else
+        {
+            out = format_to(out, "-{}", Key);
+            if(!desc.keyword.empty()) out = format_to(out, ", --{} ", desc.keyword);
+            out = internal::format_var<nvals>(out, desc.var);
+        }
+        return out;
+    }
+};
+
+template <typename Converter, std::size_t nvals>
+struct formatter<lucid::argparse::Positional<Converter, nvals>>
+{
+    constexpr auto
+    parse(format_parse_context& ctx) const
+    {
+        auto it = ctx.begin();
+        return it++;
+    }
+
+    template <typename FormatContext>
+    constexpr auto
+    format(const lucid::argparse::Positional<Converter, nvals>& desc, FormatContext& ctx) const
+    {
+        return internal::format_var<nvals>(ctx.out(), desc.var);
+    }
+};
+
+template <typename... Options>
+struct formatter<lucid::argparse::detail::fmt_options<std::tuple<Options...>>>
+{
+    using Data = lucid::argparse::detail::fmt_options<std::tuple<Options...>>;
+
+  private:
+    char presentation = 's';
+
+  public:
+    constexpr auto
+    parse(format_parse_context& ctx)
+    {
+        auto it = ctx.begin(), end = ctx.end();
+
+        if(it != end && (*it == 's' || *it == 'l')) presentation = *it++;
+
+        if(it != end && *it != '}') throw format_error("invalid format");
+
+        return it;
+    }
+
+    template <typename FormatContext>
+    constexpr auto
+    format(const Data& desc, FormatContext& ctx) const
+    {
+        constexpr auto indices = std::index_sequence_for<Options...>{};
+        const auto&    options = desc.value;
+
+        auto out = ctx.out();
+        if(presentation == 's')
+        {
+            out = internal::copy(out, "[-h");
+
+            if constexpr((false || ... || Options::is_flag))
+                internal::format_tuple(
+                    [&out](const auto& option) {
+                        using OptionType = std::decay_t<decltype(option)>;
+                        if constexpr(OptionType::is_flag) *out++ = OptionType::key;
+                    },
+                    options,
+                    indices);
+
+            *out++ = ']';
+
+            internal::format_tuple(
+                [&out](const auto& option) {
+                    using OptionType = std::decay_t<decltype(option)>;
+                    if constexpr(!OptionType::is_flag) out = format_to(out, " [{:s}]", option);
+                },
+                options,
+                indices);
+        }
+        else
+        {
+            internal::format_tuple(
+                [&out](const auto& option) {
+                    out = format_to(out, "\n[{:l}\t", option, option.doc);
+                },
+                options,
+                indices);
+        }
+        return out;
+    }
+};
+
+template <typename... Options, typename... Positionals>
+struct formatter<
+    lucid::argparse::detail::fmt_data<std::tuple<Options...>, std::tuple<Positionals...>>>
+{
+    using Desc =
+        lucid::argparse::detail::fmt_data<std::tuple<Options...>, std::tuple<Positionals...>>;
+
+    constexpr auto
+    parse(format_parse_context& ctx) const
+    {
+        auto it = ctx.begin();
+        return it++;
+    }
+
+    template <typename FormatContext>
+    constexpr auto
+    format(const Desc& desc, FormatContext& ctx) const
+    {
+        auto out = ctx.out();
+
+        out = format_to(out, "Usage: {} {:s}", desc.program_name, desc.options);
+
+        return out;
+    }
+};
+} // namespace fmt
+
+namespace lucid::argparse
+{
+template <typename... Options, typename... Positionals>
+void
+show_help(std::string_view                  program_name,
+          const std::tuple<Options...>&     options,
+          const std::tuple<Positionals...>& positionals,
+          FILE*                             file = stderr) noexcept
+{
+    fmt::print(file, "{}\n", detail::fmt_data(program_name, options, positionals));
+}
+
+template <typename Options, typename Positionals = std::tuple<>>
+class StandardErrorHandler
+{
+    static constexpr std::string_view error_head = "Argument Parsing Error";
+
+    static std::string_view
+    make_program_name(ArgsRange args) noexcept
+    {
+        const std::string_view argv0{*args.read()};
+        const std::size_t      slash_pos{argv0.rfind('/')};
+        return slash_pos == std::string_view::npos ? argv0 : argv0.substr(slash_pos + 1);
+    }
+
+    const Options&     options;
+    const Positionals& positionals;
+    std::string_view   program_name;
+
+    void
+    help(FILE* file = stderr) const noexcept
+    {
+        show_help(program_name, options, positionals, file);
+    };
+
+  public:
+    StandardErrorHandler(ArgsRange          args,
+                         const Options&     _options,
+                         const Positionals& _positionals = Positionals{}) :
+        options(_options),
+        positionals(_positionals), program_name(make_program_name(args))
+    {
+    }
+
+    StandardErrorHandler()                            = delete;
+    StandardErrorHandler(const StandardErrorHandler&) = delete;
+    StandardErrorHandler(StandardErrorHandler&&)      = delete;
+    StandardErrorHandler&
+    operator=(const StandardErrorHandler&) = delete;
+
+    void
+    operator()(const NeedHelpException&) const noexcept
+    {
+        help(stdout);
+        exit(0);
+    }
+
+    void
+    operator()(const FewArgumentsException& ex) const noexcept
+    {
+        fmt::print(stderr,
+                   FMT_STRING("{}: too few arguments for parameter \"{}\"\n"),
+                   error_head,
+                   ex.keyword);
+        help(stderr);
+        exit(1);
+    }
+
+    template <typename Key>
+    void
+    operator()(const KeyException<Key>& ex) const noexcept
+    {
+        fmt::print(stderr, FMT_STRING("{}: unknown key \"{}\"\n"), error_head, ex.value);
+        help(stderr);
+        exit(1);
+    }
+
+    void
+    operator()(const std::string_view problem_key) const noexcept
+    {
+        fmt::print(stderr,
+                   FMT_STRING("{}: too few arguments for parameter \"{}\"\nUsage:\n"),
+                   error_head,
+                   problem_key);
+        help(stderr);
+    }
+
+    void
+    operator()(bool) const noexcept
+    {
+        fmt::print(stderr, FMT_STRING("{}: too few positional arguments\nUsage:\n"), error_head);
+        help();
+        exit(1);
+    }
+};
 } // namespace lucid::argparse

@@ -87,5 +87,6 @@ int main()
     int ret = 0;
     ret += no_error_check();
     ret += error_check();
+    show_help("lucid", options, positionals);
     return ret;
 }
