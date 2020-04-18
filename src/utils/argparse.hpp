@@ -1054,19 +1054,19 @@ format_var(IterOut out, const Var& var) noexcept
     if constexpr(nvals == 1) { out = copy(out, var); }
     else if constexpr(nvals == -1ul)
     {
-        out = format_to(out, "{}...", var);
+        out = format_to(out, FMT_STRING("{}..."), var);
     }
     else
     {
         out = copy(out, var[0]);
-        for(std::size_t i = 1; i < nvals; ++i) { out = format_to(out, " {}", var[i]); }
+        for(std::size_t i = 1; i < nvals; ++i) { out = format_to(out, FMT_STRING(" {}"), var[i]); }
     }
     return out;
 }
 
 template <typename Formatter, typename Tuple, std::size_t... Idxs>
 constexpr void
-format_tuple(Formatter&& formatter, const Tuple& tpl, std::index_sequence<Idxs...>)
+for_each(Formatter&& formatter, const Tuple& tpl, std::index_sequence<Idxs...>)
 {
     (..., formatter(std::get<Idxs>(tpl)));
 }
@@ -1098,7 +1098,7 @@ struct formatter<lucid::argparse::Option<Key, Converter, nvals>>
         auto out = ctx.out();
         if(presentation == 's')
         {
-            out = format_to(out, "-{}", Key);
+            out = format_to(out, FMT_STRING("-{}"), Key);
             if constexpr(!lucid::argparse::Option<Key, Converter, nvals>::is_flag)
             {
                 *out++ = ' ';
@@ -1107,8 +1107,8 @@ struct formatter<lucid::argparse::Option<Key, Converter, nvals>>
         }
         else
         {
-            out = format_to(out, "-{}", Key);
-            if(!desc.keyword.empty()) out = format_to(out, ", --{} ", desc.keyword);
+            out = format_to(out, FMT_STRING("-{}"), Key);
+            if(!desc.keyword.empty()) out = format_to(out, FMT_STRING(", --{} "), desc.keyword);
             out = internal::format_var<nvals>(out, desc.var);
         }
         return out;
@@ -1167,7 +1167,7 @@ struct formatter<lucid::argparse::detail::fmt_options<std::tuple<Options...>>>
             out = internal::copy(out, "[-h");
 
             if constexpr((false || ... || Options::is_flag))
-                internal::format_tuple(
+                internal::for_each(
                     [&out](const auto& option) {
                         using OptionType = std::decay_t<decltype(option)>;
                         if constexpr(OptionType::is_flag) *out++ = OptionType::key;
@@ -1177,19 +1177,20 @@ struct formatter<lucid::argparse::detail::fmt_options<std::tuple<Options...>>>
 
             *out++ = ']';
 
-            internal::format_tuple(
+            internal::for_each(
                 [&out](const auto& option) {
                     using OptionType = std::decay_t<decltype(option)>;
-                    if constexpr(!OptionType::is_flag) out = format_to(out, " [{:s}]", option);
+                    if constexpr(!OptionType::is_flag)
+                        out = format_to(out, FMT_STRING(" [{:s}]"), option);
                 },
                 options,
                 indices);
         }
         else
         {
-            internal::format_tuple(
+            internal::for_each(
                 [&out](const auto& option) {
-                    out = format_to(out, "\n[{:l}\t", option, option.doc);
+                    out = format_to(out, FMT_STRING("\n[{:l}\t"), option, option.doc);
                 },
                 options,
                 indices);
@@ -1218,7 +1219,7 @@ struct formatter<
     {
         auto out = ctx.out();
 
-        out = format_to(out, "Usage: {} {:s}", desc.program_name, desc.options);
+        out = format_to(out, FMT_STRING("Usage: {} {:s}"), desc.program_name, desc.options);
 
         return out;
     }
@@ -1234,7 +1235,7 @@ show_help(std::string_view                  program_name,
           const std::tuple<Positionals...>& positionals,
           FILE*                             file = stderr) noexcept
 {
-    fmt::print(file, "{}\n", detail::fmt_data(program_name, options, positionals));
+    fmt::print(file, FMT_STRING("{}\n"), detail::fmt_data(program_name, options, positionals));
 }
 
 template <typename Options, typename Positionals = std::tuple<>>
