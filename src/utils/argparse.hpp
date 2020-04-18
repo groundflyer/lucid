@@ -970,6 +970,7 @@ parse(const std::tuple<Options...>&     options,
       ErrorHandler&&                    error_handler) noexcept
 {
     static_assert(!has_repeating_key<Options...>::value, "Keys must be unique");
+    static_assert(!(false || ... || (Options::key == ' ')), "Space is not allowed as a key");
 
     args.next();
 
