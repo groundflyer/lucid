@@ -19,33 +19,35 @@ struct out_of_range
 
 namespace detail
 {
-template <typename BinaryOp, typename Operand>
+template <typename BinaryOp, typename LeftOperand>
 struct fold_wrapper
 {
-    using ResultType = typename std::invoke_result_t<BinaryOp, const Operand&, const Operand&>;
+    BinaryOp    op;
+    LeftOperand operand;
 
-    BinaryOp   op;
-    ResultType operand;
-
-    constexpr fold_wrapper(BinaryOp _op, const Operand& _operand) : op(_op), operand(_operand) {}
+    constexpr fold_wrapper(BinaryOp _op, const LeftOperand& _operand) : op(_op), operand(_operand)
+    {
+    }
 
     constexpr fold_wrapper() = delete;
 
     constexpr fold_wrapper(const fold_wrapper&) = delete;
 
-    template <typename OperandB>
+    template <typename RightOperand>
     constexpr decltype(auto)
-    operator%(const fold_wrapper<BinaryOp, OperandB>& rhs) const noexcept
+    operator%(const fold_wrapper<BinaryOp, RightOperand>& rhs) const noexcept
     {
-        return fold_wrapper(op, op(operand, rhs.operand));
+        return fold_wrapper<BinaryOp, std::invoke_result_t<BinaryOp, LeftOperand, RightOperand>>(
+            op, op(operand, rhs.operand));
     }
 };
 
 template <typename Tuple, std::size_t... Ids>
 decltype(auto)
-enumerate_impl(Tuple&& tuple, std::index_sequence<Ids...>) noexcept
+enumerate_impl(const Tuple& tuple, std::index_sequence<Ids...>) noexcept
 {
-    return std::tuple{std::pair{Ids, std::get<Ids>(tuple)}...};
+    return std::tuple{std::pair<std::size_t, const std::tuple_element_t<Ids, Tuple>&>{
+        Ids, std::get<Ids>(tuple)}...};
 }
 
 template <typename Ret, std::size_t Idx, typename TupleArgs, typename Func, typename... RestFuncs>
@@ -178,6 +180,13 @@ reduce(BinaryOp&& op, Init&& init, Args&&... args) noexcept
     return (detail::fold_wrapper(op, init) % ... % detail::fold_wrapper(op, args)).operand;
 }
 
+template <typename BinaryOp, typename T, typename... Ts>
+constexpr decltype(auto)
+reduce_tuple(BinaryOp&& op, const T& init, const std::tuple<Ts...>& tuple) noexcept
+{
+    return std::apply([&](const Ts&... args) { return reduce(op, init, args...); }, tuple);
+}
+
 template <typename... Ts>
 constexpr decltype(auto)
 enumerate(const std::tuple<Ts...>& tuple) noexcept
@@ -189,8 +198,6 @@ template <typename... Args, typename... Funcs, template <typename...> typename T
 constexpr decltype(auto)
 switcher_func(const std::size_t case_, Tuple<Funcs...>&& funcs, Args&&... args)
 {
-    if(case_ >= sizeof...(Funcs)) throw out_of_range{case_, sizeof...(Funcs)};
-
     return std::apply(
         [case_, args_tuple = std::forward_as_tuple(args...)](Funcs&&... items) mutable {
             using tpl = typename typelist<Funcs...>::template result_of<Args...>;
@@ -205,8 +212,6 @@ template <typename... Args, typename... Funcs, template <typename...> typename T
 constexpr decltype(auto)
 switcher_func(const std::size_t case_, const Tuple<Funcs...>& funcs, const Args&... args)
 {
-    if(case_ >= sizeof...(Funcs)) throw out_of_range{case_, sizeof...(Funcs)};
-
     return std::apply(
         [case_, args_tuple = std::tuple{args...}](const Funcs&... items) mutable {
             using tpl = typename typelist<Funcs...>::template result_of<Args...>;

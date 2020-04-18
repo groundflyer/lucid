@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
                          },
                          [](const auto& testing, const auto)
                          {
-                             const auto& [isect, pidx] = testing;
+                             const auto& [pidx, isect] = testing;
                              return !isect || pidx != 0ul;
                          });
 

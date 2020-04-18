@@ -22,7 +22,7 @@ struct Constant
     Sample
     operator()() const noexcept
     {
-        const auto [isect, pid]       = hider(ray, *scene);
+        const auto [pid, isect]       = hider(ray, *scene);
         const auto& [color, emission] = (*material_getter)(pid);
         const RGB ret                 = isect ? color + emission : RGB(0_r);
         return Sample{sample_pos, ret};
@@ -58,7 +58,7 @@ struct PathTracer_
         for(std::size_t depth = 0; depth < max_depth; ++depth)
         {
             const auto& [ro, rd]    = ray;
-            const auto [isect, pid] = hider(ray, *scene);
+            const auto [pid, isect] = hider(ray, *scene);
 
             if(!isect) break;
 

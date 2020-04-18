@@ -74,31 +74,30 @@ namespace lucid
 
     namespace detail
     {
-        template <typename Intersections, std::size_t ... Ids>
-        constexpr decltype(auto)
-        closest_impl(const Intersections& isects,
-                     std::index_sequence<Ids...>) noexcept
-        {
-            return reduce([](const auto& a, const auto& b)
-                          { return a.first.t < b.first.t ? (a) : (b); },
-                std::pair{(std::get<0>(isects)), 0ul},
-                std::pair{(std::get<Ids + 1>(isects)), Ids + 1}...);
-        }
-
-        template <template <typename, std::size_t> typename Container,
-                  typename PrimsTuple,
-                  std::size_t ... Ids>
-        constexpr auto
-        hider_impl(const Ray_<Container>& ray,
-                   const PrimsTuple& prims,
-                   std::index_sequence<Ids...>) noexcept
-        { return closest(std::tuple{intersect(ray, std::get<Ids>(prims))...}); }
+    template <template <typename, std::size_t> typename Container,
+              typename PrimsTuple,
+              std::size_t... Ids>
+    constexpr auto
+    hider_impl(const Ray_<Container>& ray,
+               const PrimsTuple&      prims,
+               std::index_sequence<Ids...>) noexcept
+    {
+        return closest(std::tuple{intersect(ray, std::get<Ids>(prims))...});
     }
+    } // namespace detail
 
     template <typename Intersections>
     constexpr decltype(auto)
     closest(const Intersections& isects) noexcept
-    { return detail::closest_impl(isects, std::make_index_sequence<std::tuple_size_v<Intersections> - 1>{}); }
+    {
+        return reduce_tuple(
+            [](const auto& a, const auto& b) noexcept {
+                return a.second.t < b.second.t ? (a) : (b);
+            },
+            std::pair<std::size_t, const Intersection&>{
+                0ul, Intersection{false, std::numeric_limits<real>::infinity(), Vec2{}}},
+            enumerate(isects));
+    }
 
     template <template <typename, std::size_t> typename Container,
               typename PrimsTuple>
