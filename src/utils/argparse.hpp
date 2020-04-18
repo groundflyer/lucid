@@ -108,24 +108,12 @@ argv2array(char* argc[], Converter converter, std::index_sequence<Idxs...>) noex
     return value_type{converter(argc[Idxs])...};
 }
 
-template <typename T>
-struct fmt_options
-{
-    const T& value;
-};
-
-template <typename T>
-struct fmt_pos
-{
-    const T& value;
-};
-
 template <typename Options, typename Positionals>
 struct fmt_data
 {
-    std::string_view     program_name;
-    fmt_options<Options> options;
-    fmt_pos<Positionals> positionals;
+    std::string_view   program_name;
+    const Options&     options;
+    const Positionals& positionals;
 
     fmt_data()                = delete;
     fmt_data(const fmt_data&) = delete;
@@ -1063,13 +1051,6 @@ format_var(IterOut out, const Var& var) noexcept
     }
     return out;
 }
-
-template <typename Formatter, typename Tuple, std::size_t... Idxs>
-constexpr void
-for_each(Formatter&& formatter, const Tuple& tpl, std::index_sequence<Idxs...>)
-{
-    (..., formatter(std::get<Idxs>(tpl)));
-}
 } // namespace internal
 
 template <char Key, typename Converter, std::size_t nvals>
@@ -1133,71 +1114,74 @@ struct formatter<lucid::argparse::Positional<Converter, nvals>>
     }
 };
 
-template <typename... Options>
-struct formatter<lucid::argparse::detail::fmt_options<std::tuple<Options...>>>
+template <bool        is_short,
+          std::size_t max_width,
+          typename OutIter,
+          typename... Options,
+          typename... Positionals>
+constexpr OutIter
+format_head(OutIter                           out,
+            const std::tuple<Options...>&     options,
+            const std::tuple<Positionals...>& positionals,
+            const std::size_t                 margin) noexcept
 {
-    using Data = lucid::argparse::detail::fmt_options<std::tuple<Options...>>;
-
-  private:
-    char presentation = 's';
-
-  public:
-    constexpr auto
-    parse(format_parse_context& ctx)
+    if constexpr(is_short)
     {
-        auto it = ctx.begin(), end = ctx.end();
+        out                        = internal::copy(out, "[-h");
+        std::size_t current_column = margin + 3;
 
-        if(it != end && (*it == 's' || *it == 'l')) presentation = *it++;
+        auto next_line = [&](const std::size_t column) {
+            if(column > max_width)
+            {
+                *out++ = '\n';
+                for(std::size_t i = 0; i < margin - 1; ++i) *out++ = ' ';
+                current_column = margin;
+            }
+        };
 
-        if(it != end && *it != '}') throw format_error("invalid format");
-
-        return it;
-    }
-
-    template <typename FormatContext>
-    constexpr auto
-    format(const Data& desc, FormatContext& ctx) const
-    {
-        constexpr auto indices = std::index_sequence_for<Options...>{};
-        const auto&    options = desc.value;
-
-        auto out = ctx.out();
-        if(presentation == 's')
-        {
-            out = internal::copy(out, "[-h");
-
-            if constexpr((false || ... || Options::is_flag))
-                internal::for_each(
-                    [&out](const auto& option) {
-                        using OptionType = std::decay_t<decltype(option)>;
-                        if constexpr(OptionType::is_flag) *out++ = OptionType::key;
-                    },
-                    options,
-                    indices);
-
-            *out++ = ']';
-
-            internal::for_each(
-                [&out](const auto& option) {
+        if constexpr((false || ... || Options::is_flag))
+            lucid::for_each(
+                [&](const auto& option) {
                     using OptionType = std::decay_t<decltype(option)>;
-                    if constexpr(!OptionType::is_flag)
-                        out = format_to(out, FMT_STRING(" [{:s}]"), option);
+                    if constexpr(OptionType::is_flag)
+                    {
+                        *out++ = OptionType::key;
+                        ++current_column;
+                    }
                 },
-                options,
-                indices);
-        }
-        else
-        {
-            internal::for_each(
-                [&out](const auto& option) {
-                    out = format_to(out, FMT_STRING("\n[{:l}\t"), option, option.doc);
-                },
-                options,
-                indices);
-        }
-        return out;
+                options);
+
+        *out++ = ']';
+        ++current_column;
+        next_line(current_column);
+
+        auto printer = [&](auto&& str, const auto& elem) {
+            const std::size_t str_size = formatted_size(str, elem);
+            next_line(current_column + str_size);
+            out = format_to(out, str, elem);
+            current_column += str_size;
+        };
+
+        lucid::for_each(
+            [&](const auto& option) {
+                using OptionType = std::decay_t<decltype(option)>;
+                if constexpr(!OptionType::is_flag) printer(FMT_STRING(" [{:s}]"), option);
+            },
+            options);
+
+        // short positionals
+        lucid::for_each([&](const auto& elem) { printer(FMT_STRING(" {}"), elem); }, positionals);
     }
-};
+    else
+    {
+        lucid::for_each(
+            [&out](const auto& option) {
+                out = format_to(out, FMT_STRING("\n[{:l}\t"), option, option.doc);
+            },
+            options);
+    }
+    return out;
+}
 
 template <typename... Options, typename... Positionals>
 struct formatter<
@@ -1217,9 +1201,17 @@ struct formatter<
     constexpr auto
     format(const Desc& desc, FormatContext& ctx) const
     {
+        constexpr std::size_t max_width = 80;
+
         auto out = ctx.out();
 
-        out = format_to(out, FMT_STRING("Usage: {} {:s}"), desc.program_name, desc.options);
+        constexpr auto front = FMT_STRING("Usage: {} ");
+
+        out = format_to(out, front, desc.program_name);
+
+        // short options
+        out = format_head<true, max_width>(
+            out, desc.options, desc.positionals, formatted_size(front, desc.program_name));
 
         return out;
     }

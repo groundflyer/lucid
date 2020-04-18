@@ -155,6 +155,20 @@ apply_impl(F&& f, Tuple& tuple, std::index_sequence<I...>) noexcept
 {
     return std::invoke(std::forward<F>(f), tuple.template get<I>()...);
 }
+
+template <typename F, typename Tuple, std::size_t... I>
+constexpr void
+for_each_impl(F&& f, const Tuple& tuple, std::index_sequence<I...>)
+{
+    (..., std::invoke(std::forward<F>(f), std::get<I>(tuple)));
+}
+
+template <typename F, typename Tuple, std::size_t... I>
+constexpr void
+for_each_impl(F&& f, Tuple& tuple, std::index_sequence<I...>)
+{
+    (..., std::invoke(std::forward<F>(f), std::get<I>(tuple)));
+}
 } // namespace detail
 
 template <typename BinaryOp, typename Init, typename... Args>
@@ -284,5 +298,19 @@ constexpr decltype(auto)
 apply(F&& f, Tuple<Ts...>& tuple) noexcept
 {
     return detail::apply_impl(std::forward<F>(f), tuple, std::index_sequence_for<Ts...>{});
+}
+
+template <typename F, typename... Ts>
+constexpr void
+for_each(F&& f, const std::tuple<Ts...>& tuple)
+{
+    detail::for_each_impl(std::forward<F>(f), tuple, std::index_sequence_for<Ts...>{});
+}
+
+template <typename F, typename... Ts>
+constexpr void
+for_each(F&& f, std::tuple<Ts...>& tuple)
+{
+    detail::for_each_impl(std::forward<F>(f), tuple, std::index_sequence_for<Ts...>{});
 }
 } // namespace lucid
