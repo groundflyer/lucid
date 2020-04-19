@@ -27,11 +27,7 @@ struct to_unsigned
 };
 
 constexpr std::tuple options{
-    option<'r', 2>(to_unsigned{},
-                   {640, 640},
-                   "resolution",
-                   "Image resolution.",
-                   {"width", "height"}),
+    option<'r', 2>(to_unsigned{}, {640, 640}, "resolution", "Image resolution.", {"W", "H"}),
     option<'d'>(to_unsigned{}, 4, "depth", "Maximum bounces.", "N"),
     option<'q'>(to_unsigned{}, 100000, "queue-size", "Task dispatcher queue size.", "Q")};
 
