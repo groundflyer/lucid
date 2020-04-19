@@ -138,8 +138,8 @@ int main(int argc, char *argv[])
     const auto gp_gen = tuple{sphere_gen, triangle_gen, quad_gen, disk_gen};
     const auto gp_gen_l = tuple{sphere_gen_l, triangle_gen_l, quad_gen_l, disk_gen_l, aabb_gen_l};
 
-    RandomDistribution<size_t> gp_choose(0ul, std::tuple_size_v<decltype(gp_gen)>);
-    RandomDistribution<size_t> gp_choose_l(0ul, std::tuple_size_v<decltype(gp_gen_l)>);
+    RandomDistribution<size_t> gp_choose(0ul, std::tuple_size_v<decltype(gp_gen)> - 1);
+    RandomDistribution<size_t> gp_choose_l(0ul, std::tuple_size_v<decltype(gp_gen_l)> - 1);
 
     const auto rand_prim_gen = [&](){ return switcher_func(gp_choose(g), gp_gen); };
     const auto rand_prim_gen_l = [&](const real m, const Normal& n){ return switcher_func(gp_choose_l(g), gp_gen_l, m, n); };
