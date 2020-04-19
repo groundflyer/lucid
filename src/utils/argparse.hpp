@@ -1115,6 +1115,44 @@ struct formatter<lucid::argparse::Positional<Converter, nvals>>
     }
 };
 
+template <std::size_t max_width, typename IterOut>
+constexpr IterOut
+aligned_doc(IterOut out, const std::string_view text, const std::size_t margin) noexcept
+{
+    std::size_t column = margin;
+    const auto  end    = text.cend();
+
+    auto is_not_space = [&](char a) noexcept { return ((a != ' ') && (a != '\t') && (a != '\n')); };
+    auto word_size    = [&](auto iter) noexcept {
+        std::size_t counter = 0ul;
+        while(is_not_space(*iter) && iter != end)
+        {
+            ++iter;
+            ++counter;
+        }
+        return counter;
+    };
+
+    for(auto iter = text.cbegin(); iter != end; ++iter)
+    {
+        const std::size_t esteem_column = column + word_size(iter) + 1ul;
+
+        if(is_not_space(*iter) || (esteem_column <= max_width))
+        {
+            *out++ = *iter;
+            ++column;
+        }
+        else
+        {
+            *out++ = '\n';
+            for(std::size_t i = 0; i < margin; ++i) *out++ = ' ';
+            column = margin;
+        }
+    }
+
+    return out;
+}
+
 template <bool        is_short,
           std::size_t max_width,
           typename OutIter,
@@ -1175,25 +1213,18 @@ format_opts(OutIter                           out,
     }
     else
     {
+        auto align_printer = [&](const auto& str, const auto& elem) noexcept {
+            out = format_to(out, str, elem);
+            // width is guarandeed to be less the margin
+            const std::size_t width = formatted_size(str, elem) - 1ul;
+            for(std::size_t i = 0; i < (margin - width); ++i) *out++ = ' ';
+            out = aligned_doc<max_width>(out, elem.doc, margin);
+        };
         lucid::for_each(
-            [&](const auto& option) {
-                // width is guarandeed to be less the margin
-                out                     = format_to(out, FMT_STRING("\n    {:l}"), option);
-                const std::size_t width = formatted_size("    {:l}", option);
-                for(std::size_t i = 0; i < (margin - width); ++i) *out++ = ' ';
-                out = internal::copy(out, option.doc);
-            },
-            options);
+            [&](const auto& option) { align_printer(FMT_STRING("\n    {:l}"), option); }, options);
 
-        lucid::for_each(
-            [&](const auto& pos) {
-                // width is guarandeed to be less the margin
-                out                     = format_to(out, FMT_STRING("\n    {}"), pos);
-                const std::size_t width = formatted_size("    {}", pos);
-                for(std::size_t i = 0; i < (margin - width); ++i) *out++ = ' ';
-                out = internal::copy(out, pos.doc);
-            },
-            positionals);
+        lucid::for_each([&](const auto& pos) { align_printer(FMT_STRING("\n    {}"), pos); },
+                        positionals);
     }
     return out;
 }

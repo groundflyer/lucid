@@ -52,10 +52,10 @@ ArgvMock
 };
 
 
-constexpr tuple options{option<'a'>(identity{}, "default foo", "foo", "doc for foo", "FOO"),
-                        flag<'f'>(false, "flag", "doc for flag"),
-                        option<'d', 2ul>(identity{}, {"1111", "2222"}, "two-val", "doc for two-val", {"2val1", "2val2"}),
-                        option_list<'m'>(identity{}, "multi_val", "doc for multi_val", "VAL")};
+constexpr tuple options{option<'a'>(identity{}, "default foo", "foo", "long doc for foo lore ipsum hule bly", "FOO"),
+                        flag<'f'>(false, "flag", "doc for flag bla bla bla foo bar"),
+                        option<'d', 2ul>(identity{}, {"1111", "2222"}, "two-val", "doc for two-val here we have an array fo string views of size two", {"2val1", "2val2"}),
+                        option_list<'m'>(identity{}, "multi_val", "doc for unlimited values", "VAL")};
 
 static_assert(!keywords_have_space(options));
 
