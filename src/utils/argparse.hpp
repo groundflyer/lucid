@@ -1121,7 +1121,7 @@ template <bool        is_short,
           typename... Options,
           typename... Positionals>
 constexpr OutIter
-format_head(OutIter                           out,
+format_opts(OutIter                           out,
             const std::tuple<Options...>&     options,
             const std::tuple<Positionals...>& positionals,
             const std::size_t                 margin) noexcept
@@ -1176,12 +1176,57 @@ format_head(OutIter                           out,
     else
     {
         lucid::for_each(
-            [&out](const auto& option) {
-                out = format_to(out, FMT_STRING("\n[{:l}\t"), option, option.doc);
+            [&](const auto& option) {
+                // width is guarandeed to be less the margin
+                out                     = format_to(out, FMT_STRING("\n    {:l}"), option);
+                const std::size_t width = formatted_size("    {:l}", option);
+                for(std::size_t i = 0; i < (margin - width); ++i) *out++ = ' ';
+                out = internal::copy(out, option.doc);
             },
             options);
+
+        lucid::for_each(
+            [&](const auto& pos) {
+                // width is guarandeed to be less the margin
+                out                     = format_to(out, FMT_STRING("\n    {}"), pos);
+                const std::size_t width = formatted_size("    {}", pos);
+                for(std::size_t i = 0; i < (margin - width); ++i) *out++ = ' ';
+                out = internal::copy(out, pos.doc);
+            },
+            positionals);
     }
     return out;
+}
+
+template <typename Options, typename Positionals, std::size_t... OptIdx, std::size_t... PosIdx>
+constexpr std::size_t
+longest_head(const Options&     options,
+             const Positionals& positionals,
+             std::index_sequence<OptIdx...>,
+             std::index_sequence<PosIdx...>) noexcept
+{
+    const std::size_t opt_max = lucid::reduce_tuple(
+        [](const std::size_t a, const auto& option2) noexcept -> std::size_t {
+            return std::max(a, formatted_size(FMT_STRING("{:l}"), option2));
+        },
+        0ul,
+        options);
+
+    std::size_t pos_max = 0;
+
+    if constexpr(std::tuple_size_v<Positionals> == 1)
+    { pos_max = formatted_size(FMT_STRING("{}"), std::get<0>(positionals)); }
+    else if constexpr((std::tuple_size_v<Positionals>) > 1)
+    {
+        pos_max = lucid::reduce_tuple(
+            [](const std::size_t a, const auto& pos2) noexcept -> std::size_t {
+                return std::max(a, formatted_size(FMT_STRING("{}"), pos2));
+            },
+            0ul,
+            positionals);
+    }
+
+    return std::max(opt_max, pos_max);
 }
 
 template <typename... Options, typename... Positionals>
@@ -1202,7 +1247,9 @@ struct formatter<
     constexpr auto
     format(const Desc& desc, FormatContext& ctx) const
     {
-        constexpr std::size_t max_width = 80;
+        constexpr std::size_t max_width   = 80;
+        const auto&           options     = desc.options;
+        const auto&           positionals = desc.positionals;
 
         auto out = ctx.out();
 
@@ -1211,8 +1258,17 @@ struct formatter<
         out = format_to(out, front, desc.program_name);
 
         // short options
-        out = format_head<true, max_width>(
-            out, desc.options, desc.positionals, formatted_size(front, desc.program_name));
+        out = format_opts<true, max_width>(
+            out, options, positionals, formatted_size(front, desc.program_name));
+
+        out = copy(out, "\n\nOptions:");
+
+        const std::size_t new_margin = longest_head(options,
+                                                    positionals,
+                                                    std::index_sequence_for<Options...>{},
+                                                    std::index_sequence_for<Positionals...>{});
+
+        out = format_opts<false, max_width>(out, options, positionals, new_margin + 5ul);
 
         return out;
     }
