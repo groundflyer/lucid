@@ -496,7 +496,7 @@ option_list(Converter&&            converter,
     return Option<Key, Converter, -1ul>(std::forward<Converter>(converter), keyword, doc, var);
 }
 
-template <char Key, typename... Args>
+template <char Key>
 constexpr auto
 flag(const bool def_val, const std::string_view keyword, const std::string_view doc) noexcept
 {
@@ -1220,6 +1220,10 @@ format_opts(OutIter                           out,
             for(std::size_t i = 0; i < (margin - width); ++i) *out++ = ' ';
             out = aligned_doc<max_width>(out, elem.doc, margin);
         };
+
+        align_printer("\n    {:l}",
+                      lucid::argparse::flag<'h'>(false, "help", "Show this message and exit."));
+
         lucid::for_each(
             [&](const auto& option) { align_printer(FMT_STRING("\n    {:l}"), option); }, options);
 
