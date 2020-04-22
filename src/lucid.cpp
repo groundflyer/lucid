@@ -47,11 +47,11 @@ main(int argc, char* argv[])
 
     const Vec2u res(parse_results.get_opt<'r'>());
     const auto& [width, height] = res;
-    const real ratio            = static_cast<real>(width) / static_cast<real>(height);
+    const real cam_ratio        = ratio(res);
 
     Logger logger(Logger::DEBUG);
 
-    const perspective::shoot cam        = CornellBox::camera(ratio);
+    const perspective::shoot cam        = CornellBox::camera(cam_ratio);
     const auto               room_geo   = CornellBox::geometry();
     const auto               mat_getter = CornellBox::mat_getter();
 
@@ -65,7 +65,7 @@ main(int argc, char* argv[])
     try
     {
         Viewport::init(width, height);
-        Film<ScanlineImage<float, 4>> film{Vec2u(Viewport::get_res()), ratio};
+        Film<ScanlineImage<float, 4>> film{Vec2u(Viewport::get_res())};
         const real                    filter_rad = film.pixel_radius() * 4_r;
 
         Viewport::load_img(film.img);

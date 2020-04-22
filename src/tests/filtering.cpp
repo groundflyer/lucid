@@ -22,10 +22,7 @@ Film<Image>&
 full_update(Film<Image>& film, Updater&& update, const Sample& sample) noexcept
 {
     for(auto it = film.img.begin(); it != film.img.end(); ++it)
-    {
-        const Vec2 pp = film.device_coords(it.pos());
-        *it           = update(*it, pp, sample);
-    }
+        *it           = update(*it, film.device_coords(it.pos()), sample);
     return film;
 }
 
@@ -48,7 +45,7 @@ int main(int argc, char* argv[])
                              auto&& [res, filter_size, samples] = feed;
                              Film<ScanlineImage<float, 4>> film_test(res);
                              Film<ScanlineImage<float, 4>> film_valid(res);
-                             const real filter_rad = film_test.pixel_radius() * filter_size;
+                             const real filter_rad = film_test.pixel_radius() * std::min(filter_size, lucid::min(res));
                              const PixelUpdate updater{TriangleFilter(filter_rad)};
                              for_each(samples, [&](const Sample& sample)
                              {
@@ -57,9 +54,9 @@ int main(int argc, char* argv[])
                              });
                              return std::pair{std::move(film_test), std::move(film_valid)};
                          };
-    const auto property = [](const auto& tested, const auto&)
+    const auto property = [](auto&& tested, const auto&)
                           {
-                              const auto& [film_test, film_valid] = tested;
+                              auto&& [film_test, film_valid] = tested;
                               auto iter2 = film_valid.img.begin();
                               int ret = 0;
                               for (const auto val : film_test.img)
