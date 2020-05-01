@@ -49,11 +49,12 @@ struct window_scanline_iterator
 
 template <typename Image>
 constexpr std::pair<Vec2u, Vec2u>
-filter_bound(const Film<Image>& film, const Vec2& sample_ndc, const real filter_radius) noexcept
+filter_bound(const Film<Image>& film, const Vec2& sample_pos, const real filter_radius) noexcept
 {
-    const Vec2 bmin = lucid::max(sample_ndc - filter_radius, Vec2(-0.5_r));
-    const Vec2 bmax = lucid::min(sample_ndc + filter_radius, Vec2(0.5_r) - film.pixel_size);
-    return std::pair{film.pixel_coords(bmin), film.pixel_coords(bmax)};
+    const real half_ratio = film._ratio * 0.5_r;
+    const Vec2 bmin       = lucid::max(sample_pos - filter_radius, Vec2(-half_ratio, -0.5_r));
+    const Vec2 bmax       = lucid::min(sample_pos + filter_radius, Vec2(half_ratio, 0.5_r));
+    return std::pair{film.pixel_index(bmin), film.pixel_index(bmax)};
 }
 
 template <typename Image>
@@ -90,9 +91,9 @@ struct TriangleFilter
     constexpr TriangleFilter(const real& _radius) : radius(_radius), invert_radius(1_r / _radius) {}
 
     constexpr real
-    operator()(const Vec2& pixel_ndc, const Vec2& sample_ndc) const noexcept
+    operator()(const Vec2& pixel_ssp, const Vec2& sample_pos) const noexcept
     {
-        const real dist = distance(pixel_ndc, sample_ndc);
+        const real dist = distance(pixel_ssp, sample_pos);
         const real norm = dist * invert_radius;
         return 1_r - std::min(1_r, norm);
     }
@@ -107,11 +108,11 @@ struct PixelUpdate
 
     template <template <typename, std::size_t> typename Container>
     constexpr RGBA
-    operator()(const RGBA_<Container>& old_rgba, const Vec2& pixel_ndc, const Sample& sample) const
+    operator()(const RGBA_<Container>& old_rgba, const Vec2& pixel_ssp, const Sample& sample) const
         noexcept
     {
-        const auto& [sample_ndc, sample_val] = sample;
-        const real weight                    = filter(pixel_ndc, sample_ndc);
+        const auto& [sample_pos, sample_val] = sample;
+        const real weight                    = filter(pixel_ssp, sample_pos);
         RGB        old_color(old_rgba);
         const real old_weight = old_rgba.template get<3>();
         const real new_weight = old_weight + weight;
@@ -130,10 +131,10 @@ struct PixelReset
 
     template <template <typename, std::size_t> typename Container>
     constexpr RGBA
-    operator()(const RGBA_<Container>&, const Vec2& pixel_ndc, const Sample& sample) const noexcept
+    operator()(const RGBA_<Container>&, const Vec2& pixel_ssp, const Sample& sample) const noexcept
     {
-        const auto& [sample_ndc, sample_val] = sample;
-        return RGBA(sample_val * filter(pixel_ndc, sample_ndc), 1_r);
+        const auto& [sample_pos, sample_val] = sample;
+        return RGBA(sample_val * filter(pixel_ssp, sample_pos), 1_r);
     }
 };
 
@@ -143,9 +144,9 @@ update_pixels(Film<Image>& film, Updater&& update, const Sample& sample) noexcep
 {
     for(const Vec2u pos: filter_iterate(film, sample.first, update.filter.radius))
     {
-        const Vec2     pixel_ndc = film.device_coords(pos);
+        const Vec2     pixel_ssp = film.sample_space(pos);
         decltype(auto) pixel_val = film.img[pos];
-        pixel_val                = update(pixel_val, pixel_ndc, sample);
+        pixel_val                = update(pixel_val, pixel_ssp, sample);
     }
     return film;
 }
