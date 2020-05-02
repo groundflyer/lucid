@@ -27,11 +27,17 @@ main()
 {
     std::random_device           rd;
     std::default_random_engine   g(rd());
-    RandomDistribution<real>     pos_dist(-0.5_r, 0.5_r);
     RandomDistribution<unsigned> count_dist(3u, 400u);
 
     const auto color_gen = [&]() { return RGB{rand<float, 3>(g)}; };
-    const auto pos_gen   = [&]() { return Vec2(pos_dist.template operator()<2>(g)); };
+    const auto pos_gen   = [&](const real _ratio,
+                               const real _pixel_width) {
+                               const real hratio = _ratio * 0.5_r;
+                               const real hpwidth = _pixel_width * 0.5_r;
+                               RandomDistribution<real> hdist(-0.5_r - hpwidth, 0.5_r + hpwidth);
+                               RandomDistribution<real> wdist(-hratio - hpwidth, hratio + hpwidth);
+                               return Vec2(wdist(g), hdist(g));
+                           };
     const auto res_gen   = [&]() { return Vec2u(count_dist.template operator()<2>(g)); };
 
     int ret = 0;
@@ -56,16 +62,17 @@ main()
             const auto& [fsx, fsy]  = fss;
             const Vec2u idxt        = pixel_index(res, fss);
             // this check fails approximately in 0.0055% cases with -O3 -ffast-math
-            const bool error_prone = math::abs(fsx) > ratio(res) * 0.5_r;
+            const bool error_prone = math::fabs(fsx) > ratio(res) * 0.5_r;
             return any(idxg != idxt) || error_prone || (math::abs(fsy) > 0.5_r);
         });
 
     const auto generator = [&]() {
-        return std::tuple{res_gen(),
+                               const Vec2u res = res_gen();
+        return std::tuple{res,
                           count_dist(g),
                           views::generate_n(
                               [&]() {
-                                  return Sample{pos_gen(), color_gen()};
+                                  return Sample{pos_gen(ratio(res), pixel_width(res)), color_gen()};
                               },
                               count_dist(g))};
     };
@@ -76,7 +83,7 @@ main()
         const real filter_rad = film_test._pixel_radius * std::min(filter_size, lucid::min(res));
         const PixelUpdate updater{TriangleFilter(filter_rad)};
         for_each(samples, [&](const Sample& sample) {
-            film_test  = update_pixels(film_test, updater, sample);
+            film_test  = sample_based_update(film_test, updater, sample);
             film_valid = full_update(film_valid, updater, sample);
         });
         return std::pair{std::move(film_test), std::move(film_valid)};

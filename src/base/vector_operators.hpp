@@ -489,6 +489,102 @@ srgb_luminance(const VectorType<T, N, Container>& rgb) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
+          class Container,
+          template <typename, std::size_t, template <typename, std::size_t> typename>
+          typename VectorType>
+constexpr const T&
+get_x(const VectorType<T, N, Container>& v) noexcept
+{
+    return v.template get<0>();
+}
+
+template <typename T,
+          std::size_t N,
+          template <typename, std::size_t>
+          class Container,
+          template <typename, std::size_t, template <typename, std::size_t> typename>
+          typename VectorType>
+constexpr T&
+get_x(VectorType<T, N, Container>& v) noexcept
+{
+    return v.template get<0>();
+}
+
+template <typename T,
+          std::size_t N,
+          template <typename, std::size_t>
+          class Container,
+          template <typename, std::size_t, template <typename, std::size_t> typename>
+          typename VectorType>
+constexpr const T&
+get_y(const VectorType<T, N, Container>& v) noexcept
+{
+    return v.template get<1>();
+}
+
+template <typename T,
+          std::size_t N,
+          template <typename, std::size_t>
+          class Container,
+          template <typename, std::size_t, template <typename, std::size_t> typename>
+          typename VectorType>
+constexpr T&
+get_y(VectorType<T, N, Container>& v) noexcept
+{
+    return v.template get<1>();
+}
+
+template <typename T,
+          std::size_t N,
+          template <typename, std::size_t>
+          class Container,
+          template <typename, std::size_t, template <typename, std::size_t> typename>
+          typename VectorType>
+constexpr const T&
+get_z(const VectorType<T, N, Container>& v) noexcept
+{
+    return v.template get<2>();
+}
+
+template <typename T,
+          std::size_t N,
+          template <typename, std::size_t>
+          class Container,
+          template <typename, std::size_t, template <typename, std::size_t> typename>
+          typename VectorType>
+constexpr T&
+get_z(VectorType<T, N, Container>& v) noexcept
+{
+    return v.template get<2>();
+}
+
+template <typename T,
+          std::size_t N,
+          template <typename, std::size_t>
+          class Container,
+          template <typename, std::size_t, template <typename, std::size_t> typename>
+          typename VectorType>
+constexpr const T&
+get_w(const VectorType<T, N, Container>& v) noexcept
+{
+    return v.template get<3>();
+}
+
+template <typename T,
+          std::size_t N,
+          template <typename, std::size_t>
+          class Container,
+          template <typename, std::size_t, template <typename, std::size_t> typename>
+          typename VectorType>
+constexpr T&
+get_w(VectorType<T, N, Container>& v) noexcept
+{
+    return v.template get<3>();
+}
+
+template <typename T,
+          std::size_t N,
+          template <typename, std::size_t>
           typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>

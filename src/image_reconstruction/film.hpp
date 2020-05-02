@@ -5,6 +5,7 @@
 #pragma once
 
 #include <base/types.hpp>
+#include <utils/range.hpp>
 
 namespace lucid
 {
@@ -64,6 +65,13 @@ pixel_width(const Vec2& _res) noexcept
     return 1_r / w;
 }
 
+constexpr real
+pixel_width(const Vec2u& _res) noexcept
+{
+    const real w = static_cast<real>(_res.template get<0>());
+    return 1_r / w;
+}
+
 template <typename Image>
 struct Film
 {
@@ -76,20 +84,28 @@ struct Film
 
     explicit Film(const Vec2u& res_u) noexcept :
         img(res_u), res(res_u), _ratio(ratio(res)), _pixel_width(pixel_width(res)),
-        _pixel_radius(math::sqrt(2_r * _pixel_width))
+        _pixel_radius(math::sqrt(2_r * pow<2>(_pixel_width)))
     {
     }
 
     Vec2
     sample_space(const Vec2u& _pidx) const noexcept
     {
+        CHECK_INDEX(get_x(_pidx), get_x(img.res()));
+        CHECK_INDEX(get_y(_pidx), get_y(img.res()));
         return lucid::sample_space(res, _ratio, _pidx);
     }
 
     Vec2u
-    pixel_index(const Vec2& sample_pos) const noexcept
+    pixel_index(const Vec2& pos) const noexcept
     {
-        return lucid::pixel_index(res, _ratio, sample_pos);
+        // we require posx to be in range [-ratio/2, ratio/2]
+        // posy in range [-0.5, 0.5]
+        ASSERT(inclusive_range(-_ratio * 0.5_r, _ratio * 0.5_r)(pos.template get<0>()),
+               "Invalid X sample position");
+        ASSERT(inclusive_range(-0.5_r, 0.5_r)(pos.template get<1>()), "Invalid Y sample position");
+
+        return lucid::pixel_index(res, _ratio, pos);
     }
 };
 } // namespace lucid

@@ -48,16 +48,6 @@ struct window_scanline_iterator
 };
 
 template <typename Image>
-constexpr std::pair<Vec2u, Vec2u>
-filter_bound(const Film<Image>& film, const Vec2& sample_pos, const real filter_radius) noexcept
-{
-    const real half_ratio = film._ratio * 0.5_r;
-    const Vec2 bmin       = lucid::max(sample_pos - filter_radius, Vec2(-half_ratio, -0.5_r));
-    const Vec2 bmax       = lucid::min(sample_pos + filter_radius, Vec2(half_ratio, 0.5_r));
-    return std::pair{film.pixel_index(bmin), film.pixel_index(bmax)};
-}
-
-template <typename Image>
 constexpr auto
 filter_iterate(const Film<Image>& film, const Vec2& pos, const real filter_radius) noexcept
 {
@@ -79,7 +69,9 @@ filter_iterate(const Film<Image>& film, const Vec2& pos, const real filter_radiu
         }
     };
 
-    const auto [bmin, bmax] = filter_bound(film, pos, filter_radius);
+    const real  half_ratio = film._ratio * 0.5_r;
+    const Vec2u bmin = film.pixel_index(lucid::max(pos - filter_radius, Vec2(-half_ratio, -0.5_r)));
+    const Vec2u bmax = film.pixel_index(lucid::min(pos + filter_radius, Vec2(half_ratio, 0.5_r)));
     return iter_proxy{bmin, (bmax - bmin) + 1u};
 }
 
@@ -140,7 +132,7 @@ struct PixelReset
 
 template <typename Image, typename Updater>
 Film<Image>&
-update_pixels(Film<Image>& film, Updater&& update, const Sample& sample) noexcept
+sample_based_update(Film<Image>& film, Updater&& update, const Sample& sample) noexcept
 {
     for(const Vec2u pos: filter_iterate(film, sample.first, update.filter.radius))
     {

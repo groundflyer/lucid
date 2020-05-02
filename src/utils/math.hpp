@@ -19,6 +19,7 @@ namespace math
 using std::abs;
 using std::ceil;
 using std::cos;
+using std::fabs;
 using std::floor;
 using std::fmod;
 using std::pow;
