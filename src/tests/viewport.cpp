@@ -5,43 +5,82 @@
 #include <integrators/basic.hpp>
 #include <sampling/film.hpp>
 #include <scene/cornell_box.hpp>
-#include <utils/printing.hpp>
 #include <utils/logging.hpp>
+#include <utils/printing.hpp>
+#include <utils/timer.hpp>
 
 using namespace lucid;
+using namespace std::literals;
 
 static std::random_device                      rd;
 static thread_local std::default_random_engine g(rd());
 
-
-int main(int argc, char* argv[])
+int
+main(int argc, char* argv[])
 {
-    const unsigned short width     = argc > 1 ? std::stoi(argv[1]) : 640u;
-    const unsigned short height    = argc > 2 ? std::stoi(argv[2]) : 480u;
+    const unsigned short width  = argc > 1 ? std::stoi(argv[1]) : 640u;
+    const unsigned short height = argc > 2 ? std::stoi(argv[2]) : 480u;
 
     Logger logger(Logger::DEBUG);
 
     Viewport::init(width, height);
-    const real         ratio = static_cast<real>(width) / static_cast<real>(height);
 
-    Film<ScanlineImage<float, 4>> film{Vec2u(Viewport::get_res()), ratio};
-    logger.debug("pixel size = {}", film.pixel_size);
-    const perspective::shoot cam   = CornellBox::camera(ratio);
-    const auto         room_geo   = CornellBox::geometry();
-    const auto         mat_getter = CornellBox::mat_getter();
-    using Simple = Constant<std::decay_t<decltype(room_geo)>, std::decay_t<decltype(mat_getter)>>;
-    for(auto it = film.img.begin(); it != film.img.end(); ++it)
+    Film<ScanlineImage<float, 4>> film1{Vec2u(Viewport::get_res())};
+    Film<ScanlineImage<float, 4>> film2{Vec2u(Viewport::get_res())};
+
+    const real               hratio  = film1._ratio * 0.5_r;
+    const real               hpwidth = film1._pixel_width * 0.5_r;
+    RandomDistribution<real> hdist(-0.5_r - hpwidth, 0.5_r + hpwidth);
+    RandomDistribution<real> wdist(-hratio - hpwidth, hratio + hpwidth);
+
+    const auto        color_gen   = [&]() { return RGB{rand<float, 3>(g)}; };
+    const auto        pos_gen     = [&]() { return Vec2(wdist(g), hdist(g)); };
+    const unsigned    filter_size = 100u;
+    const real        filter_rad  = film1._pixel_radius * filter_size;
+    const PixelUpdate updater{TriangleFilter(filter_rad)};
+
+    for(std::size_t i = 0; i < 30ul; ++i)
     {
-        const Vec2 pp = film.device_coords(it.pos());
-        Simple ig{cam(pp), &room_geo, &mat_getter, pp};
+        const Sample sample{pos_gen(), color_gen()};
+        film1 = sample_based_update(film1, updater, sample);
+    }
+
+    const perspective::shoot cam        = CornellBox::camera();
+    const auto               room_geo   = CornellBox::geometry();
+    const auto               mat_getter = CornellBox::mat_getter();
+    using Simple = Constant<std::decay_t<decltype(room_geo)>, std::decay_t<decltype(mat_getter)>>;
+    for(auto it = film2.img.begin(); it != film2.img.end(); ++it)
+    {
+        const Vec2 pp = film1.sample_space(it.pos());
+        Simple     ig{cam(pp), &room_geo, &mat_getter, pp};
         *it = RGBA(ig().second);
     }
 
-    Viewport::load_img(film.img);
+    bool choice = true;
+    Viewport::load_img(film1.img);
+
+    ElapsedTimer<> timer;
 
     while(Viewport::active())
     {
+        if(timer.has_expired(3s))
+        {
+            timer.restart();
+            choice ^= true;
+
+            if(choice)
+            {
+                fmt::print("Sample test\n");
+                Viewport::load_img(film1.img);
+            }
+            else
+            {
+                fmt::print("Camera test\n");
+                Viewport::load_img(film2.img);
+            }
+        }
         Viewport::draw();
+
         glfwPollEvents();
     }
 

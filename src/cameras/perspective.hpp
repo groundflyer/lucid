@@ -17,11 +17,8 @@ struct perspective
         constexpr shoot() noexcept {}
 
         template <template <typename, size_t> typename Container>
-        constexpr shoot(const real              fovy,
-                        const real              ratio,
-                        const Mat4_<Container>& _transform) noexcept :
-            tan_fov_half(math::tan(fovy * 0.5_r) * ratio, math::tan(fovy * 0.5_r)),
-            transform(_transform)
+        constexpr shoot(const real fovy, const Mat4_<Container>& _transform) noexcept :
+            tan_fov_half(math::tan(fovy * 0.5_r), math::tan(fovy * 0.5_r)), transform(_transform)
         {
         }
 

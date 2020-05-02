@@ -93,10 +93,10 @@ class CornellBox
     }
 
     static constexpr perspective::shoot
-    camera(const real& ratio) noexcept
+    camera() noexcept
     {
-        return perspective::shoot(
-            radians(60_r), ratio, look_at(Point(0, 0, 4), Point(0, 0, 0), Normal(0, 1, 0)));
+        return perspective::shoot(radians(60_r),
+                                  look_at(Point(0, 0, 4), Point(0, 0, 0), Normal(0, 1, 0)));
     }
 
     static constexpr MatGetter
