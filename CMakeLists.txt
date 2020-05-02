@@ -58,6 +58,7 @@ endif()
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "")
 add_compile_options($<$<CONFIG:RelWithDebInfo>:-march=native>)
 add_compile_options($<$<CONFIG:RelWithDebInfo>:-ffast-math>)
+add_compile_options($<$<CONFIG:RelWithDebInfo>:-O3>)
 
 # Colored output from Clang
 add_compile_options($<$<CXX_COMPILER_ID:Clang>:-fcolor-diagnostics>)
