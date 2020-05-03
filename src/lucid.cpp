@@ -26,10 +26,20 @@ struct to_unsigned
     }
 };
 
+struct to_real
+{
+    real
+    operator()(const std::string_view word) const noexcept
+    {
+        return std::atof(word.data());
+    }
+};
+
 constexpr std::tuple options{
     option<'r', 2>(to_unsigned{}, {640, 640}, "resolution", "Image resolution.", {"W", "H"}),
     option<'d'>(to_unsigned{}, 4, "depth", "Maximum bounces.", "N"),
-    option<'q'>(to_unsigned{}, 100000, "queue-size", "Task dispatcher queue size.", "Q")};
+    option<'q'>(to_unsigned{}, 100000, "queue-size", "Task dispatcher queue size.", "Q"),
+    option<'f'>(to_real{}, 2_r, "filter-width", "Pixel filter width.", "W")};
 
 static_assert(!keywords_have_space(options));
 
@@ -42,16 +52,16 @@ main(int argc, char* argv[])
     ArgsRange  args(argc, argv);
     const auto parse_results = parse(options, args, StandardErrorHandler(args, options));
 
-    const std::uint8_t max_depth = parse_results.get_opt<'d'>();
-    const unsigned     qsize     = parse_results.get_opt<'q'>();
+    const std::uint8_t max_depth    = parse_results.get_opt<'d'>();
+    const unsigned     qsize        = parse_results.get_opt<'q'>();
+    const real         filter_width = parse_results.get_opt<'f'>();
 
     const Vec2u res(parse_results.get_opt<'r'>());
     const auto& [width, height] = res;
-    const real cam_ratio        = ratio(res);
 
     Logger logger(Logger::DEBUG);
 
-    const perspective::shoot cam        = CornellBox::camera(cam_ratio);
+    const perspective::shoot cam        = CornellBox::camera();
     const auto               room_geo   = CornellBox::geometry();
     const auto               mat_getter = CornellBox::mat_getter();
 
@@ -66,7 +76,7 @@ main(int argc, char* argv[])
     {
         Viewport::init(width, height);
         Film<ScanlineImage<float, 4>> film{Vec2u(Viewport::get_res())};
-        const real                    filter_rad = film.pixel_radius() * 4_r;
+        const real                    filter_rad = film._pixel_radius * filter_width;
 
         Viewport::load_img(film.img);
         Viewport::check_errors();
@@ -86,14 +96,14 @@ main(int argc, char* argv[])
                     ++it;
                 else
                     it = film.img.begin();
-                sample_pos = sample_pixel(g, film.pixel_size, film.device_coords(it.pos()));
+                sample_pos = sample_pixel(g, film._pixel_width, film.sample_space(it.pos()));
             } while(dispatcher.try_submit(PathTracer{
                 &g, &room_geo, &mat_getter, cam(sample_pos), max_depth, bias, sample_pos}));
 
             while(const auto ret = dispatcher.fetch_result<PathTracer>())
             {
                 const Sample& sample = ret.value();
-                update_pixels(film, updater, sample);
+                film                 = sample_based_update(film, updater, sample);
             }
 
             Viewport::reload_img(film.img);
