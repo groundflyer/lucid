@@ -40,15 +40,6 @@ struct PathTracer_
     real                  bias;
     Vec2                  sample_pos;
 
-    static Vec3
-    sample_hemisphere(const Normal& n, const Vec2& u) noexcept
-    {
-        const auto& [u1, u2] = u;
-        const auto r         = 2_r * Pi * u2;
-        const auto phi       = math::sqrt(1_r - pow<2>(u1));
-        return basis_matrix(n).dot(Vec3(math::cos(r) * phi, math::sin(r) * phi, u1));
-    }
-
     Sample
     operator()() noexcept
     {
@@ -57,12 +48,24 @@ struct PathTracer_
 
         for(std::size_t depth = 0; depth < max_depth; ++depth)
         {
-            const auto& [ro, rd]    = ray;
+            const auto& [ro, wo]    = ray;
             const auto [pid, isect] = hider(ray, *scene);
 
             if(!isect) break;
 
-            const auto& [color, emission] = (*material_getter)(pid);
+            const auto& [bsdf, emit_f] = (*material_getter)(pid);
+
+            const Normal n = lucid::visit(
+                pid,
+                [&, &iss = isect](const auto& prim) noexcept { return normal(ray, iss, prim); },
+                *scene);
+
+            const auto [eval, sample] = bsdf(n);
+
+            const Normal wi       = sample(wo, Vec2(rand<real, 2>(*g)));
+            const RGB    color    = eval(wi, wo);
+            const RGB    emission = emit_f();
+
             has_rad |= any(emission > 0_r);
 
             if(all(almost_equal(color, 0_r, 10)))
@@ -71,17 +74,11 @@ struct PathTracer_
                 break;
             }
 
-            const Normal n = lucid::visit(
-                pid,
-                [&, &iss = isect](const auto& prim) { return normal(ray, iss, prim); },
-                *scene);
+            const Point p = ro + wo * isect.t;
 
-            const Point  p = ro + rd * isect.t;
-            const Normal new_dir(sample_hemisphere(n, Vec2(rand<real, 2>(*g))));
+            radiance = radiance * color + emission;
 
-            radiance = radiance * color * std::max(dot(n, new_dir), 0_r) + emission;
-
-            ray = Ray(p + new_dir * bias, new_dir);
+            ray = Ray(p + wi * bias, wi);
         }
 
         return Sample{sample_pos, radiance * has_rad};

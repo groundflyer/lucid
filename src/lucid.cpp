@@ -70,7 +70,6 @@ main(int argc, char* argv[])
     using PathTracer = PathTracer_<std::default_random_engine,
                                    std::decay_t<decltype(room_geo)>,
                                    std::decay_t<decltype(mat_getter)>>;
-    using Simple = Constant<std::decay_t<decltype(room_geo)>, std::decay_t<decltype(mat_getter)>>;
 
     try
     {
@@ -82,8 +81,8 @@ main(int argc, char* argv[])
         Viewport::check_errors();
         logger.debug("OpenGL initialized");
 
-        Dispatcher<PathTracer, Simple> dispatcher(qsize);
-        const PixelUpdate              updater{TriangleFilter(filter_rad)};
+        Dispatcher<PathTracer> dispatcher(qsize);
+        const PixelUpdate      updater{TriangleFilter(filter_rad)};
 
         auto it = film.img.begin();
 
