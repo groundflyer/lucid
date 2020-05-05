@@ -970,7 +970,12 @@ parse(const std::tuple<Options...>&     options,
       ErrorHandler&&                    error_handler) noexcept
 {
     static_assert(!has_repeating_key<Options...>::value, "Keys must be unique");
-    static_assert(!(false || ... || (Options::key == ' ')), "Space is not allowed as a key");
+    // it will be better if we could use std::isalpha and std::isdigit for this check
+    // but they are not constexpr
+    static_assert(
+        !(false || ... || (Options::key == ' ' || Options::key == '\t' || Options::key == '\n')),
+        "Space characters are not allowed to be a key");
+    static_assert(!(false || ... || (Options::key == 'h')), "Key -h is reserved");
 
     args.next();
 
