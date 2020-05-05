@@ -102,7 +102,7 @@ main(int argc, char* argv[])
             while(const auto ret = dispatcher.fetch_result<PathTracer>())
             {
                 const Sample& sample = ret.value();
-                film                 = sample_based_update(film, updater, sample);
+                film                 = sample_based_singular_update(film, updater, sample);
             }
 
             Viewport::reload_img(film.img);

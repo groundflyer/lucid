@@ -132,14 +132,30 @@ struct PixelReset
 
 template <typename Image, typename Updater>
 Film<Image>&
-sample_based_update(Film<Image>& film, Updater&& update, const Sample& sample) noexcept
+sample_based_region_update(Film<Image>& film, Updater&& update, const Sample& sample) noexcept
 {
-    for(const Vec2u pos: filter_iterate(film, sample.first, update.filter.radius))
+    for(const Vec2u pidx: filter_iterate(film, sample.first, update.filter.radius))
     {
-        const Vec2     pixel_ssp = film.sample_space(pos);
-        decltype(auto) pixel_val = film.img[pos];
+        const Vec2     pixel_ssp = film.sample_space(pidx);
+        decltype(auto) pixel_val = film.img[pidx];
         pixel_val                = update(pixel_val, pixel_ssp, sample);
     }
+    return film;
+}
+
+template <typename Image, typename Updater>
+Film<Image>&
+sample_based_singular_update(Film<Image>& film, Updater&& update, const Sample& sample) noexcept
+{
+    const auto& [sample_pos, sample_val] = sample;
+    Vec2u pidx                           = film.pixel_index(sample_pos);
+    auto& [i, j]                         = pidx;
+    const auto [w, h]                    = film.img.res();
+    i                                    = std::clamp(i, 0u, w);
+    j                                    = std::clamp(j, 0u, h);
+    const Vec2     pixel_ssp             = film.sample_space(pidx);
+    decltype(auto) pixel_val             = film.img[pidx];
+    pixel_val                            = update(pixel_val, pixel_ssp, sample);
     return film;
 }
 } // namespace lucid

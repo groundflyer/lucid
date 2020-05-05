@@ -83,7 +83,7 @@ main()
         const real filter_rad = film_test._pixel_radius * std::min(filter_size, lucid::min(res));
         const PixelUpdate updater{TriangleFilter(filter_rad)};
         for_each(samples, [&](const Sample& sample) {
-            film_test  = sample_based_update(film_test, updater, sample);
+            film_test  = sample_based_region_update(film_test, updater, sample);
             film_valid = full_update(film_valid, updater, sample);
         });
         return std::pair{std::move(film_test), std::move(film_valid)};

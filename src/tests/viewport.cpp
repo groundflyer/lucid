@@ -42,7 +42,7 @@ main(int argc, char* argv[])
     for(std::size_t i = 0; i < 30ul; ++i)
     {
         const Sample sample{pos_gen(), color_gen()};
-        film1 = sample_based_update(film1, updater, sample);
+        film1 = sample_based_region_update(film1, updater, sample);
     }
 
     const perspective::shoot cam        = CornellBox::camera();
