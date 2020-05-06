@@ -22,9 +22,16 @@ struct Constant
     Sample
     operator()() const noexcept
     {
-        const auto [pid, isect]       = hider(ray, *scene);
-        const auto& [color, emission] = (*material_getter)(pid);
-        const RGB ret                 = isect ? color + emission : RGB(0_r);
+        const auto [pid, isect]    = hider(ray, *scene);
+        const auto& [bsdf, emit_f] = (*material_getter)(pid);
+        const Normal n             = lucid::visit(
+            pid,
+            [&, &iss = isect](const auto& prim) noexcept { return normal(ray, iss, prim); },
+            *scene);
+        const auto eval     = bsdf(n).first;
+        const RGB  color    = eval(n, n);
+        const RGB  emission = emit_f();
+        const RGB  ret      = isect ? color + emission : RGB(0_r);
         return Sample{sample_pos, ret};
     }
 };
