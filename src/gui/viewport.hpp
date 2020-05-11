@@ -64,7 +64,7 @@ class Viewport
     }
 
     static void
-    init(const int iwidth, const int iheight)
+    init(const Vec2u& _res)
     {
         const int status = glfwInit();
         if(!status) throw status;
@@ -73,7 +73,9 @@ class Viewport
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        window = glfwCreateWindow(iwidth, iheight, "Lucid", nullptr, nullptr);
+        const auto [iwidth, iheight] = _res;
+        window                       = glfwCreateWindow(
+            static_cast<int>(iwidth), static_cast<int>(iheight), "Lucid", nullptr, nullptr);
 
         if(!window)
         {

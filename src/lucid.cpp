@@ -57,7 +57,6 @@ main(int argc, char* argv[])
     const real         filter_width = parse_results.get_opt<'f'>();
 
     const Vec2u res(parse_results.get_opt<'r'>());
-    const auto& [width, height] = res;
 
     Logger logger(Logger::DEBUG);
 
@@ -73,7 +72,7 @@ main(int argc, char* argv[])
 
     try
     {
-        Viewport::init(width, height);
+        Viewport::init(res);
         Film<ScanlineImage<float, 4>> film{Vec2u(Viewport::get_res())};
         const real                    filter_rad = film._pixel_radius * filter_width;
 

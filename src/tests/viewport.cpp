@@ -16,14 +16,11 @@ static std::random_device                      rd;
 static thread_local std::default_random_engine g(rd());
 
 int
-main(int argc, char* argv[])
+main()
 {
-    const unsigned short width  = argc > 1 ? std::stoi(argv[1]) : 640u;
-    const unsigned short height = argc > 2 ? std::stoi(argv[2]) : 480u;
-
     Logger logger(Logger::DEBUG);
 
-    Viewport::init(width, height);
+    Viewport::init(Vec2u(640, 480));
 
     Film<ScanlineImage<float, 4>> film1{Vec2u(Viewport::get_res())};
     Film<ScanlineImage<float, 4>> film2{Vec2u(Viewport::get_res())};
