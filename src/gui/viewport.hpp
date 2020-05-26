@@ -11,7 +11,9 @@
 
 namespace lucid
 {
-class Viewport
+
+template <typename MouseAction>
+class _Viewport
 {
     static const constexpr char* vertex_shader_src = "#version 330 core\n"
                                                      "layout (location = 0) in vec3 inP;"
@@ -48,23 +50,37 @@ class Viewport
     static inline unsigned    texture;
     static inline Vec2i       res;
 
-  public:
-    Viewport()                = delete;
-    Viewport(const Viewport&) = delete;
-    Viewport(Viewport&&)      = delete;
-    Viewport&
-    operator=(const Viewport&) = delete;
-    ~Viewport()                = delete;
+    static inline MouseAction mouse_action;
 
     static void
-    resize(GLFWwindow*, int width, int height) noexcept
+    resize_callback(GLFWwindow*, int width, int height) noexcept
     {
         res = Vec2i(width, height);
         glViewport(0, 0, width, height);
     }
 
     static void
-    init(const Vec2u& _res)
+    mouse_button_callback(GLFWwindow*, int button, int action, int mods) noexcept
+    {
+        mouse_action(button, action == GLFW_PRESS, mods);
+    }
+
+    static void
+    cursor_position_callback(GLFWwindow*, double xpos, double ypos) noexcept
+    {
+        mouse_action(Vec2{xpos, ypos});
+    }
+
+  public:
+    _Viewport()                 = delete;
+    _Viewport(const _Viewport&) = delete;
+    _Viewport(_Viewport&&)      = delete;
+    _Viewport&
+    operator=(const _Viewport&) = delete;
+    ~_Viewport()                = delete;
+
+    static void
+    init(const Vec2u& _res, MouseAction&& _mouse_action)
     {
         const int status = glfwInit();
         if(!status) throw status;
@@ -83,8 +99,12 @@ class Viewport
             throw std::runtime_error("Failed to create window");
         }
 
+        mouse_action = _mouse_action;
+
         glfwMakeContextCurrent(window);
-        glfwSetFramebufferSizeCallback(window, resize);
+        glfwSetFramebufferSizeCallback(window, resize_callback);
+        glfwSetMouseButtonCallback(window, mouse_button_callback);
+        glfwSetCursorPosCallback(window, cursor_position_callback);
 
         auto& [width, height] = res;
         glfwGetFramebufferSize(window, &width, &height);

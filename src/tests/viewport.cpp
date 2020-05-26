@@ -15,12 +15,40 @@ using namespace std::literals;
 static std::random_device                      rd;
 static thread_local std::default_random_engine g(rd());
 
+
+struct MouseAction
+{
+    Logger* logger = nullptr;
+    Vec2 prev_pos{0_r};
+    bool pressed = false;
+
+    void
+    operator()(int button, bool _pressed, int /* mods */) noexcept
+    {
+        pressed = button == GLFW_MOUSE_BUTTON_LEFT &&
+            _pressed;
+    }
+
+    void
+    operator()(const Vec2& new_pos) noexcept
+    {
+        if (pressed)
+        {
+            Vec2 delta = new_pos - prev_pos;
+            prev_pos = new_pos;
+            logger->debug("Movement delta = {}", delta.data());
+        }
+    }
+};
+
+using Viewport = _Viewport<MouseAction>;
+
 int
 main()
 {
     Logger logger(Logger::DEBUG);
 
-    Viewport::init(Vec2u(640, 480));
+    Viewport::init(Vec2u(640, 480), MouseAction{&logger});
 
     Film<ScanlineImage<float, 4>> film1{Vec2u(Viewport::get_res())};
     Film<ScanlineImage<float, 4>> film2{Vec2u(Viewport::get_res())};
@@ -53,29 +81,28 @@ main()
         *it = RGBA(ig().second);
     }
 
-    bool choice = true;
+    // bool choice = true;
     Viewport::load_img(film1.img);
 
-    ElapsedTimer<> timer;
+    // ElapsedTimer<> timer;
 
     while(Viewport::active())
     {
-        if(timer.has_expired(3s))
-        {
-            timer.restart();
-            choice ^= true;
+        // if(timer.has_expired(3s))
+        // {
+        //     timer.restart();
+        //     choice ^= true;
 
-            if(choice)
-            {
-                fmt::print("Sample test\n");
-                Viewport::load_img(film1.img);
-            }
-            else
-            {
-                fmt::print("Camera test\n");
+        //     if(choice)
+        //     {
+        //         fmt::print("Sample test\n");
+        //         Viewport::load_img(film1.img);
+        //     }
+        //     else
+        //     {
                 Viewport::load_img(film2.img);
-            }
-        }
+        //     }
+        // }
         Viewport::draw();
 
         glfwPollEvents();
