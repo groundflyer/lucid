@@ -1004,6 +1004,10 @@ parse(const std::tuple<Options...>&     options,
     {
         error_handler(ex);
     }
+    catch(const UnexpectedValue& ex)
+    {
+        error_handler(ex);
+    }
     catch(const KeyException<char>& ex)
     {
         error_handler(ex);
@@ -1389,6 +1393,13 @@ class StandardErrorHandler
         fmt::print(stderr, FMT_STRING("{}: unknown key \"{}\"\n"), error_head, ex.value);
         help(stderr);
         exit(1);
+    }
+
+    void
+    operator()(const UnexpectedValue& ex) const noexcept
+    {
+        fmt::print(stderr, FMT_STRING("{}: unexpected value \"{}\"n"), error_head, ex.value);
+        help(stderr);
     }
 
     void
