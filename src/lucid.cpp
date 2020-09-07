@@ -35,6 +35,17 @@ struct to_real
     }
 };
 
+struct dummy_action
+{
+    template <typename... Args>
+    void
+    operator()(Args&&...) const noexcept
+    {
+    }
+};
+
+using Viewport = _Viewport<dummy_action>;
+
 constexpr std::tuple options{
     option<'r', 2>(to_unsigned{}, {640, 640}, "resolution", "Image resolution.", {"W", "H"}),
     option<'d'>(to_unsigned{}, 4, "depth", "Maximum bounces.", "N"),
@@ -72,7 +83,7 @@ main(int argc, char* argv[])
 
     try
     {
-        Viewport::init(res);
+        Viewport::init(res, dummy_action{});
         Film<ScanlineImage<float, 4>> film{Vec2u(Viewport::get_res())};
         const real                    filter_rad = film._pixel_radius * filter_width;
 
