@@ -1,10 +1,11 @@
 *~
 bin/*
 tests/*
-build
-yapt
-.clang_complete
+build*
 *.png
 *.jpg
 *.exr
 *.ppm
+compile_commands.json
+.ccls-cache
+.dir-locals.el
