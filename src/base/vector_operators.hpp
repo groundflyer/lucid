@@ -21,25 +21,25 @@ template <typename T1,
           typename T2,
           std::size_t N,
           template <typename, std::size_t>
-          class Container1,
+          typename Container1,
           template <typename, std::size_t>
-          class Container2,
+          typename Container2,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType1,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType2,
           typename BinaryOperation>
 constexpr auto
-transform(BinaryOperation                       binary_op,
+transform(BinaryOperation&&                     binary_op,
           const VectorType1<T1, N, Container1>& a,
           const VectorType2<T2, N, Container2>& b) noexcept
 {
-    using RetElemType = typename std::decay_t<std::result_of_t<BinaryOperation(T1, T2)>>;
+    using RetElemType = typename std::decay_t<std::invoke_result_t<BinaryOperation, T1, T2>>;
     using RetType     = VectorType1<RetElemType, N, std::array>;
 
     RetType ret{};
 
-    for(std::size_t i = 0; i < N; ++i) ret[i] = binary_op(a[i], b[i]);
+    for(std::size_t i = 0; i < N; ++i) ret[i] = std::invoke(binary_op, a[i], b[i]);
 
     return ret;
 }
@@ -47,19 +47,19 @@ transform(BinaryOperation                       binary_op,
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType,
           typename UnaryOperation>
 constexpr auto
-transform(UnaryOperation unary_op, const VectorType<T, N, Container>& a) noexcept
+transform(UnaryOperation&& unary_op, const VectorType<T, N, Container>& a) noexcept
 {
-    using RetElemType = typename std::decay_t<std::result_of_t<UnaryOperation(T)>>;
+    using RetElemType = typename std::decay_t<std::invoke_result_t<UnaryOperation, T>>;
     using RetType     = VectorType<RetElemType, N, std::array>;
 
     RetType ret{};
 
-    for(std::size_t i = 0; i < N; ++i) ret[i] = unary_op(a[i]);
+    for(std::size_t i = 0; i < N; ++i) ret[i] = std::invoke(unary_op, a[i]);
 
     return ret;
 }
@@ -67,15 +67,15 @@ transform(UnaryOperation unary_op, const VectorType<T, N, Container>& a) noexcep
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType,
           typename BinaryOperation,
           typename Init>
 constexpr Init
-reduce(BinaryOperation binary_op, const VectorType<T, N, Container>& a, Init init) noexcept
+reduce(BinaryOperation&& binary_op, const VectorType<T, N, Container>& a, Init init) noexcept
 {
-    for(std::size_t i = 0; i < N; ++i) init = binary_op(init, a[i]);
+    for(std::size_t i = 0; i < N; ++i) init = std::invoke(binary_op, init, a[i]);
 
     return init;
 }
@@ -84,9 +84,9 @@ template <typename T1,
           typename T2,
           std::size_t N,
           template <typename, std::size_t>
-          class Container1,
+          typename Container1,
           template <typename, std::size_t>
-          class Container2,
+          typename Container2,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType1,
           template <typename, std::size_t, template <typename, std::size_t> typename>
@@ -95,13 +95,14 @@ template <typename T1,
           typename BinaryOperation2,
           typename Init>
 constexpr Init
-transform_reduce(BinaryOperation1                      binary_op1,
-                 BinaryOperation2                      binary_op2,
+transform_reduce(BinaryOperation1&&                    binary_op1,
+                 BinaryOperation2&&                    binary_op2,
                  const VectorType1<T1, N, Container1>& a,
                  const VectorType2<T2, N, Container2>& b,
                  Init                                  init) noexcept
 {
-    for(std::size_t i = 0; i < N; ++i) init = binary_op2(init, binary_op1(a[i], b[i]));
+    for(std::size_t i = 0; i < N; ++i)
+        init = std::invoke(binary_op2, init, std::invoke(binary_op1, a[i], b[i]));
 
     return init;
 }
@@ -109,19 +110,19 @@ transform_reduce(BinaryOperation1                      binary_op1,
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType,
           typename UnaryOperation,
           typename BinaryOperation,
           typename Init>
 constexpr Init
-transform_reduce(UnaryOperation                     unary_op,
-                 BinaryOperation                    binary_op,
+transform_reduce(UnaryOperation&&                   unary_op,
+                 BinaryOperation&&                  binary_op,
                  const VectorType<T, N, Container>& a,
                  Init                               init) noexcept
 {
-    for(std::size_t i = 0; i < N; ++i) init = binary_op(init, unary_op(a[i]));
+    for(std::size_t i = 0; i < N; ++i) init = std::invoke(binary_op, init, unary_op(a[i]));
 
     return init;
 }
@@ -129,7 +130,7 @@ transform_reduce(UnaryOperation                     unary_op,
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr T
@@ -141,7 +142,7 @@ length2(const VectorType<T, N, Container>& a) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr T
@@ -153,7 +154,7 @@ length(const VectorType<T, N, Container>& a) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr auto
@@ -169,9 +170,9 @@ normalize(const VectorType<T, N, Container>& a) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container1,
+          typename Container1,
           template <typename, std::size_t>
-          class Container2,
+          typename Container2,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType1,
           template <typename, std::size_t, template <typename, std::size_t> typename>
@@ -185,7 +186,7 @@ distance(const VectorType1<T, N, Container1>& a, const VectorType2<T, N, Contain
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr T
@@ -197,7 +198,7 @@ sum(const VectorType<T, N, Container>& a) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr T
@@ -209,7 +210,7 @@ product(const VectorType<T, N, Container>& a) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr bool
@@ -221,7 +222,7 @@ all(const VectorType<T, N, Container>& a) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr bool
@@ -233,7 +234,7 @@ any(const VectorType<T, N, Container>& a) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr T
@@ -245,7 +246,7 @@ avg(const VectorType<T, N, Container>& a) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr T
@@ -258,7 +259,7 @@ max(const VectorType<T, N, Container>& a) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr T
@@ -271,9 +272,9 @@ min(const VectorType<T, N, Container>& a) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container1,
+          typename Container1,
           template <typename, std::size_t>
-          class Container2,
+          typename Container2,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType1,
           template <typename, std::size_t, template <typename, std::size_t> typename>
@@ -287,9 +288,9 @@ max(const VectorType1<T, N, Container1>& a, const VectorType2<T, N, Container2>&
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container1,
+          typename Container1,
           template <typename, std::size_t>
-          class Container2,
+          typename Container2,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType1,
           template <typename, std::size_t, template <typename, std::size_t> typename>
@@ -303,9 +304,9 @@ min(const VectorType1<T, N, Container1>& a, const VectorType2<T, N, Container2>&
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container1,
+          typename Container1,
           template <typename, std::size_t>
-          class Container2,
+          typename Container2,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType1,
           template <typename, std::size_t, template <typename, std::size_t> typename>
@@ -323,7 +324,7 @@ template <typename T,
           std::size_t N,
           typename ULP,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr auto
@@ -335,7 +336,7 @@ almost_equal(const VectorType<T, N, Container>& va, const T b, const ULP ulp)
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr auto
@@ -347,7 +348,7 @@ fit(const VectorType<T, N, Container>& v, const T minval, const T maxval) noexce
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr auto
@@ -359,7 +360,7 @@ abs(const VectorType<T, N, Container>& v) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr auto
@@ -372,7 +373,7 @@ template <unsigned exp,
           typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr auto
@@ -384,7 +385,7 @@ pow(const VectorType<T, N, Container>& v) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr auto
@@ -396,7 +397,7 @@ clamp(const VectorType<T, N, Container>& v, const T minval, const T maxval) noex
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr auto
@@ -412,7 +413,7 @@ roll(const VectorType<T, N, Container>& v, const std::size_t shift) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 auto
@@ -425,9 +426,9 @@ isfinite(const VectorType<T, N, Container>& v) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container1,
+          typename Container1,
           template <typename, std::size_t>
-          class Container2,
+          typename Container2,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType1,
           template <typename, std::size_t, template <typename, std::size_t> typename>
@@ -442,9 +443,9 @@ dot(const VectorType1<T, N, Container1>& a, const VectorType2<T, N, Container2>&
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container1,
+          typename Container1,
           template <typename, std::size_t>
-          class Container2,
+          typename Container2,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType1,
           template <typename, std::size_t, template <typename, std::size_t> typename>
@@ -489,7 +490,7 @@ srgb_luminance(const VectorType<T, N, Container>& rgb) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr const T&
@@ -501,7 +502,7 @@ get_x(const VectorType<T, N, Container>& v) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr T&
@@ -513,7 +514,7 @@ get_x(VectorType<T, N, Container>& v) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr const T&
@@ -525,7 +526,7 @@ get_y(const VectorType<T, N, Container>& v) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr T&
@@ -537,7 +538,7 @@ get_y(VectorType<T, N, Container>& v) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr const T&
@@ -549,7 +550,7 @@ get_z(const VectorType<T, N, Container>& v) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr T&
@@ -561,7 +562,7 @@ get_z(VectorType<T, N, Container>& v) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr const T&
@@ -573,7 +574,7 @@ get_w(const VectorType<T, N, Container>& v) noexcept
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
-          class Container,
+          typename Container,
           template <typename, std::size_t, template <typename, std::size_t> typename>
           typename VectorType>
 constexpr T&

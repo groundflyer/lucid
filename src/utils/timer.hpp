@@ -26,7 +26,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #pragma once
 
 #include <fmt/chrono.h>
@@ -34,80 +33,97 @@
 
 namespace lucid
 {
-    template <typename Clock = std::chrono::steady_clock>
-    class ElapsedTimer
+template <typename Clock = std::chrono::steady_clock>
+class ElapsedTimer
+{
+    using ClockDuration = std::chrono::duration<typename Clock::rep, typename Clock::period>;
+    using TimePoint     = typename Clock::time_point;
+
+    TimePoint startpoint = Clock::now();
+
+  public:
+    ElapsedTimer() {}
+
+    ElapsedTimer(const ElapsedTimer& rhs) : startpoint(rhs.startpoint) {}
+
+    explicit ElapsedTimer(const TimePoint& rhs) : startpoint(rhs) {}
+
+    bool
+    operator==(const ElapsedTimer& rhs) const noexcept
     {
-        using ClockDuration = std::chrono::duration<typename Clock::rep, typename Clock::period>;
-        using TimePoint = typename Clock::time_point;
-
-        TimePoint startpoint = Clock::now();
-    public:
-        ElapsedTimer() {}
-
-        ElapsedTimer(const ElapsedTimer & rhs) : startpoint(rhs.startpoint) {}
-
-        explicit
-        ElapsedTimer(const TimePoint & rhs) : startpoint(rhs) {}
-
-        bool
-        operator==(const ElapsedTimer & rhs) const noexcept
-        { return startpoint == rhs.startpoint; }
-        bool
-        operator!=(const ElapsedTimer & rhs) const noexcept
-        { return startpoint != rhs.startpoint; }
-
-        // is younger
-        bool
-        operator<(const ElapsedTimer & rhs) const noexcept
-        { return startpoint > rhs.startpoint; }
-        bool
-        operator<=(const ElapsedTimer & rhs) const noexcept
-        { return startpoint >= rhs.startpoint; }
-
-        // is older
-        bool
-        operator>(const ElapsedTimer & rhs) const noexcept
-        { return startpoint < rhs.startpoint; }
-        bool
-        operator>=(const ElapsedTimer & rhs) const noexcept
-        { return startpoint <= rhs.startpoint; }
-
-        ClockDuration
-        operator-(const ElapsedTimer & rhs) const noexcept
-        { return startpoint - rhs.startpoint; }
-
-        ClockDuration
-        elapsed() const noexcept
-        { return Clock::now() - startpoint; }
-
-        ClockDuration
-        restart() noexcept
-        {
-            const ClockDuration ret = elapsed();
-            startpoint = Clock::now();
-            return ret;
-        }
-
-        template <typename Rep, typename Period>
-        bool
-        has_expired(const std::chrono::duration<Rep, Period> & timeout) const noexcept
-        { return elapsed() > timeout; }
-    };
-
-    template <typename F, typename Clock = std::chrono::steady_clock, typename ... Args>
-    decltype(auto)
-    measure(F && callable, Args && ...args)
-    {
-        ElapsedTimer<Clock> timer;
-
-        if constexpr (std::is_void_v<std::invoke_result_t<F, Args...>>)
-        {
-            callable(std::forward<Args>(args)...);
-
-            return timer.elapsed();
-        }
-        else
-            return std::pair{callable(std::forward<Args>(args)...),
-                    timer.elapsed()};
+        return startpoint == rhs.startpoint;
     }
+    bool
+    operator!=(const ElapsedTimer& rhs) const noexcept
+    {
+        return startpoint != rhs.startpoint;
+    }
+
+    // is younger
+    bool
+    operator<(const ElapsedTimer& rhs) const noexcept
+    {
+        return startpoint > rhs.startpoint;
+    }
+    bool
+    operator<=(const ElapsedTimer& rhs) const noexcept
+    {
+        return startpoint >= rhs.startpoint;
+    }
+
+    // is older
+    bool
+    operator>(const ElapsedTimer& rhs) const noexcept
+    {
+        return startpoint < rhs.startpoint;
+    }
+    bool
+    operator>=(const ElapsedTimer& rhs) const noexcept
+    {
+        return startpoint <= rhs.startpoint;
+    }
+
+    ClockDuration
+    operator-(const ElapsedTimer& rhs) const noexcept
+    {
+        return startpoint - rhs.startpoint;
+    }
+
+    ClockDuration
+    elapsed() const noexcept
+    {
+        return Clock::now() - startpoint;
+    }
+
+    ClockDuration
+    restart() noexcept
+    {
+        const ClockDuration ret = elapsed();
+        startpoint              = Clock::now();
+        return ret;
+    }
+
+    template <typename Rep, typename Period>
+    bool
+    has_expired(const std::chrono::duration<Rep, Period>& timeout) const noexcept
+    {
+        return elapsed() > timeout;
+    }
+};
+
+template <typename F, typename Clock = std::chrono::steady_clock, typename... Args>
+decltype(auto)
+measure(F&& f, Args&&... args)
+{
+    ElapsedTimer<Clock> timer;
+
+    if constexpr(std::is_void_v<std::invoke_result_t<F, Args...>>)
+    {
+        std::invoke(f, args...);
+
+        return timer.elapsed();
+    }
+    else
+        return std::pair{std::invoke(f, args...), timer.elapsed()};
 }
+} // namespace lucid

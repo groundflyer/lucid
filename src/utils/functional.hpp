@@ -14,22 +14,18 @@ struct ComposeOp
 {
     template <typename LHS, typename RHS>
     constexpr decltype(auto)
-    operator()(LHS lhs, RHS rhs) const noexcept
+    operator()(LHS lhs, RHS rhs) const
     {
-        return [=
-        ](auto&&... args) -> std::invoke_result_t<LHS, std::invoke_result_t<RHS, decltype(args)...>>
-        {
+        return [=](auto&&... args) -> decltype(auto) {
             return std::invoke(lhs, std::invoke(rhs, args...));
         };
     }
 
     template <typename LHS, typename RHS>
     constexpr decltype(auto)
-    operator()(LHS lhs, RHS rhs) noexcept
+    operator()(LHS lhs, RHS rhs)
     {
-        return [=
-        ](auto&&... args) -> std::invoke_result_t<LHS, std::invoke_result_t<RHS, decltype(args)...>>
-        {
+        return [=](auto&&... args) -> decltype(auto) {
             return std::invoke(lhs, std::invoke(rhs, args...));
         };
     }
@@ -39,7 +35,7 @@ struct ComposeOp
 // compose(a, b, c) = a(b(c()))
 template <typename F, typename... Fs>
 constexpr decltype(auto)
-compose(F&& f, Fs&&... fs) noexcept
+compose(F&& f, Fs&&... fs)
 {
     return reduce(detail::ComposeOp{}, std::forward<F>(f), std::forward<Fs>(fs)...);
 }

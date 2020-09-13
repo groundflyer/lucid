@@ -40,6 +40,14 @@ struct fold_wrapper
         return fold_wrapper<BinaryOp, std::invoke_result_t<BinaryOp, LeftOperand, RightOperand>>(
             op, op(operand, rhs.operand));
     }
+
+    template <typename RightOperand>
+    constexpr decltype(auto)
+    operator%(const fold_wrapper<BinaryOp, RightOperand>& rhs) noexcept
+    {
+        return fold_wrapper<BinaryOp, std::invoke_result_t<BinaryOp, LeftOperand, RightOperand>>(
+            op, op(operand, rhs.operand));
+    }
 };
 
 template <typename Tuple, std::size_t... Ids>
@@ -148,28 +156,28 @@ template <typename F, typename Tuple, std::size_t... I>
 constexpr decltype(auto)
 apply_impl(F&& f, Tuple&& tuple, std::index_sequence<I...>) noexcept
 {
-    return std::invoke(std::forward<F>(f), tuple.template get<I>()...);
+    return std::invoke(f, tuple.template get<I>()...);
 }
 
 template <typename F, typename Tuple, std::size_t... I>
 constexpr decltype(auto)
 apply_impl(F&& f, Tuple& tuple, std::index_sequence<I...>) noexcept
 {
-    return std::invoke(std::forward<F>(f), tuple.template get<I>()...);
+    return std::invoke(f, tuple.template get<I>()...);
 }
 
 template <typename F, typename Tuple, std::size_t... I>
 constexpr void
 for_each_impl(F&& f, const Tuple& tuple, std::index_sequence<I...>)
 {
-    (..., std::invoke(std::forward<F>(f), std::get<I>(tuple)));
+    (..., std::invoke(f, std::get<I>(tuple)));
 }
 
 template <typename F, typename Tuple, std::size_t... I>
 constexpr void
 for_each_impl(F&& f, Tuple& tuple, std::index_sequence<I...>)
 {
-    (..., std::invoke(std::forward<F>(f), std::get<I>(tuple)));
+    (..., std::invoke(f, std::get<I>(tuple)));
 }
 } // namespace detail
 
