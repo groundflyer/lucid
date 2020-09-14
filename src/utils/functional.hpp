@@ -78,6 +78,16 @@ template <typename BinaryF>
 constexpr decltype(auto)
 flip(BinaryF f) noexcept
 {
-    return [=](auto&& rhs, auto&& lhs) { return std::invoke(f, lhs, rhs); };
+    return [=](auto&& rhs, auto&& lhs) constexpr { return std::invoke(f, lhs, rhs); };
+}
+
+template <typename T>
+constexpr auto
+maker() noexcept
+{
+    return []<typename... Args>(Args && ... args) constexpr
+    {
+        return T(std::forward<Args>(args)...);
+    };
 }
 } // namespace lucid
