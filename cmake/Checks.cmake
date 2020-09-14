@@ -34,13 +34,7 @@ if(NOT Std_Invoke)
   message(FATAL_ERROR "${CMAKE_CXX_COMPILER_ID}-${CMAKE_CXX_COMPILER_VERSION}'s STL doesn't have std::invoke")
 endif()
 
-# Use Clang with libc++ and colorize output
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND USE_LIBCXX)
-  check_cxx_compiler_flag("-stdlib=libc++ -lc++abi" LibCxx)
-
-  if(LibCxx)
-    add_compile_options(-stdlib=libc++)
-    set(CMAKE_EXE_LINKER_FLAGS "-stdlib=libc++ -lc++abi")
-    message(STATUS "Using LLVM libc++ and compiler-rt")
-  endif()
+check_cxx_source_compiles("int main(){auto f1 = [](int a){return a + 1;};decltype(f1) f2;f1 = f2;return 0;}" Default_Constructible_Assignable_Lambdas)
+if (NOT Default_Constructible_Assignable_Lambdas)
+  message(FATAL_ERROR "${CMAKE_CXX_COMPILER_ID}-${CMAKE_CXX_COMPILER_VERSION} doesn't support default constructible and assignable stateless lambdas (P0624R2)")
 endif()

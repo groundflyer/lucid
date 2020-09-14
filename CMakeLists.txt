@@ -2,12 +2,15 @@ cmake_minimum_required(VERSION 3.9)
 
 project(lucid CXX)
 
-# Compiler with C++17 support is required
-set(CMAKE_CXX_STANDARD 17)
+# Compiler with C++20 support is required
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Check some C++17 features
+# Check for required compiler features
 include(cmake/Checks.cmake)
+
+# Clang-related checks
+include(cmake/Clang.cmake)
 
 # External dependencies
 # Threads

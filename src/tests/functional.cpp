@@ -13,12 +13,14 @@ main()
     auto to_s = [](bool ok) { return ok ? "OK" : "FAIL"; };
     int  ret  = 0;
     {
-        const auto a  = [](const int n) { return n + 10; };
-        const auto b  = [](const int n) { return n * 2; };
-        const auto c  = [](const int n) { return n / 5; };
-        const auto f  = compose(a, b, c);
+        const auto                a = [](const int n) { return n + 10; };
+        const auto                b = [](const int n) { return n * 2; };
+        const auto                c = [](const int n) { return n / 5; };
+        const auto                f = compose(a, b, c);
+        std::decay_t<decltype(f)> f1;
+        f1            = f;
         const int  n  = 10;
-        const int  rc = f(n);
+        const int  rc = f1(n);
         const int  rs = a(b(c(n)));
         const bool ok = rc == rs;
         fmt::print("Constant passing: {}\n", to_s(ok));
