@@ -38,3 +38,11 @@ check_cxx_source_compiles("int main(){auto f1 = [](int a){return a + 1;};decltyp
 if (NOT Default_Constructible_Assignable_Lambdas)
   message(FATAL_ERROR "${CMAKE_CXX_COMPILER_ID}-${CMAKE_CXX_COMPILER_VERSION} doesn't support default constructible and assignable stateless lambdas (P0624R2)")
 endif()
+
+check_cxx_source_compiles("#include <utility>
+template <typename T> constexpr auto maker() noexcept{
+return []<typename... Args>(Args && ... args) constexpr {return T(std::forward<Args>(args)...); };}
+int main(){auto a = maker<int>(); return a(0);}" Template_Parameters_For_Lambdas)
+if (NOT Template_Parameters_For_Lambdas)
+  message(FATAL_ERROR "${CMAKE_CXX_COMPILER_ID}-${CMAKE_CXX_COMPILER_VERSION} doesn't support template parameter syntax for generic lambdas (P0428R2)")
+endif()
