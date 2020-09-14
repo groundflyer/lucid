@@ -182,6 +182,8 @@ class _Viewport
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        glUseProgram(shader_program);
     }
 
     static const Vec2i&
@@ -228,11 +230,9 @@ class _Viewport
         if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
 
-        glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        // glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
+        // glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(shader_program);
-        glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
@@ -316,9 +316,9 @@ class _Viewport
 };
 } // namespace detail
 
-template <typename... Actions>
+template <typename ResizeAction, typename MouseAction>
 auto
-make_viewport(const Vec2u& res, Actions&&... actions)
+make_viewport(const Vec2u& res, ResizeAction&& ra, MouseAction&& ma)
 {
     if(!detail::_gl_initialized)
     {
@@ -331,6 +331,7 @@ make_viewport(const Vec2u& res, Actions&&... actions)
     }
 
     return
-        typename detail::_Viewport<std::decay_t<Actions>...>::Handler(res, std::move(actions)...);
+        typename detail::_Viewport<std::decay_t<ResizeAction>, std::decay_t<MouseAction>>::Handler(
+            res, std::move(ra), std::move(ma));
 }
 } // namespace lucid
