@@ -11,8 +11,11 @@
 
 namespace lucid
 {
+namespace detail
+{
+static inline int _gl_initialized = false;
 
-template <typename MouseAction>
+template <typename ResizeAction, typename MouseAction>
 class _Viewport
 {
     static const constexpr char* vertex_shader_src = "#version 330 core\n"
@@ -42,36 +45,37 @@ class _Viewport
         0 // second triangle
     };
 
-    static inline GLFWwindow* window;
-    static inline unsigned    shader_program;
-    static inline unsigned    VBO;
-    static inline unsigned    VAO;
-    static inline unsigned    EBO;
-    static inline unsigned    texture;
-    static inline Vec2i       res;
+    static inline GLFWwindow* window         = nullptr;
+    static inline unsigned    shader_program = -1u;
+    static inline unsigned    VBO            = -1u;
+    static inline unsigned    VAO            = -1u;
+    static inline unsigned    EBO            = -1u;
+    static inline unsigned    texture        = -1u;
+    static inline Vec2i       res{640, 480};
 
-    static inline MouseAction mouse_action;
+    static inline ResizeAction resize_action;
+    static inline MouseAction  mouse_action;
 
     static void
     resize_callback(GLFWwindow*, int width, int height) noexcept
     {
         res = Vec2i(width, height);
         glViewport(0, 0, width, height);
+        reload_img(resize_action(res));
     }
 
     static void
     mouse_button_callback(GLFWwindow*, int button, int action, int mods) noexcept
     {
-        mouse_action(button, action == GLFW_PRESS, mods);
+        reload_img(mouse_action(button, action == GLFW_PRESS, mods));
     }
 
     static void
     cursor_position_callback(GLFWwindow*, double xpos, double ypos) noexcept
     {
-        mouse_action(Vec2{xpos, ypos});
+        reload_img(mouse_action(Vec2{xpos, ypos}));
     }
 
-  public:
     _Viewport()                 = delete;
     _Viewport(const _Viewport&) = delete;
     _Viewport(_Viewport&&)      = delete;
@@ -80,14 +84,8 @@ class _Viewport
     ~_Viewport()                = delete;
 
     static void
-    init(const Vec2u& _res, MouseAction&& _mouse_action)
+    init(const Vec2u& _res, ResizeAction&& _resize_action, MouseAction&& _mouse_action)
     {
-        const int status = glfwInit();
-        if(!status) throw status;
-
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
         const auto [iwidth, iheight] = _res;
         window                       = glfwCreateWindow(
@@ -99,7 +97,8 @@ class _Viewport
             throw std::runtime_error("Failed to create window");
         }
 
-        mouse_action = _mouse_action;
+        resize_action = std::move(_resize_action);
+        mouse_action  = std::move(_mouse_action);
 
         glfwMakeContextCurrent(window);
         glfwSetFramebufferSizeCallback(window, resize_callback);
@@ -258,5 +257,80 @@ class _Viewport
 
         glfwTerminate();
     }
+
+  public:
+    struct Handler
+    {
+        Handler() noexcept      = delete;
+        Handler(const Handler&) = delete;
+        Handler(Handler&&)      = delete;
+        Handler&
+        operator=(const Handler&) = delete;
+        Handler&
+        operator=(Handler&&) = delete;
+
+        Handler(const Vec2u& res, ResizeAction&& ra, MouseAction&& ma)
+        {
+            _Viewport::init(res, std::move(ra), std::move(ma));
+        }
+        ~Handler() noexcept { _Viewport::cleanup(); }
+
+        const Vec2i&
+        get_res() const noexcept
+        {
+            return _Viewport::get_res();
+        }
+
+        template <typename Format>
+        void
+        load_img(const lucid::ScanlineImage<Format, 4>& img) const noexcept
+        {
+            _Viewport::load_img(img);
+        }
+
+        template <typename Format>
+        void
+        reload_img(const lucid::ScanlineImage<Format, 4>& img) const
+        {
+            _Viewport::reload_img(img);
+        }
+
+        bool
+        active() const noexcept
+        {
+            return _Viewport::active();
+        }
+
+        void
+        draw() const noexcept
+        {
+            _Viewport::draw();
+        }
+
+        void
+        check_errors() const
+        {
+            _Viewport::check_errors();
+        }
+    };
 };
+} // namespace detail
+
+template <typename... Actions>
+auto
+make_viewport(const Vec2u& res, Actions&&... actions)
+{
+    if(!detail::_gl_initialized)
+    {
+        detail::_gl_initialized = glfwInit();
+        if(!detail::_gl_initialized) throw detail::_gl_initialized;
+
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    }
+
+    return
+        typename detail::_Viewport<std::decay_t<Actions>...>::Handler(res, std::move(actions)...);
+}
 } // namespace lucid
