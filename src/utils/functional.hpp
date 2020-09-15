@@ -81,13 +81,16 @@ flip(BinaryF f) noexcept
     return [=](auto&& rhs, auto&& lhs) constexpr { return std::invoke(f, lhs, rhs); };
 }
 
-template <typename T>
+template <typename T, bool list_init = false>
 constexpr auto
 maker() noexcept
 {
     return []<typename... Args>(Args && ... args) constexpr
     {
-        return T(std::forward<Args>(args)...);
+        if constexpr(list_init)
+            return T{std::forward<Args>(args)...};
+        else
+            return T(std::forward<Args>(args)...);
     };
 }
 } // namespace lucid
