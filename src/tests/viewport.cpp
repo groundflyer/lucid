@@ -5,6 +5,7 @@
 #include <integrators/basic.hpp>
 #include <sampling/film.hpp>
 #include <scene/cornell_box.hpp>
+#include <utils/functional.hpp>
 #include <utils/logging.hpp>
 #include <utils/printing.hpp>
 #include <utils/timer.hpp>
@@ -12,53 +13,46 @@
 using namespace lucid;
 using namespace std::literals;
 
-// static std::random_device                      rd;
-// static thread_local std::default_random_engine g(rd());
-
-struct MouseAction;
-struct ResizeAction;
-
 using Image    = ScanlineImage<float, 4>;
 using FilmRGBA = Film<Image>;
 
 struct Renderer
 {
-    static const inline auto                  room_geo   = CornellBox::geometry();
-    static const inline CornellBox::MatGetter mat_getter = CornellBox::mat_getter();
+    static inline const auto                  room_geo   = CornellBox::geometry();
+    static inline const CornellBox::MatGetter mat_getter = CornellBox::mat_getter();
 
     using Simple = Constant<std::decay_t<decltype(room_geo)>, CornellBox::MatGetter>;
 
-    FilmRGBA film;
+    const perspective::shoot* cam;
 
-    explicit Renderer(const Vec2u& res) noexcept : film(res) {}
-
-    void
-    operator()(const perspective::shoot& cam) noexcept
+    const Image&
+    operator()(FilmRGBA& film) noexcept
     {
         for(auto it = film.img.begin(); it != film.img.end(); ++it)
         {
             const Vec2 pp = film.sample_space(it.pos());
-            Simple     ig{cam(pp), &room_geo, &mat_getter, pp};
+            Simple     ig{(*cam)(pp), &room_geo, &mat_getter, pp};
             *it = RGBA(ig().second);
         }
-    };
+
+        return film.img;
+    }
 };
 
-struct ResizeAction
+struct ResizeFilm
 {
-    Renderer* render;
+    FilmRGBA* film;
 
-    void
+    FilmRGBA&
     operator()(const Vec2i& res)
     {
-        render->film = FilmRGBA(Vec2u(res));
+        *film = FilmRGBA(Vec2u(res));
+        return *film;
     }
 };
 
 // struct MouseAction
 // {
-//     perspective::shoot* cam;
-//     Renderer* render;
 //     Vec2 res;
 //     Vec2 prev_pos{0_r};
 //     bool pressed = false;
@@ -77,16 +71,7 @@ struct ResizeAction
 //             const Vec2 pix_delta = new_pos - prev_pos;
 //             const Vec2 ndc_delta = pix_delta / res;
 //             const Vec2 angle_delta = lucid::transform(invert_fov, ndc_delta);
-//             const Normal axis = cross(Normal(0_r, 0_r, -1_r), Normal(angle_delta, 0_r));
-//             const real angle = length(angle_delta);
-//             if (angle > 0.001_r)
-//             {
-//                 cam->transform = dot(cam->transform, rotate(angle, axis));
-//                 (*render)(*cam);
-//                 prev_pos = new_pos;
-//                 Viewport::load_img(render->film.img);
-//             }
-//         }
+//          }
 //     }
 // };
 
@@ -110,13 +95,13 @@ main()
     perspective::shoot cam = CornellBox::camera();
 
     const Vec2u res{320, 240};
-    Renderer    render(res);
+    FilmRGBA    film(res);
+    Renderer    render{&cam};
 
-    auto dummy_action = DummyAction{&render.film.img};
-    auto viewport     = make_viewport(res, dummy_action, dummy_action);
+    auto viewport = make_viewport(res, compose(render, ResizeFilm{&film}), DummyAction{&film.img});
 
-    render(cam);
-    viewport.load_img(render.film.img);
+    render(film);
+    viewport.load_img(film.img);
 
     while(viewport.active())
     {

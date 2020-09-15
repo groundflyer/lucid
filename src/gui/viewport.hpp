@@ -15,7 +15,7 @@ namespace detail
 {
 static inline int _gl_initialized = false;
 
-template <typename ResizeAction, typename MouseAction>
+template <typename ResizeReaction, typename MouseReaction>
 class _Viewport
 {
     static const constexpr char* vertex_shader_src = "#version 330 core\n"
@@ -53,15 +53,15 @@ class _Viewport
     static inline unsigned    texture        = -1u;
     static inline Vec2i       res{640, 480};
 
-    static inline ResizeAction resize_action;
-    static inline MouseAction  mouse_action;
+    static inline ResizeReaction resize_action;
+    static inline MouseReaction  mouse_action;
 
     static void
     resize_callback(GLFWwindow*, int width, int height) noexcept
     {
         res = Vec2i(width, height);
         glViewport(0, 0, width, height);
-        reload_img(resize_action(res));
+        load_img(resize_action(res));
     }
 
     static void
@@ -84,7 +84,7 @@ class _Viewport
     ~_Viewport()                = delete;
 
     static void
-    init(const Vec2u& _res, ResizeAction&& _resize_action, MouseAction&& _mouse_action)
+    init(const Vec2u& _res, ResizeReaction&& _resize_action, MouseReaction&& _mouse_action)
     {
 
         const auto [iwidth, iheight] = _res;
@@ -269,7 +269,7 @@ class _Viewport
         Handler&
         operator=(Handler&&) = delete;
 
-        Handler(const Vec2u& res, ResizeAction&& ra, MouseAction&& ma)
+        Handler(const Vec2u& res, ResizeReaction&& ra, MouseReaction&& ma)
         {
             _Viewport::init(res, std::move(ra), std::move(ma));
         }
@@ -316,9 +316,9 @@ class _Viewport
 };
 } // namespace detail
 
-template <typename ResizeAction, typename MouseAction>
+template <typename ResizeReaction, typename MouseReaction>
 auto
-make_viewport(const Vec2u& res, ResizeAction&& ra, MouseAction&& ma)
+make_viewport(const Vec2u& res, ResizeReaction&& ra, MouseReaction&& ma)
 {
     if(!detail::_gl_initialized)
     {
@@ -328,10 +328,13 @@ make_viewport(const Vec2u& res, ResizeAction&& ra, MouseAction&& ma)
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHintString(GLFW_X11_CLASS_NAME, "Lucid");
+        glfwWindowHintString(GLFW_X11_INSTANCE_NAME, "Lucid");
     }
 
-    return
-        typename detail::_Viewport<std::decay_t<ResizeAction>, std::decay_t<MouseAction>>::Handler(
-            res, std::move(ra), std::move(ma));
+    return typename detail::_Viewport<std::decay_t<ResizeReaction>,
+                                      std::decay_t<MouseReaction>>::Handler(res,
+                                                                            std::move(ra),
+                                                                            std::move(ma));
 }
 } // namespace lucid
