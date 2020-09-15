@@ -17,6 +17,7 @@ namespace lucid
 namespace math
 {
 using std::abs;
+using std::atan;
 using std::ceil;
 using std::cos;
 using std::fabs;

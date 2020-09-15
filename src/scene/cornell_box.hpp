@@ -132,10 +132,10 @@ class CornellBox
                        Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r)});
     }
 
-    static constexpr perspective::shoot
-    camera() noexcept
+    static perspective::shoot
+    camera(const real fov = radians(60_r)) noexcept
     {
-        return perspective::shoot(radians(60_r),
+        return perspective::shoot(convert_fov(fov),
                                   look_at(Point(0, 0, 4), Point(0, 0, 0), Normal(0, 1, 0)));
     }
 

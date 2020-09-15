@@ -7,6 +7,18 @@
 
 namespace lucid
 {
+real
+convert_fov(const real fov) noexcept
+{
+    return math::tan(fov * 0.5_r);
+}
+
+real
+invert_fov(const real f) noexcept
+{
+    return math::atan(f) * 2_r;
+}
+
 struct perspective
 {
     struct shoot
@@ -17,8 +29,8 @@ struct perspective
         constexpr shoot() noexcept {}
 
         template <template <typename, size_t> typename Container>
-        constexpr shoot(const real fovy, const Mat4_<Container>& _transform) noexcept :
-            tan_fov_half(math::tan(fovy * 0.5_r), math::tan(fovy * 0.5_r)), transform(_transform)
+        constexpr shoot(const real cfovy, const Mat4_<Container>& _transform) noexcept :
+            tan_fov_half(cfovy), transform(_transform)
         {
         }
 
