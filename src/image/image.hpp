@@ -177,6 +177,31 @@ class ScanlineImage
         return *this;
     }
 
+    ScanlineImage&
+    operator=(ScanlineImage&& rhs)
+    {
+        if(&rhs == this) return *this;
+
+        if(size() != rhs.size())
+        {
+            if(p_data)
+            {
+                for(std::size_t i = 0; i < size(); ++i)
+                    std::allocator_traits<Allocator>::destroy(m_alloc, p_data + i);
+
+                std::allocator_traits<Allocator>::deallocate(m_alloc, p_data, size());
+            }
+
+            m_res = rhs.m_res;
+        }
+
+        p_data     = rhs.p_data;
+        rhs.p_data = nullptr;
+        rhs.m_res  = Vec2u{0, 0};
+
+        return *this;
+    }
+
     ~ScanlineImage() noexcept
     {
         for(std::size_t i = 0; i < size(); ++i)
