@@ -15,7 +15,7 @@ namespace detail
 {
 static inline int _gl_initialized = false;
 
-template <typename ResizeReaction, typename MouseReaction>
+template <typename ResizeReaction, typename KeyReaction, typename MouseReaction>
 class _Viewport
 {
     static const constexpr char* vertex_shader_src = "#version 330 core\n"
@@ -53,27 +53,34 @@ class _Viewport
     static inline unsigned    texture        = -1u;
     static inline Vec2i       res{640, 480};
 
-    static inline ResizeReaction resize_action;
-    static inline MouseReaction  mouse_action;
+    static inline ResizeReaction resize_reaction;
+    static inline KeyReaction    key_reaction;
+    static inline MouseReaction  mouse_reaction;
 
     static void
     resize_callback(GLFWwindow*, int width, int height) noexcept
     {
         res = Vec2i(width, height);
         glViewport(0, 0, width, height);
-        load_img(resize_action(res));
+        load_img(resize_reaction(res));
+    }
+
+    static void
+    key_callback(GLFWwindow*, int key, int /*scancode*/, int action, int mods) noexcept
+    {
+        reload_img(key_reaction(key, action, mods));
     }
 
     static void
     mouse_button_callback(GLFWwindow*, int button, int action, int mods) noexcept
     {
-        reload_img(mouse_action(button, action == GLFW_PRESS, mods));
+        reload_img(mouse_reaction(button, action == GLFW_PRESS, mods));
     }
 
     static void
     cursor_position_callback(GLFWwindow*, double xpos, double ypos) noexcept
     {
-        reload_img(mouse_action(Vec2{xpos, ypos}));
+        reload_img(mouse_reaction(Vec2{xpos, ypos}));
     }
 
     _Viewport()                 = delete;
@@ -84,7 +91,10 @@ class _Viewport
     ~_Viewport()                = delete;
 
     static void
-    init(const Vec2u& _res, ResizeReaction&& _resize_action, MouseReaction&& _mouse_action)
+    init(const Vec2u&     _res,
+         ResizeReaction&& _resize_reaction,
+         KeyReaction&&    _key_reaction,
+         MouseReaction&&  _mouse_reaction)
     {
 
         const auto [iwidth, iheight] = _res;
@@ -97,11 +107,13 @@ class _Viewport
             throw std::runtime_error("Failed to create window");
         }
 
-        resize_action = std::move(_resize_action);
-        mouse_action  = std::move(_mouse_action);
+        resize_reaction = _resize_reaction;
+        mouse_reaction  = _mouse_reaction;
+        key_reaction    = _key_reaction;
 
         glfwMakeContextCurrent(window);
         glfwSetFramebufferSizeCallback(window, resize_callback);
+        glfwSetKeyCallback(window, key_callback);
         glfwSetMouseButtonCallback(window, mouse_button_callback);
         glfwSetCursorPosCallback(window, cursor_position_callback);
 
@@ -269,9 +281,9 @@ class _Viewport
         Handler&
         operator=(Handler&&) = delete;
 
-        Handler(const Vec2u& res, ResizeReaction&& ra, MouseReaction&& ma)
+        Handler(const Vec2u& res, ResizeReaction&& ra, KeyReaction&& ka, MouseReaction&& ma)
         {
-            _Viewport::init(res, std::move(ra), std::move(ma));
+            _Viewport::init(res, std::move(ra), std::move(ka), std::move(ma));
         }
         ~Handler() noexcept { _Viewport::cleanup(); }
 
@@ -316,9 +328,9 @@ class _Viewport
 };
 } // namespace detail
 
-template <typename ResizeReaction, typename MouseReaction>
+template <typename... Actions>
 auto
-make_viewport(const Vec2u& res, ResizeReaction&& ra, MouseReaction&& ma)
+make_viewport(const Vec2u& res, Actions&&... actions)
 {
     if(!detail::_gl_initialized)
     {
@@ -332,9 +344,7 @@ make_viewport(const Vec2u& res, ResizeReaction&& ra, MouseReaction&& ma)
         glfwWindowHintString(GLFW_X11_INSTANCE_NAME, "Lucid");
     }
 
-    return typename detail::_Viewport<std::decay_t<ResizeReaction>,
-                                      std::decay_t<MouseReaction>>::Handler(res,
-                                                                            std::move(ra),
-                                                                            std::move(ma));
+    return
+        typename detail::_Viewport<std::decay_t<Actions>...>::Handler(res, std::move(actions)...);
 }
 } // namespace lucid
