@@ -10,3 +10,8 @@ if(BUILD_TESTS)
   enable_testing()
   add_subdirectory(tests)
 endif()
+
+if(BUILD_BENCHMARKS)
+  message(STATUS "Building benchmarks")
+  add_subdirectory(benchmarks)
+endif()

@@ -36,6 +36,7 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif()
 option(USE_DOUBLE_PRECISION "Use double precision floating-point format" OFF)
 option(BUILD_TESTS "Build tests" OFF)
+option(BUILD_BENCHMARKS "Build benchmarks" OFF)
 
 # Use GCC/Clang pipe
 add_compile_options(-Wall -Wpedantic -Wextra -pipe -fno-rtti)
