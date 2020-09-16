@@ -4,6 +4,7 @@ file(GLOB test_srcs RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cpp")
 
 foreach(src ${test_srcs})
   string(REPLACE ".cpp" "" name ${src})
+  string(APPEND name "_test")
 
   add_executable(${name} ${src})
 
@@ -18,5 +19,5 @@ foreach(src ${test_srcs})
   target_link_libraries(${name} PRIVATE fmt-header-only)
 
   add_test(NAME ${name} COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${name})
-  message(STATUS "Added test: ${name}")
+  message(STATUS "Found ${name}")
 endforeach()
