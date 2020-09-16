@@ -17,6 +17,9 @@ using namespace lucid;
 using namespace std::literals;
 using namespace argparse;
 
+using Image    = ScanlineImage<float, 4>;
+using FilmRGBA = Film<Image>;
+
 struct to_unsigned
 {
     unsigned
@@ -26,31 +29,27 @@ struct to_unsigned
     }
 };
 
-struct to_real
+struct DummyAction
 {
-    real
-    operator()(const std::string_view word) const noexcept
-    {
-        return std::atof(word.data());
-    }
-};
+    Image* img;
 
-struct dummy_action
-{
     template <typename... Args>
-    void
+    const Image&
     operator()(Args&&...) const noexcept
     {
+        return *img;
     }
 };
-
-using Viewport = _Viewport<dummy_action>;
 
 constexpr std::tuple options{
     option<'r', 2>(to_unsigned{}, {640, 640}, "resolution", "Image resolution.", {"W", "H"}),
     option<'d'>(to_unsigned{}, 4, "depth", "Maximum bounces.", "N"),
     option<'q'>(to_unsigned{}, 100000, "queue-size", "Task dispatcher queue size.", "Q"),
-    option<'f'>(to_real{}, 2_r, "filter-width", "Pixel filter width.", "W")};
+    option<'f'>([](const std::string_view word) noexcept { return std::atof(word.data()); },
+                2_r,
+                "filter-width",
+                "Pixel filter width.",
+                "W")};
 
 static_assert(!keywords_have_space(options));
 
@@ -83,12 +82,13 @@ main(int argc, char* argv[])
 
     try
     {
-        Viewport::init(res, dummy_action{});
-        Film<ScanlineImage<float, 4>> film{Vec2u(Viewport::get_res())};
-        const real                    filter_rad = film._pixel_radius * filter_width;
+        FilmRGBA    film{res};
+        DummyAction da{&film.img};
+        auto        viewport   = make_viewport(res, da, da, da);
+        const real  filter_rad = film._pixel_radius * filter_width;
 
-        Viewport::load_img(film.img);
-        Viewport::check_errors();
+        viewport.load_img(film.img);
+        viewport.check_errors();
         logger.debug("OpenGL initialized");
 
         Dispatcher<PathTracer> dispatcher(qsize);
@@ -96,7 +96,7 @@ main(int argc, char* argv[])
 
         auto it = film.img.begin();
 
-        while(Viewport::active())
+        while(viewport.active())
         {
             Vec2 sample_pos;
             do
@@ -115,8 +115,8 @@ main(int argc, char* argv[])
                 film                 = sample_based_singular_update(film, updater, sample);
             }
 
-            Viewport::reload_img(film.img);
-            Viewport::draw();
+            viewport.reload_img(film.img);
+            viewport.draw();
             glfwPollEvents();
         }
     }
@@ -129,7 +129,6 @@ main(int argc, char* argv[])
         logger.critical("GLFW init error: {}", er);
     }
 
-    Viewport::cleanup();
     logger.debug("Good bye.");
 
     return 0;
