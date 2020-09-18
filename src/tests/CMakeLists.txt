@@ -8,11 +8,11 @@ foreach(src ${test_srcs})
 
   add_executable(${name} ${src})
 
-  if(${name} STREQUAL "viewport")
+  if(${name} STREQUAL "viewport_test")
     target_include_directories(${name} PUBLIC ${OPENGL_INCLUDE_DIR})
     target_link_libraries(${name} PUBLIC ${GL_LIBS})
     target_compile_definitions(${name} PUBLIC ${GL_DEFS})
-  elseif(${name} STREQUAL "dispatcher")
+  elseif(${name} STREQUAL "dispatcher_test")
     target_link_libraries(${name} PRIVATE fmt-header-only Threads::Threads)
   endif()
 
