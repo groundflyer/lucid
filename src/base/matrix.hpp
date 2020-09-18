@@ -611,35 +611,31 @@ namespace lucid
 
 
     // determinant
-    template <typename T, size_t M, size_t N,
-			  template <typename, size_t> class Container>
+    template <typename T, size_t M, size_t N, template <typename, size_t> class Container>
     constexpr typename std::enable_if_t<M == N, T>
-    det(const Matrix<T, M, N, Container> & a) noexcept
+    det(const Matrix<T, M, N, Container>& a) noexcept
     {
-		std::array<size_t, M> idxs{};
-		std::iota(idxs.begin(), idxs.end(), 0);
+        std::array<size_t, M> idxs{};
+        std::iota(idxs.begin(), idxs.end(), 0);
 
-		auto product = [&idxs, &a]()
-			{
-				T ret{1};
-				for (size_t i = 0; i < M; ++i)
-					ret *= a.at(i, idxs[i]);
-				return ret;
-			};
+        auto product = [&idxs, &a]() noexcept {
+            T ret{1};
+            for(size_t i = 0; i < M; ++i) ret *= a.at(i, idxs[i]);
+            return ret;
+        };
 
-		auto get_elem = [&]()
-			{ return sgn(idxs) * product(); };
+        auto get_elem = [&]() noexcept { return sgn(idxs) * product(); };
 
-		T ret = get_elem();
+        T ret = get_elem();
 
-		const constexpr size_t rank = fac(M) - 1;
-		for (size_t _ = 0; _ < rank; ++_)
-		{
-			std::next_permutation(idxs.begin(), idxs.end());
-			ret += get_elem();
-		}
+        const constexpr size_t rank = fac(M) - 1;
+        for(size_t _ = 0; _ < rank; ++_)
+        {
+            std::next_permutation(idxs.begin(), idxs.end());
+            ret += get_elem();
+        }
 
-		return ret;
+        return ret;
     }
 
     // contructs minor matrix by removing I row, J column
@@ -687,27 +683,25 @@ namespace lucid
     }
 
     // returns inverse matrix
-    template <typename T, size_t M, size_t N,
-			  template <typename, size_t> class Container>
+    template <typename T, size_t M, size_t N, template <typename, size_t> class Container>
     constexpr auto
-    inverse(const Matrix<T, M, N, Container> & a) noexcept
+    inverse(const Matrix<T, M, N, Container>& a) noexcept
     {
-        const auto is_zero = [](const T& val)
-                             {
-                                 if constexpr (std::is_floating_point_v<T>)
-                                     return almost_equal(val, T{0}, 5);
-                                 else
-                                     return val == 0;
-                             };
+        const auto is_zero = [](const T& val) noexcept {
+            if constexpr(std::is_floating_point_v<T>)
+                return almost_equal(val, T{0}, 5);
+            else
+                return val == 0;
+        };
 
-		const auto d = det(a);
+        const auto d = det(a);
 
-		if (!is_zero(d))
-			return transpose(cofactor(a)) / d;
-		else
-			return a;
+        if(!is_zero(d))
+            return transpose(cofactor(a)) / d;
+        else
+            return a;
     }
-}
+    } // namespace lucid
 
 namespace std
 {
