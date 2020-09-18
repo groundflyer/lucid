@@ -19,5 +19,4 @@ foreach(src ${test_srcs})
   target_link_libraries(${name} PRIVATE fmt-header-only)
 
   add_test(NAME ${name} COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${name})
-  message(STATUS "Found ${name}")
 endforeach()
