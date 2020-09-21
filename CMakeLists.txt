@@ -6,20 +6,13 @@ project(lucid CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 # Check for required compiler features
-include(cmake/Checks.cmake)
+include(CxxFeatures)
 
 # Clang-related checks
-include(cmake/Clang.cmake)
-
-# External dependencies
-# Threads
-set(CMAKE_THREAD_PREFER_PTHREAD 1)
-set(THREADS_PREFER_PTHREAD_FLAG 1)
-find_package(Threads REQUIRED)
-
-# OpenGL
-find_package(OpenGL REQUIRED)
+include(Clang)
 
 # Default Build Type is Release
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -38,12 +31,18 @@ option(USE_DOUBLE_PRECISION "Use double precision floating-point format" OFF)
 option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_BENCHMARKS "Build benchmarks" OFF)
 
-# Use GCC/Clang pipe
-add_compile_options(-Wall -Wpedantic -Wextra -pipe -fno-rtti)
-
+add_compile_options(-Wall -Wpedantic -Wextra -fno-rtti)
 # Optimize for the host machine
 add_compile_options($<$<CONFIG:Release>:-march=native>)
 add_compile_options($<$<CONFIG:Release>:-ffast-math>)
+
+# RelWithDebInfo
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "")
+add_compile_options($<$<CONFIG:RelWithDebInfo>:-march=native>)
+add_compile_options($<$<CONFIG:RelWithDebInfo>:-ffast-math>)
+add_compile_options($<$<CONFIG:RelWithDebInfo>:-O3>)
+# Colored output from Clang
+add_compile_options($<$<CXX_COMPILER_ID:Clang>:-fcolor-diagnostics>)
 
 # Link-time optimization
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -60,15 +59,6 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
   endif()
 endif()
 
-# RelWithDebInfo
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "")
-add_compile_options($<$<CONFIG:RelWithDebInfo>:-march=native>)
-add_compile_options($<$<CONFIG:RelWithDebInfo>:-ffast-math>)
-add_compile_options($<$<CONFIG:RelWithDebInfo>:-O3>)
-
-# Colored output from Clang
-add_compile_options($<$<CXX_COMPILER_ID:Clang>:-fcolor-diagnostics>)
-
 # Set floating point precision
 set(_precision "single")
 if(USE_DOUBLE_PRECISION)
@@ -76,6 +66,15 @@ if(USE_DOUBLE_PRECISION)
   add_definitions(-D_DOUBLE_PRECISION)
 endif()
 message(STATUS "Floating-point format: ${_precision} precision")
+
+# Threads
+set(CMAKE_THREAD_PREFER_PTHREAD 1)
+set(THREADS_PREFER_PTHREAD_FLAG 1)
+find_package(Threads REQUIRED)
+
+# OpenGL
+set(OpenGL_GL_PREFERENCE LEGACY)
+find_package(OpenGL REQUIRED)
 
 # GLFW3
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
