@@ -25,7 +25,7 @@ namespace lucid
 {
 template <typename G, typename R>
 void
-bench(const std::size_t n, std::string_view name, G&& g, R&& r, std::FILE* log = nullptr) noexcept
+bench(std::FILE* log, const std::size_t n, std::string_view name, G&& g, R&& r) noexcept
 {
     auto vals = ranges::views::generate_n(g, n) | ranges::to<std::vector>();
 
@@ -33,16 +33,16 @@ bench(const std::size_t n, std::string_view name, G&& g, R&& r, std::FILE* log =
 
     for(auto& val: vals) r(val);
 
-    const auto elapsed = timer.elapsed();
+    const auto ns = timer.elapsed();
 
-    const auto ms  = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed);
-    const auto avg = elapsed / n;
+    const auto ms  = std::chrono::duration_cast<std::chrono::milliseconds>(ns);
+    const auto avg = ns / n;
     fmt::print("{}: {} for {} runs; avg: {}\n", name, ms, n, avg);
 
     if(log)
     {
         std::time_t t = std::time(nullptr);
-        fmt::print(log, "{} {:%Y%m%d} {}\n", repo_hash, fmt::localtime(t), avg);
+        fmt::print(log, "{},{:%Y%m%d},{},{},{}\n", repo_hash, fmt::localtime(t), name, ns, n);
     }
 }
 } // namespace lucid

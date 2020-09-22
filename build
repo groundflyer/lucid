@@ -29,6 +29,7 @@ enable_benchmarks() {
     BENCHMARK=true
 }
 
+
 run_tests() {
     if [ $TEST = true ]; then
         pushd ${BUILD_DIR}/src/tests
@@ -38,15 +39,19 @@ run_tests() {
 }
 
 run_benchmarks() {
+    CPUNAME=$(sed "s/[^a-zA-Z0-9]/ /g" <<< `uname -p` | xargs | sed "s/ /_/g")
+
     if [ $BENCHMARK = true ]; then
         pushd ${BUILD_DIR}/src/benchmarks
+        logdir=${SRC_DIR}/logs/${CPUNAME}
+        mkdir -p ${logdir}
         for bm in bm_*; do
-            ./${bm}
+            log=${logdir}/${bm:3}.csv
+            ./${bm} ${log}
         done
         popd
     fi
 }
-
 
 for key in $@; do
     case $key in

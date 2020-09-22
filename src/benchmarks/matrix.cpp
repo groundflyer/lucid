@@ -13,7 +13,8 @@ using namespace lucid;
 int
 main(int argc, char* argv[])
 {
-    const size_t n = argc == 2 ? atoi(argv[1]) : 10000000;
+    std::FILE*   log = argc >= 2 ? std::fopen(argv[1], "a") : nullptr;
+    const size_t n   = argc == 3 ? atoi(argv[2]) : 10000000;
 
     random_device         rd;
     default_random_engine g(rd());
@@ -21,6 +22,7 @@ main(int argc, char* argv[])
     RandomDistribution<real> dist(-100000_r, 100000_r);
     auto mgen = [&]() noexcept { return Mat4(dist.template operator()<16>(g)); };
     bench(
+        log,
         n,
         "Mat4 dot",
         [&]() noexcept {
@@ -31,6 +33,7 @@ main(int argc, char* argv[])
             m3                 = dot(m1, m2);
         });
     bench(
+        log,
         n,
         "Mat4 dot Vec4",
         [&]() noexcept {
@@ -41,11 +44,12 @@ main(int argc, char* argv[])
             v2                = dot(m, v1);
         });
     auto m2gen = [&]() noexcept { return pair{mgen(), Mat4(0_r)}; };
-    bench(n, "Mat4 transpose", m2gen, [](auto& v) noexcept {
+    bench(log, n, "Mat4 transpose", m2gen, [](auto& v) noexcept {
         auto& [m1, m2] = v;
         m2             = transpose(m1);
     });
     bench(
+        log,
         n,
         "Mat4 det",
         [&]() noexcept {
@@ -55,9 +59,12 @@ main(int argc, char* argv[])
             auto& [m, d] = v;
             d            = det(m);
         });
-    bench(n, "Mat4 inverse", m2gen, [](auto& v) noexcept {
+    bench(log, n, "Mat4 inverse", m2gen, [](auto& v) noexcept {
         auto& [m1, m2] = v;
         m2             = inverse(m1);
     });
+
+    if(log) std::fclose(log);
+
     return 0;
 }
