@@ -1,7 +1,7 @@
 *~
 bin/*
 tests/*
-build*
+build_*
 *.png
 *.jpg
 *.exr
