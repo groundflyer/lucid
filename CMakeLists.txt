@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.16)
 
 project(lucid CXX)
 
@@ -55,7 +55,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
       set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
     endif()
   else()
-    message(STATUS "Interprocedural optimization is not supported: ${IPO_ERROR}")
+    message(STATUS "Interprocedural optimization is not supported")
   endif()
 endif()
 

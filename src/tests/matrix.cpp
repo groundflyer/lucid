@@ -9,6 +9,8 @@ using namespace lucid;
 
 using Indicies        = index_sequence<3ul, 4ul>;
 using ArithmeticTypes = typelist<float, double>;
+// 5% error threshold, because + and - operations are quite inaccurate
+static const constexpr double threshold = 0.05;
 
 template <typename T, size_t M, size_t N, typename RandomEngine>
 auto
@@ -29,8 +31,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
     auto array_n_gen = [&]() { return dist.template operator()<N>(g); };
     auto vgen        = [&]() { return Vec(array_n_gen()); };
 
-    const constexpr double threshold       = is_floating_point_v<T> ? 0.01 : 0.0;
-    const auto             test_property_n = [num_tests, threshold](auto&&... args) {
+    const auto test_property_n = [num_tests](auto&&... args) {
         return test_property(num_tests, threshold, forward<decltype(args)>(args)...);
     };
 

@@ -17,6 +17,7 @@ CMAKE_ARGS=(
 )
 TEST=false
 BENCHMARK=false
+[ -z "${JOBS:-}" ] && JOBS=8
 
 enable_tests() {
     CMAKE_ARGS+=(-DBUILD_TESTS=ON)
@@ -32,7 +33,7 @@ enable_benchmarks() {
 run_tests() {
     if [ $TEST = true ]; then
         pushd ${BUILD_DIR}/src/tests
-        ctest -j8
+        ctest -j${JOBS}
         popd
     fi
 }
@@ -82,7 +83,7 @@ done
 mkdir -p ${BUILD_DIR}
 pushd ${BUILD_DIR}
 cmake ${CMAKE_ARGS[*]} ${SRC_DIR}
-make -j8
+make -j${JOBS}
 run_tests
 run_benchmarks
 popd

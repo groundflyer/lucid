@@ -139,7 +139,7 @@ main()
     render(film, cam);
     viewport.load_img(film.img);
 
-    if(viewport.active())
+    while(viewport.active())
     {
         viewport.draw();
         glfwPollEvents();

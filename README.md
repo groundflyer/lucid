@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/groundflyer/lucid.svg?branch=master)](https://travis-ci.com/groundflyer/lucid)
+
 # Work in progress
 
 Lucid is an experimental path-tracer where the experiment is rather *how* to implement than *what* to implement.
@@ -14,5 +16,5 @@ allowing compilers to apply more aggressive optimizations and also we can group 
 
 # Building
 
-* CMake 3.9 or newer
-* Clang 7.1.0 or newer
+* CMake 3.16 or newer
+* LLVM Clang and libc++ version 10 or newer
