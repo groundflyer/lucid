@@ -6,6 +6,10 @@ project(lucid CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  message(FATAL_ERROR "Only LLVM Clang is supported")
+endif()
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # Check for required compiler features
@@ -22,14 +26,11 @@ endif()
 message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
 
 # Options
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  option(USE_LIBCXX "Use LibC++ when compiling with clang" OFF)
-else()
-  message(FATAL_ERROR "Only LLVM Clang is supported")
-endif()
+option(USE_LIBCXX "Use LibC++ when compiling with clang" ON)
 option(USE_DOUBLE_PRECISION "Use double precision floating-point format" OFF)
 option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_BENCHMARKS "Build benchmarks" OFF)
+option(ENABLE_IPO "Enable interprocedural optimization" OFF)
 
 add_compile_options(-Wall -Wpedantic -Wextra -fno-rtti)
 # Optimize for the host machine
@@ -49,7 +50,6 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
   include(CheckIPOSupported)
   check_ipo_supported(RESULT HAS_IPO OUTPUT IPO_ERROR LANGUAGES CXX)
   if(HAS_IPO)
-    option(ENABLE_IPO "Enable interprocedural optimization" OFF)
     if(ENABLE_IPO)
       message(STATUS "Interprocedural optimization enabled")
       set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)

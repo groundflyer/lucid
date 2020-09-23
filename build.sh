@@ -12,7 +12,6 @@ SRC_DIR=`realpath $(dirname "${BASH_SOURCE[0]}")`
 BUILD_DIR=${SRC_DIR}/build_clang
 CMAKE_ARGS=(
     -DCMAKE_CXX_COMPILER=clang++
-    -DUSE_LIBCXX=ON
     -DCMAKE_VERBOSE_MAKEFILE=ON
     -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 )
@@ -43,7 +42,7 @@ run_benchmarks() {
 
     if [ $BENCHMARK = true ]; then
         pushd ${BUILD_DIR}/src/benchmarks
-        logdir=${SRC_DIR}/logs/${CPUNAME}
+        logdir=${SRC_DIR}/bm_results/${CPUNAME}
         mkdir -p ${logdir}
         for bm in bm_*; do
             log=${logdir}/${bm:3}.csv
