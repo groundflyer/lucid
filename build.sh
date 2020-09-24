@@ -1,11 +1,12 @@
 #!/bin/bash
 
 showhelp() {
-    echo "Usage: $0 [-t] [-b] [-e] [-a]"
+    echo "Usage: $0 [-t] [-b] [-d] [-e] [-a]"
     echo -e "\t-t\tbuild and run tests"
     echo -e "\t-b\tbuild and run benchmarks"
+    echo -e "\t-d\tbuild documentation"
     echo -e "\t-e\tuse temporary directory"
-    echo -e "\t-a\tbuild benchmarks and tests then run them"
+    echo -e "\t-a\tbuild all, then run benchmarks and tests"
 }
 
 SRC_DIR=`realpath $(dirname "${BASH_SOURCE[0]}")`
@@ -29,6 +30,9 @@ enable_benchmarks() {
     BENCHMARK=true
 }
 
+enable_docs() {
+    CMAKE_ARGS+=(-DBUILD_DOC=ON)
+}
 
 run_tests() {
     if [ $TEST = true ]; then
@@ -61,12 +65,16 @@ for key in $@; do
         -b)
             enable_benchmarks
             ;;
+        -d)
+            enable_docs
+            ;;
         -e)
             BUILD_DIR=`mktemp -d`
             ;;
         -a)
             enable_tests
             enable_benchmarks
+            enable_docs
             ;;
         -h)
             showhelp

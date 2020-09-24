@@ -2,21 +2,32 @@
 // vector.hpp --
 //
 
+/// @file
+/// Defines common functions for generic vector type.
+
 #pragma once
 
-#include <utils/static_span.hpp>
 #include <utils/math.hpp>
+#include <utils/static_span.hpp>
 
-#include <array>
-#include <limits>
-#include <utility>
-#include <numeric>
 #include <algorithm>
+#include <array>
 #include <functional>
+#include <limits>
+#include <numeric>
 #include <type_traits>
+#include <utility>
 
 namespace lucid
 {
+/// @brief Invokes @p binary_op (@p T1 -> @p T2 -> c) with corresponding elements of
+/// vectors @p a and @p b storing results in a new vector.
+///
+/// @p a and @p b must have the same dimensionality @p N.
+/// @param[in] binary_op Binary operation to perform on components of input vectors.
+/// @param[in] a First vector.
+/// @param[in] b Second vector.
+/// @return VectorType1 of dimensionality @p N and element type @p c
 template <typename T1,
           typename T2,
           std::size_t N,
@@ -422,7 +433,7 @@ isfinite(const VectorType<T, N, Container>& v) noexcept
     return transform(static_cast<bool (*)(T)>(std::isfinite), v);
 }
 
-    // dot product
+// dot product
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
@@ -439,7 +450,7 @@ dot(const VectorType1<T, N, Container1>& a, const VectorType2<T, N, Container2>&
     return transform_reduce(std::multiplies<T>(), std::plus<T>(), a, b, T{0});
 }
 
-    // N-dimensional cross product
+// N-dimensional cross product
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
@@ -636,11 +647,13 @@ class ImmutableVectorOperators
     template <template <typename, std::size_t> typename Container2,
               template <typename, std::size_t, template <typename, std::size_t> typename>
               typename VectorType2>
-    constexpr auto operator*(const VectorType2<T, N, Container2>& rhs) const noexcept
+    constexpr auto
+    operator*(const VectorType2<T, N, Container2>& rhs) const noexcept
     {
         return transform(std::multiplies<T>(), this_vec(), rhs);
     }
-    constexpr auto operator*(const T& rhs) const noexcept
+    constexpr auto
+    operator*(const T& rhs) const noexcept
     {
         return transform([&rhs](const T& a) { return a * rhs; }, this_vec());
     }
@@ -774,145 +787,142 @@ class ImmutableVectorOperators
     }
 };
 
-    template <typename T, std::size_t N,
-              template <typename, std::size_t> typename Container,
-              template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType>
-    class MutableVectorOperators
+template <typename T,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container,
+          template <typename, std::size_t, template <typename, std::size_t> typename>
+          typename VectorType>
+class MutableVectorOperators
+{
+    static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");
+
+    constexpr VectorType<T, N, Container>&
+    this_vec() noexcept
     {
-		static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");
-
-        constexpr VectorType<T, N, Container>&
-        this_vec() noexcept
-        { return static_cast<VectorType<T, N, Container>&>(*this); }
-
-    public:
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr decltype(auto)
-		operator+=(const VectorType2<T, N, Container2> & rhs) noexcept
-		{
-			for (std::size_t i = 0; i < N; ++i)
-				this_vec()[i] += rhs[i];
-
-			return this_vec();
-		}
-		constexpr decltype(auto)
-		operator+=(const T & rhs) noexcept
-		{
-			for (std::size_t i = 0; i < N; ++i)
-				this_vec()[i] += rhs;
-
-			return this_vec();
-		}
-
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr decltype(auto)
-		operator-=(const VectorType2<T, N, Container2> & rhs) noexcept
-		{
-			for (std::size_t i = 0; i < N; ++i)
-				this_vec()[i] -= rhs[i];
-
-			return this_vec();
-		}
-		constexpr decltype(auto)
-		operator-=(const T & rhs) noexcept
-		{
-			for (std::size_t i = 0; i < N; ++i)
-				this_vec()[i] -= rhs;
-
-			return this_vec();
-		}
-
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr decltype(auto)
-		operator*=(const VectorType2<T, N, Container2> & rhs) noexcept
-		{
-			for (std::size_t i = 0; i < N; ++i)
-				this_vec()[i] *= rhs[i];
-
-			return this_vec();
-		}
-		constexpr decltype(auto)
-		operator*=(const T & rhs) noexcept
-		{
-			for (std::size_t i = 0; i < N; ++i)
-				this_vec()[i] *= rhs;
-
-			return this_vec();
-		}
-
-		template <template <typename, std::size_t> typename Container2,
-                  template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType2>
-		constexpr decltype(auto)
-		operator/=(const VectorType2<T, N, Container2> & rhs) noexcept
-		{
-			for (std::size_t i = 0; i < N; ++i)
-				this_vec()[i] /= rhs[i];
-
-			return this_vec();
-		}
-		constexpr decltype(auto)
-		operator/=(const T & rhs) noexcept
-		{
-			for (std::size_t i = 0; i < N; ++i)
-				this_vec()[i] /= rhs;
-
-			return this_vec();
-		}
-    };
-
-
-    template <std::size_t idx,
-              typename OutType, std::size_t OutSize,
-              typename InType,
-              typename ... Tail>
-    constexpr std::array<OutType, OutSize>&
-    vector_constructor(std::array<OutType, OutSize>& out,
-                       const InType& head,
-                       Tail&& ... tail) noexcept
-    {
-        static_assert(idx < OutSize, "Too many elements.");
-
-        out[idx] = static_cast<OutType>(head);
-
-        if constexpr (sizeof...(tail) > 0)
-            return vector_constructor<idx + 1>(out, std::forward<Tail>(tail)...);
-
-        if constexpr (idx < (OutSize - 1))
-            return vector_constructor<idx + 1>(out, head);
-
-        if constexpr (sizeof...(tail) == 0 && (idx + 1) < OutSize)
-            return vector_constructor<idx + 1>(out, OutType{0});
-
-        return out;
+        return static_cast<VectorType<T, N, Container>&>(*this);
     }
 
-    template <std::size_t idx,
-              typename OutType, std::size_t OutSize,
-              typename InType, std::size_t InSize,
-              template <typename, std::size_t> typename Container,
-              template <typename, std::size_t, template <typename, std::size_t> typename> typename VectorType,
-              typename ... Tail>
-    constexpr std::array<OutType, OutSize>&
-    vector_constructor(std::array<OutType, OutSize>& out,
-                       const VectorType<InType, InSize, Container>& head,
-                       Tail&& ... tail) noexcept
+  public:
+    template <template <typename, std::size_t> typename Container2,
+              template <typename, std::size_t, template <typename, std::size_t> typename>
+              typename VectorType2>
+    constexpr decltype(auto)
+    operator+=(const VectorType2<T, N, Container2>& rhs) noexcept
     {
-        static_assert(idx < OutSize, "Too many elements.");
+        for(std::size_t i = 0; i < N; ++i) this_vec()[i] += rhs[i];
 
-        const constexpr auto N = std::min(OutSize - idx, InSize);
-        for(std::size_t i = 0; i < N; ++i)
-            out[idx + i] = static_cast<OutType>(head[i]);
-
-        if constexpr (sizeof...(tail) > 0)
-            return vector_constructor<idx + N>(out, std::forward<Tail>(tail)...);
-
-        // fill remaining with zeros
-        if constexpr (sizeof...(tail) == 0 && (idx + N) < OutSize)
-            return vector_constructor<idx + N>(out, OutType{0});
-
-        return out;
+        return this_vec();
     }
-    } // namespace lucid
+    constexpr decltype(auto)
+    operator+=(const T& rhs) noexcept
+    {
+        for(std::size_t i = 0; i < N; ++i) this_vec()[i] += rhs;
+
+        return this_vec();
+    }
+
+    template <template <typename, std::size_t> typename Container2,
+              template <typename, std::size_t, template <typename, std::size_t> typename>
+              typename VectorType2>
+    constexpr decltype(auto)
+    operator-=(const VectorType2<T, N, Container2>& rhs) noexcept
+    {
+        for(std::size_t i = 0; i < N; ++i) this_vec()[i] -= rhs[i];
+
+        return this_vec();
+    }
+    constexpr decltype(auto)
+    operator-=(const T& rhs) noexcept
+    {
+        for(std::size_t i = 0; i < N; ++i) this_vec()[i] -= rhs;
+
+        return this_vec();
+    }
+
+    template <template <typename, std::size_t> typename Container2,
+              template <typename, std::size_t, template <typename, std::size_t> typename>
+              typename VectorType2>
+    constexpr decltype(auto)
+    operator*=(const VectorType2<T, N, Container2>& rhs) noexcept
+    {
+        for(std::size_t i = 0; i < N; ++i) this_vec()[i] *= rhs[i];
+
+        return this_vec();
+    }
+    constexpr decltype(auto)
+    operator*=(const T& rhs) noexcept
+    {
+        for(std::size_t i = 0; i < N; ++i) this_vec()[i] *= rhs;
+
+        return this_vec();
+    }
+
+    template <template <typename, std::size_t> typename Container2,
+              template <typename, std::size_t, template <typename, std::size_t> typename>
+              typename VectorType2>
+    constexpr decltype(auto)
+    operator/=(const VectorType2<T, N, Container2>& rhs) noexcept
+    {
+        for(std::size_t i = 0; i < N; ++i) this_vec()[i] /= rhs[i];
+
+        return this_vec();
+    }
+    constexpr decltype(auto)
+    operator/=(const T& rhs) noexcept
+    {
+        for(std::size_t i = 0; i < N; ++i) this_vec()[i] /= rhs;
+
+        return this_vec();
+    }
+};
+
+template <std::size_t idx, typename OutType, std::size_t OutSize, typename InType, typename... Tail>
+constexpr std::array<OutType, OutSize>&
+vector_constructor(std::array<OutType, OutSize>& out, const InType& head, Tail&&... tail) noexcept
+{
+    static_assert(idx < OutSize, "Too many elements.");
+
+    out[idx] = static_cast<OutType>(head);
+
+    if constexpr(sizeof...(tail) > 0)
+        return vector_constructor<idx + 1>(out, std::forward<Tail>(tail)...);
+
+    if constexpr(idx < (OutSize - 1)) return vector_constructor<idx + 1>(out, head);
+
+    if constexpr(sizeof...(tail) == 0 && (idx + 1) < OutSize)
+        return vector_constructor<idx + 1>(out, OutType{0});
+
+    return out;
+}
+
+template <std::size_t idx,
+          typename OutType,
+          std::size_t OutSize,
+          typename InType,
+          std::size_t InSize,
+          template <typename, std::size_t>
+          typename Container,
+          template <typename, std::size_t, template <typename, std::size_t> typename>
+          typename VectorType,
+          typename... Tail>
+constexpr std::array<OutType, OutSize>&
+vector_constructor(std::array<OutType, OutSize>&                out,
+                   const VectorType<InType, InSize, Container>& head,
+                   Tail&&... tail) noexcept
+{
+    static_assert(idx < OutSize, "Too many elements.");
+
+    const constexpr auto N = std::min(OutSize - idx, InSize);
+    for(std::size_t i = 0; i < N; ++i) out[idx + i] = static_cast<OutType>(head[i]);
+
+    if constexpr(sizeof...(tail) > 0)
+        return vector_constructor<idx + N>(out, std::forward<Tail>(tail)...);
+
+    // fill remaining with zeros
+    if constexpr(sizeof...(tail) == 0 && (idx + N) < OutSize)
+        return vector_constructor<idx + N>(out, OutType{0});
+
+    return out;
+}
+} // namespace lucid

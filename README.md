@@ -1,3 +1,6 @@
+Lucid: experimental physical-based renderer {#mainpage}
+=====
+
 [![Build Status](https://travis-ci.com/groundflyer/lucid.svg?branch=master)](https://travis-ci.com/groundflyer/lucid)
 
 # Work in progress

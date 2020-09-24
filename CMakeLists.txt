@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(lucid CXX)
+project(Lucid CXX)
 
 # Compiler with C++20 support is required
 set(CMAKE_CXX_STANDARD 20)
@@ -30,6 +30,7 @@ option(USE_LIBCXX "Use LibC++ when compiling with clang" ON)
 option(USE_DOUBLE_PRECISION "Use double precision floating-point format" OFF)
 option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_BENCHMARKS "Build benchmarks" OFF)
+option(BUILD_DOC "Build documentation" OFF)
 option(ENABLE_IPO "Enable interprocedural optimization" OFF)
 
 add_compile_options(-Wall -Wpedantic -Wextra -fno-rtti)
@@ -94,5 +95,33 @@ include_directories(concurrentqueue)
 
 # range-v3
 include_directories(range-v3/include)
+
+# docs
+if(BUILD_DOC)
+  find_package(Doxygen REQUIRED dot)
+  if(DOXYGEN_FOUND)
+    message(STATUS "Building documentation")
+
+    set(DOXYGEN_PROJECT_BRIEF "Experimental renderer")
+    set(DOXYGEN_EXTRACT_ALL YES)
+    set(DOXYGEN_EXTRACT_PRIVATE YES)
+    set(DOXYGEN_EXTRACT_STATIC YES)
+    set(DOXYGEN_EXTRACT_ANON_NSPACES YES)
+    set(DOXYGEN_FILE_PATTERNS *.cpp *.hpp *.md)
+    set(DOXYGEN_GENERATE_TREEVIEW YES)
+    set(DOXYGEN_INCLUDE_GRAPH NO)
+    set(DOXYGEN_INCLUDED_BY_GRAPH NO)
+    set(DOXYGEN_DIRECTORY_GRAPH NO)
+    set(DOXYGEN_DOT_IMAGE_FORMAT svg)
+    set(DOXYGEN_INTERACTIVE_SVG YES)
+    set(DOXYGEN_TOC_EXPAND YES)
+    set(_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+    doxygen_add_docs(docs ${_SRC_DIR} ${CMAKE_SOURCE_DIR}/README.md ALL
+      COMMENT "Generating documentation with Doxygen"
+      WORKING_DIRECTORY ${_SRC_DIR})
+  else()
+    message(SEND_ERROR "Doxygen not found. Can't build docs.")
+  endif()
+endif()
 
 add_subdirectory(src)

@@ -62,16 +62,31 @@ static_assert(!keywords_have_space(options));
 constexpr tuple positionals{positional<2ul>(identity{}, "doc for 1st positional", {"pos11", "pos12"}),
                             positional(identity{}, "doc for 2nd positional", "pos2")};
 
+/// @test Passing correct arguments to argument parser.
 bool
 no_error_check() noexcept
 {
-    ArgvMock mock({"argtest", "-a", "foo value", "-d", "d1", "d2", "-m", "mval1", "mval2", "mval3", "-f", "1posval1", "1posval2", "2posval"});
+    ArgvMock  mock({"argtest",
+                   "-a",
+                   "foo value",
+                   "-d",
+                   "d1",
+                   "d2",
+                   "-m",
+                   "mval1",
+                   "mval2",
+                   "mval3",
+                   "-f",
+                   "1posval1",
+                   "1posval2",
+                   "2posval"});
     ArgsRange args(mock.argc(), mock.argv());
-    bool ret = false;
-    parse(options, positionals, args, [&ret](const auto&){ ret = true; });
+    bool      ret = false;
+    parse(options, positionals, args, [&ret](const auto&) { ret = true; });
     return ret;
 }
 
+/// @test Passing wrong arguments (no required positionals) to argument parser.
 bool
 error_check() noexcept
 {
