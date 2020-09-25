@@ -34,6 +34,7 @@ addons:
       - libglu1-mesa-dev
       - libgl1-mesa-glx
       - libgl1-mesa-dev
+      - graphviz
       - doxygen
 
 env: CXX=clang++-10 CC=clang-10
