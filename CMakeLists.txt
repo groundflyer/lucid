@@ -116,7 +116,8 @@ if(BUILD_DOC)
     set(DOXYGEN_INTERACTIVE_SVG YES)
     set(DOXYGEN_TOC_EXPAND YES)
     set(_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-    doxygen_add_docs(docs ${_SRC_DIR} ${CMAKE_SOURCE_DIR}/README.md ALL
+    set(_DOC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/doc)
+    doxygen_add_docs(doc ${_SRC_DIR} ${_DOC_DIR} ALL
       COMMENT "Generating documentation with Doxygen"
       WORKING_DIRECTORY ${_SRC_DIR})
   else()

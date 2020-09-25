@@ -34,6 +34,7 @@ addons:
       - libglu1-mesa-dev
       - libgl1-mesa-glx
       - libgl1-mesa-dev
+      - doxygen
 
 env: CXX=clang++-10 CC=clang-10
 
@@ -45,7 +46,16 @@ before_script:
   - mkdir -p build && cd build
 
 script:
-  - cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON ..
+  - cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_DOC=ON ..
   - cmake --build . -- -j2
   - cd src/tests
   - ctest --output-on-failure -j2
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  keep_history: true
+  on:
+    branch: master
+  local_dir: "${TRAVIS_BUILD_DIR:?}/html"
