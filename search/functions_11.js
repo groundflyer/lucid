@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['radians',['radians',['../namespacelucid.html#a421f21a1ea5335fda34d5c9f823e0229',1,'lucid']]],
+  ['radius',['radius',['../primitives_8cpp.html#ad65b21db3413de1b568aceb2d047e970',1,'radius(const Sphere &amp;prim) noexcept:&#160;primitives.cpp'],['../primitives_8cpp.html#a70b55cfe8a2aa651ab61ebe00cdf0829',1,'radius(const AABB &amp;prim) noexcept:&#160;primitives.cpp']]],
+  ['rand',['rand',['../namespacelucid.html#a5b717610f668c48d455861f789919d21',1,'lucid::rand(Generator &amp;g)'],['../namespacelucid.html#a0b6429cc7728e56221844143d55c3add',1,'lucid::rand(Generator &amp;g)']]],
+  ['randomdistribution',['RandomDistribution',['../classlucid_1_1RandomDistribution.html#a59e3b327999b1e19d9fdeb9aaed96d79',1,'lucid::RandomDistribution::RandomDistribution()'],['../classlucid_1_1RandomDistribution_3_01bool_01_4.html#ad759af0a6f8d34dd6ab711239d8a209d',1,'lucid::RandomDistribution&lt; bool &gt;::RandomDistribution()']]],
+  ['range',['range',['../namespacelucid.html#a43f254a141def660928a546894553812',1,'lucid']]],
+  ['ratio',['ratio',['../namespacelucid.html#aed857b30dbf5f18a6d40017cff13110d',1,'lucid']]],
+  ['ray_5f',['Ray_',['../structlucid_1_1Ray__.html#ab391a3e576845dc4ba671564bd30b9ec',1,'lucid::Ray_::Ray_() noexcept'],['../structlucid_1_1Ray__.html#a2ebda811b1c18bdfa64f9611c2abb83d',1,'lucid::Ray_::Ray_(const Point_&lt; Container1 &gt; &amp;_origin, const Normal_&lt; Container2 &gt; &amp;_dir) noexcept'],['../namespacelucid.html#a1a6bb01f81137e3fe48a526517140946',1,'lucid::Ray_()']]],
+  ['read',['read',['../classlucid_1_1argparse_1_1ArgsRange.html#acc8884a6df9c81bafc6f812a242cc85a',1,'lucid::argparse::ArgsRange::read()'],['../classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4_1_1value__range.html#aaa9a28bcb8437d484092a0db98bfe9ff',1,'lucid::argparse::Binding&lt; Converter, -1ul &gt;::value_range::read()']]],
+  ['reduce',['reduce',['../namespacelucid.html#afb8a02500add580ba3c5b30efa46b9d5',1,'lucid::reduce(BinaryOperation &amp;&amp;binary_op, const VectorType&lt; T, N, Container &gt; &amp;a, Init init) noexcept'],['../namespacelucid.html#a9af96b4c3204c163287f72ea03211c09',1,'lucid::reduce(BinaryOp &amp;&amp;op, Init &amp;&amp;init, Args &amp;&amp;... args) noexcept']]],
+  ['reduce_5ftuple',['reduce_tuple',['../namespacelucid.html#a98f671069ed85b349f615138f1d2f215',1,'lucid']]],
+  ['ref',['ref',['../namespacelucid.html#a7b861882b3e5b75ee50e11a846231bc9',1,'lucid::ref(const Matrix&lt; T, M, N, Container &gt; &amp;m) noexcept'],['../namespacelucid.html#a7faf8650787d79412c346544b9fc19b9',1,'lucid::ref(const VectorType&lt; T, N, Container &gt; &amp;v) noexcept']]],
+  ['reload_5fimg',['reload_img',['../classlucid_1_1detail_1_1__Viewport.html#a972ecc4bfbf6f6c35873c508b185d2b9',1,'lucid::detail::_Viewport::reload_img()'],['../structlucid_1_1detail_1_1__Viewport_1_1Handler.html#aeb10b8c26a3d2e81774e73e33ab100d2',1,'lucid::detail::_Viewport::Handler::reload_img()']]],
+  ['render',['render',['../viewport_8cpp.html#a31569eed057e0b9d030231622d191d3f',1,'viewport.cpp']]],
+  ['repeat_5fto_5farray',['repeat_to_array',['../namespacelucid.html#abc7f4d8ceafe7a6012a5f479e5c0094b',1,'lucid']]],
+  ['repeat_5fto_5ftuple',['repeat_to_tuple',['../namespacelucid.html#a7d59e081a64108ea774c35f0507a19c2',1,'lucid']]],
+  ['res',['res',['../classlucid_1_1ScanlineImage.html#ab5dca2d42a755112fbbe78d53ba98fff',1,'lucid::ScanlineImage']]],
+  ['resample',['resample',['../namespacelucid.html#a75b6117deb48c5f8ade91cba28397b92',1,'lucid']]],
+  ['reset_5fopt',['reset_opt',['../classlucid_1_1argparse_1_1Visitor.html#a493ec4ebc268af38812fab0eec41481d',1,'lucid::argparse::Visitor']]],
+  ['resize_5fcallback',['resize_callback',['../classlucid_1_1detail_1_1__Viewport.html#aad32f822cf74a0a6dc08a3efee654e02',1,'lucid::detail::_Viewport']]],
+  ['restart',['restart',['../classlucid_1_1ElapsedTimer.html#ae7f62d7569f27dccd6b1d05ac243d4a9',1,'lucid::ElapsedTimer']]],
+  ['result_5findex',['result_index',['../classlucid_1_1Dispatcher.html#a845eb2f75ff841ec6ecf8dfe6ac11ccf',1,'lucid::Dispatcher']]],
+  ['roll',['roll',['../namespacelucid.html#ae36520edfa5fe230b27bd27c5a1be2ed',1,'lucid']]],
+  ['rotate',['rotate',['../namespacelucid.html#a3f883d2fb6b1ee3264d74271ba97fe48',1,'lucid']]],
+  ['run_5ftask',['run_task',['../structlucid_1_1Dispatcher_1_1ThreadWorker.html#a48c53714e69d0a0cccd21ceb52a8e821',1,'lucid::Dispatcher::ThreadWorker']]]
+];

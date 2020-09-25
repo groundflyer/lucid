@@ -1,0 +1,5 @@
+<map id="lucid::CornellBox::MatGetter::Emission" name="lucid::CornellBox::MatGetter::Emission">
+<area shape="rect" id="node2" href="$classlucid_1_1Vector.html" title="lucid::Vector\&lt; std\l::array \&gt;" alt="" coords="292,53,429,94"/>
+<area shape="rect" id="node3" href="$classlucid_1_1ImmutableVectorOperators.html" title="lucid::ImmutableVectorOperators\l\&lt; std::array, N, std::array,\l Vector \&gt;" alt="" coords="5,5,243,61"/>
+<area shape="rect" id="node4" href="$classlucid_1_1MutableVectorOperators.html" title="lucid::MutableVectorOperators\l\&lt; std::array, N, std::array,\l Vector \&gt;" alt="" coords="15,85,233,141"/>
+</map>

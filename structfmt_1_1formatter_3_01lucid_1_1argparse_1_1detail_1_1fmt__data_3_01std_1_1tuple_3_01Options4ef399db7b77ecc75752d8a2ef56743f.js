@@ -1,0 +1,6 @@
+var structfmt_1_1formatter_3_01lucid_1_1argparse_1_1detail_1_1fmt__data_3_01std_1_1tuple_3_01Options4ef399db7b77ecc75752d8a2ef56743f =
+[
+    [ "Desc", "structfmt_1_1formatter_3_01lucid_1_1argparse_1_1detail_1_1fmt__data_3_01std_1_1tuple_3_01Options4ef399db7b77ecc75752d8a2ef56743f.html#ae1885f607ec281b3468a396ebe53c45d", null ],
+    [ "format", "structfmt_1_1formatter_3_01lucid_1_1argparse_1_1detail_1_1fmt__data_3_01std_1_1tuple_3_01Options4ef399db7b77ecc75752d8a2ef56743f.html#aa5347238278514ae9716a66ff0df5e88", null ],
+    [ "parse", "structfmt_1_1formatter_3_01lucid_1_1argparse_1_1detail_1_1fmt__data_3_01std_1_1tuple_3_01Options4ef399db7b77ecc75752d8a2ef56743f.html#aa52ef85daf1b4bc289764142198d7d41", null ]
+];
