@@ -1304,7 +1304,7 @@ struct formatter<
         out = format_opts<true, max_width>(
             out, options, positionals, formatted_size(front, desc.program_name));
 
-        out = copy(out, "\n\nOptions:");
+        out = internal::copy(out, "\n\nOptions:");
 
         const std::size_t new_margin = longest_head(options,
                                                     positionals,

@@ -6,6 +6,7 @@
 
 #include <utils/timer.hpp>
 
+#include <range/v3/range/conversion.hpp>
 #include <range/v3/view/generate_n.hpp>
 
 #include <fmt/chrono.h>
