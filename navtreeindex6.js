@@ -1,6 +1,5 @@
 var NAVTREEINDEX6 =
 {
-"vector__operators_8hpp.html#afb329df53b59f7c49c874f855dd6b4a9":[4,0,0,7,4],
 "vector__operators_8hpp.html#afb8a02500add580ba3c5b30efa46b9d5":[4,0,0,7,31],
 "vector__operators_8hpp_source.html":[4,0,0,7],
 "viewport_8cpp.html":[4,0,10,12],

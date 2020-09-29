@@ -9,7 +9,7 @@ var searchData=
   ['image_2ehpp',['image.hpp',['../image_8hpp.html',1,'']]],
   ['imageptr',['ImagePtr',['../classlucid_1_1ScanlineImage_1_1__iterator.html#ab0ac881ff4328bbefcbccdd7fbdbacf5',1,'lucid::ScanlineImage::_iterator']]],
   ['imageref',['ImageRef',['../classlucid_1_1ScanlineImage_1_1__iterator.html#a466cc1e2418c25dd194b89d6ea8d285a',1,'lucid::ScanlineImage::_iterator']]],
-  ['img',['img',['../classlucid_1_1ScanlineImage_1_1__iterator.html#a3f390f26b9aea53543efd01db40f8d7d',1,'lucid::ScanlineImage::_iterator::img()'],['../structlucid_1_1Film.html#a99e7ce764b93a47edc40d2596ad6508a',1,'lucid::Film::img()'],['../structDummyAction.html#ab9ec5464fee9b9b58c1eac8abf6f26b2',1,'DummyAction::img()']]],
+  ['img',['img',['../classlucid_1_1ScanlineImage_1_1__iterator.html#a3f390f26b9aea53543efd01db40f8d7d',1,'lucid::ScanlineImage::_iterator::img()'],['../structlucid_1_1Film.html#a99e7ce764b93a47edc40d2596ad6508a',1,'lucid::Film::img()'],['../structDummyAction.html#aeeacfd7fc625fb0fd4bdeb087bc0790c',1,'DummyAction::img()']]],
   ['immutablevectoroperators',['ImmutableVectorOperators',['../classlucid_1_1ImmutableVectorOperators.html',1,'lucid']]],
   ['immutablevectoroperators_3c_20container_2c_203_2c_20std_3a_3aarray_2c_20normaln_5f_20_3e',['ImmutableVectorOperators&lt; Container, 3, std::array, NormalN_ &gt;',['../classlucid_1_1ImmutableVectorOperators.html',1,'lucid']]],
   ['immutablevectoroperators_3c_20container_2c_203_2c_20std_3a_3aarray_2c_20pointn_5f_20_3e',['ImmutableVectorOperators&lt; Container, 3, std::array, PointN_ &gt;',['../classlucid_1_1ImmutableVectorOperators.html',1,'lucid']]],

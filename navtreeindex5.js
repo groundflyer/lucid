@@ -1,6 +1,5 @@
 var NAVTREEINDEX5 =
 {
-"structlucid_1_1detail_1_1__Viewport_1_1Handler.html#ab8f687a3675ab0bb84b2e062a8e7eb9d":[3,0,1,1,0,0,2],
 "structlucid_1_1detail_1_1__Viewport_1_1Handler.html#aca9bf3b4c07690f383ec2fd68697ce78":[3,0,1,1,0,0,9],
 "structlucid_1_1detail_1_1__Viewport_1_1Handler.html#ad8bb4a5758bd15332f5d4a34ea971722":[3,0,1,1,0,0,3],
 "structlucid_1_1detail_1_1__Viewport_1_1Handler.html#ae667aa21b95989f343e9105fa9ee37dc":[3,0,1,1,0,0,11],
@@ -249,5 +248,6 @@ var NAVTREEINDEX5 =
 "vector__operators_8hpp.html#adfa9ad04e2ae44aaf03295a27bc3482b":[4,0,0,7,2],
 "vector__operators_8hpp.html#ae36520edfa5fe230b27bd27c5a1be2ed":[4,0,0,7,33],
 "vector__operators_8hpp.html#aea5458a2d56542b0dc4874011d36a3b8":[4,0,0,7,6],
-"vector__operators_8hpp.html#af510bdc3f0c54502625fb857a0fda1cd":[4,0,0,7,25]
+"vector__operators_8hpp.html#af510bdc3f0c54502625fb857a0fda1cd":[4,0,0,7,25],
+"vector__operators_8hpp.html#afb329df53b59f7c49c874f855dd6b4a9":[4,0,0,7,4]
 };
