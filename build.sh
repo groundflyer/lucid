@@ -1,12 +1,13 @@
 #!/bin/bash
 
 showhelp() {
-    echo "Usage: $0 [-t] [-b] [-d] [-e] [-a]"
+    echo "Usage: $0 [-t] [-b] [-d] [-e] [-a] [-c]"
     echo -e "\t-t\tbuild and run tests"
     echo -e "\t-b\tbuild and run benchmarks"
     echo -e "\t-d\tbuild documentation"
     echo -e "\t-e\tuse temporary directory"
     echo -e "\t-a\tbuild all, then run benchmarks and tests"
+    echo -e "\t-c\trun cmake only, don't build"
 }
 
 SRC_DIR=`realpath $(dirname "${BASH_SOURCE[0]}")`
@@ -19,6 +20,7 @@ CMAKE_ARGS=(
 TEST=false
 BENCHMARK=false
 [ -z "${JOBS:-}" ] && JOBS=8
+DO_BUILD=true
 
 enable_tests() {
     CMAKE_ARGS+=(-DBUILD_TESTS=ON)
@@ -76,6 +78,9 @@ for key in $@; do
             enable_benchmarks
             enable_docs
             ;;
+        -c)
+            DO_BUILD=false
+            ;;
         -h)
             showhelp
             exit 0
@@ -91,7 +96,9 @@ done
 mkdir -p ${BUILD_DIR}
 pushd ${BUILD_DIR}
 cmake ${CMAKE_ARGS[*]} ${SRC_DIR}
-make -j${JOBS}
-run_tests
-run_benchmarks
+if [ $DO_BUILD = true ]; then
+    make -j${JOBS}
+    run_tests
+    run_benchmarks
+fi
 popd
