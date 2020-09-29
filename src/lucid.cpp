@@ -29,18 +29,6 @@ struct to_unsigned
     }
 };
 
-struct DummyAction
-{
-    Image* img;
-
-    template <typename... Args>
-    const Image&
-    operator()(Args&&...) const noexcept
-    {
-        return *img;
-    }
-};
-
 constexpr std::tuple options{
     option<'r', 2>(to_unsigned{}, {640, 640}, "resolution", "Image resolution.", {"W", "H"}),
     option<'d'>(to_unsigned{}, 4, "depth", "Maximum bounces.", "N"),
@@ -82,10 +70,10 @@ main(int argc, char* argv[])
 
     try
     {
-        FilmRGBA    film{res};
-        DummyAction da{&film.img};
-        auto        viewport   = make_viewport(res, da, da, da);
-        const real  filter_rad = film._pixel_radius * filter_width;
+        FilmRGBA   film{res};
+        auto       da         = [](auto&&...) {};
+        auto       viewport   = make_viewport(res, da, da, da);
+        const real filter_rad = film._pixel_radius * filter_width;
 
         viewport.load_img(film.img);
         viewport.check_errors();

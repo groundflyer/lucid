@@ -9,6 +9,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include <type_traits>
+
 namespace lucid
 {
 namespace detail
@@ -62,25 +64,37 @@ class _Viewport
     {
         res = Vec2i(width, height);
         glViewport(0, 0, width, height);
-        load_img(resize_reaction(res));
+        if constexpr(std::is_void_v<std::invoke_result_t<ResizeReaction, Vec2i>>)
+            resize_reaction(res);
+        else
+            load_img(resize_reaction(res));
     }
 
     static void
     key_callback(GLFWwindow*, int key, int /*scancode*/, int action, int mods) noexcept
     {
-        reload_img(key_reaction(key, action, mods));
+        if constexpr(std::is_void_v<std::invoke_result_t<KeyReaction, int, int, int>>)
+            key_reaction(key, action, mods);
+        else
+            reload_img(key_reaction(key, action, mods));
     }
 
     static void
     mouse_button_callback(GLFWwindow*, int button, int action, int mods) noexcept
     {
-        reload_img(mouse_reaction(button, action == GLFW_PRESS, mods));
+        if constexpr(std::is_void_v<std::invoke_result_t<MouseReaction, int, bool, int>>)
+            mouse_reaction(button, action == GLFW_PRESS, mods);
+        else
+            reload_img(mouse_reaction(button, action == GLFW_PRESS, mods));
     }
 
     static void
     cursor_position_callback(GLFWwindow*, double xpos, double ypos) noexcept
     {
-        reload_img(mouse_reaction(Vec2{xpos, ypos}));
+        if constexpr(std::is_void_v<std::invoke_result_t<MouseReaction, Vec2>>)
+            mouse_reaction(Vec2{xpos, ypos});
+        else
+            reload_img(mouse_reaction(Vec2{xpos, ypos}));
     }
 
     _Viewport()                 = delete;
