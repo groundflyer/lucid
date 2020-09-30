@@ -35,7 +35,7 @@ var vector__operators_8hpp =
     [ "ref", "vector__operators_8hpp.html#a7faf8650787d79412c346544b9fc19b9", null ],
     [ "roll", "vector__operators_8hpp.html#ae36520edfa5fe230b27bd27c5a1be2ed", null ],
     [ "sqrt", "vector__operators_8hpp.html#aa257ad63b097388cc40e2ea1daa6eca3", null ],
-    [ "srgb_luminance", "vector__operators_8hpp.html#a34885880705c1001dc8a88f30e0db2ab", null ],
+    [ "srgb_luminance", "vector__operators_8hpp.html#a4e9833485239859a448f6e76293443dd", null ],
     [ "sum", "vector__operators_8hpp.html#a4cba4d1f1126d8cbd1a21e91972074c1", null ],
     [ "transform", "vector__operators_8hpp.html#a1ab329e3b0c8db9fecdafb32170456c5", null ],
     [ "transform", "vector__operators_8hpp.html#aa85f8f9964a872d2d2534c1486020704", null ],

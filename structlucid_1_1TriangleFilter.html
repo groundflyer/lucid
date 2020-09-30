@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -88,116 +94,25 @@ $(document).ready(function(){initNavTree('structlucid_1_1TriangleFilter.html',''
 <div class="title">lucid::TriangleFilter Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="filtering_8hpp_source.html">filtering.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a737aab37b6ed6be70138f1b957c3c5d9"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1TriangleFilter.html#a737aab37b6ed6be70138f1b957c3c5d9">TriangleFilter</a> (const <a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> &amp;_radius)</td></tr>
+<tr class="memitem:a737aab37b6ed6be70138f1b957c3c5d9"><td class="memItemLeft" align="right" valign="top"><a id="a737aab37b6ed6be70138f1b957c3c5d9"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>TriangleFilter</b> (const real &amp;_radius)</td></tr>
 <tr class="separator:a737aab37b6ed6be70138f1b957c3c5d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc242e9219e86623c8f2aeec5735745e"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1TriangleFilter.html#afc242e9219e86623c8f2aeec5735745e">operator()</a> (const <a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a> &amp;pixel_ssp, const <a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a> &amp;sample_pos) const noexcept</td></tr>
+<tr class="memitem:afc242e9219e86623c8f2aeec5735745e"><td class="memItemLeft" align="right" valign="top"><a id="afc242e9219e86623c8f2aeec5735745e"></a>
+constexpr real&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (const <a class="el" href="classlucid_1_1Vector.html">Vec2</a> &amp;pixel_ssp, const <a class="el" href="classlucid_1_1Vector.html">Vec2</a> &amp;sample_pos) const noexcept</td></tr>
 <tr class="separator:afc242e9219e86623c8f2aeec5735745e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aa3580bea931d19b77015fb5631081809"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1TriangleFilter.html#aa3580bea931d19b77015fb5631081809">radius</a></td></tr>
+<tr class="memitem:aa3580bea931d19b77015fb5631081809"><td class="memItemLeft" align="right" valign="top"><a id="aa3580bea931d19b77015fb5631081809"></a>
+real&#160;</td><td class="memItemRight" valign="bottom"><b>radius</b></td></tr>
 <tr class="separator:aa3580bea931d19b77015fb5631081809"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af780b88d559c0af3a951343f930fd766"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1TriangleFilter.html#af780b88d559c0af3a951343f930fd766">invert_radius</a></td></tr>
+<tr class="memitem:af780b88d559c0af3a951343f930fd766"><td class="memItemLeft" align="right" valign="top"><a id="af780b88d559c0af3a951343f930fd766"></a>
+real&#160;</td><td class="memItemRight" valign="bottom"><b>invert_radius</b></td></tr>
 <tr class="separator:af780b88d559c0af3a951343f930fd766"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a737aab37b6ed6be70138f1b957c3c5d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a737aab37b6ed6be70138f1b957c3c5d9">&#9670;&nbsp;</a></span>TriangleFilter()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr lucid::TriangleFilter::TriangleFilter </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> &amp;&#160;</td>
-          <td class="paramname"><em>_radius</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="afc242e9219e86623c8f2aeec5735745e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc242e9219e86623c8f2aeec5735745e">&#9670;&nbsp;</a></span>operator()()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> lucid::TriangleFilter::operator() </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a> &amp;&#160;</td>
-          <td class="paramname"><em>pixel_ssp</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a> &amp;&#160;</td>
-          <td class="paramname"><em>sample_pos</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="af780b88d559c0af3a951343f930fd766"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af780b88d559c0af3a951343f930fd766">&#9670;&nbsp;</a></span>invert_radius</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> lucid::TriangleFilter::invert_radius</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa3580bea931d19b77015fb5631081809"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3580bea931d19b77015fb5631081809">&#9670;&nbsp;</a></span>radius</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> lucid::TriangleFilter::radius</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>image_reconstruction/<a class="el" href="filtering_8hpp_source.html">filtering.hpp</a></li>
 </ul>
@@ -206,7 +121,7 @@ Public Attributes</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="structlucid_1_1TriangleFilter.html">TriangleFilter</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="structlucid_1_1TriangleFilter.html">TriangleFilter</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

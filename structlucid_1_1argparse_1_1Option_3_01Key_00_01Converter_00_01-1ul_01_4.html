@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -90,274 +96,49 @@ $(document).ready(function(){initNavTree('structlucid_1_1argparse_1_1Option_3_01
 <div class="title">lucid::argparse::Option&lt; Key, Converter, -1ul &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="argparse_8hpp_source.html">argparse.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a7b606cc5195609ba48180057fd67d0b8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1Option_3_01Key_00_01Converter_00_01-1ul_01_4.html#a7b606cc5195609ba48180057fd67d0b8">value_type</a> = std::decay_t&lt; std::invoke_result_t&lt; Converter, std::string_view &gt; &gt;</td></tr>
+<tr class="memitem:a7b606cc5195609ba48180057fd67d0b8"><td class="memItemLeft" align="right" valign="top"><a id="a7b606cc5195609ba48180057fd67d0b8"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = std::decay_t&lt; std::invoke_result_t&lt; Converter, std::string_view &gt; &gt;</td></tr>
 <tr class="separator:a7b606cc5195609ba48180057fd67d0b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:acdada21e78ee4aa38ff6389d86c52a28"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1Option_3_01Key_00_01Converter_00_01-1ul_01_4.html#acdada21e78ee4aa38ff6389d86c52a28">Option</a> (Converter &amp;&amp;_converter, const std::string_view _keyword, const std::string_view _doc, const std::string_view _var) noexcept</td></tr>
+<tr class="memitem:acdada21e78ee4aa38ff6389d86c52a28"><td class="memItemLeft" align="right" valign="top"><a id="acdada21e78ee4aa38ff6389d86c52a28"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>Option</b> (Converter &amp;&amp;_converter, const std::string_view _keyword, const std::string_view _doc, const std::string_view _var) noexcept</td></tr>
 <tr class="separator:acdada21e78ee4aa38ff6389d86c52a28"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5fe4a8c26d37a4471defed011e0f4a4d"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classlucid_1_1argparse_1_1Binding.html">Binding</a>&lt; Converter, -1ul &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1Option_3_01Key_00_01Converter_00_01-1ul_01_4.html#a5fe4a8c26d37a4471defed011e0f4a4d">binding</a> () const noexcept</td></tr>
+<tr class="memitem:a5fe4a8c26d37a4471defed011e0f4a4d"><td class="memItemLeft" align="right" valign="top"><a id="a5fe4a8c26d37a4471defed011e0f4a4d"></a>
+constexpr <a class="el" href="classlucid_1_1argparse_1_1Binding.html">Binding</a>&lt; Converter, -1ul &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>binding</b> () const noexcept</td></tr>
 <tr class="separator:a5fe4a8c26d37a4471defed011e0f4a4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a6369696797465bcea5e0c0267091b30b"><td class="memItemLeft" align="right" valign="top">Converter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1Option_3_01Key_00_01Converter_00_01-1ul_01_4.html#a6369696797465bcea5e0c0267091b30b">converter</a></td></tr>
+<tr class="memitem:a6369696797465bcea5e0c0267091b30b"><td class="memItemLeft" align="right" valign="top"><a id="a6369696797465bcea5e0c0267091b30b"></a>
+Converter&#160;</td><td class="memItemRight" valign="bottom"><b>converter</b></td></tr>
 <tr class="separator:a6369696797465bcea5e0c0267091b30b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07bd36aa5894943f0a04990db509ab9f"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1Option_3_01Key_00_01Converter_00_01-1ul_01_4.html#a07bd36aa5894943f0a04990db509ab9f">keyword</a></td></tr>
+<tr class="memitem:a07bd36aa5894943f0a04990db509ab9f"><td class="memItemLeft" align="right" valign="top"><a id="a07bd36aa5894943f0a04990db509ab9f"></a>
+std::string_view&#160;</td><td class="memItemRight" valign="bottom"><b>keyword</b></td></tr>
 <tr class="separator:a07bd36aa5894943f0a04990db509ab9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefdf440acfe7fbaf12d52db281fb0619"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1Option_3_01Key_00_01Converter_00_01-1ul_01_4.html#aefdf440acfe7fbaf12d52db281fb0619">doc</a></td></tr>
+<tr class="memitem:aefdf440acfe7fbaf12d52db281fb0619"><td class="memItemLeft" align="right" valign="top"><a id="aefdf440acfe7fbaf12d52db281fb0619"></a>
+std::string_view&#160;</td><td class="memItemRight" valign="bottom"><b>doc</b></td></tr>
 <tr class="separator:aefdf440acfe7fbaf12d52db281fb0619"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7acc5bdce8a08e353ba00c0afe0a387c"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1Option_3_01Key_00_01Converter_00_01-1ul_01_4.html#a7acc5bdce8a08e353ba00c0afe0a387c">var</a></td></tr>
+<tr class="memitem:a7acc5bdce8a08e353ba00c0afe0a387c"><td class="memItemLeft" align="right" valign="top"><a id="a7acc5bdce8a08e353ba00c0afe0a387c"></a>
+std::string_view&#160;</td><td class="memItemRight" valign="bottom"><b>var</b></td></tr>
 <tr class="separator:a7acc5bdce8a08e353ba00c0afe0a387c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a923aeb5473dbc3e3f192fbfe944baa4d"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1Option_3_01Key_00_01Converter_00_01-1ul_01_4.html#a923aeb5473dbc3e3f192fbfe944baa4d">num_vals</a> = -1ul</td></tr>
+<tr class="memitem:a923aeb5473dbc3e3f192fbfe944baa4d"><td class="memItemLeft" align="right" valign="top"><a id="a923aeb5473dbc3e3f192fbfe944baa4d"></a>
+static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>num_vals</b> = -1ul</td></tr>
 <tr class="separator:a923aeb5473dbc3e3f192fbfe944baa4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a589713068a9f4620a2026d9edd95b9e0"><td class="memItemLeft" align="right" valign="top">static constexpr char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1Option_3_01Key_00_01Converter_00_01-1ul_01_4.html#a589713068a9f4620a2026d9edd95b9e0">key</a> = <a class="el" href="structlucid_1_1argparse_1_1Key.html">Key</a></td></tr>
+<tr class="memitem:a589713068a9f4620a2026d9edd95b9e0"><td class="memItemLeft" align="right" valign="top"><a id="a589713068a9f4620a2026d9edd95b9e0"></a>
+static constexpr char&#160;</td><td class="memItemRight" valign="bottom"><b>key</b> = <a class="el" href="structlucid_1_1argparse_1_1Key.html">Key</a></td></tr>
 <tr class="separator:a589713068a9f4620a2026d9edd95b9e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d1acd9c84d6fbb8ca090ce74397c8af"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1Option_3_01Key_00_01Converter_00_01-1ul_01_4.html#a8d1acd9c84d6fbb8ca090ce74397c8af">is_flag</a> = false</td></tr>
+<tr class="memitem:a8d1acd9c84d6fbb8ca090ce74397c8af"><td class="memItemLeft" align="right" valign="top"><a id="a8d1acd9c84d6fbb8ca090ce74397c8af"></a>
+static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_flag</b> = false</td></tr>
 <tr class="separator:a8d1acd9c84d6fbb8ca090ce74397c8af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a7b606cc5195609ba48180057fd67d0b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b606cc5195609ba48180057fd67d0b8">&#9670;&nbsp;</a></span>value_type</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;char Key, typename Converter &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="structlucid_1_1argparse_1_1Option.html">lucid::argparse::Option</a>&lt; <a class="el" href="structlucid_1_1argparse_1_1Key.html">Key</a>, Converter, -1ul &gt;::value_type =  std::decay_t&lt;std::invoke_result_t&lt;Converter, std::string_view&gt; &gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="acdada21e78ee4aa38ff6389d86c52a28"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acdada21e78ee4aa38ff6389d86c52a28">&#9670;&nbsp;</a></span>Option()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;char Key, typename Converter &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1argparse_1_1Option.html">lucid::argparse::Option</a>&lt; <a class="el" href="structlucid_1_1argparse_1_1Key.html">Key</a>, Converter, -1ul &gt;::Option </td>
-          <td>(</td>
-          <td class="paramtype">Converter &amp;&amp;&#160;</td>
-          <td class="paramname"><em>_converter</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string_view&#160;</td>
-          <td class="paramname"><em>_keyword</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string_view&#160;</td>
-          <td class="paramname"><em>_doc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string_view&#160;</td>
-          <td class="paramname"><em>_var</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a5fe4a8c26d37a4471defed011e0f4a4d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5fe4a8c26d37a4471defed011e0f4a4d">&#9670;&nbsp;</a></span>binding()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;char Key, typename Converter &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="classlucid_1_1argparse_1_1Binding.html">Binding</a>&lt;Converter, -1ul&gt; lucid::argparse::Option&lt; Key, Converter, -1ul &gt;::binding </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a6369696797465bcea5e0c0267091b30b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6369696797465bcea5e0c0267091b30b">&#9670;&nbsp;</a></span>converter</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;char Key, typename Converter &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">Converter <a class="el" href="structlucid_1_1argparse_1_1Option.html">lucid::argparse::Option</a>&lt; <a class="el" href="structlucid_1_1argparse_1_1Key.html">Key</a>, Converter, -1ul &gt;::converter</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aefdf440acfe7fbaf12d52db281fb0619"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aefdf440acfe7fbaf12d52db281fb0619">&#9670;&nbsp;</a></span>doc</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;char Key, typename Converter &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string_view <a class="el" href="structlucid_1_1argparse_1_1Option.html">lucid::argparse::Option</a>&lt; <a class="el" href="structlucid_1_1argparse_1_1Key.html">Key</a>, Converter, -1ul &gt;::doc</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8d1acd9c84d6fbb8ca090ce74397c8af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d1acd9c84d6fbb8ca090ce74397c8af">&#9670;&nbsp;</a></span>is_flag</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;char Key, typename Converter &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr bool <a class="el" href="structlucid_1_1argparse_1_1Option.html">lucid::argparse::Option</a>&lt; <a class="el" href="structlucid_1_1argparse_1_1Key.html">Key</a>, Converter, -1ul &gt;::is_flag = false</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a589713068a9f4620a2026d9edd95b9e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a589713068a9f4620a2026d9edd95b9e0">&#9670;&nbsp;</a></span>key</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;char Key, typename Converter &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr char <a class="el" href="structlucid_1_1argparse_1_1Option.html">lucid::argparse::Option</a>&lt; <a class="el" href="structlucid_1_1argparse_1_1Key.html">Key</a>, Converter, -1ul &gt;::key = <a class="el" href="structlucid_1_1argparse_1_1Key.html">Key</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a07bd36aa5894943f0a04990db509ab9f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07bd36aa5894943f0a04990db509ab9f">&#9670;&nbsp;</a></span>keyword</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;char Key, typename Converter &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string_view <a class="el" href="structlucid_1_1argparse_1_1Option.html">lucid::argparse::Option</a>&lt; <a class="el" href="structlucid_1_1argparse_1_1Key.html">Key</a>, Converter, -1ul &gt;::keyword</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a923aeb5473dbc3e3f192fbfe944baa4d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a923aeb5473dbc3e3f192fbfe944baa4d">&#9670;&nbsp;</a></span>num_vals</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;char Key, typename Converter &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr std::size_t <a class="el" href="structlucid_1_1argparse_1_1Option.html">lucid::argparse::Option</a>&lt; <a class="el" href="structlucid_1_1argparse_1_1Key.html">Key</a>, Converter, -1ul &gt;::num_vals = -1ul</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7acc5bdce8a08e353ba00c0afe0a387c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7acc5bdce8a08e353ba00c0afe0a387c">&#9670;&nbsp;</a></span>var</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;char Key, typename Converter &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string_view <a class="el" href="structlucid_1_1argparse_1_1Option.html">lucid::argparse::Option</a>&lt; <a class="el" href="structlucid_1_1argparse_1_1Key.html">Key</a>, Converter, -1ul &gt;::var</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>utils/<a class="el" href="argparse_8hpp_source.html">argparse.hpp</a></li>
 </ul>
@@ -366,7 +147,7 @@ template&lt;char Key, typename Converter &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="namespacelucid_1_1argparse.html">argparse</a></li><li class="navelem"><a class="el" href="structlucid_1_1argparse_1_1Option_3_01Key_00_01Converter_00_01-1ul_01_4.html">Option&lt; Key, Converter, -1ul &gt;</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><b>argparse</b></li><li class="navelem"><a class="el" href="structlucid_1_1argparse_1_1Option_3_01Key_00_01Converter_00_01-1ul_01_4.html">Option&lt; Key, Converter, -1ul &gt;</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

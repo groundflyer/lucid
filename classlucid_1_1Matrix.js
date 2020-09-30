@@ -1,6 +1,5 @@
 var classlucid_1_1Matrix =
 [
-    [ "Data", "classlucid_1_1Matrix.html#a95cd5ad74ef99fa3b5afddf61c1a52ba", null ],
     [ "Matrix", "classlucid_1_1Matrix.html#ada2fcdf110336ec9c9211f9eec6b3347", null ],
     [ "Matrix", "classlucid_1_1Matrix.html#abc3920f65eb80a76712aae3a707c31be", null ],
     [ "Matrix", "classlucid_1_1Matrix.html#ad752a009fa0809ccb35d53776db0e21a", null ],
@@ -13,16 +12,14 @@ var classlucid_1_1Matrix =
     [ "at", "classlucid_1_1Matrix.html#a289acd268fb5855f3663c497686875ec", null ],
     [ "at", "classlucid_1_1Matrix.html#acd8965e9fe9397667f605e93f2933218", null ],
     [ "at", "classlucid_1_1Matrix.html#aa794c1c2f2cca8fb50c973aa5cfc0612", null ],
-    [ "begin", "classlucid_1_1Matrix.html#a52165156cfaacc45b7490b822a82afbc", null ],
+    [ "begin", "classlucid_1_1Matrix.html#a15be0c7709f0dde918d68bd8676a4ecf", null ],
     [ "cbegin", "classlucid_1_1Matrix.html#a245e3c192ab3c42f1bcb7dc5023d9b24", null ],
     [ "cend", "classlucid_1_1Matrix.html#ae75ae75928d604a9979a8debf749b82d", null ],
     [ "data", "classlucid_1_1Matrix.html#a6621ed854a0ad2a88a7d18765ff8586d", null ],
     [ "dot", "classlucid_1_1Matrix.html#abdb1e4567a3570b979668510981c2a09", null ],
-    [ "end", "classlucid_1_1Matrix.html#ae400712e22d2edc75f40bbe22214cfdc", null ],
+    [ "end", "classlucid_1_1Matrix.html#a201a7d7c0ea081499b4198988e2fb318", null ],
     [ "get", "classlucid_1_1Matrix.html#aa7efec61a7a5fa8c9370f2804b591356", null ],
     [ "get", "classlucid_1_1Matrix.html#a152b3beeb793f9978b58cea765c19e59", null ],
-    [ "identity", "classlucid_1_1Matrix.html#ab57fd922f8d9074fc7fb07bacf8a8e5e", null ],
-    [ "indices", "classlucid_1_1Matrix.html#ac71e84e3045352a467234d80c217c3c5", null ],
     [ "operator!=", "classlucid_1_1Matrix.html#ae1e1d5a12c51dd26571320c4b50903dd", null ],
     [ "operator!=", "classlucid_1_1Matrix.html#a77ad1a403b55e39d5c452113437cf290", null ],
     [ "operator*", "classlucid_1_1Matrix.html#acb1db12ca5d43e5044e0ec4c157d9bc0", null ],
@@ -57,13 +54,5 @@ var classlucid_1_1Matrix =
     [ "operator>=", "classlucid_1_1Matrix.html#afc2d7bb196c56e366ba28a2d10c0249e", null ],
     [ "operator>=", "classlucid_1_1Matrix.html#a075d06bae9443d5fe5f36575d3c58b48", null ],
     [ "operator[]", "classlucid_1_1Matrix.html#a43a1dce5c50bc85e3ace090022230e75", null ],
-    [ "operator[]", "classlucid_1_1Matrix.html#a04365f954dd1602a6f46a1564fa03d9a", null ],
-    [ "pos", "classlucid_1_1Matrix.html#a8f0b870bda5b8823157fa186e2b2e3bb", null ],
-    [ "unpack", "classlucid_1_1Matrix.html#a2218073109c3b0f10965450915744c0b", null ],
-    [ "unpack", "classlucid_1_1Matrix.html#a8a6886209cc5565e4b20914ee6febe2a", null ],
-    [ "unpack", "classlucid_1_1Matrix.html#a7d9c01888f7b4b2a23b78b7fe1813882", null ],
-    [ "unpack", "classlucid_1_1Matrix.html#a9d1a32c90aa7e015d559243c9423ed27", null ],
-    [ "unpack", "classlucid_1_1Matrix.html#af01b16e06e0b59dc5bcee5c587662cab", null ],
-    [ "m_data", "classlucid_1_1Matrix.html#a6a410facb581675e1ddb6004defc8b60", null ],
-    [ "MN", "classlucid_1_1Matrix.html#aeeb8f6d6ca87a9ea974ec8844e80ff6a", null ]
+    [ "operator[]", "classlucid_1_1Matrix.html#a04365f954dd1602a6f46a1564fa03d9a", null ]
 ];

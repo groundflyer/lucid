@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -91,92 +97,27 @@ $(document).ready(function(){initNavTree('structFilmCapture.html','');});
 <div class="dynheader">
 Collaboration diagram for FilmCapture:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="structFilmCapture__coll__graph.svg" width="100%" height="410"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="structFilmCapture__coll__graph.svg" width="100%" height="424"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a20dc6ee31dc5280175d94df2b4aeba32"><td class="memItemLeft" align="right" valign="top"><a class="el" href="lucid_8cpp.html#a52bd9688644e9d652dc21a2b7193aa72">FilmRGBA</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFilmCapture.html#a20dc6ee31dc5280175d94df2b4aeba32">operator()</a> (const <a class="el" href="namespacelucid.html#a9403c07c46b719e8f507175ff3189983">Vec2i</a> &amp;res)</td></tr>
+<tr class="memitem:a20dc6ee31dc5280175d94df2b4aeba32"><td class="memItemLeft" align="right" valign="top"><a id="a20dc6ee31dc5280175d94df2b4aeba32"></a>
+<a class="el" href="structlucid_1_1Film.html">FilmRGBA</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (const <a class="el" href="classlucid_1_1Vector.html">Vec2i</a> &amp;res)</td></tr>
 <tr class="separator:a20dc6ee31dc5280175d94df2b4aeba32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab67c5bb191e890b8f1be32c91411d71"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="lucid_8cpp.html#a6183ac6a3e68656f790e96ced506ab7b">Image</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFilmCapture.html#aab67c5bb191e890b8f1be32c91411d71">operator()</a> (const <a class="el" href="structlucid_1_1perspective_1_1shoot.html">perspective::shoot</a> &amp;cam) noexcept</td></tr>
+<tr class="memitem:aab67c5bb191e890b8f1be32c91411d71"><td class="memItemLeft" align="right" valign="top"><a id="aab67c5bb191e890b8f1be32c91411d71"></a>
+const <a class="el" href="classlucid_1_1ScanlineImage.html">Image</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (const <a class="el" href="structlucid_1_1perspective_1_1shoot.html">perspective::shoot</a> &amp;cam) noexcept</td></tr>
 <tr class="separator:aab67c5bb191e890b8f1be32c91411d71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a36fa02f11d92c2c188ab286ceb63033d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="lucid_8cpp.html#a52bd9688644e9d652dc21a2b7193aa72">FilmRGBA</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFilmCapture.html#a36fa02f11d92c2c188ab286ceb63033d">film</a></td></tr>
+<tr class="memitem:a36fa02f11d92c2c188ab286ceb63033d"><td class="memItemLeft" align="right" valign="top"><a id="a36fa02f11d92c2c188ab286ceb63033d"></a>
+<a class="el" href="structlucid_1_1Film.html">FilmRGBA</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>film</b></td></tr>
 <tr class="separator:a36fa02f11d92c2c188ab286ceb63033d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a20dc6ee31dc5280175d94df2b4aeba32"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a20dc6ee31dc5280175d94df2b4aeba32">&#9670;&nbsp;</a></span>operator()() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="lucid_8cpp.html#a52bd9688644e9d652dc21a2b7193aa72">FilmRGBA</a>&amp; FilmCapture::operator() </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#a9403c07c46b719e8f507175ff3189983">Vec2i</a> &amp;&#160;</td>
-          <td class="paramname"><em>res</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aab67c5bb191e890b8f1be32c91411d71"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab67c5bb191e890b8f1be32c91411d71">&#9670;&nbsp;</a></span>operator()() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="lucid_8cpp.html#a6183ac6a3e68656f790e96ced506ab7b">Image</a>&amp; FilmCapture::operator() </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structlucid_1_1perspective_1_1shoot.html">perspective::shoot</a> &amp;&#160;</td>
-          <td class="paramname"><em>cam</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a36fa02f11d92c2c188ab286ceb63033d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a36fa02f11d92c2c188ab286ceb63033d">&#9670;&nbsp;</a></span>film</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="lucid_8cpp.html#a52bd9688644e9d652dc21a2b7193aa72">FilmRGBA</a>* FilmCapture::film</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>tests/<a class="el" href="viewport_8cpp.html">viewport.cpp</a></li>
+<li>tests/viewport.cpp</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

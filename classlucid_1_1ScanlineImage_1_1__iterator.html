@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -82,441 +88,39 @@ $(document).ready(function(){initNavTree('classlucid_1_1ScanlineImage_1_1__itera
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-types">Private Types</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classlucid_1_1ScanlineImage_1_1__iterator-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">lucid::ScanlineImage&lt; T, NC, Allocator &gt;::_iterator&lt; Const &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="image_8hpp_source.html">image.hpp</a>&gt;</code></p>
-<div class="dynheader">
-Collaboration diagram for lucid::ScanlineImage&lt; T, NC, Allocator &gt;::_iterator&lt; Const &gt;:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classlucid_1_1ScanlineImage_1_1__iterator__coll__graph.svg" width="182" height="156"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a65118bf3e750143bb63bd2017dcb205c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#a65118bf3e750143bb63bd2017dcb205c">_iterator</a> ()=delete</td></tr>
-<tr class="separator:a65118bf3e750143bb63bd2017dcb205c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1193ee82a017209b51833e135c527dea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#a1193ee82a017209b51833e135c527dea">_iterator</a> (<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#a466cc1e2418c25dd194b89d6ea8d285a">ImageRef</a> _img, const unsigned <a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#af575ed41a6f108067b8a3712ca3effa5">pos</a>)</td></tr>
+<tr class="memitem:a1193ee82a017209b51833e135c527dea"><td class="memItemLeft" align="right" valign="top"><a id="a1193ee82a017209b51833e135c527dea"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>_iterator</b> (ImageRef _img, const unsigned pos)</td></tr>
 <tr class="separator:a1193ee82a017209b51833e135c527dea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61833bc8fc4cff1a7929755f62685e9b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#a61833bc8fc4cff1a7929755f62685e9b">_iterator</a> (const <a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a> &amp;rhs)</td></tr>
+<tr class="memitem:a61833bc8fc4cff1a7929755f62685e9b"><td class="memItemLeft" align="right" valign="top"><a id="a61833bc8fc4cff1a7929755f62685e9b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>_iterator</b> (const <a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a> &amp;rhs)</td></tr>
 <tr class="separator:a61833bc8fc4cff1a7929755f62685e9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72b8c55b126906c6fb0999739db8a000"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#a72b8c55b126906c6fb0999739db8a000">operator=</a> (const <a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a> &amp;rhs) noexcept</td></tr>
+<tr class="memitem:a72b8c55b126906c6fb0999739db8a000"><td class="memItemLeft" align="right" valign="top"><a id="a72b8c55b126906c6fb0999739db8a000"></a>
+<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a> &amp;rhs) noexcept</td></tr>
 <tr class="separator:a72b8c55b126906c6fb0999739db8a000"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af575ed41a6f108067b8a3712ca3effa5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#af575ed41a6f108067b8a3712ca3effa5">pos</a> () const noexcept</td></tr>
+<tr class="memitem:af575ed41a6f108067b8a3712ca3effa5"><td class="memItemLeft" align="right" valign="top"><a id="af575ed41a6f108067b8a3712ca3effa5"></a>
+<a class="el" href="classlucid_1_1Vector.html">Vec2u</a>&#160;</td><td class="memItemRight" valign="bottom"><b>pos</b> () const noexcept</td></tr>
 <tr class="separator:af575ed41a6f108067b8a3712ca3effa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0391c4fedc93146577c393055733de34"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#a0391c4fedc93146577c393055733de34">operator++</a> () noexcept</td></tr>
+<tr class="memitem:a0391c4fedc93146577c393055733de34"><td class="memItemLeft" align="right" valign="top"><a id="a0391c4fedc93146577c393055733de34"></a>
+<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> () noexcept</td></tr>
 <tr class="separator:a0391c4fedc93146577c393055733de34"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1cbd955af1ef556b8f034bff659af2d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#aa1cbd955af1ef556b8f034bff659af2d">operator++</a> (int) noexcept</td></tr>
+<tr class="memitem:aa1cbd955af1ef556b8f034bff659af2d"><td class="memItemLeft" align="right" valign="top"><a id="aa1cbd955af1ef556b8f034bff659af2d"></a>
+<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> (int) noexcept</td></tr>
 <tr class="separator:aa1cbd955af1ef556b8f034bff659af2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad537bcddc8382c5157a5172ea2ead890"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#ad537bcddc8382c5157a5172ea2ead890">operator!=</a> (const <a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a> &amp;rhs) const noexcept</td></tr>
+<tr class="memitem:ad537bcddc8382c5157a5172ea2ead890"><td class="memItemLeft" align="right" valign="top"><a id="ad537bcddc8382c5157a5172ea2ead890"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a> &amp;rhs) const noexcept</td></tr>
 <tr class="separator:ad537bcddc8382c5157a5172ea2ead890"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ede1b5e9a1e58f3dff2de1748d29719"><td class="memItemLeft" align="right" valign="top">decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#a6ede1b5e9a1e58f3dff2de1748d29719">operator*</a> () const noexcept</td></tr>
+<tr class="memitem:a6ede1b5e9a1e58f3dff2de1748d29719"><td class="memItemLeft" align="right" valign="top"><a id="a6ede1b5e9a1e58f3dff2de1748d29719"></a>
+decltype(auto)&#160;</td><td class="memItemRight" valign="bottom"><b>operator*</b> () const noexcept</td></tr>
 <tr class="separator:a6ede1b5e9a1e58f3dff2de1748d29719"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
-Private Types</h2></td></tr>
-<tr class="memitem:a466cc1e2418c25dd194b89d6ea8d285a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#a466cc1e2418c25dd194b89d6ea8d285a">ImageRef</a> = std::conditional_t&lt; Const, const <a class="el" href="classlucid_1_1ScanlineImage.html">ScanlineImage</a> &amp;, <a class="el" href="classlucid_1_1ScanlineImage.html">ScanlineImage</a> &amp; &gt;</td></tr>
-<tr class="separator:a466cc1e2418c25dd194b89d6ea8d285a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0ac881ff4328bbefcbccdd7fbdbacf5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#ab0ac881ff4328bbefcbccdd7fbdbacf5">ImagePtr</a> = std::conditional_t&lt; Const, const <a class="el" href="classlucid_1_1ScanlineImage.html">ScanlineImage</a> *, <a class="el" href="classlucid_1_1ScanlineImage.html">ScanlineImage</a> * &gt;</td></tr>
-<tr class="separator:ab0ac881ff4328bbefcbccdd7fbdbacf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:a3f390f26b9aea53543efd01db40f8d7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#ab0ac881ff4328bbefcbccdd7fbdbacf5">ImagePtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#a3f390f26b9aea53543efd01db40f8d7d">img</a> = nullptr</td></tr>
-<tr class="separator:a3f390f26b9aea53543efd01db40f8d7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22e6872cbdddfb7e3efc31f4fa1c16c3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlucid_1_1scanline__iterator.html">scanline_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#a22e6872cbdddfb7e3efc31f4fa1c16c3">iter</a></td></tr>
-<tr class="separator:a22e6872cbdddfb7e3efc31f4fa1c16c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="ab0ac881ff4328bbefcbccdd7fbdbacf5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0ac881ff4328bbefcbccdd7fbdbacf5">&#9670;&nbsp;</a></span>ImagePtr</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t NC, typename Allocator = std::allocator&lt;T&gt;&gt; </div>
-<div class="memtemplate">
-template&lt;bool Const = false&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="classlucid_1_1ScanlineImage.html">lucid::ScanlineImage</a>&lt; T, NC, Allocator &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#ab0ac881ff4328bbefcbccdd7fbdbacf5">ImagePtr</a> =  std::conditional_t&lt;Const, const <a class="el" href="classlucid_1_1ScanlineImage.html">ScanlineImage</a>*, <a class="el" href="classlucid_1_1ScanlineImage.html">ScanlineImage</a>*&gt;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a466cc1e2418c25dd194b89d6ea8d285a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a466cc1e2418c25dd194b89d6ea8d285a">&#9670;&nbsp;</a></span>ImageRef</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t NC, typename Allocator = std::allocator&lt;T&gt;&gt; </div>
-<div class="memtemplate">
-template&lt;bool Const = false&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="classlucid_1_1ScanlineImage.html">lucid::ScanlineImage</a>&lt; T, NC, Allocator &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#a466cc1e2418c25dd194b89d6ea8d285a">ImageRef</a> =  std::conditional_t&lt;Const, const <a class="el" href="classlucid_1_1ScanlineImage.html">ScanlineImage</a>&amp;, <a class="el" href="classlucid_1_1ScanlineImage.html">ScanlineImage</a>&amp;&gt;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a65118bf3e750143bb63bd2017dcb205c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a65118bf3e750143bb63bd2017dcb205c">&#9670;&nbsp;</a></span>_iterator() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t NC, typename Allocator = std::allocator&lt;T&gt;&gt; </div>
-<div class="memtemplate">
-template&lt;bool Const = false&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1ScanlineImage.html">lucid::ScanlineImage</a>&lt; T, NC, Allocator &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1193ee82a017209b51833e135c527dea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1193ee82a017209b51833e135c527dea">&#9670;&nbsp;</a></span>_iterator() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t NC, typename Allocator = std::allocator&lt;T&gt;&gt; </div>
-<div class="memtemplate">
-template&lt;bool Const = false&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1ScanlineImage.html">lucid::ScanlineImage</a>&lt; T, NC, Allocator &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#a466cc1e2418c25dd194b89d6ea8d285a">ImageRef</a>&#160;</td>
-          <td class="paramname"><em>_img</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const unsigned&#160;</td>
-          <td class="paramname"><em>pos</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a61833bc8fc4cff1a7929755f62685e9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a61833bc8fc4cff1a7929755f62685e9b">&#9670;&nbsp;</a></span>_iterator() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t NC, typename Allocator = std::allocator&lt;T&gt;&gt; </div>
-<div class="memtemplate">
-template&lt;bool Const = false&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1ScanlineImage.html">lucid::ScanlineImage</a>&lt; T, NC, Allocator &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a> </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt; &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad537bcddc8382c5157a5172ea2ead890"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad537bcddc8382c5157a5172ea2ead890">&#9670;&nbsp;</a></span>operator!=()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t NC, typename Allocator = std::allocator&lt;T&gt;&gt; </div>
-<div class="memtemplate">
-template&lt;bool Const = false&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classlucid_1_1ScanlineImage.html">lucid::ScanlineImage</a>&lt; T, NC, Allocator &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt;::operator!= </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt; &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6ede1b5e9a1e58f3dff2de1748d29719"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ede1b5e9a1e58f3dff2de1748d29719">&#9670;&nbsp;</a></span>operator*()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t NC, typename Allocator = std::allocator&lt;T&gt;&gt; </div>
-<div class="memtemplate">
-template&lt;bool Const = false&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) <a class="el" href="classlucid_1_1ScanlineImage.html">lucid::ScanlineImage</a>&lt; T, NC, Allocator &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt;::operator* </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0391c4fedc93146577c393055733de34"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0391c4fedc93146577c393055733de34">&#9670;&nbsp;</a></span>operator++() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t NC, typename Allocator = std::allocator&lt;T&gt;&gt; </div>
-<div class="memtemplate">
-template&lt;bool Const = false&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&amp; <a class="el" href="classlucid_1_1ScanlineImage.html">lucid::ScanlineImage</a>&lt; T, NC, Allocator &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt;::operator++ </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa1cbd955af1ef556b8f034bff659af2d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1cbd955af1ef556b8f034bff659af2d">&#9670;&nbsp;</a></span>operator++() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t NC, typename Allocator = std::allocator&lt;T&gt;&gt; </div>
-<div class="memtemplate">
-template&lt;bool Const = false&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a> <a class="el" href="classlucid_1_1ScanlineImage.html">lucid::ScanlineImage</a>&lt; T, NC, Allocator &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt;::operator++ </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a72b8c55b126906c6fb0999739db8a000"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72b8c55b126906c6fb0999739db8a000">&#9670;&nbsp;</a></span>operator=()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t NC, typename Allocator = std::allocator&lt;T&gt;&gt; </div>
-<div class="memtemplate">
-template&lt;bool Const = false&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&amp; <a class="el" href="classlucid_1_1ScanlineImage.html">lucid::ScanlineImage</a>&lt; T, NC, Allocator &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt;::operator= </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt; &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af575ed41a6f108067b8a3712ca3effa5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af575ed41a6f108067b8a3712ca3effa5">&#9670;&nbsp;</a></span>pos()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t NC, typename Allocator = std::allocator&lt;T&gt;&gt; </div>
-<div class="memtemplate">
-template&lt;bool Const = false&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a> <a class="el" href="classlucid_1_1ScanlineImage.html">lucid::ScanlineImage</a>&lt; T, NC, Allocator &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt;::pos </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a3f390f26b9aea53543efd01db40f8d7d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f390f26b9aea53543efd01db40f8d7d">&#9670;&nbsp;</a></span>img</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t NC, typename Allocator = std::allocator&lt;T&gt;&gt; </div>
-<div class="memtemplate">
-template&lt;bool Const = false&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html#ab0ac881ff4328bbefcbccdd7fbdbacf5">ImagePtr</a> <a class="el" href="classlucid_1_1ScanlineImage.html">lucid::ScanlineImage</a>&lt; T, NC, Allocator &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt;::img = nullptr</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a22e6872cbdddfb7e3efc31f4fa1c16c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22e6872cbdddfb7e3efc31f4fa1c16c3">&#9670;&nbsp;</a></span>iter</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t NC, typename Allocator = std::allocator&lt;T&gt;&gt; </div>
-<div class="memtemplate">
-template&lt;bool Const = false&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structlucid_1_1scanline__iterator.html">scanline_iterator</a> <a class="el" href="classlucid_1_1ScanlineImage.html">lucid::ScanlineImage</a>&lt; T, NC, Allocator &gt;::<a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a>&lt; Const &gt;::iter</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>image/<a class="el" href="image_8hpp_source.html">image.hpp</a></li>
 </ul>
@@ -525,7 +129,7 @@ template&lt;bool Const = false&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="classlucid_1_1ScanlineImage.html">ScanlineImage</a></li><li class="navelem"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="classlucid_1_1ScanlineImage.html">ScanlineImage</a></li><li class="navelem"><a class="el" href="classlucid_1_1ScanlineImage_1_1__iterator.html">_iterator</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

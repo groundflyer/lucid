@@ -1,7 +1,5 @@
 var classlucid_1_1ElapsedTimer =
 [
-    [ "ClockDuration", "classlucid_1_1ElapsedTimer.html#aaa5d8fb67d505295dd4790228114c9fc", null ],
-    [ "TimePoint", "classlucid_1_1ElapsedTimer.html#aeaefcd81e28dd39259dd3b1a07005455", null ],
     [ "ElapsedTimer", "classlucid_1_1ElapsedTimer.html#ae141e63debc7ebe7caeb0c45f81d9916", null ],
     [ "ElapsedTimer", "classlucid_1_1ElapsedTimer.html#a3120bd55f08200affb4c98af611a4d34", null ],
     [ "ElapsedTimer", "classlucid_1_1ElapsedTimer.html#a53da2bb325cabc3dc0bced39a312d8a3", null ],
@@ -14,6 +12,5 @@ var classlucid_1_1ElapsedTimer =
     [ "operator==", "classlucid_1_1ElapsedTimer.html#acb8f8e2d5126fb1253d0bb4347009b46", null ],
     [ "operator>", "classlucid_1_1ElapsedTimer.html#a74d28abf2e82cffc35799198d16b5fe1", null ],
     [ "operator>=", "classlucid_1_1ElapsedTimer.html#a089e07920839fb9601c605ce4c8cce09", null ],
-    [ "restart", "classlucid_1_1ElapsedTimer.html#ae7f62d7569f27dccd6b1d05ac243d4a9", null ],
-    [ "startpoint", "classlucid_1_1ElapsedTimer.html#aa899745f171d1d8af9dcd4d0d65bcaa1", null ]
+    [ "restart", "classlucid_1_1ElapsedTimer.html#ae7f62d7569f27dccd6b1d05ac243d4a9", null ]
 ];

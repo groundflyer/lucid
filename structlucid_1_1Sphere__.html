@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -88,8 +94,6 @@ $(document).ready(function(){initNavTree('structlucid_1_1Sphere__.html','');});
 <div class="title">lucid::Sphere_&lt; Container &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="sphere_8hpp_source.html">sphere.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for lucid::Sphere_&lt; Container &gt;:</div>
 <div class="dyncontent">
@@ -99,120 +103,20 @@ Collaboration diagram for lucid::Sphere_&lt; Container &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a08e6f1e5b9d5a60c5739cb297b393683"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Sphere__.html#a08e6f1e5b9d5a60c5739cb297b393683">Sphere_</a> () noexcept</td></tr>
-<tr class="separator:a08e6f1e5b9d5a60c5739cb297b393683"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07f7a4852341482fe3268e8892e4dbe4"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container1&gt; </td></tr>
-<tr class="memitem:a07f7a4852341482fe3268e8892e4dbe4"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structlucid_1_1Sphere__.html#a07f7a4852341482fe3268e8892e4dbe4">Sphere_</a> (const <a class="el" href="namespacelucid.html#a063ae7aa12a8696e54a6b000ce9c5f7e">Point_</a>&lt; Container1 &gt; &amp;_center, const <a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> &amp;_radius) noexcept</td></tr>
+<tr class="memitem:a07f7a4852341482fe3268e8892e4dbe4"><td class="memTemplParams" colspan="2"><a id="a07f7a4852341482fe3268e8892e4dbe4"></a>
+template&lt;template&lt; typename, size_t &gt; typename Container1&gt; </td></tr>
+<tr class="memitem:a07f7a4852341482fe3268e8892e4dbe4"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Sphere_</b> (const <a class="el" href="classlucid_1_1PointN__.html">Point_</a>&lt; Container1 &gt; &amp;_center, const real &amp;_radius) noexcept</td></tr>
 <tr class="separator:a07f7a4852341482fe3268e8892e4dbe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a2bda3903218c6ca12ad5d77ff6e0fd33"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a063ae7aa12a8696e54a6b000ce9c5f7e">Point_</a>&lt; Container &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Sphere__.html#a2bda3903218c6ca12ad5d77ff6e0fd33">center</a></td></tr>
+<tr class="memitem:a2bda3903218c6ca12ad5d77ff6e0fd33"><td class="memItemLeft" align="right" valign="top"><a id="a2bda3903218c6ca12ad5d77ff6e0fd33"></a>
+<a class="el" href="classlucid_1_1PointN__.html">Point_</a>&lt; Container &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>center</b></td></tr>
 <tr class="separator:a2bda3903218c6ca12ad5d77ff6e0fd33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4a45b0b58b7dd499dcd8691c054b0fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Sphere__.html#ac4a45b0b58b7dd499dcd8691c054b0fa">radius</a></td></tr>
+<tr class="memitem:ac4a45b0b58b7dd499dcd8691c054b0fa"><td class="memItemLeft" align="right" valign="top"><a id="ac4a45b0b58b7dd499dcd8691c054b0fa"></a>
+real&#160;</td><td class="memItemRight" valign="bottom"><b>radius</b></td></tr>
 <tr class="separator:ac4a45b0b58b7dd499dcd8691c054b0fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a08e6f1e5b9d5a60c5739cb297b393683"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08e6f1e5b9d5a60c5739cb297b393683">&#9670;&nbsp;</a></span>Sphere_() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1Sphere__.html">lucid::Sphere_</a>&lt; Container &gt;::<a class="el" href="structlucid_1_1Sphere__.html">Sphere_</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a07f7a4852341482fe3268e8892e4dbe4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07f7a4852341482fe3268e8892e4dbe4">&#9670;&nbsp;</a></span>Sphere_() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container1&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1Sphere__.html">lucid::Sphere_</a>&lt; Container &gt;::<a class="el" href="structlucid_1_1Sphere__.html">Sphere_</a> </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#a063ae7aa12a8696e54a6b000ce9c5f7e">Point_</a>&lt; Container1 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>_center</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> &amp;&#160;</td>
-          <td class="paramname"><em>_radius</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a2bda3903218c6ca12ad5d77ff6e0fd33"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2bda3903218c6ca12ad5d77ff6e0fd33">&#9670;&nbsp;</a></span>center</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a063ae7aa12a8696e54a6b000ce9c5f7e">Point_</a>&lt;Container&gt; <a class="el" href="structlucid_1_1Sphere__.html">lucid::Sphere_</a>&lt; Container &gt;::center</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac4a45b0b58b7dd499dcd8691c054b0fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4a45b0b58b7dd499dcd8691c054b0fa">&#9670;&nbsp;</a></span>radius</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> <a class="el" href="structlucid_1_1Sphere__.html">lucid::Sphere_</a>&lt; Container &gt;::radius</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>ray_traversal/primitives/<a class="el" href="sphere_8hpp_source.html">sphere.hpp</a></li>
 </ul>
@@ -221,7 +125,7 @@ template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="structlucid_1_1Sphere__.html">Sphere_</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="structlucid_1_1Sphere__.html">Sphere_</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

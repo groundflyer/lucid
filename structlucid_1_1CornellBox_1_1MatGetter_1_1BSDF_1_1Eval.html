@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -88,8 +94,6 @@ $(document).ready(function(){initNavTree('structlucid_1_1CornellBox_1_1MatGetter
 <div class="title">lucid::CornellBox::MatGetter::BSDF::Eval Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="cornell__box_8hpp_source.html">cornell_box.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for lucid::CornellBox::MatGetter::BSDF::Eval:</div>
 <div class="dyncontent">
@@ -99,82 +103,19 @@ Collaboration diagram for lucid::CornellBox::MatGetter::BSDF::Eval:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a470155f03d7bc5d6d091b5f0fef34c8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a42220ce6855fc3c4bf7ac1b164d189f4">RGB</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1CornellBox_1_1MatGetter_1_1BSDF_1_1Eval.html#a470155f03d7bc5d6d091b5f0fef34c8a">operator()</a> (const <a class="el" href="namespacelucid.html#a10028aadd8333d6b94c51d651372f6be">Normal</a> &amp;wi, const <a class="el" href="namespacelucid.html#a10028aadd8333d6b94c51d651372f6be">Normal</a> &amp;) const noexcept</td></tr>
+<tr class="memitem:a470155f03d7bc5d6d091b5f0fef34c8a"><td class="memItemLeft" align="right" valign="top"><a id="a470155f03d7bc5d6d091b5f0fef34c8a"></a>
+<a class="el" href="classlucid_1_1Vector.html">RGB</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (const <a class="el" href="classlucid_1_1NormalN__.html">Normal</a> &amp;wi, const <a class="el" href="classlucid_1_1NormalN__.html">Normal</a> &amp;) const noexcept</td></tr>
 <tr class="separator:a470155f03d7bc5d6d091b5f0fef34c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ac35659eafb458243eaf64c11216df0d9"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespacelucid.html#a10028aadd8333d6b94c51d651372f6be">Normal</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1CornellBox_1_1MatGetter_1_1BSDF_1_1Eval.html#ac35659eafb458243eaf64c11216df0d9">n</a></td></tr>
+<tr class="memitem:ac35659eafb458243eaf64c11216df0d9"><td class="memItemLeft" align="right" valign="top"><a id="ac35659eafb458243eaf64c11216df0d9"></a>
+const <a class="el" href="classlucid_1_1NormalN__.html">Normal</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>n</b></td></tr>
 <tr class="separator:ac35659eafb458243eaf64c11216df0d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90a2295bb2ab9c366551a458e24bac7c"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespacelucid.html#a42220ce6855fc3c4bf7ac1b164d189f4">RGB</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1CornellBox_1_1MatGetter_1_1BSDF_1_1Eval.html#a90a2295bb2ab9c366551a458e24bac7c">color</a></td></tr>
+<tr class="memitem:a90a2295bb2ab9c366551a458e24bac7c"><td class="memItemLeft" align="right" valign="top"><a id="a90a2295bb2ab9c366551a458e24bac7c"></a>
+const <a class="el" href="classlucid_1_1Vector.html">RGB</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>color</b></td></tr>
 <tr class="separator:a90a2295bb2ab9c366551a458e24bac7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a470155f03d7bc5d6d091b5f0fef34c8a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a470155f03d7bc5d6d091b5f0fef34c8a">&#9670;&nbsp;</a></span>operator()()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a42220ce6855fc3c4bf7ac1b164d189f4">RGB</a> lucid::CornellBox::MatGetter::BSDF::Eval::operator() </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#a10028aadd8333d6b94c51d651372f6be">Normal</a> &amp;&#160;</td>
-          <td class="paramname"><em>wi</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#a10028aadd8333d6b94c51d651372f6be">Normal</a> &amp;&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a90a2295bb2ab9c366551a458e24bac7c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90a2295bb2ab9c366551a458e24bac7c">&#9670;&nbsp;</a></span>color</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="namespacelucid.html#a42220ce6855fc3c4bf7ac1b164d189f4">RGB</a>&amp; lucid::CornellBox::MatGetter::BSDF::Eval::color</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac35659eafb458243eaf64c11216df0d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac35659eafb458243eaf64c11216df0d9">&#9670;&nbsp;</a></span>n</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="namespacelucid.html#a10028aadd8333d6b94c51d651372f6be">Normal</a>&amp; lucid::CornellBox::MatGetter::BSDF::Eval::n</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>scene/<a class="el" href="cornell__box_8hpp_source.html">cornell_box.hpp</a></li>
 </ul>
@@ -183,7 +124,7 @@ Public Attributes</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="classlucid_1_1CornellBox.html">CornellBox</a></li><li class="navelem"><a class="el" href="classlucid_1_1CornellBox_1_1MatGetter.html">MatGetter</a></li><li class="navelem"><a class="el" href="structlucid_1_1CornellBox_1_1MatGetter_1_1BSDF.html">BSDF</a></li><li class="navelem"><a class="el" href="structlucid_1_1CornellBox_1_1MatGetter_1_1BSDF_1_1Eval.html">Eval</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="classlucid_1_1CornellBox.html">CornellBox</a></li><li class="navelem"><a class="el" href="classlucid_1_1CornellBox_1_1MatGetter.html">MatGetter</a></li><li class="navelem"><b>BSDF</b></li><li class="navelem"><a class="el" href="structlucid_1_1CornellBox_1_1MatGetter_1_1BSDF_1_1Eval.html">Eval</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

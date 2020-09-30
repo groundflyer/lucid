@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -81,55 +87,474 @@ $(document).ready(function(){initNavTree('transforms_8hpp.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">transforms.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="types_8hpp_source.html">types.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;types.hpp&quot;</code><br />
 <code>#include &lt;utility&gt;</code><br />
 </div>
 <p><a href="transforms_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespacelucid"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelucid.html">lucid</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aa2a2da49f311405398d417279cd73c97"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:aa2a2da49f311405398d417279cd73c97"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#aa2a2da49f311405398d417279cd73c97">lucid::dehomogenize</a> (const Vec4_&lt; Container &gt; &amp;a) noexcept</td></tr>
-<tr class="separator:aa2a2da49f311405398d417279cd73c97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3adb81839d50d9663769501dab27a6a"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename MatContainer, template&lt; typename, size_t &gt; typename VecContainer&gt; </td></tr>
-<tr class="memitem:ab3adb81839d50d9663769501dab27a6a"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#ab3adb81839d50d9663769501dab27a6a">lucid::apply_transform</a> (const Mat4_&lt; MatContainer &gt; &amp;t, const Vec3_&lt; VecContainer &gt; &amp;v) noexcept</td></tr>
-<tr class="separator:ab3adb81839d50d9663769501dab27a6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6ce6d2ecb2a4e71bddc22c740b77197"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename MatContainer, template&lt; typename, size_t &gt; typename PointContainer&gt; </td></tr>
-<tr class="memitem:ad6ce6d2ecb2a4e71bddc22c740b77197"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#ad6ce6d2ecb2a4e71bddc22c740b77197">lucid::apply_transform</a> (const Mat4_&lt; MatContainer &gt; &amp;t, const Point_&lt; PointContainer &gt; &amp;p) noexcept</td></tr>
-<tr class="separator:ad6ce6d2ecb2a4e71bddc22c740b77197"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7de8d9db082762bcc721c3335591345f"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename MatContainer, template&lt; typename, size_t &gt; typename NormalContainer&gt; </td></tr>
-<tr class="memitem:a7de8d9db082762bcc721c3335591345f"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a7de8d9db082762bcc721c3335591345f">lucid::apply_transform</a> (const Mat4_&lt; MatContainer &gt; &amp;t, const Normal_&lt; NormalContainer &gt; &amp;n) noexcept</td></tr>
-<tr class="separator:a7de8d9db082762bcc721c3335591345f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb3211622deb1c19897ad1d68be98d0a"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:adb3211622deb1c19897ad1d68be98d0a"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#adb3211622deb1c19897ad1d68be98d0a">lucid::translate</a> (const Point_&lt; Container &gt; &amp;delta) noexcept</td></tr>
-<tr class="separator:adb3211622deb1c19897ad1d68be98d0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1957e5c6d59574223f5d973df329979d"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a1957e5c6d59574223f5d973df329979d"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a1957e5c6d59574223f5d973df329979d">lucid::scale</a> (const Point_&lt; Container &gt; &amp;delta) noexcept</td></tr>
-<tr class="separator:a1957e5c6d59574223f5d973df329979d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f883d2fb6b1ee3264d74271ba97fe48"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a3f883d2fb6b1ee3264d74271ba97fe48"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a3f883d2fb6b1ee3264d74271ba97fe48">lucid::rotate</a> (const real angle, const Normal_&lt; Container &gt; &amp;axis) noexcept</td></tr>
-<tr class="separator:a3f883d2fb6b1ee3264d74271ba97fe48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99d6d5b104d7a4045f434531c2583bc4"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename EyeContainer, template&lt; typename, size_t &gt; typename CenContainer, template&lt; typename, size_t &gt; typename UpContainer&gt; </td></tr>
-<tr class="memitem:a99d6d5b104d7a4045f434531c2583bc4"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a99d6d5b104d7a4045f434531c2583bc4">lucid::look_at</a> (const Point_&lt; EyeContainer &gt; &amp;eye, const Point_&lt; CenContainer &gt; &amp;target, const Normal_&lt; UpContainer &gt; &amp;up) noexcept</td></tr>
-<tr class="separator:a99d6d5b104d7a4045f434531c2583bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf8879cc154d11379d58112472e6c572"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:adf8879cc154d11379d58112472e6c572"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#adf8879cc154d11379d58112472e6c572">lucid::basis</a> (const Normal_&lt; Container &gt; &amp;n) noexcept</td></tr>
-<tr class="separator:adf8879cc154d11379d58112472e6c572"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bb7c335d49252123f44cbe7a550e23d"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a5bb7c335d49252123f44cbe7a550e23d"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a5bb7c335d49252123f44cbe7a550e23d">lucid::basis_matrix</a> (const Normal_&lt; Container &gt; &amp;z) noexcept</td></tr>
-<tr class="separator:a5bb7c335d49252123f44cbe7a550e23d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d03f36d7ae83bc1f860ffd321dbd313"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a8d03f36d7ae83bc1f860ffd321dbd313"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="transforms_8hpp.html#a8d03f36d7ae83bc1f860ffd321dbd313">lucid::dehomogenize</a> (const Vec4_&lt; Container &gt; &amp;a) noexcept</td></tr>
+<tr class="memdesc:a8d03f36d7ae83bc1f860ffd321dbd313"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a vector from homogenous coordinates.  <a href="transforms_8hpp.html#a8d03f36d7ae83bc1f860ffd321dbd313">More...</a><br /></td></tr>
+<tr class="separator:a8d03f36d7ae83bc1f860ffd321dbd313"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d5e5d464e0c593c20b78bad45b5db45"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename MatContainer, template&lt; typename, size_t &gt; typename VecContainer&gt; </td></tr>
+<tr class="memitem:a4d5e5d464e0c593c20b78bad45b5db45"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="transforms_8hpp.html#a4d5e5d464e0c593c20b78bad45b5db45">lucid::apply_transform</a> (const Mat4_&lt; MatContainer &gt; &amp;t, const Vec3_&lt; VecContainer &gt; &amp;v) noexcept</td></tr>
+<tr class="memdesc:a4d5e5d464e0c593c20b78bad45b5db45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply transform to a vector.  <a href="transforms_8hpp.html#a4d5e5d464e0c593c20b78bad45b5db45">More...</a><br /></td></tr>
+<tr class="separator:a4d5e5d464e0c593c20b78bad45b5db45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0575d44d128909d3fce9b45228a88697"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename MatContainer, template&lt; typename, size_t &gt; typename PointContainer&gt; </td></tr>
+<tr class="memitem:a0575d44d128909d3fce9b45228a88697"><td class="memTemplItemLeft" align="right" valign="top">constexpr Point&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="transforms_8hpp.html#a0575d44d128909d3fce9b45228a88697">lucid::apply_transform</a> (const Mat4_&lt; MatContainer &gt; &amp;t, const Point_&lt; PointContainer &gt; &amp;p) noexcept</td></tr>
+<tr class="memdesc:a0575d44d128909d3fce9b45228a88697"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply transform to a point.  <a href="transforms_8hpp.html#a0575d44d128909d3fce9b45228a88697">More...</a><br /></td></tr>
+<tr class="separator:a0575d44d128909d3fce9b45228a88697"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58842884245731ff7c53d7682df8fed3"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename MatContainer, template&lt; typename, size_t &gt; typename NormalContainer&gt; </td></tr>
+<tr class="memitem:a58842884245731ff7c53d7682df8fed3"><td class="memTemplItemLeft" align="right" valign="top">constexpr Normal&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="transforms_8hpp.html#a58842884245731ff7c53d7682df8fed3">lucid::apply_transform</a> (const Mat4_&lt; MatContainer &gt; &amp;t, const Normal_&lt; NormalContainer &gt; &amp;n) noexcept</td></tr>
+<tr class="memdesc:a58842884245731ff7c53d7682df8fed3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply transform to a normal.  <a href="transforms_8hpp.html#a58842884245731ff7c53d7682df8fed3">More...</a><br /></td></tr>
+<tr class="separator:a58842884245731ff7c53d7682df8fed3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5141f2669f241db3ef911f2cb9440d17"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a5141f2669f241db3ef911f2cb9440d17"><td class="memTemplItemLeft" align="right" valign="top">constexpr Mat4&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="transforms_8hpp.html#a5141f2669f241db3ef911f2cb9440d17">lucid::translate</a> (const Point_&lt; Container &gt; &amp;delta) noexcept</td></tr>
+<tr class="memdesc:a5141f2669f241db3ef911f2cb9440d17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create translation transform.  <a href="transforms_8hpp.html#a5141f2669f241db3ef911f2cb9440d17">More...</a><br /></td></tr>
+<tr class="separator:a5141f2669f241db3ef911f2cb9440d17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed2a9ba3c7fd96ec7cca3041eef69661"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:aed2a9ba3c7fd96ec7cca3041eef69661"><td class="memTemplItemLeft" align="right" valign="top">constexpr Mat4&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="transforms_8hpp.html#aed2a9ba3c7fd96ec7cca3041eef69661">lucid::scale</a> (const Point_&lt; Container &gt; &amp;delta) noexcept</td></tr>
+<tr class="memdesc:aed2a9ba3c7fd96ec7cca3041eef69661"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create scale transform.  <a href="transforms_8hpp.html#aed2a9ba3c7fd96ec7cca3041eef69661">More...</a><br /></td></tr>
+<tr class="separator:aed2a9ba3c7fd96ec7cca3041eef69661"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9629fde63b7e85a5036e766eaa283a65"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a9629fde63b7e85a5036e766eaa283a65"><td class="memTemplItemLeft" align="right" valign="top">constexpr Mat4&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="transforms_8hpp.html#a9629fde63b7e85a5036e766eaa283a65">lucid::rotate</a> (const real angle, const Normal_&lt; Container &gt; &amp;axis) noexcept</td></tr>
+<tr class="memdesc:a9629fde63b7e85a5036e766eaa283a65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create clockwise rotation transform.  <a href="transforms_8hpp.html#a9629fde63b7e85a5036e766eaa283a65">More...</a><br /></td></tr>
+<tr class="separator:a9629fde63b7e85a5036e766eaa283a65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1b89b15e1c8b02ed01c1a54c6d12cc6"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename EyeContainer, template&lt; typename, size_t &gt; typename CenContainer, template&lt; typename, size_t &gt; typename UpContainer&gt; </td></tr>
+<tr class="memitem:ac1b89b15e1c8b02ed01c1a54c6d12cc6"><td class="memTemplItemLeft" align="right" valign="top">constexpr Mat4&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="transforms_8hpp.html#ac1b89b15e1c8b02ed01c1a54c6d12cc6">lucid::look_at</a> (const Point_&lt; EyeContainer &gt; &amp;eye, const Point_&lt; CenContainer &gt; &amp;target, const Normal_&lt; UpContainer &gt; &amp;up) noexcept</td></tr>
+<tr class="memdesc:ac1b89b15e1c8b02ed01c1a54c6d12cc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create Look-At transform.  <a href="transforms_8hpp.html#ac1b89b15e1c8b02ed01c1a54c6d12cc6">More...</a><br /></td></tr>
+<tr class="separator:ac1b89b15e1c8b02ed01c1a54c6d12cc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9b4585ec3c1ad390e940db8a3fd7d9d"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:ac9b4585ec3c1ad390e940db8a3fd7d9d"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::pair&lt; Normal, Normal &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="transforms_8hpp.html#ac9b4585ec3c1ad390e940db8a3fd7d9d">lucid::basis</a> (const Normal_&lt; Container &gt; &amp;n) noexcept</td></tr>
+<tr class="memdesc:ac9b4585ec3c1ad390e940db8a3fd7d9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build orthonormal basis for a given normal (z axis). <b>[Duff2017Basis]</b>.  <a href="transforms_8hpp.html#ac9b4585ec3c1ad390e940db8a3fd7d9d">More...</a><br /></td></tr>
+<tr class="separator:ac9b4585ec3c1ad390e940db8a3fd7d9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d902a17fdd1a45b7b345e41ae8e7619"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a8d902a17fdd1a45b7b345e41ae8e7619"><td class="memTemplItemLeft" align="right" valign="top">constexpr Mat3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="transforms_8hpp.html#a8d902a17fdd1a45b7b345e41ae8e7619">lucid::basis_matrix</a> (const Normal_&lt; Container &gt; &amp;z) noexcept</td></tr>
+<tr class="memdesc:a8d902a17fdd1a45b7b345e41ae8e7619"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build orthonormal basis for a given normal (z axis). <b>[Duff2017Basis]</b>.  <a href="transforms_8hpp.html#a8d902a17fdd1a45b7b345e41ae8e7619">More...</a><br /></td></tr>
+<tr class="separator:a8d902a17fdd1a45b7b345e41ae8e7619"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines coordinate transformation functions. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="file_a4d5e5d464e0c593c20b78bad45b5db45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a4d5e5d464e0c593c20b78bad45b5db45">&#9670;&nbsp;</a></span>apply_transform() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; typename, size_t &gt; typename MatContainer, template&lt; typename, size_t &gt; typename VecContainer&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr Vec3 lucid::apply_transform </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1Matrix.html">Mat4_</a>&lt; MatContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1Vector.html">Vec3_</a>&lt; VecContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Apply transform to a vector. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>transform to apply. </td></tr>
+    <tr><td class="paramname">v</td><td>vector to transform. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="file_a0575d44d128909d3fce9b45228a88697"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a0575d44d128909d3fce9b45228a88697">&#9670;&nbsp;</a></span>apply_transform() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; typename, size_t &gt; typename MatContainer, template&lt; typename, size_t &gt; typename PointContainer&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr Point lucid::apply_transform </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1Matrix.html">Mat4_</a>&lt; MatContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1PointN__.html">Point_</a>&lt; PointContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>p</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Apply transform to a point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>transform to apply. </td></tr>
+    <tr><td class="paramname">p</td><td>point to transform. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="file_a58842884245731ff7c53d7682df8fed3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a58842884245731ff7c53d7682df8fed3">&#9670;&nbsp;</a></span>apply_transform() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; typename, size_t &gt; typename MatContainer, template&lt; typename, size_t &gt; typename NormalContainer&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr Normal lucid::apply_transform </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1Matrix.html">Mat4_</a>&lt; MatContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1NormalN__.html">Normal_</a>&lt; NormalContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Apply transform to a normal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>transform to apply. </td></tr>
+    <tr><td class="paramname">n</td><td>noraml to transform. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="file_ac9b4585ec3c1ad390e940db8a3fd7d9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_ac9b4585ec3c1ad390e940db8a3fd7d9d">&#9670;&nbsp;</a></span>basis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::pair&lt;Normal, Normal&gt; lucid::basis </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1NormalN__.html">Normal_</a>&lt; Container &gt; &amp;&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Build orthonormal basis for a given normal (z axis). <b>[Duff2017Basis]</b>. </p>
+<dl class="section return"><dt>Returns</dt><dd>a pair of normals representing x and y axes. </dd></dl>
+
+</div>
+</div>
+<a id="file_a8d902a17fdd1a45b7b345e41ae8e7619"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a8d902a17fdd1a45b7b345e41ae8e7619">&#9670;&nbsp;</a></span>basis_matrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr Mat3 lucid::basis_matrix </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1NormalN__.html">Normal_</a>&lt; Container &gt; &amp;&#160;</td>
+          <td class="paramname"><em>z</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Build orthonormal basis for a given normal (z axis). <b>[Duff2017Basis]</b>. </p>
+<dl class="section return"><dt>Returns</dt><dd>3x3 rotation matrix. </dd></dl>
+
+</div>
+</div>
+<a id="file_a8d03f36d7ae83bc1f860ffd321dbd313"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a8d03f36d7ae83bc1f860ffd321dbd313">&#9670;&nbsp;</a></span>dehomogenize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr Vec3 lucid::dehomogenize </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1Vector.html">Vec4_</a>&lt; Container &gt; &amp;&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Convert a vector from homogenous coordinates. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>homogenous column vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="file_ac1b89b15e1c8b02ed01c1a54c6d12cc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_ac1b89b15e1c8b02ed01c1a54c6d12cc6">&#9670;&nbsp;</a></span>look_at()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; typename, size_t &gt; typename EyeContainer, template&lt; typename, size_t &gt; typename CenContainer, template&lt; typename, size_t &gt; typename UpContainer&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr Mat4 lucid::look_at </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1PointN__.html">Point_</a>&lt; EyeContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>eye</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1PointN__.html">Point_</a>&lt; CenContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1NormalN__.html">Normal_</a>&lt; UpContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>up</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create Look-At transform. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eye</td><td>eye position. </td></tr>
+    <tr><td class="paramname">target</td><td>target position. </td></tr>
+    <tr><td class="paramname">up</td><td>vector (usually {0, 1, 0}). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="file_a9629fde63b7e85a5036e766eaa283a65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a9629fde63b7e85a5036e766eaa283a65">&#9670;&nbsp;</a></span>rotate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr Mat4 lucid::rotate </td>
+          <td>(</td>
+          <td class="paramtype">const real&#160;</td>
+          <td class="paramname"><em>angle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1NormalN__.html">Normal_</a>&lt; Container &gt; &amp;&#160;</td>
+          <td class="paramname"><em>axis</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create clockwise rotation transform. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle</td><td>angle defined in radians. </td></tr>
+    <tr><td class="paramname">axis</td><td>axis to rotate object around. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="file_aed2a9ba3c7fd96ec7cca3041eef69661"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_aed2a9ba3c7fd96ec7cca3041eef69661">&#9670;&nbsp;</a></span>scale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr Mat4 lucid::scale </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1PointN__.html">Point_</a>&lt; Container &gt; &amp;&#160;</td>
+          <td class="paramname"><em>delta</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create scale transform. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">delta</td><td>scale delta. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="file_a5141f2669f241db3ef911f2cb9440d17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a5141f2669f241db3ef911f2cb9440d17">&#9670;&nbsp;</a></span>translate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr Mat4 lucid::translate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1PointN__.html">Point_</a>&lt; Container &gt; &amp;&#160;</td>
+          <td class="paramname"><em>delta</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create translation transform. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">delta</td><td>translation delta. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

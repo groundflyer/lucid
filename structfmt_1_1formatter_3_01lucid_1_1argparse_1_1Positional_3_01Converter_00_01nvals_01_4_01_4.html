@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -87,86 +93,17 @@ $(document).ready(function(){initNavTree('structfmt_1_1formatter_3_01lucid_1_1ar
 <div class="title">fmt::formatter&lt; lucid::argparse::Positional&lt; Converter, nvals &gt; &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="argparse_8hpp_source.html">argparse.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0db1c448c798abaf98b86565749e051c"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfmt_1_1formatter_3_01lucid_1_1argparse_1_1Positional_3_01Converter_00_01nvals_01_4_01_4.html#a0db1c448c798abaf98b86565749e051c">parse</a> (format_parse_context &amp;ctx) const</td></tr>
+<tr class="memitem:a0db1c448c798abaf98b86565749e051c"><td class="memItemLeft" align="right" valign="top"><a id="a0db1c448c798abaf98b86565749e051c"></a>
+constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><b>parse</b> (format_parse_context &amp;ctx) const</td></tr>
 <tr class="separator:a0db1c448c798abaf98b86565749e051c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9aeaea2c009c59c01662a086b1a1ca9"><td class="memTemplParams" colspan="2">template&lt;typename FormatContext &gt; </td></tr>
-<tr class="memitem:af9aeaea2c009c59c01662a086b1a1ca9"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structfmt_1_1formatter_3_01lucid_1_1argparse_1_1Positional_3_01Converter_00_01nvals_01_4_01_4.html#af9aeaea2c009c59c01662a086b1a1ca9">format</a> (const <a class="el" href="structlucid_1_1argparse_1_1Positional.html">lucid::argparse::Positional</a>&lt; Converter, nvals &gt; &amp;desc, FormatContext &amp;ctx) const</td></tr>
+<tr class="memitem:af9aeaea2c009c59c01662a086b1a1ca9"><td class="memTemplParams" colspan="2"><a id="af9aeaea2c009c59c01662a086b1a1ca9"></a>
+template&lt;typename FormatContext &gt; </td></tr>
+<tr class="memitem:af9aeaea2c009c59c01662a086b1a1ca9"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>format</b> (const <a class="el" href="structlucid_1_1argparse_1_1Positional.html">lucid::argparse::Positional</a>&lt; Converter, nvals &gt; &amp;desc, FormatContext &amp;ctx) const</td></tr>
 <tr class="separator:af9aeaea2c009c59c01662a086b1a1ca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="af9aeaea2c009c59c01662a086b1a1ca9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af9aeaea2c009c59c01662a086b1a1ca9">&#9670;&nbsp;</a></span>format()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Converter , std::size_t nvals&gt; </div>
-<div class="memtemplate">
-template&lt;typename FormatContext &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto fmt::formatter&lt; <a class="el" href="structlucid_1_1argparse_1_1Positional.html">lucid::argparse::Positional</a>&lt; Converter, nvals &gt; &gt;::format </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structlucid_1_1argparse_1_1Positional.html">lucid::argparse::Positional</a>&lt; Converter, nvals &gt; &amp;&#160;</td>
-          <td class="paramname"><em>desc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">FormatContext &amp;&#160;</td>
-          <td class="paramname"><em>ctx</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0db1c448c798abaf98b86565749e051c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0db1c448c798abaf98b86565749e051c">&#9670;&nbsp;</a></span>parse()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Converter , std::size_t nvals&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto fmt::formatter&lt; <a class="el" href="structlucid_1_1argparse_1_1Positional.html">lucid::argparse::Positional</a>&lt; Converter, nvals &gt; &gt;::parse </td>
-          <td>(</td>
-          <td class="paramtype">format_parse_context &amp;&#160;</td>
-          <td class="paramname"><em>ctx</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>utils/<a class="el" href="argparse_8hpp_source.html">argparse.hpp</a></li>
 </ul>
@@ -175,7 +112,7 @@ template&lt;typename Converter , std::size_t nvals&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacefmt.html">fmt</a></li><li class="navelem"><a class="el" href="structfmt_1_1formatter_3_01lucid_1_1argparse_1_1Positional_3_01Converter_00_01nvals_01_4_01_4.html">formatter&lt; lucid::argparse::Positional&lt; Converter, nvals &gt; &gt;</a></li>
+    <li class="navelem"><b>fmt</b></li><li class="navelem"><a class="el" href="structfmt_1_1formatter_3_01lucid_1_1argparse_1_1Positional_3_01Converter_00_01nvals_01_4_01_4.html">formatter&lt; lucid::argparse::Positional&lt; Converter, nvals &gt; &gt;</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

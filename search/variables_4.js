@@ -1,9 +1,0 @@
-var searchData=
-[
-  ['d',['d',['../structB.html#a2ce834014f024be75f99bd4e626d4b08',1,'B']]],
-  ['data',['data',['../classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4_1_1value__range.html#a7ac173d7e2ae06f89127c6060116eebd',1,'lucid::argparse::Binding&lt; Converter, -1ul &gt;::value_range::data()'],['../classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html#a8ff435398ad7749ddd97bc5b137be2fa',1,'lucid::argparse::Binding&lt; Converter, -1ul &gt;::data()'],['../structlucid_1_1argparse_1_1Value.html#a2fe6fc457e58d265e97fa6507cd35b44',1,'lucid::argparse::Value::data()'],['../classlucid_1_1steady__tuple.html#ab837fbdffffe8d4852eb94047c62ae0f',1,'lucid::steady_tuple::data()']]],
-  ['default_5fvalue',['default_value',['../classlucid_1_1argparse_1_1Binding.html#af6192b413e4d596c12b6ccae0ab04cf4',1,'lucid::argparse::Binding::default_value()'],['../classlucid_1_1argparse_1_1Binding_3_01Converter_00_011_01_4.html#a53d6b553bcfd5950e7c87e62c06c60e3',1,'lucid::argparse::Binding&lt; Converter, 1 &gt;::default_value()'],['../structlucid_1_1argparse_1_1Option.html#a486300d152b3c7e73bb6a9a98c48ca50',1,'lucid::argparse::Option::default_value()']]],
-  ['desc',['desc',['../structlucid_1_1argparse_1_1Visitor_1_1State.html#a6170fb337c42cdb0b0623dd0d642184d',1,'lucid::argparse::Visitor::State']]],
-  ['dir',['dir',['../structlucid_1_1Ray__.html#a247b70cb84dce0680780d4ec1a2ce19e',1,'lucid::Ray_']]],
-  ['doc',['doc',['../structlucid_1_1argparse_1_1Option.html#af53b9081b365119c19f7c84404aa40ca',1,'lucid::argparse::Option::doc()'],['../structlucid_1_1argparse_1_1Option_3_01Key_00_01Converter_00_01-1ul_01_4.html#aefdf440acfe7fbaf12d52db281fb0619',1,'lucid::argparse::Option&lt; Key, Converter, -1ul &gt;::doc()'],['../structlucid_1_1argparse_1_1Positional.html#aeb0051d2188745fdf6cd4b5af6fb3e80',1,'lucid::argparse::Positional::doc()']]]
-];

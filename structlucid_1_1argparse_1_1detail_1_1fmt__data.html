@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -88,237 +94,34 @@ $(document).ready(function(){initNavTree('structlucid_1_1argparse_1_1detail_1_1f
 <div class="title">lucid::argparse::detail::fmt_data&lt; Options, Positionals &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="argparse_8hpp_source.html">argparse.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aeb2cb8aca8a51f7425980c7ac0354583"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html#aeb2cb8aca8a51f7425980c7ac0354583">fmt_data</a> ()=delete</td></tr>
-<tr class="separator:aeb2cb8aca8a51f7425980c7ac0354583"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8672ef235898f3760279179dd7b393e6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html#a8672ef235898f3760279179dd7b393e6">fmt_data</a> (const <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a> &amp;)=delete</td></tr>
+<tr class="memitem:a8672ef235898f3760279179dd7b393e6"><td class="memItemLeft" align="right" valign="top"><a id="a8672ef235898f3760279179dd7b393e6"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>fmt_data</b> (const <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a> &amp;)=delete</td></tr>
 <tr class="separator:a8672ef235898f3760279179dd7b393e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab2f3c6dfc88a8390186db3c4b5c91fb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html#aab2f3c6dfc88a8390186db3c4b5c91fb">fmt_data</a> (<a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a> &amp;&amp;)=delete</td></tr>
+<tr class="memitem:aab2f3c6dfc88a8390186db3c4b5c91fb"><td class="memItemLeft" align="right" valign="top"><a id="aab2f3c6dfc88a8390186db3c4b5c91fb"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>fmt_data</b> (<a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a> &amp;&amp;)=delete</td></tr>
 <tr class="separator:aab2f3c6dfc88a8390186db3c4b5c91fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f798d141dfbcbc67c491184653e461e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html#a5f798d141dfbcbc67c491184653e461e">operator=</a> (const <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a> &amp;)=delete</td></tr>
+<tr class="memitem:a5f798d141dfbcbc67c491184653e461e"><td class="memItemLeft" align="right" valign="top"><a id="a5f798d141dfbcbc67c491184653e461e"></a>
+<a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a> &amp;)=delete</td></tr>
 <tr class="separator:a5f798d141dfbcbc67c491184653e461e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7142379203a05f93bcd616630a1c83a"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html#ad7142379203a05f93bcd616630a1c83a">fmt_data</a> (std::string_view _program_name, const Options &amp;_options, const Positionals &amp;_positionals) noexcept</td></tr>
+<tr class="memitem:ad7142379203a05f93bcd616630a1c83a"><td class="memItemLeft" align="right" valign="top"><a id="ad7142379203a05f93bcd616630a1c83a"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>fmt_data</b> (std::string_view _program_name, const Options &amp;_options, const Positionals &amp;_positionals) noexcept</td></tr>
 <tr class="separator:ad7142379203a05f93bcd616630a1c83a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a963bf8c6e9f643c46ff47977a0504627"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html#a963bf8c6e9f643c46ff47977a0504627">program_name</a></td></tr>
+<tr class="memitem:a963bf8c6e9f643c46ff47977a0504627"><td class="memItemLeft" align="right" valign="top"><a id="a963bf8c6e9f643c46ff47977a0504627"></a>
+std::string_view&#160;</td><td class="memItemRight" valign="bottom"><b>program_name</b></td></tr>
 <tr class="separator:a963bf8c6e9f643c46ff47977a0504627"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66954d09357d603769d1d4d2a226a546"><td class="memItemLeft" align="right" valign="top">const Options &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html#a66954d09357d603769d1d4d2a226a546">options</a></td></tr>
+<tr class="memitem:a66954d09357d603769d1d4d2a226a546"><td class="memItemLeft" align="right" valign="top"><a id="a66954d09357d603769d1d4d2a226a546"></a>
+const Options &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>options</b></td></tr>
 <tr class="separator:a66954d09357d603769d1d4d2a226a546"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba3a2a1983f9f63c76a79f6653b2dc2f"><td class="memItemLeft" align="right" valign="top">const Positionals &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html#aba3a2a1983f9f63c76a79f6653b2dc2f">positionals</a></td></tr>
+<tr class="memitem:aba3a2a1983f9f63c76a79f6653b2dc2f"><td class="memItemLeft" align="right" valign="top"><a id="aba3a2a1983f9f63c76a79f6653b2dc2f"></a>
+const Positionals &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>positionals</b></td></tr>
 <tr class="separator:aba3a2a1983f9f63c76a79f6653b2dc2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aeb2cb8aca8a51f7425980c7ac0354583"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb2cb8aca8a51f7425980c7ac0354583">&#9670;&nbsp;</a></span>fmt_data() <span class="overload">[1/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Options , typename Positionals &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">lucid::argparse::detail::fmt_data</a>&lt; Options, Positionals &gt;::<a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8672ef235898f3760279179dd7b393e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8672ef235898f3760279179dd7b393e6">&#9670;&nbsp;</a></span>fmt_data() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Options , typename Positionals &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">lucid::argparse::detail::fmt_data</a>&lt; Options, Positionals &gt;::<a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a> </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a>&lt; Options, Positionals &gt; &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aab2f3c6dfc88a8390186db3c4b5c91fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab2f3c6dfc88a8390186db3c4b5c91fb">&#9670;&nbsp;</a></span>fmt_data() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Options , typename Positionals &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">lucid::argparse::detail::fmt_data</a>&lt; Options, Positionals &gt;::<a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a>&lt; Options, Positionals &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad7142379203a05f93bcd616630a1c83a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7142379203a05f93bcd616630a1c83a">&#9670;&nbsp;</a></span>fmt_data() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Options , typename Positionals &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">lucid::argparse::detail::fmt_data</a>&lt; Options, Positionals &gt;::<a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a> </td>
-          <td>(</td>
-          <td class="paramtype">std::string_view&#160;</td>
-          <td class="paramname"><em>_program_name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Options &amp;&#160;</td>
-          <td class="paramname"><em>_options</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Positionals &amp;&#160;</td>
-          <td class="paramname"><em>_positionals</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a5f798d141dfbcbc67c491184653e461e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f798d141dfbcbc67c491184653e461e">&#9670;&nbsp;</a></span>operator=()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Options , typename Positionals &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a>&amp; <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">lucid::argparse::detail::fmt_data</a>&lt; Options, Positionals &gt;::operator= </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a>&lt; Options, Positionals &gt; &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a66954d09357d603769d1d4d2a226a546"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66954d09357d603769d1d4d2a226a546">&#9670;&nbsp;</a></span>options</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Options , typename Positionals &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">const Options&amp; <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">lucid::argparse::detail::fmt_data</a>&lt; Options, Positionals &gt;::options</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aba3a2a1983f9f63c76a79f6653b2dc2f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba3a2a1983f9f63c76a79f6653b2dc2f">&#9670;&nbsp;</a></span>positionals</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Options , typename Positionals &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">const Positionals&amp; <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">lucid::argparse::detail::fmt_data</a>&lt; Options, Positionals &gt;::positionals</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a963bf8c6e9f643c46ff47977a0504627"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a963bf8c6e9f643c46ff47977a0504627">&#9670;&nbsp;</a></span>program_name</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Options , typename Positionals &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string_view <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">lucid::argparse::detail::fmt_data</a>&lt; Options, Positionals &gt;::program_name</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>utils/<a class="el" href="argparse_8hpp_source.html">argparse.hpp</a></li>
 </ul>
@@ -327,7 +130,7 @@ template&lt;typename Options , typename Positionals &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="namespacelucid_1_1argparse.html">argparse</a></li><li class="navelem"><a class="el" href="namespacelucid_1_1argparse_1_1detail.html">detail</a></li><li class="navelem"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><b>argparse</b></li><li class="navelem"><b>detail</b></li><li class="navelem"><a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">fmt_data</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

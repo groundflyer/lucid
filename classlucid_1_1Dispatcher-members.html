@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -87,22 +93,10 @@ $(document).ready(function(){initNavTree('classlucid_1_1Dispatcher.html','');});
 
 <p>This is the complete list of members for <a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#a5cca1a635e2c53bbb54044e8e41f0805">active_flag</a></td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#a0e979de08f995575ea28544ce759d351">count</a></td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#a610e0c9f1671bc5b89b1b9358760d801">Dispatcher</a>(const std::size_t queue_size=10000, const unsigned num_threads=std::thread::hardware_concurrency()) noexcept</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#a4c7f1c6cba2fa3d8c905b5268030ceb9">fetch_result</a>() noexcept</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#a19a5ff3c27c77e0cbae60dbeeadf7201">no_args</a> typedef</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#a845eb2f75ff841ec6ecf8dfe6ac11ccf">result_index</a>() noexcept</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">private</span><span class="mlabel">static</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#acccbe42394d12d78cbc4094f6b7cf821">result_queue_pool</a></td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#a3d9614eb33cab293706047a020241283">ResultQueue</a> typedef</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#aa4a5ac2ab36e783d87a3e3d717e7f1d8">ResultQueuePool</a> typedef</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#a3779e1344ebf202a864595325430f413">ResultTypeList</a> typedef</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#a9214d4fe51bc68197f4c4fb22ae45f34">task_queue_pool</a></td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#a3bc0f67df4f0e8b77bbba88bc5a9de9b">TaskQueuePool</a> typedef</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#a9b8277ad56b83616bd201a94e2b2ec5a">TaskTypeList</a> typedef</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#a43e6583f46bb13c9b116ca0cb3ebb66d">threads</a></td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#a35e569fcb5f7e31f60513f12d71f8ed7">try_submit</a>(Task &amp;&amp;task) noexcept</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html#a6ceea1f08bfa72a8d7f0583eeb6fbd9d">~Dispatcher</a>() noexcept</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>Dispatcher</b>(const std::size_t queue_size=10000, const unsigned num_threads=std::thread::hardware_concurrency()) noexcept (defined in <a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a>)</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>fetch_result</b>() noexcept (defined in <a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a>)</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>try_submit</b>(Task &amp;&amp;task) noexcept (defined in <a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a>)</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>~Dispatcher</b>() noexcept (defined in <a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a>)</td><td class="entry"><a class="el" href="classlucid_1_1Dispatcher.html">lucid::Dispatcher&lt; Tasks &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

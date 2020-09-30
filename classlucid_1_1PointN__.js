@@ -1,6 +1,5 @@
 var classlucid_1_1PointN__ =
 [
-    [ "Data", "classlucid_1_1PointN__.html#a42e9c3ca3960255241136c3ce2d83b96", null ],
     [ "PointN_", "classlucid_1_1PointN__.html#adca53833c36135d4ee6d59944da67a37", null ],
     [ "PointN_", "classlucid_1_1PointN__.html#a19943404ab7fab23840f336f10829df9", null ],
     [ "PointN_", "classlucid_1_1PointN__.html#ae28cac25506c0478b449bcd48b1cc921", null ],
@@ -25,6 +24,5 @@ var classlucid_1_1PointN__ =
     [ "operator=", "classlucid_1_1PointN__.html#a1f99ec65935dbc787deeb8a0587be322", null ],
     [ "operator[]", "classlucid_1_1PointN__.html#a7c2626bdd37d517cc46c8890b5854ca5", null ],
     [ "operator[]", "classlucid_1_1PointN__.html#abf9d8496cb5cbc71083b2386cc6174f3", null ],
-    [ "size", "classlucid_1_1PointN__.html#a1fe4d67dd4267c8d77f260f45cfe2aa1", null ],
-    [ "m_data", "classlucid_1_1PointN__.html#a440145b5388ea1250d8104a8eb651496", null ]
+    [ "size", "classlucid_1_1PointN__.html#a1fe4d67dd4267c8d77f260f45cfe2aa1", null ]
 ];

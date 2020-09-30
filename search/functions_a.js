@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['key_5fcallback',['key_callback',['../classlucid_1_1detail_1_1__Viewport.html#a43427e5eaa8d35469555f134d015bcb4',1,'lucid::detail::_Viewport']]],
-  ['key_5finfo',['key_info',['../classlucid_1_1argparse_1_1Visitor.html#ae56db698680007faff005129a442d950',1,'lucid::argparse::Visitor']]],
-  ['keywords_5fhave_5fspace',['keywords_have_space',['../namespacelucid_1_1argparse.html#a0b8e0610b64e06e5f3f7ff03aac52e9c',1,'lucid::argparse']]]
+  ['pow',['pow',['../vector__operators_8hpp.html#a012a7d078f096b399100971d7f9ba33b',1,'lucid::pow(const VectorType&lt; T, N, Container &gt; &amp;v) noexcept'],['../math_8hpp.html#a45c04cf8fb86621c17e6c5786a312542',1,'lucid::pow(const T value) noexcept']]],
+  ['product',['product',['../vector__operators_8hpp.html#a38ae3103f34d6e6f9fc39aa82ff3d1d7',1,'lucid']]]
 ];

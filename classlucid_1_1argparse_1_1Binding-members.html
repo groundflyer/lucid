@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -87,17 +93,10 @@ $(document).ready(function(){initNavTree('classlucid_1_1argparse_1_1Binding.html
 
 <p>This is the complete list of members for <a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html#a6c5ea4ff153e1e6f6a708abf79f9dc4d">Binding</a>(const Converter &amp;_converter, const value_type &amp;value) noexcept</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">explicit</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html#a945147710ba9d426943e58d079b434e5">converter</a></td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html#af6192b413e4d596c12b6ccae0ab04cf4">default_value</a></td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html#a71487f926236e957c40ff08f37454ccc">idx</a></td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html#a592a1c9760b91fafc18c610823141dca">increment</a>() noexcept</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">private</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html#aa64ff1102e5a685603d35ccf7211e8b8">is_set</a></td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html#a8bf2049ad15ad08025b9792493acd0f1">operator()</a>() const</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html#a6a62e1d85ca5c5597092cc3dcfb04028">set</a>(std::string_view) noexcept</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html#a2e4b306738f4e72fbf5d0602c8269495">set</a>(char **data) noexcept</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html#a026c61f79cd2f8a9a2f807e4b78b8788">value_type</a> typedef</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html#a656268ac0c0d865a38a9032ed8e91366">words</a></td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>Binding</b>(const Converter &amp;_converter, const value_type &amp;value) noexcept (defined in <a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a>)</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">explicit</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>operator()</b>() const (defined in <a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a>)</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>set</b>(std::string_view) noexcept (defined in <a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a>)</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>set</b>(char **data) noexcept (defined in <a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a>)</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding.html">lucid::argparse::Binding&lt; Converter, nvals &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

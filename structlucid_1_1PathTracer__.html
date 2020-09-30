@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -88,8 +94,6 @@ $(document).ready(function(){initNavTree('structlucid_1_1PathTracer__.html','');
 <div class="title">lucid::PathTracer_&lt; RandomEngine, Scene, MaterialGetter &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="basic_8hpp_source.html">basic.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for lucid::PathTracer_&lt; RandomEngine, Scene, MaterialGetter &gt;:</div>
 <div class="dyncontent">
@@ -99,167 +103,34 @@ Collaboration diagram for lucid::PathTracer_&lt; RandomEngine, Scene, MaterialGe
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aba865611f786fd9e43dc9e2ad75f67d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a7dda3034070e64819ad4f9b52dadc6f9">Sample</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1PathTracer__.html#aba865611f786fd9e43dc9e2ad75f67d2">operator()</a> () noexcept</td></tr>
+<tr class="memitem:aba865611f786fd9e43dc9e2ad75f67d2"><td class="memItemLeft" align="right" valign="top"><a id="aba865611f786fd9e43dc9e2ad75f67d2"></a>
+Sample&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> () noexcept</td></tr>
 <tr class="separator:aba865611f786fd9e43dc9e2ad75f67d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a6240dc2432a87476b1eb478bf25f6d15"><td class="memItemLeft" align="right" valign="top">RandomEngine *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1PathTracer__.html#a6240dc2432a87476b1eb478bf25f6d15">g</a></td></tr>
+<tr class="memitem:a6240dc2432a87476b1eb478bf25f6d15"><td class="memItemLeft" align="right" valign="top"><a id="a6240dc2432a87476b1eb478bf25f6d15"></a>
+RandomEngine *&#160;</td><td class="memItemRight" valign="bottom"><b>g</b></td></tr>
 <tr class="separator:a6240dc2432a87476b1eb478bf25f6d15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a152962e7c47c4b0edcffd88bb2ed1315"><td class="memItemLeft" align="right" valign="top">Scene const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1PathTracer__.html#a152962e7c47c4b0edcffd88bb2ed1315">scene</a></td></tr>
+<tr class="memitem:a152962e7c47c4b0edcffd88bb2ed1315"><td class="memItemLeft" align="right" valign="top"><a id="a152962e7c47c4b0edcffd88bb2ed1315"></a>
+Scene const  *&#160;</td><td class="memItemRight" valign="bottom"><b>scene</b></td></tr>
 <tr class="separator:a152962e7c47c4b0edcffd88bb2ed1315"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab86fa7c87d795c34751f4dbde11c5ced"><td class="memItemLeft" align="right" valign="top">MaterialGetter const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1PathTracer__.html#ab86fa7c87d795c34751f4dbde11c5ced">material_getter</a></td></tr>
+<tr class="memitem:ab86fa7c87d795c34751f4dbde11c5ced"><td class="memItemLeft" align="right" valign="top"><a id="ab86fa7c87d795c34751f4dbde11c5ced"></a>
+MaterialGetter const  *&#160;</td><td class="memItemRight" valign="bottom"><b>material_getter</b></td></tr>
 <tr class="separator:ab86fa7c87d795c34751f4dbde11c5ced"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e2442ac9b2fa9805b57e8f64e42e6b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a2d13e5ff86ee839a96cf940cf9587df4">Ray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1PathTracer__.html#a4e2442ac9b2fa9805b57e8f64e42e6b8">ray</a></td></tr>
+<tr class="memitem:a4e2442ac9b2fa9805b57e8f64e42e6b8"><td class="memItemLeft" align="right" valign="top"><a id="a4e2442ac9b2fa9805b57e8f64e42e6b8"></a>
+<a class="el" href="structlucid_1_1Ray__.html">Ray</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ray</b></td></tr>
 <tr class="separator:a4e2442ac9b2fa9805b57e8f64e42e6b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b94aa07cac524e105b807f3a84c94f7"><td class="memItemLeft" align="right" valign="top">std::uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1PathTracer__.html#a7b94aa07cac524e105b807f3a84c94f7">max_depth</a></td></tr>
+<tr class="memitem:a7b94aa07cac524e105b807f3a84c94f7"><td class="memItemLeft" align="right" valign="top"><a id="a7b94aa07cac524e105b807f3a84c94f7"></a>
+std::uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>max_depth</b></td></tr>
 <tr class="separator:a7b94aa07cac524e105b807f3a84c94f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a541163c607f09f78e593eafaa3becbb1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1PathTracer__.html#a541163c607f09f78e593eafaa3becbb1">bias</a></td></tr>
+<tr class="memitem:a541163c607f09f78e593eafaa3becbb1"><td class="memItemLeft" align="right" valign="top"><a id="a541163c607f09f78e593eafaa3becbb1"></a>
+real&#160;</td><td class="memItemRight" valign="bottom"><b>bias</b></td></tr>
 <tr class="separator:a541163c607f09f78e593eafaa3becbb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aecaf3b49f060508e3d085f4adf461144"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1PathTracer__.html#aecaf3b49f060508e3d085f4adf461144">sample_pos</a></td></tr>
+<tr class="memitem:aecaf3b49f060508e3d085f4adf461144"><td class="memItemLeft" align="right" valign="top"><a id="aecaf3b49f060508e3d085f4adf461144"></a>
+<a class="el" href="classlucid_1_1Vector.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>sample_pos</b></td></tr>
 <tr class="separator:aecaf3b49f060508e3d085f4adf461144"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="aba865611f786fd9e43dc9e2ad75f67d2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba865611f786fd9e43dc9e2ad75f67d2">&#9670;&nbsp;</a></span>operator()()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename RandomEngine , typename Scene , typename MaterialGetter &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a7dda3034070e64819ad4f9b52dadc6f9">Sample</a> <a class="el" href="structlucid_1_1PathTracer__.html">lucid::PathTracer_</a>&lt; RandomEngine, Scene, MaterialGetter &gt;::operator() </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a541163c607f09f78e593eafaa3becbb1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a541163c607f09f78e593eafaa3becbb1">&#9670;&nbsp;</a></span>bias</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename RandomEngine , typename Scene , typename MaterialGetter &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> <a class="el" href="structlucid_1_1PathTracer__.html">lucid::PathTracer_</a>&lt; RandomEngine, Scene, MaterialGetter &gt;::bias</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6240dc2432a87476b1eb478bf25f6d15"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6240dc2432a87476b1eb478bf25f6d15">&#9670;&nbsp;</a></span>g</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename RandomEngine , typename Scene , typename MaterialGetter &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">RandomEngine* <a class="el" href="structlucid_1_1PathTracer__.html">lucid::PathTracer_</a>&lt; RandomEngine, Scene, MaterialGetter &gt;::g</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab86fa7c87d795c34751f4dbde11c5ced"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab86fa7c87d795c34751f4dbde11c5ced">&#9670;&nbsp;</a></span>material_getter</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename RandomEngine , typename Scene , typename MaterialGetter &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">MaterialGetter const* <a class="el" href="structlucid_1_1PathTracer__.html">lucid::PathTracer_</a>&lt; RandomEngine, Scene, MaterialGetter &gt;::material_getter</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7b94aa07cac524e105b807f3a84c94f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b94aa07cac524e105b807f3a84c94f7">&#9670;&nbsp;</a></span>max_depth</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename RandomEngine , typename Scene , typename MaterialGetter &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::uint8_t <a class="el" href="structlucid_1_1PathTracer__.html">lucid::PathTracer_</a>&lt; RandomEngine, Scene, MaterialGetter &gt;::max_depth</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a4e2442ac9b2fa9805b57e8f64e42e6b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e2442ac9b2fa9805b57e8f64e42e6b8">&#9670;&nbsp;</a></span>ray</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename RandomEngine , typename Scene , typename MaterialGetter &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a2d13e5ff86ee839a96cf940cf9587df4">Ray</a> <a class="el" href="structlucid_1_1PathTracer__.html">lucid::PathTracer_</a>&lt; RandomEngine, Scene, MaterialGetter &gt;::ray</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aecaf3b49f060508e3d085f4adf461144"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aecaf3b49f060508e3d085f4adf461144">&#9670;&nbsp;</a></span>sample_pos</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename RandomEngine , typename Scene , typename MaterialGetter &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a> <a class="el" href="structlucid_1_1PathTracer__.html">lucid::PathTracer_</a>&lt; RandomEngine, Scene, MaterialGetter &gt;::sample_pos</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a152962e7c47c4b0edcffd88bb2ed1315"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a152962e7c47c4b0edcffd88bb2ed1315">&#9670;&nbsp;</a></span>scene</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename RandomEngine , typename Scene , typename MaterialGetter &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">Scene const* <a class="el" href="structlucid_1_1PathTracer__.html">lucid::PathTracer_</a>&lt; RandomEngine, Scene, MaterialGetter &gt;::scene</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>integrators/<a class="el" href="basic_8hpp_source.html">basic.hpp</a></li>
 </ul>
@@ -268,7 +139,7 @@ template&lt;typename RandomEngine , typename Scene , typename MaterialGetter &gt
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="structlucid_1_1PathTracer__.html">PathTracer_</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="structlucid_1_1PathTracer__.html">PathTracer_</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

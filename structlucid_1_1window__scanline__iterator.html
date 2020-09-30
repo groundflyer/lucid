@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -88,8 +94,6 @@ $(document).ready(function(){initNavTree('structlucid_1_1window__scanline__itera
 <div class="title">lucid::window_scanline_iterator Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="filtering_8hpp_source.html">filtering.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for lucid::window_scanline_iterator:</div>
 <div class="dyncontent">
@@ -99,254 +103,34 @@ Collaboration diagram for lucid::window_scanline_iterator:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afd1481e59a9061463f9fac9c3a47256e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1window__scanline__iterator.html#afd1481e59a9061463f9fac9c3a47256e">window_scanline_iterator</a> ()=delete</td></tr>
-<tr class="separator:afd1481e59a9061463f9fac9c3a47256e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1cf6f31087dfae4ec75918bbd86284a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1window__scanline__iterator.html#ab1cf6f31087dfae4ec75918bbd86284a">operator=</a> (const <a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a> &amp;)=delete</td></tr>
+<tr class="memitem:ab1cf6f31087dfae4ec75918bbd86284a"><td class="memItemLeft" align="right" valign="top"><a id="ab1cf6f31087dfae4ec75918bbd86284a"></a>
+<a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a> &amp;)=delete</td></tr>
 <tr class="separator:ab1cf6f31087dfae4ec75918bbd86284a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a613ed77e32eb8c1bb6c54a61f2b764bd"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1window__scanline__iterator.html#a613ed77e32eb8c1bb6c54a61f2b764bd">window_scanline_iterator</a> (const <a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a> &amp;offset_, const <a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a> &amp;res, const unsigned pos)</td></tr>
+<tr class="memitem:a613ed77e32eb8c1bb6c54a61f2b764bd"><td class="memItemLeft" align="right" valign="top"><a id="a613ed77e32eb8c1bb6c54a61f2b764bd"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>window_scanline_iterator</b> (const <a class="el" href="classlucid_1_1Vector.html">Vec2u</a> &amp;offset_, const <a class="el" href="classlucid_1_1Vector.html">Vec2u</a> &amp;res, const unsigned pos)</td></tr>
 <tr class="separator:a613ed77e32eb8c1bb6c54a61f2b764bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ef149f16929c845963a76607ea685d3"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1window__scanline__iterator.html#a4ef149f16929c845963a76607ea685d3">operator*</a> () noexcept</td></tr>
+<tr class="memitem:a4ef149f16929c845963a76607ea685d3"><td class="memItemLeft" align="right" valign="top"><a id="a4ef149f16929c845963a76607ea685d3"></a>
+constexpr <a class="el" href="classlucid_1_1Vector.html">Vec2u</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator*</b> () noexcept</td></tr>
 <tr class="separator:a4ef149f16929c845963a76607ea685d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b0d546ddc43605589ee9d7b427b1cd9"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1window__scanline__iterator.html#a3b0d546ddc43605589ee9d7b427b1cd9">operator++</a> () noexcept</td></tr>
+<tr class="memitem:a3b0d546ddc43605589ee9d7b427b1cd9"><td class="memItemLeft" align="right" valign="top"><a id="a3b0d546ddc43605589ee9d7b427b1cd9"></a>
+constexpr <a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> () noexcept</td></tr>
 <tr class="separator:a3b0d546ddc43605589ee9d7b427b1cd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05caf13707cd8cf5859acda6d000e822"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1window__scanline__iterator.html#a05caf13707cd8cf5859acda6d000e822">operator!=</a> (const <a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a> &amp;rhs) const noexcept</td></tr>
+<tr class="memitem:a05caf13707cd8cf5859acda6d000e822"><td class="memItemLeft" align="right" valign="top"><a id="a05caf13707cd8cf5859acda6d000e822"></a>
+constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a> &amp;rhs) const noexcept</td></tr>
 <tr class="separator:a05caf13707cd8cf5859acda6d000e822"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e833a36226b57e94c2bb3c87ba54bd1"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1window__scanline__iterator.html#a3e833a36226b57e94c2bb3c87ba54bd1">operator&lt;</a> (const <a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a> &amp;rhs) const noexcept</td></tr>
+<tr class="memitem:a3e833a36226b57e94c2bb3c87ba54bd1"><td class="memItemLeft" align="right" valign="top"><a id="a3e833a36226b57e94c2bb3c87ba54bd1"></a>
+constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a> &amp;rhs) const noexcept</td></tr>
 <tr class="separator:a3e833a36226b57e94c2bb3c87ba54bd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a10c8413cf7e0b0cdeaada19284fd9b7d"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1window__scanline__iterator.html#a10c8413cf7e0b0cdeaada19284fd9b7d">offset</a></td></tr>
+<tr class="memitem:a10c8413cf7e0b0cdeaada19284fd9b7d"><td class="memItemLeft" align="right" valign="top"><a id="a10c8413cf7e0b0cdeaada19284fd9b7d"></a>
+const <a class="el" href="classlucid_1_1Vector.html">Vec2u</a>&#160;</td><td class="memItemRight" valign="bottom"><b>offset</b></td></tr>
 <tr class="separator:a10c8413cf7e0b0cdeaada19284fd9b7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81aafbda1513ff32ed0ed676533e6779"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlucid_1_1scanline__iterator.html">scanline_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1window__scanline__iterator.html#a81aafbda1513ff32ed0ed676533e6779">iter</a></td></tr>
+<tr class="memitem:a81aafbda1513ff32ed0ed676533e6779"><td class="memItemLeft" align="right" valign="top"><a id="a81aafbda1513ff32ed0ed676533e6779"></a>
+<a class="el" href="structlucid_1_1scanline__iterator.html">scanline_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>iter</b></td></tr>
 <tr class="separator:a81aafbda1513ff32ed0ed676533e6779"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="afd1481e59a9061463f9fac9c3a47256e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd1481e59a9061463f9fac9c3a47256e">&#9670;&nbsp;</a></span>window_scanline_iterator() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">lucid::window_scanline_iterator::window_scanline_iterator </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a613ed77e32eb8c1bb6c54a61f2b764bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a613ed77e32eb8c1bb6c54a61f2b764bd">&#9670;&nbsp;</a></span>window_scanline_iterator() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr lucid::window_scanline_iterator::window_scanline_iterator </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a> &amp;&#160;</td>
-          <td class="paramname"><em>offset_</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a> &amp;&#160;</td>
-          <td class="paramname"><em>res</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const unsigned&#160;</td>
-          <td class="paramname"><em>pos</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a05caf13707cd8cf5859acda6d000e822"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a05caf13707cd8cf5859acda6d000e822">&#9670;&nbsp;</a></span>operator!=()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr bool lucid::window_scanline_iterator::operator!= </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a> &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a4ef149f16929c845963a76607ea685d3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4ef149f16929c845963a76607ea685d3">&#9670;&nbsp;</a></span>operator*()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a> lucid::window_scanline_iterator::operator* </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3b0d546ddc43605589ee9d7b427b1cd9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b0d546ddc43605589ee9d7b427b1cd9">&#9670;&nbsp;</a></span>operator++()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a>&amp; lucid::window_scanline_iterator::operator++ </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3e833a36226b57e94c2bb3c87ba54bd1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e833a36226b57e94c2bb3c87ba54bd1">&#9670;&nbsp;</a></span>operator<()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr bool lucid::window_scanline_iterator::operator&lt; </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a> &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab1cf6f31087dfae4ec75918bbd86284a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab1cf6f31087dfae4ec75918bbd86284a">&#9670;&nbsp;</a></span>operator=()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a>&amp; lucid::window_scanline_iterator::operator= </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a> &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a81aafbda1513ff32ed0ed676533e6779"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a81aafbda1513ff32ed0ed676533e6779">&#9670;&nbsp;</a></span>iter</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structlucid_1_1scanline__iterator.html">scanline_iterator</a> lucid::window_scanline_iterator::iter</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a10c8413cf7e0b0cdeaada19284fd9b7d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10c8413cf7e0b0cdeaada19284fd9b7d">&#9670;&nbsp;</a></span>offset</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a> lucid::window_scanline_iterator::offset</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>image_reconstruction/<a class="el" href="filtering_8hpp_source.html">filtering.hpp</a></li>
 </ul>
@@ -355,7 +139,7 @@ Public Attributes</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="structlucid_1_1window__scanline__iterator.html">window_scanline_iterator</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

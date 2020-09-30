@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -87,14 +93,10 @@ $(document).ready(function(){initNavTree('classlucid_1_1argparse_1_1Binding_3_01
 
 <p>This is the complete list of members for <a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html#a3003b7a5a72ac77f2ccb1af04b021fc3">Binding</a>(const Converter &amp;_converter) noexcept</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">explicit</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html#a600c19b2dc7f060d5f32e6230eec1c06">converter</a></td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html#a8ff435398ad7749ddd97bc5b137be2fa">data</a></td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html#a49a22390c106447a704874b9f54a8a71">increment</a>() noexcept</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">private</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html#aa91166a39b2769755f342aed718fae79">operator()</a>() const noexcept</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html#a44f4437784b1ca8d44b7f2ee297fb0ef">set</a>(std::string_view) noexcept</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html#a5e705b3e676597a2e2cb5a06674f76cc">set</a>(char **_data) noexcept</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html#a7f7a3c10c8cbb9f64b38efe7a2f25d51">size</a></td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>Binding</b>(const Converter &amp;_converter) noexcept (defined in <a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a>)</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">explicit</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>operator()</b>() const noexcept (defined in <a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a>)</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>set</b>(std::string_view) noexcept (defined in <a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a>)</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>set</b>(char **_data) noexcept (defined in <a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a>)</td><td class="entry"><a class="el" href="classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html">lucid::argparse::Binding&lt; Converter, -1ul &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

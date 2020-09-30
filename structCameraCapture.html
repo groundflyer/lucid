@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -97,130 +103,24 @@ Collaboration diagram for CameraCapture:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4074e0c61cd655090bb470df9f029e9a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a68def036f0ebb1d1ca46ef084c784fe3">Mat4</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCameraCapture.html#a4074e0c61cd655090bb470df9f029e9a">get_transform</a> (int key) const noexcept</td></tr>
+<tr class="memitem:a4074e0c61cd655090bb470df9f029e9a"><td class="memItemLeft" align="right" valign="top"><a id="a4074e0c61cd655090bb470df9f029e9a"></a>
+<a class="el" href="classlucid_1_1Matrix.html">Mat4</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_transform</b> (int key) const noexcept</td></tr>
 <tr class="separator:a4074e0c61cd655090bb470df9f029e9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a141ee9008316da057abc6a92325fb1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlucid_1_1perspective_1_1shoot.html">perspective::shoot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCameraCapture.html#a7a141ee9008316da057abc6a92325fb1">operator()</a> (int key, int action, int) noexcept</td></tr>
+<tr class="memitem:a7a141ee9008316da057abc6a92325fb1"><td class="memItemLeft" align="right" valign="top"><a id="a7a141ee9008316da057abc6a92325fb1"></a>
+<a class="el" href="structlucid_1_1perspective_1_1shoot.html">perspective::shoot</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (int key, int action, int) noexcept</td></tr>
 <tr class="separator:a7a141ee9008316da057abc6a92325fb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab7f4159de6d11d9f908276e6548d658"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="lucid_8cpp.html#a6183ac6a3e68656f790e96ced506ab7b">Image</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCameraCapture.html#aab7f4159de6d11d9f908276e6548d658">operator()</a> (<a class="el" href="lucid_8cpp.html#a52bd9688644e9d652dc21a2b7193aa72">FilmRGBA</a> &amp;film) noexcept</td></tr>
+<tr class="memitem:aab7f4159de6d11d9f908276e6548d658"><td class="memItemLeft" align="right" valign="top"><a id="aab7f4159de6d11d9f908276e6548d658"></a>
+const <a class="el" href="classlucid_1_1ScanlineImage.html">Image</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (<a class="el" href="structlucid_1_1Film.html">FilmRGBA</a> &amp;film) noexcept</td></tr>
 <tr class="separator:aab7f4159de6d11d9f908276e6548d658"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a8e46d3c50fdbdc3c863440d713097409"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlucid_1_1perspective_1_1shoot.html">perspective::shoot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCameraCapture.html#a8e46d3c50fdbdc3c863440d713097409">cam</a></td></tr>
+<tr class="memitem:a8e46d3c50fdbdc3c863440d713097409"><td class="memItemLeft" align="right" valign="top"><a id="a8e46d3c50fdbdc3c863440d713097409"></a>
+<a class="el" href="structlucid_1_1perspective_1_1shoot.html">perspective::shoot</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cam</b></td></tr>
 <tr class="separator:a8e46d3c50fdbdc3c863440d713097409"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a4074e0c61cd655090bb470df9f029e9a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4074e0c61cd655090bb470df9f029e9a">&#9670;&nbsp;</a></span>get_transform()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a68def036f0ebb1d1ca46ef084c784fe3">Mat4</a> CameraCapture::get_transform </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>key</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7a141ee9008316da057abc6a92325fb1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a141ee9008316da057abc6a92325fb1">&#9670;&nbsp;</a></span>operator()() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structlucid_1_1perspective_1_1shoot.html">perspective::shoot</a> CameraCapture::operator() </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>key</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>action</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aab7f4159de6d11d9f908276e6548d658"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab7f4159de6d11d9f908276e6548d658">&#9670;&nbsp;</a></span>operator()() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="lucid_8cpp.html#a6183ac6a3e68656f790e96ced506ab7b">Image</a>&amp; CameraCapture::operator() </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="lucid_8cpp.html#a52bd9688644e9d652dc21a2b7193aa72">FilmRGBA</a> &amp;&#160;</td>
-          <td class="paramname"><em>film</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a8e46d3c50fdbdc3c863440d713097409"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e46d3c50fdbdc3c863440d713097409">&#9670;&nbsp;</a></span>cam</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structlucid_1_1perspective_1_1shoot.html">perspective::shoot</a> CameraCapture::cam</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>tests/<a class="el" href="viewport_8cpp.html">viewport.cpp</a></li>
+<li>tests/viewport.cpp</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

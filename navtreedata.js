@@ -2,52 +2,28 @@ var NAVTREE =
 [
   [ "Lucid", "index.html", [
     [ "Development documentation", "index.html", null ],
-    [ "Test List", "test.html", null ],
-    [ "Namespaces", null, [
-      [ "Namespace List", "namespaces.html", "namespaces" ],
-      [ "Namespace Members", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", "namespacemembers_dup" ],
-        [ "Functions", "namespacemembers_func.html", "namespacemembers_func" ],
-        [ "Variables", "namespacemembers_vars.html", null ],
-        [ "Typedefs", "namespacemembers_type.html", null ]
-      ] ]
-    ] ],
+    [ "Bibliography", "citelist.html", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
-        [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", "functions_vars" ],
-        [ "Typedefs", "functions_type.html", null ],
-        [ "Enumerations", "functions_enum.html", null ],
-        [ "Enumerator", "functions_eval.html", null ],
-        [ "Related Functions", "functions_rela.html", null ]
+        [ "All", "functions.html", null ],
+        [ "Functions", "functions_func.html", null ]
       ] ]
     ] ],
     [ "Files", null, [
-      [ "File List", "files.html", "files" ],
-      [ "File Members", "globals.html", [
-        [ "All", "globals.html", null ],
-        [ "Functions", "globals_func.html", null ],
-        [ "Variables", "globals_vars.html", null ],
-        [ "Typedefs", "globals_type.html", null ],
-        [ "Macros", "globals_defs.html", null ]
-      ] ]
+      [ "File List", "files.html", "files" ]
     ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"aabb_8hpp.html",
-"classlucid_1_1NormalN__.html#a7b4e83b35c73f5a979553cbfbc1c7aa6",
-"classlucid_1_1detail_1_1__Viewport.html#a187846ed9073fc6f616678a4fb95770b",
-"functions_w.html",
-"structArgvMock.html#a3a2f6b4a0ccdac3f24a26a83f24e92ff",
-"structlucid_1_1detail_1_1__Viewport_1_1Handler.html#aca9bf3b4c07690f383ec2fd68697ce78",
-"vector__operators_8hpp.html#afb8a02500add580ba3c5b30efa46b9d5"
+".html",
+"classlucid_1_1StaticSpan.html#aafe41c16b95a771e28738d3fa373189b",
+"structfmt_1_1formatter_3_01lucid_1_1argparse_1_1detail_1_1fmt__data_3_01std_1_1tuple_3_01Options4ef399db7b77ecc75752d8a2ef56743f.html#aa52ef85daf1b4bc289764142198d7d41",
+"transforms_8hpp.html#ac9b4585ec3c1ad390e940db8a3fd7d9d"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

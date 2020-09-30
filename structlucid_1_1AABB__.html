@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -88,8 +94,6 @@ $(document).ready(function(){initNavTree('structlucid_1_1AABB__.html','');});
 <div class="title">lucid::AABB_&lt; Container &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="aabb_8hpp_source.html">aabb.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for lucid::AABB_&lt; Container &gt;:</div>
 <div class="dyncontent">
@@ -99,214 +103,30 @@ Collaboration diagram for lucid::AABB_&lt; Container &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2d2266de286cddcfdf91053954ff9b5d"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1AABB__.html#a2d2266de286cddcfdf91053954ff9b5d">AABB_</a> () noexcept</td></tr>
-<tr class="separator:a2d2266de286cddcfdf91053954ff9b5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8298909b3e93ecb38e310758f4642f06"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
-<tr class="memitem:a8298909b3e93ecb38e310758f4642f06"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structlucid_1_1AABB__.html#a8298909b3e93ecb38e310758f4642f06">AABB_</a> (const <a class="el" href="namespacelucid.html#a063ae7aa12a8696e54a6b000ce9c5f7e">Point_</a>&lt; Container1 &gt; &amp;_vmin, const <a class="el" href="namespacelucid.html#a063ae7aa12a8696e54a6b000ce9c5f7e">Point_</a>&lt; Container2 &gt; &amp;_vmax) noexcept</td></tr>
+<tr class="memitem:a8298909b3e93ecb38e310758f4642f06"><td class="memTemplParams" colspan="2"><a id="a8298909b3e93ecb38e310758f4642f06"></a>
+template&lt;template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
+<tr class="memitem:a8298909b3e93ecb38e310758f4642f06"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>AABB_</b> (const <a class="el" href="classlucid_1_1PointN__.html">Point_</a>&lt; Container1 &gt; &amp;_vmin, const <a class="el" href="classlucid_1_1PointN__.html">Point_</a>&lt; Container2 &gt; &amp;_vmax) noexcept</td></tr>
 <tr class="separator:a8298909b3e93ecb38e310758f4642f06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7c73962728af58e72bb0ba5c4ae959c"><td class="memItemLeft" align="right" valign="top">constexpr const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1AABB__.html#ae7c73962728af58e72bb0ba5c4ae959c">operator[]</a> (const bool i) const noexcept</td></tr>
+<tr class="memitem:ae7c73962728af58e72bb0ba5c4ae959c"><td class="memItemLeft" align="right" valign="top"><a id="ae7c73962728af58e72bb0ba5c4ae959c"></a>
+constexpr const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (const bool i) const noexcept</td></tr>
 <tr class="separator:ae7c73962728af58e72bb0ba5c4ae959c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a343cbe535bdb89609ab3154e50c62401"><td class="memItemLeft" align="right" valign="top">constexpr auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1AABB__.html#a343cbe535bdb89609ab3154e50c62401">operator[]</a> (const bool i) noexcept</td></tr>
+<tr class="memitem:a343cbe535bdb89609ab3154e50c62401"><td class="memItemLeft" align="right" valign="top"><a id="a343cbe535bdb89609ab3154e50c62401"></a>
+constexpr auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (const bool i) noexcept</td></tr>
 <tr class="separator:a343cbe535bdb89609ab3154e50c62401"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a110e5e5b27f7d7457d3022b010bb4f9a"><td class="memTemplParams" colspan="2">template&lt;typename Idxs &gt; </td></tr>
-<tr class="memitem:a110e5e5b27f7d7457d3022b010bb4f9a"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structlucid_1_1AABB__.html#a110e5e5b27f7d7457d3022b010bb4f9a">operator[]</a> (const Idxs &amp;idxs) const noexcept</td></tr>
+<tr class="memitem:a110e5e5b27f7d7457d3022b010bb4f9a"><td class="memTemplParams" colspan="2"><a id="a110e5e5b27f7d7457d3022b010bb4f9a"></a>
+template&lt;typename Idxs &gt; </td></tr>
+<tr class="memitem:a110e5e5b27f7d7457d3022b010bb4f9a"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator[]</b> (const Idxs &amp;idxs) const noexcept</td></tr>
 <tr class="separator:a110e5e5b27f7d7457d3022b010bb4f9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:af01afd9bb7f2bed91bad53523a6dfadf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a063ae7aa12a8696e54a6b000ce9c5f7e">Point_</a>&lt; Container &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1AABB__.html#af01afd9bb7f2bed91bad53523a6dfadf">vmin</a></td></tr>
+<tr class="memitem:af01afd9bb7f2bed91bad53523a6dfadf"><td class="memItemLeft" align="right" valign="top"><a id="af01afd9bb7f2bed91bad53523a6dfadf"></a>
+<a class="el" href="classlucid_1_1PointN__.html">Point_</a>&lt; Container &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vmin</b></td></tr>
 <tr class="separator:af01afd9bb7f2bed91bad53523a6dfadf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad884c0f11e07ff275b7920cf58abf7cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a063ae7aa12a8696e54a6b000ce9c5f7e">Point_</a>&lt; Container &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1AABB__.html#ad884c0f11e07ff275b7920cf58abf7cb">vmax</a></td></tr>
+<tr class="memitem:ad884c0f11e07ff275b7920cf58abf7cb"><td class="memItemLeft" align="right" valign="top"><a id="ad884c0f11e07ff275b7920cf58abf7cb"></a>
+<a class="el" href="classlucid_1_1PointN__.html">Point_</a>&lt; Container &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vmax</b></td></tr>
 <tr class="separator:ad884c0f11e07ff275b7920cf58abf7cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a2d2266de286cddcfdf91053954ff9b5d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d2266de286cddcfdf91053954ff9b5d">&#9670;&nbsp;</a></span>AABB_() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1AABB__.html">lucid::AABB_</a>&lt; Container &gt;::<a class="el" href="structlucid_1_1AABB__.html">AABB_</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8298909b3e93ecb38e310758f4642f06"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8298909b3e93ecb38e310758f4642f06">&#9670;&nbsp;</a></span>AABB_() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1AABB__.html">lucid::AABB_</a>&lt; Container &gt;::<a class="el" href="structlucid_1_1AABB__.html">AABB_</a> </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#a063ae7aa12a8696e54a6b000ce9c5f7e">Point_</a>&lt; Container1 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>_vmin</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#a063ae7aa12a8696e54a6b000ce9c5f7e">Point_</a>&lt; Container2 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>_vmax</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae7c73962728af58e72bb0ba5c4ae959c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae7c73962728af58e72bb0ba5c4ae959c">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr const auto&amp; <a class="el" href="structlucid_1_1AABB__.html">lucid::AABB_</a>&lt; Container &gt;::operator[] </td>
-          <td>(</td>
-          <td class="paramtype">const bool&#160;</td>
-          <td class="paramname"><em>i</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a343cbe535bdb89609ab3154e50c62401"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a343cbe535bdb89609ab3154e50c62401">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto&amp; <a class="el" href="structlucid_1_1AABB__.html">lucid::AABB_</a>&lt; Container &gt;::operator[] </td>
-          <td>(</td>
-          <td class="paramtype">const bool&#160;</td>
-          <td class="paramname"><em>i</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a110e5e5b27f7d7457d3022b010bb4f9a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a110e5e5b27f7d7457d3022b010bb4f9a">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-<div class="memtemplate">
-template&lt;typename Idxs &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto <a class="el" href="structlucid_1_1AABB__.html">lucid::AABB_</a>&lt; Container &gt;::operator[] </td>
-          <td>(</td>
-          <td class="paramtype">const Idxs &amp;&#160;</td>
-          <td class="paramname"><em>idxs</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="ad884c0f11e07ff275b7920cf58abf7cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad884c0f11e07ff275b7920cf58abf7cb">&#9670;&nbsp;</a></span>vmax</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a063ae7aa12a8696e54a6b000ce9c5f7e">Point_</a>&lt;Container&gt; <a class="el" href="structlucid_1_1AABB__.html">lucid::AABB_</a>&lt; Container &gt;::vmax</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af01afd9bb7f2bed91bad53523a6dfadf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af01afd9bb7f2bed91bad53523a6dfadf">&#9670;&nbsp;</a></span>vmin</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a063ae7aa12a8696e54a6b000ce9c5f7e">Point_</a>&lt;Container&gt; <a class="el" href="structlucid_1_1AABB__.html">lucid::AABB_</a>&lt; Container &gt;::vmin</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>ray_traversal/primitives/<a class="el" href="aabb_8hpp_source.html">aabb.hpp</a></li>
 </ul>
@@ -315,7 +135,7 @@ template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="structlucid_1_1AABB__.html">AABB_</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="structlucid_1_1AABB__.html">AABB_</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

@@ -11,6 +11,5 @@ var files =
     [ "sampling", "dir_135820457b1e8e8dc5343e26fb29c1f8.html", "dir_135820457b1e8e8dc5343e26fb29c1f8" ],
     [ "scene", "dir_fd40b43fc4c1e00689c4b0cc7f9f9515.html", "dir_fd40b43fc4c1e00689c4b0cc7f9f9515" ],
     [ "tests", "dir_59425e443f801f1f2fd8bbe4959a3ccf.html", "dir_59425e443f801f1f2fd8bbe4959a3ccf" ],
-    [ "utils", "dir_cbdb8362360e11eafe2fa3bc74cf0ffd.html", "dir_cbdb8362360e11eafe2fa3bc74cf0ffd" ],
-    [ "lucid.cpp", "lucid_8cpp.html", "lucid_8cpp" ]
+    [ "utils", "dir_cbdb8362360e11eafe2fa3bc74cf0ffd.html", "dir_cbdb8362360e11eafe2fa3bc74cf0ffd" ]
 ];

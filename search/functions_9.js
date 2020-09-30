@@ -1,20 +1,4 @@
 var searchData=
 [
-  ['identity',['identity',['../classlucid_1_1Matrix.html#ab57fd922f8d9074fc7fb07bacf8a8e5e',1,'lucid::Matrix']]],
-  ['inclusive_5frange',['inclusive_range',['../namespacelucid.html#a064237379d725d0259a5f5738cdf8d05',1,'lucid']]],
-  ['increment',['increment',['../classlucid_1_1argparse_1_1Binding.html#a592a1c9760b91fafc18c610823141dca',1,'lucid::argparse::Binding::increment()'],['../classlucid_1_1argparse_1_1Binding_3_01Converter_00_01-1ul_01_4.html#a49a22390c106447a704874b9f54a8a71',1,'lucid::argparse::Binding&lt; Converter, -1ul &gt;::increment()']]],
-  ['index',['index',['../structlucid_1_1typelist.html#aa8860a1126ff329d147c8c5e161eeb46',1,'lucid::typelist']]],
-  ['index_5fimpl',['index_impl',['../namespacelucid_1_1detail.html#a50f9ec69e75d4442a6f10718adb1379b',1,'lucid::detail']]],
-  ['indices',['indices',['../classlucid_1_1Matrix.html#ac71e84e3045352a467234d80c217c3c5',1,'lucid::Matrix']]],
-  ['info',['info',['../classlucid_1_1Logger.html#ae924ba6f2f03bb8fe2a3ce4f9f523f03',1,'lucid::Logger']]],
-  ['init',['init',['../classlucid_1_1detail_1_1__Viewport.html#a678592ba2fa0e8fa901ab39bde7569d4',1,'lucid::detail::_Viewport']]],
-  ['intersect',['intersect',['../namespacelucid.html#af177d30b5367c90854dc68107d1489f4',1,'lucid::intersect(const Ray_&lt; RayContainer &gt; &amp;ray, const AABB_&lt; AABBContainer &gt; &amp;prim) noexcept'],['../namespacelucid.html#ae89b5435d4f9cfb64d14361c929507ca',1,'lucid::intersect(const Ray_&lt; RayContainer &gt; &amp;ray, const Disk_&lt; DiskContainer &gt; &amp;prim) noexcept'],['../namespacelucid.html#a032db082403d56d54e8c764d372c0ef6',1,'lucid::intersect(const Ray_&lt; RayContainer &gt; &amp;ray, const std::variant&lt; Prims... &gt; &amp;prim) noexcept'],['../namespacelucid.html#aeb0ff0a068ff1a29ee7e50e881b0d299',1,'lucid::intersect(const Ray_&lt; RayContainer &gt; &amp;ray, const Quad_&lt; QuadContainer &gt; &amp;prim) noexcept'],['../namespacelucid.html#aa7ded9aa0440d1ec94c521fb1c7a1f95',1,'lucid::intersect(const Ray_&lt; RayContainer &gt; &amp;ray, const Sphere_&lt; SphereContainer &gt; &amp;prim) noexcept'],['../namespacelucid.html#ad3f0777b5fe7ff5de4befba02cd8bc6e',1,'lucid::intersect(const Ray_&lt; RayContainer &gt; &amp;ray, const Triangle_&lt; TriangleContainer &gt; &amp;prim) noexcept']]],
-  ['intersection_5f',['Intersection_',['../structlucid_1_1Intersection__.html#a3df6b5f931ff676f86b078e00d188d9c',1,'lucid::Intersection_::Intersection_() noexcept'],['../structlucid_1_1Intersection__.html#ac49c8f880b309255295e96690b122601',1,'lucid::Intersection_::Intersection_(const bool _intersect, const real &amp;_t, const Vec2_&lt; Container2 &gt; &amp;_st) noexcept'],['../namespacelucid.html#ad8af2a7cf354d25ff3673e25ce8fa8ac',1,'lucid::Intersection_()']]],
-  ['inverse',['inverse',['../namespacelucid.html#a9d56816e3484f59ce324448a832a7ea0',1,'lucid']]],
-  ['inversion_5fnumber',['inversion_number',['../namespacelucid.html#a3352a58127d45c4962e47ef0db505218',1,'lucid']]],
-  ['invert_5ffov',['invert_fov',['../namespacelucid.html#a175557bb9a21a9905208e82f243f1477',1,'lucid']]],
-  ['invoker',['Invoker',['../structlucid_1_1detail_1_1ComposeOp_1_1Invoker.html#a418a6e2911b1b92fc4f0394eb93454cd',1,'lucid::detail::ComposeOp::Invoker::Invoker() noexcept'],['../structlucid_1_1detail_1_1ComposeOp_1_1Invoker.html#ab127ce788ab547ee9827248e70f04e4e',1,'lucid::detail::ComposeOp::Invoker::Invoker(const Invoker &amp;other) noexcept'],['../structlucid_1_1detail_1_1ComposeOp_1_1Invoker.html#aaf7e5f96f1c0e491549c827443cc7ccf',1,'lucid::detail::ComposeOp::Invoker::Invoker(Invoker &amp;&amp;other) noexcept'],['../structlucid_1_1detail_1_1ComposeOp_1_1Invoker.html#a2fb01220c00773f06bdef6116894afec',1,'lucid::detail::ComposeOp::Invoker::Invoker(LHS _lhs, RHS _rhs) noexcept']]],
-  ['is_5feven',['is_even',['../namespacelucid.html#a37f3876543b2089193526c0b527fce5a',1,'lucid']]],
-  ['isfinite',['isfinite',['../namespacelucid.html#a9ab0c82a19803bef1a272e0b15300679',1,'lucid']]],
-  ['iter_5ftest',['iter_test',['../image_8cpp.html#a70405016b75a7cda64731796d6077dce',1,'image.cpp']]]
+  ['normalize',['normalize',['../vector__operators_8hpp.html#ace469f9cd361998730146348fb4c5f81',1,'lucid']]]
 ];

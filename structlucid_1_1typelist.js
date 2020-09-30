@@ -11,8 +11,5 @@ var structlucid_1_1typelist =
     [ "variant", "structlucid_1_1typelist.html#ac0625134f8d54b1e5c9876cf4132cfcc", null ],
     [ "typelist", "structlucid_1_1typelist.html#ab118314263fc087b7aeb0ef7a307636c", null ],
     [ "typelist", "structlucid_1_1typelist.html#aaab71eab284f9781f670047feefdbf0e", null ],
-    [ "typelist", "structlucid_1_1typelist.html#a0d30187b243a4ecc5515b2f18ded2008", null ],
-    [ "index", "structlucid_1_1typelist.html#aa8860a1126ff329d147c8c5e161eeb46", null ],
-    [ "same", "structlucid_1_1typelist.html#a04767b957b16883ab57634aae709c471", null ],
-    [ "size", "structlucid_1_1typelist.html#a74d2327bacbe164122a90b8d179220da", null ]
+    [ "typelist", "structlucid_1_1typelist.html#a0d30187b243a4ecc5515b2f18ded2008", null ]
 ];

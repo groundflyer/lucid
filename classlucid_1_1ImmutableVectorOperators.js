@@ -11,7 +11,6 @@ var classlucid_1_1ImmutableVectorOperators =
     [ "operator-", "classlucid_1_1ImmutableVectorOperators.html#a25cd5660845f49a81a5ec96cc421ea81", null ],
     [ "operator/", "classlucid_1_1ImmutableVectorOperators.html#a9c28eb00c17ed45f37ca9e05332f7bf4", null ],
     [ "operator/", "classlucid_1_1ImmutableVectorOperators.html#a8362e14362bc7d4ab5ac1cd163313d94", null ],
-    [ "this_vec", "classlucid_1_1ImmutableVectorOperators.html#a47cdf25ae6fbe00011107d0b35b4a74e", null ],
     [ "operator!", "classlucid_1_1ImmutableVectorOperators.html#a0b91096afce6df8f78789f187cc5dd15", null ],
     [ "operator!=", "classlucid_1_1ImmutableVectorOperators.html#af41219549c7fb1606119f00933215378", null ],
     [ "operator!=", "classlucid_1_1ImmutableVectorOperators.html#a8e75d6ecdd7af6f29d02931c6c1b882b", null ],

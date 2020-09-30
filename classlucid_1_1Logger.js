@@ -13,11 +13,5 @@ var classlucid_1_1Logger =
     [ "debug", "classlucid_1_1Logger.html#a33db9f2a6d006d6997d8b65c5f7f2ae5", null ],
     [ "error", "classlucid_1_1Logger.html#aa404486f112a19beab55fb446328b1bb", null ],
     [ "info", "classlucid_1_1Logger.html#ae924ba6f2f03bb8fe2a3ce4f9f523f03", null ],
-    [ "message", "classlucid_1_1Logger.html#a11fb3836341767cdd8936045abca2dd2", null ],
-    [ "message", "classlucid_1_1Logger.html#abeb198a98efe61d63a57ac3b27c5a062", null ],
-    [ "submessage", "classlucid_1_1Logger.html#a81cd6c09b7cc8eb8f021d3a8d40b9b2d", null ],
-    [ "timestamp", "classlucid_1_1Logger.html#a3934063a32e3f4329208b61565d1e185", null ],
-    [ "warning", "classlucid_1_1Logger.html#a8205355ff9aaab5ba8e01ba588a2c08c", null ],
-    [ "flush", "classlucid_1_1Logger.html#a61e5fa1e7eae9919b7ac71e5698ea53e", null ],
-    [ "lvl", "classlucid_1_1Logger.html#a680acaf2183afd55466cecadf11aaee1", null ]
+    [ "warning", "classlucid_1_1Logger.html#a8205355ff9aaab5ba8e01ba588a2c08c", null ]
 ];

@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -88,219 +94,33 @@ $(document).ready(function(){initNavTree('structlucid_1_1detail_1_1fold__wrapper
 <div class="title">lucid::detail::fold_wrapper&lt; BinaryOp, LeftOperand &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="tuple_8hpp_source.html">tuple.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a874527e4b3fa7b28e89604d20b55b2f3"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html#a874527e4b3fa7b28e89604d20b55b2f3">fold_wrapper</a> (BinaryOp _op, const LeftOperand &amp;_operand)</td></tr>
+<tr class="memitem:a874527e4b3fa7b28e89604d20b55b2f3"><td class="memItemLeft" align="right" valign="top"><a id="a874527e4b3fa7b28e89604d20b55b2f3"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>fold_wrapper</b> (BinaryOp _op, const LeftOperand &amp;_operand)</td></tr>
 <tr class="separator:a874527e4b3fa7b28e89604d20b55b2f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a374eb5d0af085d592e65ceee402f13a6"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html#a374eb5d0af085d592e65ceee402f13a6">fold_wrapper</a> ()=delete</td></tr>
-<tr class="separator:a374eb5d0af085d592e65ceee402f13a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac14d475f0d946605d6617d621e470caf"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html#ac14d475f0d946605d6617d621e470caf">fold_wrapper</a> (const <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">fold_wrapper</a> &amp;)=delete</td></tr>
+<tr class="memitem:ac14d475f0d946605d6617d621e470caf"><td class="memItemLeft" align="right" valign="top"><a id="ac14d475f0d946605d6617d621e470caf"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>fold_wrapper</b> (const <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">fold_wrapper</a> &amp;)=delete</td></tr>
 <tr class="separator:ac14d475f0d946605d6617d621e470caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac21e72070439329fdc7dd8b0c4632c14"><td class="memTemplParams" colspan="2">template&lt;typename RightOperand &gt; </td></tr>
-<tr class="memitem:ac21e72070439329fdc7dd8b0c4632c14"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html#ac21e72070439329fdc7dd8b0c4632c14">operator%</a> (const <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">fold_wrapper</a>&lt; BinaryOp, RightOperand &gt; &amp;rhs) const noexcept</td></tr>
+<tr class="memitem:ac21e72070439329fdc7dd8b0c4632c14"><td class="memTemplParams" colspan="2"><a id="ac21e72070439329fdc7dd8b0c4632c14"></a>
+template&lt;typename RightOperand &gt; </td></tr>
+<tr class="memitem:ac21e72070439329fdc7dd8b0c4632c14"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator%</b> (const <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">fold_wrapper</a>&lt; BinaryOp, RightOperand &gt; &amp;rhs) const noexcept</td></tr>
 <tr class="separator:ac21e72070439329fdc7dd8b0c4632c14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12eb22fd1cba717463b0f2deac58f95f"><td class="memTemplParams" colspan="2">template&lt;typename RightOperand &gt; </td></tr>
-<tr class="memitem:a12eb22fd1cba717463b0f2deac58f95f"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html#a12eb22fd1cba717463b0f2deac58f95f">operator%</a> (const <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">fold_wrapper</a>&lt; BinaryOp, RightOperand &gt; &amp;rhs) noexcept</td></tr>
+<tr class="memitem:a12eb22fd1cba717463b0f2deac58f95f"><td class="memTemplParams" colspan="2"><a id="a12eb22fd1cba717463b0f2deac58f95f"></a>
+template&lt;typename RightOperand &gt; </td></tr>
+<tr class="memitem:a12eb22fd1cba717463b0f2deac58f95f"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator%</b> (const <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">fold_wrapper</a>&lt; BinaryOp, RightOperand &gt; &amp;rhs) noexcept</td></tr>
 <tr class="separator:a12eb22fd1cba717463b0f2deac58f95f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a1e04969aecb30256f47fac1a7f365d3c"><td class="memItemLeft" align="right" valign="top">BinaryOp&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html#a1e04969aecb30256f47fac1a7f365d3c">op</a></td></tr>
+<tr class="memitem:a1e04969aecb30256f47fac1a7f365d3c"><td class="memItemLeft" align="right" valign="top"><a id="a1e04969aecb30256f47fac1a7f365d3c"></a>
+BinaryOp&#160;</td><td class="memItemRight" valign="bottom"><b>op</b></td></tr>
 <tr class="separator:a1e04969aecb30256f47fac1a7f365d3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37c4fe38a4c6faa924e958fc13215d24"><td class="memItemLeft" align="right" valign="top">LeftOperand&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html#a37c4fe38a4c6faa924e958fc13215d24">operand</a></td></tr>
+<tr class="memitem:a37c4fe38a4c6faa924e958fc13215d24"><td class="memItemLeft" align="right" valign="top"><a id="a37c4fe38a4c6faa924e958fc13215d24"></a>
+LeftOperand&#160;</td><td class="memItemRight" valign="bottom"><b>operand</b></td></tr>
 <tr class="separator:a37c4fe38a4c6faa924e958fc13215d24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a874527e4b3fa7b28e89604d20b55b2f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a874527e4b3fa7b28e89604d20b55b2f3">&#9670;&nbsp;</a></span>fold_wrapper() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename BinaryOp, typename LeftOperand&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">lucid::detail::fold_wrapper</a>&lt; BinaryOp, LeftOperand &gt;::<a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">fold_wrapper</a> </td>
-          <td>(</td>
-          <td class="paramtype">BinaryOp&#160;</td>
-          <td class="paramname"><em>_op</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const LeftOperand &amp;&#160;</td>
-          <td class="paramname"><em>_operand</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a374eb5d0af085d592e65ceee402f13a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a374eb5d0af085d592e65ceee402f13a6">&#9670;&nbsp;</a></span>fold_wrapper() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename BinaryOp, typename LeftOperand&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">lucid::detail::fold_wrapper</a>&lt; BinaryOp, LeftOperand &gt;::<a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">fold_wrapper</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac14d475f0d946605d6617d621e470caf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac14d475f0d946605d6617d621e470caf">&#9670;&nbsp;</a></span>fold_wrapper() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename BinaryOp, typename LeftOperand&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">lucid::detail::fold_wrapper</a>&lt; BinaryOp, LeftOperand &gt;::<a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">fold_wrapper</a> </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">fold_wrapper</a>&lt; BinaryOp, LeftOperand &gt; &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac21e72070439329fdc7dd8b0c4632c14"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac21e72070439329fdc7dd8b0c4632c14">&#9670;&nbsp;</a></span>operator%() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename BinaryOp, typename LeftOperand&gt; </div>
-<div class="memtemplate">
-template&lt;typename RightOperand &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">lucid::detail::fold_wrapper</a>&lt; BinaryOp, LeftOperand &gt;::operator% </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">fold_wrapper</a>&lt; BinaryOp, RightOperand &gt; &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a12eb22fd1cba717463b0f2deac58f95f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a12eb22fd1cba717463b0f2deac58f95f">&#9670;&nbsp;</a></span>operator%() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename BinaryOp, typename LeftOperand&gt; </div>
-<div class="memtemplate">
-template&lt;typename RightOperand &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">lucid::detail::fold_wrapper</a>&lt; BinaryOp, LeftOperand &gt;::operator% </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">fold_wrapper</a>&lt; BinaryOp, RightOperand &gt; &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a1e04969aecb30256f47fac1a7f365d3c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e04969aecb30256f47fac1a7f365d3c">&#9670;&nbsp;</a></span>op</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename BinaryOp, typename LeftOperand&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">BinaryOp <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">lucid::detail::fold_wrapper</a>&lt; BinaryOp, LeftOperand &gt;::op</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a37c4fe38a4c6faa924e958fc13215d24"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37c4fe38a4c6faa924e958fc13215d24">&#9670;&nbsp;</a></span>operand</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename BinaryOp, typename LeftOperand&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">LeftOperand <a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">lucid::detail::fold_wrapper</a>&lt; BinaryOp, LeftOperand &gt;::operand</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>utils/<a class="el" href="tuple_8hpp_source.html">tuple.hpp</a></li>
 </ul>
@@ -309,7 +129,7 @@ template&lt;typename BinaryOp, typename LeftOperand&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="namespacelucid_1_1detail.html">detail</a></li><li class="navelem"><a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">fold_wrapper</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><b>detail</b></li><li class="navelem"><a class="el" href="structlucid_1_1detail_1_1fold__wrapper.html">fold_wrapper</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

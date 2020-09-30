@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -82,535 +88,55 @@ $(document).ready(function(){initNavTree('classlucid_1_1steady__tuple.html','');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-types">Private Types</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classlucid_1_1steady__tuple-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">lucid::steady_tuple&lt; Ts &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="steady__tuple_8hpp_source.html">steady_tuple.hpp</a>&gt;</code></p>
-<div class="dynheader">
-Collaboration diagram for lucid::steady_tuple&lt; Ts &gt;:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classlucid_1_1steady__tuple__coll__graph.svg" width="199" height="156"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac8e53d7c29b4cca7ee48fdfec0554f46"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#ac8e53d7c29b4cca7ee48fdfec0554f46">steady_tuple</a> ()=delete</td></tr>
-<tr class="separator:ac8e53d7c29b4cca7ee48fdfec0554f46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5cd329a66d24867045f3b497ef929fd1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#a5cd329a66d24867045f3b497ef929fd1">steady_tuple</a> (const <a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> &amp;)=delete</td></tr>
+<tr class="memitem:a5cd329a66d24867045f3b497ef929fd1"><td class="memItemLeft" align="right" valign="top"><a id="a5cd329a66d24867045f3b497ef929fd1"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>steady_tuple</b> (const <a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> &amp;)=delete</td></tr>
 <tr class="separator:a5cd329a66d24867045f3b497ef929fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61ceb8ea14caf69471498e677c808823"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#a61ceb8ea14caf69471498e677c808823">steady_tuple</a> (<a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> &amp;&amp;)=delete</td></tr>
+<tr class="memitem:a61ceb8ea14caf69471498e677c808823"><td class="memItemLeft" align="right" valign="top"><a id="a61ceb8ea14caf69471498e677c808823"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>steady_tuple</b> (<a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> &amp;&amp;)=delete</td></tr>
 <tr class="separator:a61ceb8ea14caf69471498e677c808823"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af54abc272e6d23f3e7edafca9e4c795a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#af54abc272e6d23f3e7edafca9e4c795a">operator=</a> (const <a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> &amp;)=delete</td></tr>
+<tr class="memitem:af54abc272e6d23f3e7edafca9e4c795a"><td class="memItemLeft" align="right" valign="top"><a id="af54abc272e6d23f3e7edafca9e4c795a"></a>
+<a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> &amp;)=delete</td></tr>
 <tr class="separator:af54abc272e6d23f3e7edafca9e4c795a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96de85231a93b969bda63236eea270d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#a96de85231a93b969bda63236eea270d0">operator=</a> (<a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> &amp;&amp;)=delete</td></tr>
+<tr class="memitem:a96de85231a93b969bda63236eea270d0"><td class="memItemLeft" align="right" valign="top"><a id="a96de85231a93b969bda63236eea270d0"></a>
+<a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> &amp;&amp;)=delete</td></tr>
 <tr class="separator:a96de85231a93b969bda63236eea270d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d08c5cb12d0950fe83f2164c118a037"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
-<tr class="memitem:a5d08c5cb12d0950fe83f2164c118a037"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#a5d08c5cb12d0950fe83f2164c118a037">steady_tuple</a> (Args &amp;&amp;... args)</td></tr>
+<tr class="memitem:a5d08c5cb12d0950fe83f2164c118a037"><td class="memTemplParams" colspan="2"><a id="a5d08c5cb12d0950fe83f2164c118a037"></a>
+template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:a5d08c5cb12d0950fe83f2164c118a037"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>steady_tuple</b> (Args &amp;&amp;... args)</td></tr>
 <tr class="separator:a5d08c5cb12d0950fe83f2164c118a037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4b311c375157ffd83a6a335aaa4a3bb"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
-<tr class="memitem:ac4b311c375157ffd83a6a335aaa4a3bb"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#ac4b311c375157ffd83a6a335aaa4a3bb">steady_tuple</a> (std::piecewise_construct_t pc, Args &amp;&amp;... args)</td></tr>
+<tr class="memitem:ac4b311c375157ffd83a6a335aaa4a3bb"><td class="memTemplParams" colspan="2"><a id="ac4b311c375157ffd83a6a335aaa4a3bb"></a>
+template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:ac4b311c375157ffd83a6a335aaa4a3bb"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>steady_tuple</b> (std::piecewise_construct_t pc, Args &amp;&amp;... args)</td></tr>
 <tr class="separator:ac4b311c375157ffd83a6a335aaa4a3bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3555ebe7cfc3527448ce5ee81d6bb40"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
-<tr class="memitem:ab3555ebe7cfc3527448ce5ee81d6bb40"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#ab3555ebe7cfc3527448ce5ee81d6bb40">steady_tuple</a> (<a class="el" href="structlucid_1_1uniform__init.html">uniform_init</a> ui, Args &amp;&amp;... args)</td></tr>
+<tr class="memitem:ab3555ebe7cfc3527448ce5ee81d6bb40"><td class="memTemplParams" colspan="2"><a id="ab3555ebe7cfc3527448ce5ee81d6bb40"></a>
+template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:ab3555ebe7cfc3527448ce5ee81d6bb40"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>steady_tuple</b> (<a class="el" href="structlucid_1_1uniform__init.html">uniform_init</a> ui, Args &amp;&amp;... args)</td></tr>
 <tr class="separator:ab3555ebe7cfc3527448ce5ee81d6bb40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba455fbd6501955fbb791381c17caf03"><td class="memTemplParams" colspan="2">template&lt;size_t I&gt; </td></tr>
-<tr class="memitem:aba455fbd6501955fbb791381c17caf03"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#aba455fbd6501955fbb791381c17caf03">get</a> () const noexcept</td></tr>
+<tr class="memitem:aba455fbd6501955fbb791381c17caf03"><td class="memTemplParams" colspan="2"><a id="aba455fbd6501955fbb791381c17caf03"></a>
+template&lt;size_t I&gt; </td></tr>
+<tr class="memitem:aba455fbd6501955fbb791381c17caf03"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get</b> () const noexcept</td></tr>
 <tr class="separator:aba455fbd6501955fbb791381c17caf03"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7444e9a4b054eedc565aac534db45b83"><td class="memTemplParams" colspan="2">template&lt;size_t I&gt; </td></tr>
-<tr class="memitem:a7444e9a4b054eedc565aac534db45b83"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#a7444e9a4b054eedc565aac534db45b83">get</a> () noexcept</td></tr>
+<tr class="memitem:a7444e9a4b054eedc565aac534db45b83"><td class="memTemplParams" colspan="2"><a id="a7444e9a4b054eedc565aac534db45b83"></a>
+template&lt;size_t I&gt; </td></tr>
+<tr class="memitem:a7444e9a4b054eedc565aac534db45b83"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get</b> () noexcept</td></tr>
 <tr class="separator:a7444e9a4b054eedc565aac534db45b83"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba455fbd6501955fbb791381c17caf03"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aba455fbd6501955fbb791381c17caf03"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#aba455fbd6501955fbb791381c17caf03">get</a> () const noexcept</td></tr>
+<tr class="memitem:aba455fbd6501955fbb791381c17caf03"><td class="memTemplParams" colspan="2"><a id="aba455fbd6501955fbb791381c17caf03"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aba455fbd6501955fbb791381c17caf03"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get</b> () const noexcept</td></tr>
 <tr class="separator:aba455fbd6501955fbb791381c17caf03"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7444e9a4b054eedc565aac534db45b83"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a7444e9a4b054eedc565aac534db45b83"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#a7444e9a4b054eedc565aac534db45b83">get</a> () noexcept</td></tr>
+<tr class="memitem:a7444e9a4b054eedc565aac534db45b83"><td class="memTemplParams" colspan="2"><a id="a7444e9a4b054eedc565aac534db45b83"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a7444e9a4b054eedc565aac534db45b83"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get</b> () noexcept</td></tr>
 <tr class="separator:a7444e9a4b054eedc565aac534db45b83"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
-Private Types</h2></td></tr>
-<tr class="memitem:a15543be1e18ec57698eb008bc98eae41"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#a15543be1e18ec57698eb008bc98eae41">Tl</a> = <a class="el" href="structlucid_1_1typelist.html">typelist</a>&lt; Ts... &gt;</td></tr>
-<tr class="separator:a15543be1e18ec57698eb008bc98eae41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6aa5ac075722aede7abe97c232a2e0e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#ad6aa5ac075722aede7abe97c232a2e0e">Idxs</a> = typename <a class="el" href="structlucid_1_1typelist.html#ab22d6fb77a3dd29b9018f6d9f085e20c">Tl::indices</a></td></tr>
-<tr class="separator:ad6aa5ac075722aede7abe97c232a2e0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19365550ac0bcab7195942876bdce56b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#a19365550ac0bcab7195942876bdce56b">Data</a> = <a class="el" href="classlucid_1_1detail_1_1steady__tuple__impl.html">detail::steady_tuple_impl</a>&lt; <a class="el" href="classlucid_1_1steady__tuple.html#ad6aa5ac075722aede7abe97c232a2e0e">Idxs</a>, Ts... &gt;</td></tr>
-<tr class="separator:a19365550ac0bcab7195942876bdce56b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:ab837fbdffffe8d4852eb94047c62ae0f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlucid_1_1steady__tuple.html#a19365550ac0bcab7195942876bdce56b">Data</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1steady__tuple.html#ab837fbdffffe8d4852eb94047c62ae0f">data</a></td></tr>
-<tr class="separator:ab837fbdffffe8d4852eb94047c62ae0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a19365550ac0bcab7195942876bdce56b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a19365550ac0bcab7195942876bdce56b">&#9670;&nbsp;</a></span>Data</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::<a class="el" href="classlucid_1_1steady__tuple.html#a19365550ac0bcab7195942876bdce56b">Data</a> =  <a class="el" href="classlucid_1_1detail_1_1steady__tuple__impl.html">detail::steady_tuple_impl</a>&lt;<a class="el" href="classlucid_1_1steady__tuple.html#ad6aa5ac075722aede7abe97c232a2e0e">Idxs</a>, Ts...&gt;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad6aa5ac075722aede7abe97c232a2e0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6aa5ac075722aede7abe97c232a2e0e">&#9670;&nbsp;</a></span>Idxs</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::<a class="el" href="classlucid_1_1steady__tuple.html#ad6aa5ac075722aede7abe97c232a2e0e">Idxs</a> =  typename <a class="el" href="structlucid_1_1typelist.html#ab22d6fb77a3dd29b9018f6d9f085e20c">Tl::indices</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a15543be1e18ec57698eb008bc98eae41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a15543be1e18ec57698eb008bc98eae41">&#9670;&nbsp;</a></span>Tl</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::<a class="el" href="classlucid_1_1steady__tuple.html#a15543be1e18ec57698eb008bc98eae41">Tl</a> =  <a class="el" href="structlucid_1_1typelist.html">typelist</a>&lt;Ts...&gt;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ac8e53d7c29b4cca7ee48fdfec0554f46"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8e53d7c29b4cca7ee48fdfec0554f46">&#9670;&nbsp;</a></span>steady_tuple() <span class="overload">[1/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::<a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5cd329a66d24867045f3b497ef929fd1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5cd329a66d24867045f3b497ef929fd1">&#9670;&nbsp;</a></span>steady_tuple() <span class="overload">[2/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::<a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a>&lt; Ts &gt; &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a61ceb8ea14caf69471498e677c808823"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a61ceb8ea14caf69471498e677c808823">&#9670;&nbsp;</a></span>steady_tuple() <span class="overload">[3/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::<a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a>&lt; Ts &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5d08c5cb12d0950fe83f2164c118a037"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d08c5cb12d0950fe83f2164c118a037">&#9670;&nbsp;</a></span>steady_tuple() <span class="overload">[4/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<div class="memtemplate">
-template&lt;typename... Args&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::<a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> </td>
-          <td>(</td>
-          <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>args</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac4b311c375157ffd83a6a335aaa4a3bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4b311c375157ffd83a6a335aaa4a3bb">&#9670;&nbsp;</a></span>steady_tuple() <span class="overload">[5/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<div class="memtemplate">
-template&lt;typename... Args&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::<a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> </td>
-          <td>(</td>
-          <td class="paramtype">std::piecewise_construct_t&#160;</td>
-          <td class="paramname"><em>pc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>args</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab3555ebe7cfc3527448ce5ee81d6bb40"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab3555ebe7cfc3527448ce5ee81d6bb40">&#9670;&nbsp;</a></span>steady_tuple() <span class="overload">[6/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<div class="memtemplate">
-template&lt;typename... Args&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::<a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structlucid_1_1uniform__init.html">uniform_init</a>&#160;</td>
-          <td class="paramname"><em>ui</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>args</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="aba455fbd6501955fbb791381c17caf03"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba455fbd6501955fbb791381c17caf03">&#9670;&nbsp;</a></span>get() <span class="overload">[1/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<div class="memtemplate">
-template&lt;size_t I&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::get </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7444e9a4b054eedc565aac534db45b83"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7444e9a4b054eedc565aac534db45b83">&#9670;&nbsp;</a></span>get() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<div class="memtemplate">
-template&lt;size_t I&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::get </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aba455fbd6501955fbb791381c17caf03"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba455fbd6501955fbb791381c17caf03">&#9670;&nbsp;</a></span>get() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::get </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7444e9a4b054eedc565aac534db45b83"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7444e9a4b054eedc565aac534db45b83">&#9670;&nbsp;</a></span>get() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::get </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af54abc272e6d23f3e7edafca9e4c795a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af54abc272e6d23f3e7edafca9e4c795a">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a>&amp; <a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::operator= </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a>&lt; Ts &gt; &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a96de85231a93b969bda63236eea270d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96de85231a93b969bda63236eea270d0">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a>&amp; <a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::operator= </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a>&lt; Ts &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="ab837fbdffffe8d4852eb94047c62ae0f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab837fbdffffe8d4852eb94047c62ae0f">&#9670;&nbsp;</a></span>data</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1steady__tuple.html#a19365550ac0bcab7195942876bdce56b">Data</a> <a class="el" href="classlucid_1_1steady__tuple.html">lucid::steady_tuple</a>&lt; Ts &gt;::data</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>utils/<a class="el" href="steady__tuple_8hpp_source.html">steady_tuple.hpp</a></li>
 </ul>
@@ -619,7 +145,7 @@ template&lt;typename... Ts&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="classlucid_1_1steady__tuple.html">steady_tuple</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -85,15 +91,11 @@ $(document).ready(function(){initNavTree('classlucid_1_1Logger.html','');});
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classlucid_1_1Logger-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">lucid::Logger Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="logging_8hpp_source.html">logging.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for lucid::Logger:</div>
 <div class="dyncontent">
@@ -108,503 +110,49 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ac3d577a1488bd111c4467591f9cc6d30"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1Logger.html#ac3d577a1488bd111c4467591f9cc6d30">Level</a> { <br />
-&#160;&#160;<a class="el" href="classlucid_1_1Logger.html#ac3d577a1488bd111c4467591f9cc6d30adb5bbbcbc7b1f6f75b2f991e7a73c331">DEBUG</a> = 10, 
-<a class="el" href="classlucid_1_1Logger.html#ac3d577a1488bd111c4467591f9cc6d30af0985decdfa92611dc9962492e4669b9">INFO</a> = 20, 
-<a class="el" href="classlucid_1_1Logger.html#ac3d577a1488bd111c4467591f9cc6d30a093d0ee0d6b77775da7231bba77c0957">WARNING</a> = 30, 
-<a class="el" href="classlucid_1_1Logger.html#ac3d577a1488bd111c4467591f9cc6d30a09f2ec01b5c9934f2b3adceebda6683e">ERROR</a> = 40, 
+<tr class="memitem:ac3d577a1488bd111c4467591f9cc6d30"><td class="memItemLeft" align="right" valign="top"><a id="ac3d577a1488bd111c4467591f9cc6d30"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>Level</b> { <br />
+&#160;&#160;<b>DEBUG</b> = 10, 
+<b>INFO</b> = 20, 
+<b>WARNING</b> = 30, 
+<b>ERROR</b> = 40, 
 <br />
-&#160;&#160;<a class="el" href="classlucid_1_1Logger.html#ac3d577a1488bd111c4467591f9cc6d30a447c6793b11b2ebb3cbc67794cb05766">CRITICAL</a> = 50
+&#160;&#160;<b>CRITICAL</b> = 50
 <br />
  }</td></tr>
 <tr class="separator:ac3d577a1488bd111c4467591f9cc6d30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa3a3356cf470dd5983cbd0be645832b4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1Logger.html#aa3a3356cf470dd5983cbd0be645832b4">Logger</a> (const <a class="el" href="classlucid_1_1Logger.html#ac3d577a1488bd111c4467591f9cc6d30">Level</a> lvl_)</td></tr>
+<tr class="memitem:aa3a3356cf470dd5983cbd0be645832b4"><td class="memItemLeft" align="right" valign="top"><a id="aa3a3356cf470dd5983cbd0be645832b4"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Logger</b> (const Level lvl_)</td></tr>
 <tr class="separator:aa3a3356cf470dd5983cbd0be645832b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33db9f2a6d006d6997d8b65c5f7f2ae5"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
-<tr class="memitem:a33db9f2a6d006d6997d8b65c5f7f2ae5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1Logger.html#a33db9f2a6d006d6997d8b65c5f7f2ae5">debug</a> (Args &amp;&amp;... args) const noexcept</td></tr>
+<tr class="memitem:a33db9f2a6d006d6997d8b65c5f7f2ae5"><td class="memTemplParams" colspan="2"><a id="a33db9f2a6d006d6997d8b65c5f7f2ae5"></a>
+template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:a33db9f2a6d006d6997d8b65c5f7f2ae5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>debug</b> (Args &amp;&amp;... args) const noexcept</td></tr>
 <tr class="separator:a33db9f2a6d006d6997d8b65c5f7f2ae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae924ba6f2f03bb8fe2a3ce4f9f523f03"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
-<tr class="memitem:ae924ba6f2f03bb8fe2a3ce4f9f523f03"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1Logger.html#ae924ba6f2f03bb8fe2a3ce4f9f523f03">info</a> (Args &amp;&amp;... args) const noexcept</td></tr>
+<tr class="memitem:ae924ba6f2f03bb8fe2a3ce4f9f523f03"><td class="memTemplParams" colspan="2"><a id="ae924ba6f2f03bb8fe2a3ce4f9f523f03"></a>
+template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:ae924ba6f2f03bb8fe2a3ce4f9f523f03"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>info</b> (Args &amp;&amp;... args) const noexcept</td></tr>
 <tr class="separator:ae924ba6f2f03bb8fe2a3ce4f9f523f03"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8205355ff9aaab5ba8e01ba588a2c08c"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
-<tr class="memitem:a8205355ff9aaab5ba8e01ba588a2c08c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1Logger.html#a8205355ff9aaab5ba8e01ba588a2c08c">warning</a> (Args &amp;&amp;... args) const noexcept</td></tr>
+<tr class="memitem:a8205355ff9aaab5ba8e01ba588a2c08c"><td class="memTemplParams" colspan="2"><a id="a8205355ff9aaab5ba8e01ba588a2c08c"></a>
+template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:a8205355ff9aaab5ba8e01ba588a2c08c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>warning</b> (Args &amp;&amp;... args) const noexcept</td></tr>
 <tr class="separator:a8205355ff9aaab5ba8e01ba588a2c08c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa404486f112a19beab55fb446328b1bb"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
-<tr class="memitem:aa404486f112a19beab55fb446328b1bb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1Logger.html#aa404486f112a19beab55fb446328b1bb">error</a> (Args &amp;&amp;... args) const noexcept</td></tr>
+<tr class="memitem:aa404486f112a19beab55fb446328b1bb"><td class="memTemplParams" colspan="2"><a id="aa404486f112a19beab55fb446328b1bb"></a>
+template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:aa404486f112a19beab55fb446328b1bb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>error</b> (Args &amp;&amp;... args) const noexcept</td></tr>
 <tr class="separator:aa404486f112a19beab55fb446328b1bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49375ceb9dfbf28179bf260d2a4e87bf"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
-<tr class="memitem:a49375ceb9dfbf28179bf260d2a4e87bf"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1Logger.html#a49375ceb9dfbf28179bf260d2a4e87bf">critical</a> (Args &amp;&amp;... args) const noexcept</td></tr>
+<tr class="memitem:a49375ceb9dfbf28179bf260d2a4e87bf"><td class="memTemplParams" colspan="2"><a id="a49375ceb9dfbf28179bf260d2a4e87bf"></a>
+template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:a49375ceb9dfbf28179bf260d2a4e87bf"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>critical</b> (Args &amp;&amp;... args) const noexcept</td></tr>
 <tr class="separator:a49375ceb9dfbf28179bf260d2a4e87bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a61e5fa1e7eae9919b7ac71e5698ea53e"><td class="memItemLeft" align="right" valign="top">static const constexpr <a class="el" href="structlucid_1_1Logger_1_1Flush.html">Flush</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1Logger.html#a61e5fa1e7eae9919b7ac71e5698ea53e">flush</a> {}</td></tr>
+<tr class="memitem:a61e5fa1e7eae9919b7ac71e5698ea53e"><td class="memItemLeft" align="right" valign="top"><a id="a61e5fa1e7eae9919b7ac71e5698ea53e"></a>
+static const constexpr <a class="el" href="structlucid_1_1Logger_1_1Flush.html">Flush</a>&#160;</td><td class="memItemRight" valign="bottom"><b>flush</b> {}</td></tr>
 <tr class="separator:a61e5fa1e7eae9919b7ac71e5698ea53e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
-Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a3934063a32e3f4329208b61565d1e185"><td class="memTemplParams" colspan="2">template&lt;typename Output &gt; </td></tr>
-<tr class="memitem:a3934063a32e3f4329208b61565d1e185"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1Logger.html#a3934063a32e3f4329208b61565d1e185">timestamp</a> (Output &amp;&amp;out, const fmt::text_style &amp;ts, const char i) noexcept</td></tr>
-<tr class="separator:a3934063a32e3f4329208b61565d1e185"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81cd6c09b7cc8eb8f021d3a8d40b9b2d"><td class="memTemplParams" colspan="2">template&lt;typename Output , typename... Args&gt; </td></tr>
-<tr class="memitem:a81cd6c09b7cc8eb8f021d3a8d40b9b2d"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1Logger.html#a81cd6c09b7cc8eb8f021d3a8d40b9b2d">submessage</a> (Output &amp;&amp;out, const fmt::text_style &amp;ts, const char i, const char e[2], Args &amp;&amp;... args) noexcept</td></tr>
-<tr class="separator:a81cd6c09b7cc8eb8f021d3a8d40b9b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11fb3836341767cdd8936045abca2dd2"><td class="memTemplParams" colspan="2">template&lt;typename Output , typename... Args&gt; </td></tr>
-<tr class="memitem:a11fb3836341767cdd8936045abca2dd2"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1Logger.html#a11fb3836341767cdd8936045abca2dd2">message</a> (Output &amp;&amp;out, const fmt::text_style &amp;ts, const char i, Args &amp;&amp;... args) noexcept</td></tr>
-<tr class="separator:a11fb3836341767cdd8936045abca2dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abeb198a98efe61d63a57ac3b27c5a062"><td class="memTemplParams" colspan="2">template&lt;typename Output , typename... Args&gt; </td></tr>
-<tr class="memitem:abeb198a98efe61d63a57ac3b27c5a062"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1Logger.html#abeb198a98efe61d63a57ac3b27c5a062">message</a> (Output &amp;&amp;out, const fmt::text_style &amp;ts, const char i, <a class="el" href="structlucid_1_1Logger_1_1Flush.html">Flush</a>, Args &amp;&amp;... args) noexcept</td></tr>
-<tr class="separator:abeb198a98efe61d63a57ac3b27c5a062"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:a680acaf2183afd55466cecadf11aaee1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlucid_1_1Logger.html#ac3d577a1488bd111c4467591f9cc6d30">Level</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1Logger.html#a680acaf2183afd55466cecadf11aaee1">lvl</a> = Level::INFO</td></tr>
-<tr class="separator:a680acaf2183afd55466cecadf11aaee1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="ac3d577a1488bd111c4467591f9cc6d30"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac3d577a1488bd111c4467591f9cc6d30">&#9670;&nbsp;</a></span>Level</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="classlucid_1_1Logger.html#ac3d577a1488bd111c4467591f9cc6d30">lucid::Logger::Level</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ac3d577a1488bd111c4467591f9cc6d30adb5bbbcbc7b1f6f75b2f991e7a73c331"></a>DEBUG&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="ac3d577a1488bd111c4467591f9cc6d30af0985decdfa92611dc9962492e4669b9"></a>INFO&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="ac3d577a1488bd111c4467591f9cc6d30a093d0ee0d6b77775da7231bba77c0957"></a>WARNING&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="ac3d577a1488bd111c4467591f9cc6d30a09f2ec01b5c9934f2b3adceebda6683e"></a>ERROR&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="ac3d577a1488bd111c4467591f9cc6d30a447c6793b11b2ebb3cbc67794cb05766"></a>CRITICAL&#160;</td><td class="fielddoc"></td></tr>
-</table>
-
-</div>
-</div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aa3a3356cf470dd5983cbd0be645832b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3a3356cf470dd5983cbd0be645832b4">&#9670;&nbsp;</a></span>Logger()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">lucid::Logger::Logger </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classlucid_1_1Logger.html#ac3d577a1488bd111c4467591f9cc6d30">Level</a>&#160;</td>
-          <td class="paramname"><em>lvl_</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a49375ceb9dfbf28179bf260d2a4e87bf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49375ceb9dfbf28179bf260d2a4e87bf">&#9670;&nbsp;</a></span>critical()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Args&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void lucid::Logger::critical </td>
-          <td>(</td>
-          <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>args</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a33db9f2a6d006d6997d8b65c5f7f2ae5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33db9f2a6d006d6997d8b65c5f7f2ae5">&#9670;&nbsp;</a></span>debug()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Args&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void lucid::Logger::debug </td>
-          <td>(</td>
-          <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>args</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa404486f112a19beab55fb446328b1bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa404486f112a19beab55fb446328b1bb">&#9670;&nbsp;</a></span>error()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Args&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void lucid::Logger::error </td>
-          <td>(</td>
-          <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>args</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae924ba6f2f03bb8fe2a3ce4f9f523f03"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae924ba6f2f03bb8fe2a3ce4f9f523f03">&#9670;&nbsp;</a></span>info()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Args&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void lucid::Logger::info </td>
-          <td>(</td>
-          <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>args</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a11fb3836341767cdd8936045abca2dd2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a11fb3836341767cdd8936045abca2dd2">&#9670;&nbsp;</a></span>message() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Output , typename... Args&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void lucid::Logger::message </td>
-          <td>(</td>
-          <td class="paramtype">Output &amp;&amp;&#160;</td>
-          <td class="paramname"><em>out</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const fmt::text_style &amp;&#160;</td>
-          <td class="paramname"><em>ts</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char&#160;</td>
-          <td class="paramname"><em>i</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>args</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abeb198a98efe61d63a57ac3b27c5a062"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abeb198a98efe61d63a57ac3b27c5a062">&#9670;&nbsp;</a></span>message() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Output , typename... Args&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void lucid::Logger::message </td>
-          <td>(</td>
-          <td class="paramtype">Output &amp;&amp;&#160;</td>
-          <td class="paramname"><em>out</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const fmt::text_style &amp;&#160;</td>
-          <td class="paramname"><em>ts</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char&#160;</td>
-          <td class="paramname"><em>i</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structlucid_1_1Logger_1_1Flush.html">Flush</a>&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>args</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a81cd6c09b7cc8eb8f021d3a8d40b9b2d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a81cd6c09b7cc8eb8f021d3a8d40b9b2d">&#9670;&nbsp;</a></span>submessage()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Output , typename... Args&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void lucid::Logger::submessage </td>
-          <td>(</td>
-          <td class="paramtype">Output &amp;&amp;&#160;</td>
-          <td class="paramname"><em>out</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const fmt::text_style &amp;&#160;</td>
-          <td class="paramname"><em>ts</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char&#160;</td>
-          <td class="paramname"><em>i</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char&#160;</td>
-          <td class="paramname"><em>e</em>[2], </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>args</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3934063a32e3f4329208b61565d1e185"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3934063a32e3f4329208b61565d1e185">&#9670;&nbsp;</a></span>timestamp()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Output &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void lucid::Logger::timestamp </td>
-          <td>(</td>
-          <td class="paramtype">Output &amp;&amp;&#160;</td>
-          <td class="paramname"><em>out</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const fmt::text_style &amp;&#160;</td>
-          <td class="paramname"><em>ts</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char&#160;</td>
-          <td class="paramname"><em>i</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8205355ff9aaab5ba8e01ba588a2c08c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8205355ff9aaab5ba8e01ba588a2c08c">&#9670;&nbsp;</a></span>warning()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Args&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void lucid::Logger::warning </td>
-          <td>(</td>
-          <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>args</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a61e5fa1e7eae9919b7ac71e5698ea53e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a61e5fa1e7eae9919b7ac71e5698ea53e">&#9670;&nbsp;</a></span>flush</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const constexpr <a class="el" href="structlucid_1_1Logger_1_1Flush.html">Flush</a> lucid::Logger::flush {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a680acaf2183afd55466cecadf11aaee1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a680acaf2183afd55466cecadf11aaee1">&#9670;&nbsp;</a></span>lvl</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1Logger.html#ac3d577a1488bd111c4467591f9cc6d30">Level</a> lucid::Logger::lvl = Level::INFO</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>utils/<a class="el" href="logging_8hpp_source.html">logging.hpp</a></li>
 </ul>
@@ -613,7 +161,7 @@ template&lt;typename... Args&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="classlucid_1_1Logger.html">Logger</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="classlucid_1_1Logger.html">Logger</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

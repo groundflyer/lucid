@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -81,76 +87,357 @@ $(document).ready(function(){initNavTree('math_8hpp.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">math.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;cmath&gt;</code><br />
-<code>#include &lt;limits&gt;</code><br />
-<code>#include &lt;utility&gt;</code><br />
+<div class="textblock"><code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;cmath&gt;</code><br />
 <code>#include &lt;iterator&gt;</code><br />
-<code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;limits&gt;</code><br />
 <code>#include &lt;type_traits&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
 </div>
 <p><a href="math_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespacelucid"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelucid.html">lucid</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacelucid_1_1math"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelucid_1_1math.html">lucid::math</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a37f3876543b2089193526c0b527fce5a"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a37f3876543b2089193526c0b527fce5a"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::enable_if_t&lt; std::is_integral_v&lt; T &gt;, bool &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a37f3876543b2089193526c0b527fce5a">lucid::is_even</a> (const T val) noexcept</td></tr>
+<tr class="memitem:a37f3876543b2089193526c0b527fce5a"><td class="memTemplParams" colspan="2"><a id="a37f3876543b2089193526c0b527fce5a"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a37f3876543b2089193526c0b527fce5a"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::enable_if_t&lt; std::is_integral_v&lt; T &gt;, bool &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a37f3876543b2089193526c0b527fce5a">lucid::is_even</a> (const T val) noexcept</td></tr>
+<tr class="memdesc:a37f3876543b2089193526c0b527fce5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether the value is even. <br /></td></tr>
 <tr class="separator:a37f3876543b2089193526c0b527fce5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad057f2dde7a43c7dddb5e154fedf1639"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ad057f2dde7a43c7dddb5e154fedf1639"><td class="memTemplItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#ad057f2dde7a43c7dddb5e154fedf1639">lucid::minus_one_pow</a> (const T a)</td></tr>
+<tr class="memitem:ad057f2dde7a43c7dddb5e154fedf1639"><td class="memTemplParams" colspan="2"><a id="ad057f2dde7a43c7dddb5e154fedf1639"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ad057f2dde7a43c7dddb5e154fedf1639"><td class="memTemplItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#ad057f2dde7a43c7dddb5e154fedf1639">lucid::minus_one_pow</a> (const T a)</td></tr>
+<tr class="memdesc:ad057f2dde7a43c7dddb5e154fedf1639"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return result of \((-1)^{a}\). <br /></td></tr>
 <tr class="separator:ad057f2dde7a43c7dddb5e154fedf1639"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6aa42d17471ba5174fe2d9ee9c5c28de"><td class="memItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a6aa42d17471ba5174fe2d9ee9c5c28de">lucid::fac</a> (const std::size_t val) noexcept</td></tr>
+<tr class="memitem:a6aa42d17471ba5174fe2d9ee9c5c28de"><td class="memItemLeft" align="right" valign="top"><a id="a6aa42d17471ba5174fe2d9ee9c5c28de"></a>
+constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a6aa42d17471ba5174fe2d9ee9c5c28de">lucid::fac</a> (const std::size_t val) noexcept</td></tr>
+<tr class="memdesc:a6aa42d17471ba5174fe2d9ee9c5c28de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute number factorial. <br /></td></tr>
 <tr class="separator:a6aa42d17471ba5174fe2d9ee9c5c28de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3352a58127d45c4962e47ef0db505218"><td class="memTemplParams" colspan="2">template&lt;typename Iterable &gt; </td></tr>
-<tr class="memitem:a3352a58127d45c4962e47ef0db505218"><td class="memTemplItemLeft" align="right" valign="top">constexpr unsigned&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a3352a58127d45c4962e47ef0db505218">lucid::inversion_number</a> (const Iterable &amp;input) noexcept</td></tr>
+<tr class="memitem:a3352a58127d45c4962e47ef0db505218"><td class="memTemplItemLeft" align="right" valign="top">constexpr unsigned&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a3352a58127d45c4962e47ef0db505218">lucid::inversion_number</a> (const Iterable &amp;input) noexcept</td></tr>
+<tr class="memdesc:a3352a58127d45c4962e47ef0db505218"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute inversion number.  <a href="math_8hpp.html#a3352a58127d45c4962e47ef0db505218">More...</a><br /></td></tr>
 <tr class="separator:a3352a58127d45c4962e47ef0db505218"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6b532d1df69fa2662e5be1c6ef2e1b9"><td class="memTemplParams" colspan="2">template&lt;typename Iterable &gt; </td></tr>
-<tr class="memitem:aa6b532d1df69fa2662e5be1c6ef2e1b9"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#aa6b532d1df69fa2662e5be1c6ef2e1b9">lucid::has_equal</a> (const Iterable &amp;input) noexcept</td></tr>
+<tr class="memitem:aa6b532d1df69fa2662e5be1c6ef2e1b9"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#aa6b532d1df69fa2662e5be1c6ef2e1b9">lucid::has_equal</a> (const Iterable &amp;input) noexcept</td></tr>
+<tr class="memdesc:aa6b532d1df69fa2662e5be1c6ef2e1b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether the input contains equal elements.  <a href="math_8hpp.html#aa6b532d1df69fa2662e5be1c6ef2e1b9">More...</a><br /></td></tr>
 <tr class="separator:aa6b532d1df69fa2662e5be1c6ef2e1b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f39cbeb372685f38885191f09231d63"><td class="memTemplParams" colspan="2">template&lt;typename Iterable &gt; </td></tr>
-<tr class="memitem:a2f39cbeb372685f38885191f09231d63"><td class="memTemplItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a2f39cbeb372685f38885191f09231d63">lucid::sgn</a> (const Iterable &amp;numbers) noexcept</td></tr>
+<tr class="memitem:a2f39cbeb372685f38885191f09231d63"><td class="memTemplItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a2f39cbeb372685f38885191f09231d63">lucid::sgn</a> (const Iterable &amp;numbers) noexcept</td></tr>
+<tr class="memdesc:a2f39cbeb372685f38885191f09231d63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute Levi-Civita symbol (signature of permutation).  <a href="math_8hpp.html#a2f39cbeb372685f38885191f09231d63">More...</a><br /></td></tr>
 <tr class="separator:a2f39cbeb372685f38885191f09231d63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38711c51946d429c3286fedb0ec75bea"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Bias &gt; </td></tr>
-<tr class="memitem:a38711c51946d429c3286fedb0ec75bea"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a38711c51946d429c3286fedb0ec75bea">lucid::lerp</a> (const T a, const T b, const Bias bias)</td></tr>
-<tr class="separator:a38711c51946d429c3286fedb0ec75bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40ba89e564d16a5838090b4bfc2b5d5a"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Bias &gt; </td></tr>
+<tr class="memitem:a40ba89e564d16a5838090b4bfc2b5d5a"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a40ba89e564d16a5838090b4bfc2b5d5a">lucid::lerp</a> (const T a, const T b, const Bias bias)</td></tr>
+<tr class="memdesc:a40ba89e564d16a5838090b4bfc2b5d5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform linear interpolation between two values.  <a href="math_8hpp.html#a40ba89e564d16a5838090b4bfc2b5d5a">More...</a><br /></td></tr>
+<tr class="separator:a40ba89e564d16a5838090b4bfc2b5d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7316764f271b477d77ea9d316132cae"><td class="memTemplParams" colspan="2">template&lt;typename T , typename ULP &gt; </td></tr>
-<tr class="memitem:ac7316764f271b477d77ea9d316132cae"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::enable_if_t&lt; std::is_floating_point_v&lt; T &gt;, bool &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#ac7316764f271b477d77ea9d316132cae">lucid::almost_equal</a> (const T a, const T b, const ULP ulp)</td></tr>
+<tr class="memitem:ac7316764f271b477d77ea9d316132cae"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::enable_if_t&lt; std::is_floating_point_v&lt; T &gt;, bool &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#ac7316764f271b477d77ea9d316132cae">lucid::almost_equal</a> (const T a, const T b, const ULP ulp)</td></tr>
+<tr class="memdesc:ac7316764f271b477d77ea9d316132cae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare floating-point values for equality using maching epsilon.  <a href="math_8hpp.html#ac7316764f271b477d77ea9d316132cae">More...</a><br /></td></tr>
 <tr class="separator:ac7316764f271b477d77ea9d316132cae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf197f50e6e7edb30c2cce2d973f2fbd"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:abf197f50e6e7edb30c2cce2d973f2fbd"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#abf197f50e6e7edb30c2cce2d973f2fbd">lucid::fit</a> (const T val, const T minval, const T maxval)</td></tr>
-<tr class="separator:abf197f50e6e7edb30c2cce2d973f2fbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d835ff4968e4fee75b5b1665e874920"><td class="memTemplParams" colspan="2"><a id="a9d835ff4968e4fee75b5b1665e874920"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a9d835ff4968e4fee75b5b1665e874920"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a9d835ff4968e4fee75b5b1665e874920">lucid::fit</a> (const T val, const T minval, const T maxval)</td></tr>
+<tr class="memdesc:a9d835ff4968e4fee75b5b1665e874920"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shift value into a new range. <br /></td></tr>
+<tr class="separator:a9d835ff4968e4fee75b5b1665e874920"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45c04cf8fb86621c17e6c5786a312542"><td class="memTemplParams" colspan="2">template&lt;unsigned exp, typename T &gt; </td></tr>
-<tr class="memitem:a45c04cf8fb86621c17e6c5786a312542"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a45c04cf8fb86621c17e6c5786a312542">lucid::pow</a> (const T value) noexcept</td></tr>
+<tr class="memitem:a45c04cf8fb86621c17e6c5786a312542"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a45c04cf8fb86621c17e6c5786a312542">lucid::pow</a> (const T value) noexcept</td></tr>
+<tr class="memdesc:a45c04cf8fb86621c17e6c5786a312542"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rise a number to a constant power.  <a href="math_8hpp.html#a45c04cf8fb86621c17e6c5786a312542">More...</a><br /></td></tr>
 <tr class="separator:a45c04cf8fb86621c17e6c5786a312542"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a247d40d29653cfd26a2ca2c4bf97003d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a247d40d29653cfd26a2ca2c4bf97003d"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a247d40d29653cfd26a2ca2c4bf97003d">lucid::degrees</a> (const T _radians)</td></tr>
+<tr class="memitem:a247d40d29653cfd26a2ca2c4bf97003d"><td class="memTemplParams" colspan="2"><a id="a247d40d29653cfd26a2ca2c4bf97003d"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a247d40d29653cfd26a2ca2c4bf97003d"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a247d40d29653cfd26a2ca2c4bf97003d">lucid::degrees</a> (const T _radians)</td></tr>
+<tr class="memdesc:a247d40d29653cfd26a2ca2c4bf97003d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert radians to degrees. <br /></td></tr>
 <tr class="separator:a247d40d29653cfd26a2ca2c4bf97003d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a421f21a1ea5335fda34d5c9f823e0229"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a421f21a1ea5335fda34d5c9f823e0229"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a421f21a1ea5335fda34d5c9f823e0229">lucid::radians</a> (const T _degrees)</td></tr>
+<tr class="memitem:a421f21a1ea5335fda34d5c9f823e0229"><td class="memTemplParams" colspan="2"><a id="a421f21a1ea5335fda34d5c9f823e0229"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a421f21a1ea5335fda34d5c9f823e0229"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a421f21a1ea5335fda34d5c9f823e0229">lucid::radians</a> (const T _degrees)</td></tr>
+<tr class="memdesc:a421f21a1ea5335fda34d5c9f823e0229"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert degrees to radians. <br /></td></tr>
 <tr class="separator:a421f21a1ea5335fda34d5c9f823e0229"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ca423575333e702ac2ee1889e8476bb"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a8ca423575333e702ac2ee1889e8476bb"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::pair&lt; bool, T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a8ca423575333e702ac2ee1889e8476bb">lucid::quadratic</a> (const T a, const T b, const T c) noexcept</td></tr>
+<tr class="memitem:a8ca423575333e702ac2ee1889e8476bb"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::pair&lt; bool, T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a8ca423575333e702ac2ee1889e8476bb">lucid::quadratic</a> (const T a, const T b, const T c) noexcept</td></tr>
+<tr class="memdesc:a8ca423575333e702ac2ee1889e8476bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve quadratic equation \(ax^{2} + bx + c\) for non-complex cases.  <a href="math_8hpp.html#a8ca423575333e702ac2ee1889e8476bb">More...</a><br /></td></tr>
 <tr class="separator:a8ca423575333e702ac2ee1889e8476bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a5884f134c495db962a683bd4acd372f7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a5884f134c495db962a683bd4acd372f7"><td class="memTemplItemLeft" align="right" valign="top">const constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid_1_1math.html#a5884f134c495db962a683bd4acd372f7">lucid::math::Pi_</a> = T{3.141592653589793}</td></tr>
+<tr class="memitem:a5884f134c495db962a683bd4acd372f7"><td class="memTemplParams" colspan="2"><a id="a5884f134c495db962a683bd4acd372f7"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a5884f134c495db962a683bd4acd372f7"><td class="memTemplItemLeft" align="right" valign="top">const constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::math::Pi_</b> = T{3.141592653589793}</td></tr>
 <tr class="separator:a5884f134c495db962a683bd4acd372f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Mathematical functions. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="file_ac7316764f271b477d77ea9d316132cae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_ac7316764f271b477d77ea9d316132cae">&#9670;&nbsp;</a></span>almost_equal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename ULP &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::enable_if_t&lt;std::is_floating_point_v&lt;T&gt;, bool&gt; lucid::almost_equal </td>
+          <td>(</td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ULP&#160;</td>
+          <td class="paramname"><em>ulp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compare floating-point values for equality using maching epsilon. </p>
+<p>The implementation is taken from <a href="https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon">https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ulp</td><td>spacing between adjascent numbers (see <a href="https://en.wikipedia.org/wiki/Unit_in_the_last_place">https://en.wikipedia.org/wiki/Unit_in_the_last_place</a>).<a class="anchor" id="ulp"></a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="file_aa6b532d1df69fa2662e5be1c6ef2e1b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_aa6b532d1df69fa2662e5be1c6ef2e1b9">&#9670;&nbsp;</a></span>has_equal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Iterable &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool lucid::has_equal </td>
+          <td>(</td>
+          <td class="paramtype">const Iterable &amp;&#160;</td>
+          <td class="paramname"><em>input</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Test whether the input contains equal elements. </p>
+<p>Complexity \(O(N^{2})\). </p>
+
+</div>
+</div>
+<a id="file_a3352a58127d45c4962e47ef0db505218"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a3352a58127d45c4962e47ef0db505218">&#9670;&nbsp;</a></span>inversion_number()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Iterable &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr unsigned lucid::inversion_number </td>
+          <td>(</td>
+          <td class="paramtype">const Iterable &amp;&#160;</td>
+          <td class="paramname"><em>input</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute inversion number. </p>
+<p>Complexity \(O(N^{2})\). <a href="https://en.wikipedia.org/wiki/Inversion_(discrete_mathematics)">https://en.wikipedia.org/wiki/Inversion_(discrete_mathematics)</a> </p>
+
+</div>
+</div>
+<a id="file_a40ba89e564d16a5838090b4bfc2b5d5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a40ba89e564d16a5838090b4bfc2b5d5a">&#9670;&nbsp;</a></span>lerp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename Bias &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr T lucid::lerp </td>
+          <td>(</td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Bias&#160;</td>
+          <td class="paramname"><em>bias</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Perform linear interpolation between two values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bias</td><td>interpolation bias. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="file_a45c04cf8fb86621c17e6c5786a312542"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a45c04cf8fb86621c17e6c5786a312542">&#9670;&nbsp;</a></span>pow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;unsigned exp, typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr T lucid::pow </td>
+          <td>(</td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Rise a number to a constant power. </p>
+<p>Fast implementation by Alister Chowdhury.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">exp</td><td>power exponent. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="file_a8ca423575333e702ac2ee1889e8476bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a8ca423575333e702ac2ee1889e8476bb">&#9670;&nbsp;</a></span>quadratic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::pair&lt;bool, T&gt; lucid::quadratic </td>
+          <td>(</td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>c</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Solve quadratic equation \(ax^{2} + bx + c\) for non-complex cases. </p>
+<dl class="section return"><dt>Returns</dt><dd>pair of bool and the smallest of two positive roots. </dd></dl>
+
+</div>
+</div>
+<a id="file_a2f39cbeb372685f38885191f09231d63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a2f39cbeb372685f38885191f09231d63">&#9670;&nbsp;</a></span>sgn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Iterable &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int lucid::sgn </td>
+          <td>(</td>
+          <td class="paramtype">const Iterable &amp;&#160;</td>
+          <td class="paramname"><em>numbers</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute Levi-Civita symbol (signature of permutation). </p>
+<p><a href="https://en.wikipedia.org/wiki/Levi-Civita_symbol">https://en.wikipedia.org/wiki/Levi-Civita_symbol</a> </p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

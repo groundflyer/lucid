@@ -1,14 +1,5 @@
 var searchData=
 [
-  ['data',['data',['../classlucid_1_1Matrix.html#a6621ed854a0ad2a88a7d18765ff8586d',1,'lucid::Matrix::data()'],['../classlucid_1_1NormalN__.html#a3c3699ec3bd6f40177deffe1c0374696',1,'lucid::NormalN_::data()'],['../classlucid_1_1PointN__.html#a18e35e77cfcc3c64c68cd2e8ab6b0c53',1,'lucid::PointN_::data() const noexcept'],['../classlucid_1_1PointN__.html#a60d6bdaff0265373fdc46bd8a028024c',1,'lucid::PointN_::data() noexcept'],['../classlucid_1_1Vector.html#add54e0b04f1008bd8c67167013f0f5bd',1,'lucid::Vector::data()'],['../classlucid_1_1ScanlineImage.html#a9125e79513c6639f89f2403c77646bfb',1,'lucid::ScanlineImage::data()']]],
-  ['debug',['debug',['../classlucid_1_1Logger.html#a33db9f2a6d006d6997d8b65c5f7f2ae5',1,'lucid::Logger']]],
-  ['degrees',['degrees',['../namespacelucid.html#a247d40d29653cfd26a2ca2c4bf97003d',1,'lucid']]],
-  ['dehomogenize',['dehomogenize',['../namespacelucid.html#aa2a2da49f311405398d417279cd73c97',1,'lucid']]],
-  ['det',['det',['../namespacelucid.html#a749ee0150d54b0f964fa5a85ca4109f5',1,'lucid']]],
-  ['diag',['diag',['../namespacelucid_1_1detail.html#ad54f64f9ffd31d43e17fde599db2fbee',1,'lucid::detail']]],
-  ['disk_5f',['Disk_',['../structlucid_1_1Disk__.html#a083347077542b0aa1e72c6762064c7a8',1,'lucid::Disk_::Disk_() noexcept'],['../structlucid_1_1Disk__.html#ad303ef3612d6f92b239d95a662b7bb95',1,'lucid::Disk_::Disk_(const Point_&lt; Container1 &gt; &amp;_position, const Normal_&lt; Container2 &gt; &amp;_normal, const real _radius) noexcept'],['../namespacelucid.html#af772cd452c96263e76a4ee3243b23cfd',1,'lucid::Disk_()']]],
-  ['dispatcher',['Dispatcher',['../classlucid_1_1Dispatcher.html#a610e0c9f1671bc5b89b1b9358760d801',1,'lucid::Dispatcher']]],
-  ['distance',['distance',['../namespacelucid.html#acd89ba70fbc830021f3ea23940143823',1,'lucid']]],
-  ['dot',['dot',['../classlucid_1_1Matrix.html#abdb1e4567a3570b979668510981c2a09',1,'lucid::Matrix::dot()'],['../classlucid_1_1ImmutableVectorOperators.html#a7929460afe4a31618641769fb8fb0bbf',1,'lucid::ImmutableVectorOperators::dot()'],['../namespacelucid.html#a8dc265bea37dd5975b514afad1b1d9f9',1,'lucid::dot(const Matrix&lt; T, M, N, MContainer &gt; &amp;lhs, const VectorType&lt; T, N, VContainer &gt; &amp;rhs) noexcept'],['../namespacelucid.html#a61ea333f7d6cac95a74f0acb4a8a0823',1,'lucid::dot(const Matrix&lt; T, M1, N1, Container1 &gt; &amp;lhs, const Matrix&lt; T, M2, N2, Container2 &gt; &amp;rhs) noexcept'],['../namespacelucid.html#a99c93315a42159ed7e824c58e57a09f7',1,'lucid::dot(const VectorType1&lt; T, N, Container1 &gt; &amp;a, const VectorType2&lt; T, N, Container2 &gt; &amp;b) noexcept']]],
-  ['draw',['draw',['../classlucid_1_1detail_1_1__Viewport.html#a6c33405dd09ae9cc95cbf0582e46031c',1,'lucid::detail::_Viewport::draw()'],['../structlucid_1_1detail_1_1__Viewport_1_1Handler.html#ab7f62ab1ea60c644b224b58710229eb8',1,'lucid::detail::_Viewport::Handler::draw()']]]
+  ['fac',['fac',['../math_8hpp.html#a6aa42d17471ba5174fe2d9ee9c5c28de',1,'lucid']]],
+  ['fit',['fit',['../vector__operators_8hpp.html#a78cabb50181bb7d25f18e690cb12282e',1,'lucid::fit(const VectorType&lt; T, N, Container &gt; &amp;v, const T minval, const T maxval) noexcept'],['../math_8hpp.html#a9d835ff4968e4fee75b5b1665e874920',1,'lucid::fit(const T val, const T minval, const T maxval)']]]
 ];

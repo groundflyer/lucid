@@ -1,6 +1,5 @@
 var classlucid_1_1NormalN__ =
 [
-    [ "Data", "classlucid_1_1NormalN__.html#ab9361db6f902fa600dfcfc614fdd6637", null ],
     [ "NormalN_", "classlucid_1_1NormalN__.html#a40a28ab4065a129846d598f2425254a9", null ],
     [ "NormalN_", "classlucid_1_1NormalN__.html#ac051556d2f0ecc80f94988163bafd2cb", null ],
     [ "NormalN_", "classlucid_1_1NormalN__.html#a34f24af152201c575312cad908960506", null ],
@@ -20,6 +19,5 @@ var classlucid_1_1NormalN__ =
     [ "operator=", "classlucid_1_1NormalN__.html#a8559601c8aa4c026be4369bb4f4c1a96", null ],
     [ "operator[]", "classlucid_1_1NormalN__.html#a305db5b2ada3fbc390beed7f60f13fcd", null ],
     [ "operator[]", "classlucid_1_1NormalN__.html#a0df64e46de7ee39813506b093cbd62eb", null ],
-    [ "size", "classlucid_1_1NormalN__.html#a72fec40c61d703527cbeadbf08a0b457", null ],
-    [ "m_data", "classlucid_1_1NormalN__.html#af1f5c1c6aa45f052cb6c97f6d3872f26", null ]
+    [ "size", "classlucid_1_1NormalN__.html#a72fec40c61d703527cbeadbf08a0b457", null ]
 ];

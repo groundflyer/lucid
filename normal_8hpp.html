@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -82,43 +88,40 @@ $(document).ready(function(){initNavTree('normal_8hpp.html','');});
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">normal.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="vector__operators_8hpp_source.html">vector_operators.hpp</a>&quot;</code><br />
-<code>#include &lt;<a class="el" href="debug_8hpp_source.html">utils/debug.hpp</a>&gt;</code><br />
+<code>#include &lt;utils/debug.hpp&gt;</code><br />
 </div>
 <p><a href="normal_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1NormalN__.html">lucid::NormalN_&lt; T, N, Container &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic Normal. Its length is supposed to be equal one.  <a href="classlucid_1_1NormalN__.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstd_1_1tuple__size_3_01lucid_1_1NormalN___3_01T_00_01N_00_01Container_01_4_01_4.html">std::tuple_size&lt; lucid::NormalN_&lt; T, N, Container &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstd_1_1tuple__element_3_01I_00_01lucid_1_1NormalN___3_01T_00_01N_00_01Container_01_4_01_4.html">std::tuple_element&lt; I, lucid::NormalN_&lt; T, N, Container &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespacelucid"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacelucid.html">lucid</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacestd"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestd.html">std</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a47b5630a943f8cd213e1cdb961d0810a"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a47b5630a943f8cd213e1cdb961d0810a"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacelucid.html#a47b5630a943f8cd213e1cdb961d0810a">lucid::NormalN_</a> (Container&lt; T, N &gt; &amp;&amp;) -&gt; NormalN_&lt; T, N, Container &gt;</td></tr>
+<tr class="memitem:a47b5630a943f8cd213e1cdb961d0810a"><td class="memTemplParams" colspan="2"><a id="a47b5630a943f8cd213e1cdb961d0810a"></a>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a47b5630a943f8cd213e1cdb961d0810a"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::NormalN_</b> (Container&lt; T, N &gt; &amp;&amp;) -&gt; NormalN_&lt; T, N, Container &gt;</td></tr>
 <tr class="separator:a47b5630a943f8cd213e1cdb961d0810a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afea9c96e65265994bb80d2333988daf9"><td class="memTemplParams" colspan="2">template&lt;std::size_t I, typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:afea9c96e65265994bb80d2333988daf9"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestd.html#afea9c96e65265994bb80d2333988daf9">std::get</a> (const <a class="el" href="classlucid_1_1NormalN__.html">lucid::NormalN_</a>&lt; T, N, Container &gt; &amp;vec) noexcept</td></tr>
+<tr class="memitem:afea9c96e65265994bb80d2333988daf9"><td class="memTemplParams" colspan="2"><a id="afea9c96e65265994bb80d2333988daf9"></a>
+template&lt;std::size_t I, typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:afea9c96e65265994bb80d2333988daf9"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>std::get</b> (const <a class="el" href="classlucid_1_1NormalN__.html">lucid::NormalN_</a>&lt; T, N, Container &gt; &amp;vec) noexcept</td></tr>
 <tr class="separator:afea9c96e65265994bb80d2333988daf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contains the definition of a generic Normal. </p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

@@ -1,4 +1,0 @@
-var structlucid_1_1argparse_1_1detail_1_1key__index__impl_3_01Key_00_01Idx_00_01__Option_00_01Rest_8_8_8_01_4 =
-[
-    [ "value", "structlucid_1_1argparse_1_1detail_1_1key__index__impl_3_01Key_00_01Idx_00_01__Option_00_01Rest_8_8_8_01_4.html#ae34e8b4b148230c36ed705516f5ed534", null ]
-];

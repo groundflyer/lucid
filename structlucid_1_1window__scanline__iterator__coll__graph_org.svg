@@ -35,7 +35,7 @@
 <!-- Node3 -->
 <g id="node3" class="node">
 <title>Node3</title>
-<g id="a_node3"><a xlink:href="classlucid_1_1Vector.html" target="_top" xlink:title="lucid::Vector\&lt; T, N,\l Container \&gt;">
+<g id="a_node3"><a xlink:href="classlucid_1_1Vector.html" target="_top" xlink:title="Generic vector with constant dimensionality. ">
 <polygon fill="#ffffff" stroke="#000000" points="224,-24.5 224,-54.5 334,-54.5 334,-24.5 224,-24.5"/>
 <text text-anchor="start" x="232" y="-42.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">lucid::Vector&lt; T, N,</text>
 <text text-anchor="middle" x="279" y="-31.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000"> Container &gt;</text>

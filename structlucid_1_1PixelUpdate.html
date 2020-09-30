@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -88,115 +94,23 @@ $(document).ready(function(){initNavTree('structlucid_1_1PixelUpdate.html','');}
 <div class="title">lucid::PixelUpdate&lt; Filter &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="filtering_8hpp_source.html">filtering.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a82c9987b335d04cdffe8a1410c176ae5"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1PixelUpdate.html#a82c9987b335d04cdffe8a1410c176ae5">PixelUpdate</a> (Filter _filter)</td></tr>
+<tr class="memitem:a82c9987b335d04cdffe8a1410c176ae5"><td class="memItemLeft" align="right" valign="top"><a id="a82c9987b335d04cdffe8a1410c176ae5"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>PixelUpdate</b> (Filter _filter)</td></tr>
 <tr class="separator:a82c9987b335d04cdffe8a1410c176ae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b919da75840fa9096305bda9c8d8b3f"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a5b919da75840fa9096305bda9c8d8b3f"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="namespacelucid.html#a56539f3c9b7c410a695bcd71124fb93e">RGBA</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structlucid_1_1PixelUpdate.html#a5b919da75840fa9096305bda9c8d8b3f">operator()</a> (const <a class="el" href="namespacelucid.html#ab6c57b53dd5533629202c74dabc768fc">RGBA_</a>&lt; Container &gt; &amp;old_rgba, const <a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a> &amp;pixel_ssp, const <a class="el" href="namespacelucid.html#a7dda3034070e64819ad4f9b52dadc6f9">Sample</a> &amp;<a class="el" href="namespacelucid.html#a2e438961d50516a8d61bba9926c4d668">sample</a>) const noexcept</td></tr>
+<tr class="memitem:a5b919da75840fa9096305bda9c8d8b3f"><td class="memTemplParams" colspan="2"><a id="a5b919da75840fa9096305bda9c8d8b3f"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a5b919da75840fa9096305bda9c8d8b3f"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classlucid_1_1Vector.html">RGBA</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator()</b> (const <a class="el" href="classlucid_1_1Vector.html">RGBA_</a>&lt; Container &gt; &amp;old_rgba, const <a class="el" href="classlucid_1_1Vector.html">Vec2</a> &amp;pixel_ssp, const Sample &amp;sample) const noexcept</td></tr>
 <tr class="separator:a5b919da75840fa9096305bda9c8d8b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a3717046c903849a2e2ecf06302f8f107"><td class="memItemLeft" align="right" valign="top">const Filter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1PixelUpdate.html#a3717046c903849a2e2ecf06302f8f107">filter</a></td></tr>
+<tr class="memitem:a3717046c903849a2e2ecf06302f8f107"><td class="memItemLeft" align="right" valign="top"><a id="a3717046c903849a2e2ecf06302f8f107"></a>
+const Filter&#160;</td><td class="memItemRight" valign="bottom"><b>filter</b></td></tr>
 <tr class="separator:a3717046c903849a2e2ecf06302f8f107"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a82c9987b335d04cdffe8a1410c176ae5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a82c9987b335d04cdffe8a1410c176ae5">&#9670;&nbsp;</a></span>PixelUpdate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Filter &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1PixelUpdate.html">lucid::PixelUpdate</a>&lt; Filter &gt;::<a class="el" href="structlucid_1_1PixelUpdate.html">PixelUpdate</a> </td>
-          <td>(</td>
-          <td class="paramtype">Filter&#160;</td>
-          <td class="paramname"><em>_filter</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a5b919da75840fa9096305bda9c8d8b3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b919da75840fa9096305bda9c8d8b3f">&#9670;&nbsp;</a></span>operator()()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Filter &gt; </div>
-<div class="memtemplate">
-template&lt;template&lt; typename, std::size_t &gt; typename Container&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="namespacelucid.html#a56539f3c9b7c410a695bcd71124fb93e">RGBA</a> <a class="el" href="structlucid_1_1PixelUpdate.html">lucid::PixelUpdate</a>&lt; Filter &gt;::operator() </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#ab6c57b53dd5533629202c74dabc768fc">RGBA_</a>&lt; Container &gt; &amp;&#160;</td>
-          <td class="paramname"><em>old_rgba</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a> &amp;&#160;</td>
-          <td class="paramname"><em>pixel_ssp</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#a7dda3034070e64819ad4f9b52dadc6f9">Sample</a> &amp;&#160;</td>
-          <td class="paramname"><em>sample</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a3717046c903849a2e2ecf06302f8f107"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3717046c903849a2e2ecf06302f8f107">&#9670;&nbsp;</a></span>filter</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Filter &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">const Filter <a class="el" href="structlucid_1_1PixelUpdate.html">lucid::PixelUpdate</a>&lt; Filter &gt;::filter</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>image_reconstruction/<a class="el" href="filtering_8hpp_source.html">filtering.hpp</a></li>
 </ul>
@@ -205,7 +119,7 @@ template&lt;typename Filter &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="structlucid_1_1PixelUpdate.html">PixelUpdate</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="structlucid_1_1PixelUpdate.html">PixelUpdate</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

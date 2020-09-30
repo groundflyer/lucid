@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -82,304 +88,54 @@ $(document).ready(function(){initNavTree('classlucid_1_1MutableVectorOperators.h
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="classlucid_1_1MutableVectorOperators-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">lucid::MutableVectorOperators&lt; T, N, Container, VectorType &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
+<p>Meta-class defining operators that modify vector elements in-place, such as +=, *=, etc.  
+ <a href="classlucid_1_1MutableVectorOperators.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="vector__operators_8hpp_source.html">vector_operators.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a469dfe7d1a7e07ae6dab89f39d803256"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, std::size_t &gt; typename Container2, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType2&gt; </td></tr>
-<tr class="memitem:a469dfe7d1a7e07ae6dab89f39d803256"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1MutableVectorOperators.html#a469dfe7d1a7e07ae6dab89f39d803256">operator+=</a> (const VectorType2&lt; T, N, Container2 &gt; &amp;rhs) noexcept</td></tr>
+<tr class="memitem:a469dfe7d1a7e07ae6dab89f39d803256"><td class="memTemplParams" colspan="2"><a id="a469dfe7d1a7e07ae6dab89f39d803256"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename Container2, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType2&gt; </td></tr>
+<tr class="memitem:a469dfe7d1a7e07ae6dab89f39d803256"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator+=</b> (const VectorType2&lt; T, N, Container2 &gt; &amp;rhs) noexcept</td></tr>
 <tr class="separator:a469dfe7d1a7e07ae6dab89f39d803256"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44dc190d1a729716210b169723242d5d"><td class="memItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1MutableVectorOperators.html#a44dc190d1a729716210b169723242d5d">operator+=</a> (const T &amp;rhs) noexcept</td></tr>
+<tr class="memitem:a44dc190d1a729716210b169723242d5d"><td class="memItemLeft" align="right" valign="top"><a id="a44dc190d1a729716210b169723242d5d"></a>
+decltype(auto) constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>operator+=</b> (const T &amp;rhs) noexcept</td></tr>
 <tr class="separator:a44dc190d1a729716210b169723242d5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed198c6e834c4a038278631adb781963"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, std::size_t &gt; typename Container2, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType2&gt; </td></tr>
-<tr class="memitem:aed198c6e834c4a038278631adb781963"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1MutableVectorOperators.html#aed198c6e834c4a038278631adb781963">operator-=</a> (const VectorType2&lt; T, N, Container2 &gt; &amp;rhs) noexcept</td></tr>
+<tr class="memitem:aed198c6e834c4a038278631adb781963"><td class="memTemplParams" colspan="2"><a id="aed198c6e834c4a038278631adb781963"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename Container2, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType2&gt; </td></tr>
+<tr class="memitem:aed198c6e834c4a038278631adb781963"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator-=</b> (const VectorType2&lt; T, N, Container2 &gt; &amp;rhs) noexcept</td></tr>
 <tr class="separator:aed198c6e834c4a038278631adb781963"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab39369dd386ad91b261479b546665b59"><td class="memItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1MutableVectorOperators.html#ab39369dd386ad91b261479b546665b59">operator-=</a> (const T &amp;rhs) noexcept</td></tr>
+<tr class="memitem:ab39369dd386ad91b261479b546665b59"><td class="memItemLeft" align="right" valign="top"><a id="ab39369dd386ad91b261479b546665b59"></a>
+decltype(auto) constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>operator-=</b> (const T &amp;rhs) noexcept</td></tr>
 <tr class="separator:ab39369dd386ad91b261479b546665b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac293232f10c0e58ffd53743130181f04"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, std::size_t &gt; typename Container2, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType2&gt; </td></tr>
-<tr class="memitem:ac293232f10c0e58ffd53743130181f04"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1MutableVectorOperators.html#ac293232f10c0e58ffd53743130181f04">operator*=</a> (const VectorType2&lt; T, N, Container2 &gt; &amp;rhs) noexcept</td></tr>
+<tr class="memitem:ac293232f10c0e58ffd53743130181f04"><td class="memTemplParams" colspan="2"><a id="ac293232f10c0e58ffd53743130181f04"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename Container2, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType2&gt; </td></tr>
+<tr class="memitem:ac293232f10c0e58ffd53743130181f04"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator*=</b> (const VectorType2&lt; T, N, Container2 &gt; &amp;rhs) noexcept</td></tr>
 <tr class="separator:ac293232f10c0e58ffd53743130181f04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adef9a0923f7d87405b09c32245baa32a"><td class="memItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1MutableVectorOperators.html#adef9a0923f7d87405b09c32245baa32a">operator*=</a> (const T &amp;rhs) noexcept</td></tr>
+<tr class="memitem:adef9a0923f7d87405b09c32245baa32a"><td class="memItemLeft" align="right" valign="top"><a id="adef9a0923f7d87405b09c32245baa32a"></a>
+decltype(auto) constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>operator*=</b> (const T &amp;rhs) noexcept</td></tr>
 <tr class="separator:adef9a0923f7d87405b09c32245baa32a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33b1d015402c1925382df135eaacc2e6"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, std::size_t &gt; typename Container2, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType2&gt; </td></tr>
-<tr class="memitem:a33b1d015402c1925382df135eaacc2e6"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1MutableVectorOperators.html#a33b1d015402c1925382df135eaacc2e6">operator/=</a> (const VectorType2&lt; T, N, Container2 &gt; &amp;rhs) noexcept</td></tr>
+<tr class="memitem:a33b1d015402c1925382df135eaacc2e6"><td class="memTemplParams" colspan="2"><a id="a33b1d015402c1925382df135eaacc2e6"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename Container2, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType2&gt; </td></tr>
+<tr class="memitem:a33b1d015402c1925382df135eaacc2e6"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator/=</b> (const VectorType2&lt; T, N, Container2 &gt; &amp;rhs) noexcept</td></tr>
 <tr class="separator:a33b1d015402c1925382df135eaacc2e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ac362803b0b62848ae895cffdbfc182"><td class="memItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1MutableVectorOperators.html#a8ac362803b0b62848ae895cffdbfc182">operator/=</a> (const T &amp;rhs) noexcept</td></tr>
+<tr class="memitem:a8ac362803b0b62848ae895cffdbfc182"><td class="memItemLeft" align="right" valign="top"><a id="a8ac362803b0b62848ae895cffdbfc182"></a>
+decltype(auto) constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>operator/=</b> (const T &amp;rhs) noexcept</td></tr>
 <tr class="separator:a8ac362803b0b62848ae895cffdbfc182"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:aa56bb90e14a10129de28a10783b23f79"><td class="memItemLeft" align="right" valign="top">constexpr VectorType&lt; T, N, Container &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1MutableVectorOperators.html#aa56bb90e14a10129de28a10783b23f79">this_vec</a> () noexcept</td></tr>
-<tr class="separator:aa56bb90e14a10129de28a10783b23f79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac293232f10c0e58ffd53743130181f04"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac293232f10c0e58ffd53743130181f04">&#9670;&nbsp;</a></span>operator*=() <span class="overload">[1/2]</span></h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;typename T, std::size_t N, template&lt; typename, std::size_t &gt; typename Container, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType&gt;<br />
+class lucid::MutableVectorOperators&lt; T, N, Container, VectorType &gt;</h3>
 
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t N, template&lt; typename, std::size_t &gt; typename Container, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType&gt; </div>
-<div class="memtemplate">
-template&lt;template&lt; typename, std::size_t &gt; typename Container2, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType2&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classlucid_1_1MutableVectorOperators.html">lucid::MutableVectorOperators</a>&lt; T, N, Container, VectorType &gt;::operator*= </td>
-          <td>(</td>
-          <td class="paramtype">const VectorType2&lt; T, N, Container2 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="adef9a0923f7d87405b09c32245baa32a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adef9a0923f7d87405b09c32245baa32a">&#9670;&nbsp;</a></span>operator*=() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t N, template&lt; typename, std::size_t &gt; typename Container, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classlucid_1_1MutableVectorOperators.html">lucid::MutableVectorOperators</a>&lt; T, N, Container, VectorType &gt;::operator*= </td>
-          <td>(</td>
-          <td class="paramtype">const T &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a469dfe7d1a7e07ae6dab89f39d803256"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a469dfe7d1a7e07ae6dab89f39d803256">&#9670;&nbsp;</a></span>operator+=() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t N, template&lt; typename, std::size_t &gt; typename Container, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType&gt; </div>
-<div class="memtemplate">
-template&lt;template&lt; typename, std::size_t &gt; typename Container2, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType2&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classlucid_1_1MutableVectorOperators.html">lucid::MutableVectorOperators</a>&lt; T, N, Container, VectorType &gt;::operator+= </td>
-          <td>(</td>
-          <td class="paramtype">const VectorType2&lt; T, N, Container2 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a44dc190d1a729716210b169723242d5d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44dc190d1a729716210b169723242d5d">&#9670;&nbsp;</a></span>operator+=() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t N, template&lt; typename, std::size_t &gt; typename Container, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classlucid_1_1MutableVectorOperators.html">lucid::MutableVectorOperators</a>&lt; T, N, Container, VectorType &gt;::operator+= </td>
-          <td>(</td>
-          <td class="paramtype">const T &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aed198c6e834c4a038278631adb781963"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed198c6e834c4a038278631adb781963">&#9670;&nbsp;</a></span>operator-=() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t N, template&lt; typename, std::size_t &gt; typename Container, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType&gt; </div>
-<div class="memtemplate">
-template&lt;template&lt; typename, std::size_t &gt; typename Container2, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType2&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classlucid_1_1MutableVectorOperators.html">lucid::MutableVectorOperators</a>&lt; T, N, Container, VectorType &gt;::operator-= </td>
-          <td>(</td>
-          <td class="paramtype">const VectorType2&lt; T, N, Container2 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab39369dd386ad91b261479b546665b59"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab39369dd386ad91b261479b546665b59">&#9670;&nbsp;</a></span>operator-=() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t N, template&lt; typename, std::size_t &gt; typename Container, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classlucid_1_1MutableVectorOperators.html">lucid::MutableVectorOperators</a>&lt; T, N, Container, VectorType &gt;::operator-= </td>
-          <td>(</td>
-          <td class="paramtype">const T &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a33b1d015402c1925382df135eaacc2e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33b1d015402c1925382df135eaacc2e6">&#9670;&nbsp;</a></span>operator/=() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t N, template&lt; typename, std::size_t &gt; typename Container, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType&gt; </div>
-<div class="memtemplate">
-template&lt;template&lt; typename, std::size_t &gt; typename Container2, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType2&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classlucid_1_1MutableVectorOperators.html">lucid::MutableVectorOperators</a>&lt; T, N, Container, VectorType &gt;::operator/= </td>
-          <td>(</td>
-          <td class="paramtype">const VectorType2&lt; T, N, Container2 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8ac362803b0b62848ae895cffdbfc182"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ac362803b0b62848ae895cffdbfc182">&#9670;&nbsp;</a></span>operator/=() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t N, template&lt; typename, std::size_t &gt; typename Container, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classlucid_1_1MutableVectorOperators.html">lucid::MutableVectorOperators</a>&lt; T, N, Container, VectorType &gt;::operator/= </td>
-          <td>(</td>
-          <td class="paramtype">const T &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa56bb90e14a10129de28a10783b23f79"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa56bb90e14a10129de28a10783b23f79">&#9670;&nbsp;</a></span>this_vec()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T, std::size_t N, template&lt; typename, std::size_t &gt; typename Container, template&lt; typename, std::size_t, template&lt; typename, std::size_t &gt; typename &gt; typename VectorType&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr VectorType&lt;T, N, Container&gt;&amp; <a class="el" href="classlucid_1_1MutableVectorOperators.html">lucid::MutableVectorOperators</a>&lt; T, N, Container, VectorType &gt;::this_vec </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<p>Meta-class defining operators that modify vector elements in-place, such as +=, *=, etc. </p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>base/<a class="el" href="vector__operators_8hpp_source.html">vector_operators.hpp</a></li>
 </ul>
 </div><!-- contents -->
@@ -387,7 +143,7 @@ template&lt;typename T, std::size_t N, template&lt; typename, std::size_t &gt; t
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="classlucid_1_1MutableVectorOperators.html">MutableVectorOperators</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="classlucid_1_1MutableVectorOperators.html">MutableVectorOperators</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

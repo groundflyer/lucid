@@ -28,8 +28,5 @@ var classlucid_1_1ScanlineImage =
     [ "pos", "classlucid_1_1ScanlineImage.html#a6e0aa8783fd30ff609aa8582000e914f", null ],
     [ "res", "classlucid_1_1ScanlineImage.html#ab5dca2d42a755112fbbe78d53ba98fff", null ],
     [ "size", "classlucid_1_1ScanlineImage.html#a916653bf8bcb56abfdfa154fc128790f", null ],
-    [ "width", "classlucid_1_1ScanlineImage.html#ac206a6cc62fbaab60b7dd7d534f01bf3", null ],
-    [ "m_alloc", "classlucid_1_1ScanlineImage.html#a371dfc0db4defe4c4f7aba244068336c", null ],
-    [ "m_res", "classlucid_1_1ScanlineImage.html#ad049a83ee0df4ef9594ee0086e283d50", null ],
-    [ "p_data", "classlucid_1_1ScanlineImage.html#ac291df71f98311d5dcb05438e7a3a21c", null ]
+    [ "width", "classlucid_1_1ScanlineImage.html#ac206a6cc62fbaab60b7dd7d534f01bf3", null ]
 ];

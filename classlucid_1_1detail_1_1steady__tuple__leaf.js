@@ -8,6 +8,5 @@ var classlucid_1_1detail_1_1steady__tuple__leaf =
     [ "get", "classlucid_1_1detail_1_1steady__tuple__leaf.html#a6731da25cbf08efd41917272af703960", null ],
     [ "get", "classlucid_1_1detail_1_1steady__tuple__leaf.html#a6baa1204d3349f32e3b1177541486391", null ],
     [ "operator=", "classlucid_1_1detail_1_1steady__tuple__leaf.html#a3f9eebbe7169f81f4ee5f3753b262b40", null ],
-    [ "operator=", "classlucid_1_1detail_1_1steady__tuple__leaf.html#a957e1925764cce6c851ecb0240b2cba7", null ],
-    [ "value", "classlucid_1_1detail_1_1steady__tuple__leaf.html#a723b00d0a220eb62ef1d0893ff770124", null ]
+    [ "operator=", "classlucid_1_1detail_1_1steady__tuple__leaf.html#a957e1925764cce6c851ecb0240b2cba7", null ]
 ];

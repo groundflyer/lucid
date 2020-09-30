@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -88,8 +94,6 @@ $(document).ready(function(){initNavTree('structlucid_1_1Intersection__.html',''
 <div class="title">lucid::Intersection_&lt; Container &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="ray__traversal_8hpp_source.html">ray_traversal.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for lucid::Intersection_&lt; Container &gt;:</div>
 <div class="dyncontent">
@@ -99,174 +103,26 @@ Collaboration diagram for lucid::Intersection_&lt; Container &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3df6b5f931ff676f86b078e00d188d9c"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Intersection__.html#a3df6b5f931ff676f86b078e00d188d9c">Intersection_</a> () noexcept</td></tr>
-<tr class="separator:a3df6b5f931ff676f86b078e00d188d9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac49c8f880b309255295e96690b122601"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
-<tr class="memitem:ac49c8f880b309255295e96690b122601"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structlucid_1_1Intersection__.html#ac49c8f880b309255295e96690b122601">Intersection_</a> (const bool _intersect, const <a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> &amp;_t, const <a class="el" href="namespacelucid.html#a47c863ae187db0fe6f83e50c8346e781">Vec2_</a>&lt; Container2 &gt; &amp;_st) noexcept</td></tr>
+<tr class="memitem:ac49c8f880b309255295e96690b122601"><td class="memTemplParams" colspan="2"><a id="ac49c8f880b309255295e96690b122601"></a>
+template&lt;template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
+<tr class="memitem:ac49c8f880b309255295e96690b122601"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Intersection_</b> (const bool _intersect, const real &amp;_t, const <a class="el" href="classlucid_1_1Vector.html">Vec2_</a>&lt; Container2 &gt; &amp;_st) noexcept</td></tr>
 <tr class="separator:ac49c8f880b309255295e96690b122601"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93805487d04883203ed291f3b7714a8e"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Intersection__.html#a93805487d04883203ed291f3b7714a8e">operator bool</a> () const noexcept</td></tr>
+<tr class="memitem:a93805487d04883203ed291f3b7714a8e"><td class="memItemLeft" align="right" valign="top"><a id="a93805487d04883203ed291f3b7714a8e"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>operator bool</b> () const noexcept</td></tr>
 <tr class="separator:a93805487d04883203ed291f3b7714a8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ad791407cc72a00551d8d4f7bbd3b18a3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Intersection__.html#ad791407cc72a00551d8d4f7bbd3b18a3">intersect</a></td></tr>
+<tr class="memitem:ad791407cc72a00551d8d4f7bbd3b18a3"><td class="memItemLeft" align="right" valign="top"><a id="ad791407cc72a00551d8d4f7bbd3b18a3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>intersect</b></td></tr>
 <tr class="separator:ad791407cc72a00551d8d4f7bbd3b18a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18be7ce63136df16444d6c8f253551ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Intersection__.html#a18be7ce63136df16444d6c8f253551ee">t</a></td></tr>
+<tr class="memitem:a18be7ce63136df16444d6c8f253551ee"><td class="memItemLeft" align="right" valign="top"><a id="a18be7ce63136df16444d6c8f253551ee"></a>
+real&#160;</td><td class="memItemRight" valign="bottom"><b>t</b></td></tr>
 <tr class="separator:a18be7ce63136df16444d6c8f253551ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0e52c5b24febb0eaa54dcfef021f0d5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a47c863ae187db0fe6f83e50c8346e781">Vec2_</a>&lt; Container &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Intersection__.html#ac0e52c5b24febb0eaa54dcfef021f0d5">st</a></td></tr>
+<tr class="memitem:ac0e52c5b24febb0eaa54dcfef021f0d5"><td class="memItemLeft" align="right" valign="top"><a id="ac0e52c5b24febb0eaa54dcfef021f0d5"></a>
+<a class="el" href="classlucid_1_1Vector.html">Vec2_</a>&lt; Container &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>st</b></td></tr>
 <tr class="separator:ac0e52c5b24febb0eaa54dcfef021f0d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a3df6b5f931ff676f86b078e00d188d9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3df6b5f931ff676f86b078e00d188d9c">&#9670;&nbsp;</a></span>Intersection_() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1Intersection__.html">lucid::Intersection_</a>&lt; Container &gt;::<a class="el" href="structlucid_1_1Intersection__.html">Intersection_</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac49c8f880b309255295e96690b122601"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac49c8f880b309255295e96690b122601">&#9670;&nbsp;</a></span>Intersection_() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container2&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1Intersection__.html">lucid::Intersection_</a>&lt; Container &gt;::<a class="el" href="structlucid_1_1Intersection__.html">Intersection_</a> </td>
-          <td>(</td>
-          <td class="paramtype">const bool&#160;</td>
-          <td class="paramname"><em>_intersect</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> &amp;&#160;</td>
-          <td class="paramname"><em>_t</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#a47c863ae187db0fe6f83e50c8346e781">Vec2_</a>&lt; Container2 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>_st</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a93805487d04883203ed291f3b7714a8e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93805487d04883203ed291f3b7714a8e">&#9670;&nbsp;</a></span>operator bool()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1Intersection__.html">lucid::Intersection_</a>&lt; Container &gt;::operator bool </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="ad791407cc72a00551d8d4f7bbd3b18a3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad791407cc72a00551d8d4f7bbd3b18a3">&#9670;&nbsp;</a></span>intersect</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="structlucid_1_1Intersection__.html">lucid::Intersection_</a>&lt; Container &gt;::intersect</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac0e52c5b24febb0eaa54dcfef021f0d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac0e52c5b24febb0eaa54dcfef021f0d5">&#9670;&nbsp;</a></span>st</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a47c863ae187db0fe6f83e50c8346e781">Vec2_</a>&lt;Container&gt; <a class="el" href="structlucid_1_1Intersection__.html">lucid::Intersection_</a>&lt; Container &gt;::st</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a18be7ce63136df16444d6c8f253551ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18be7ce63136df16444d6c8f253551ee">&#9670;&nbsp;</a></span>t</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> <a class="el" href="structlucid_1_1Intersection__.html">lucid::Intersection_</a>&lt; Container &gt;::t</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>ray_traversal/<a class="el" href="ray__traversal_8hpp_source.html">ray_traversal.hpp</a></li>
 </ul>
@@ -275,7 +131,7 @@ template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="structlucid_1_1Intersection__.html">Intersection_</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="structlucid_1_1Intersection__.html">Intersection_</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

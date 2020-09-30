@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -82,138 +88,26 @@ $(document).ready(function(){initNavTree('classlucid_1_1RandomDistribution_3_01b
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classlucid_1_1RandomDistribution_3_01bool_01_4-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">lucid::RandomDistribution&lt; bool &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="rng_8hpp_source.html">rng.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad759af0a6f8d34dd6ab711239d8a209d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1RandomDistribution_3_01bool_01_4.html#ad759af0a6f8d34dd6ab711239d8a209d">RandomDistribution</a> (double p)</td></tr>
+<tr class="memitem:ad759af0a6f8d34dd6ab711239d8a209d"><td class="memItemLeft" align="right" valign="top"><a id="ad759af0a6f8d34dd6ab711239d8a209d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>RandomDistribution</b> (double p)</td></tr>
 <tr class="separator:ad759af0a6f8d34dd6ab711239d8a209d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c2853c5789d6cdb6a51db3894a68174"><td class="memTemplParams" colspan="2">template&lt;typename Generator &gt; </td></tr>
-<tr class="memitem:a2c2853c5789d6cdb6a51db3894a68174"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1RandomDistribution_3_01bool_01_4.html#a2c2853c5789d6cdb6a51db3894a68174">operator()</a> (Generator &amp;<a class="el" href="lucid_8cpp.html#a6287b6f071b78197228f3cdbe680bbca">g</a>) noexcept</td></tr>
+<tr class="memitem:a2c2853c5789d6cdb6a51db3894a68174"><td class="memTemplParams" colspan="2"><a id="a2c2853c5789d6cdb6a51db3894a68174"></a>
+template&lt;typename Generator &gt; </td></tr>
+<tr class="memitem:a2c2853c5789d6cdb6a51db3894a68174"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator()</b> (Generator &amp;g) noexcept</td></tr>
 <tr class="separator:a2c2853c5789d6cdb6a51db3894a68174"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67976caaffc3d6765e1dd72e663b1185"><td class="memTemplParams" colspan="2">template&lt;size_t N, typename Generator , template&lt; typename, size_t &gt; typename Container = std::array&gt; </td></tr>
-<tr class="memitem:a67976caaffc3d6765e1dd72e663b1185"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classlucid_1_1RandomDistribution_3_01bool_01_4.html#a67976caaffc3d6765e1dd72e663b1185">operator()</a> (Generator &amp;<a class="el" href="lucid_8cpp.html#a6287b6f071b78197228f3cdbe680bbca">g</a>) noexcept</td></tr>
+<tr class="memitem:a67976caaffc3d6765e1dd72e663b1185"><td class="memTemplParams" colspan="2"><a id="a67976caaffc3d6765e1dd72e663b1185"></a>
+template&lt;size_t N, typename Generator , template&lt; typename, size_t &gt; typename Container = std::array&gt; </td></tr>
+<tr class="memitem:a67976caaffc3d6765e1dd72e663b1185"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator()</b> (Generator &amp;g) noexcept</td></tr>
 <tr class="separator:a67976caaffc3d6765e1dd72e663b1185"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:a8ffcd8b99049574309a038e07b31160e"><td class="memItemLeft" align="right" valign="top">std::bernoulli_distribution&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1RandomDistribution_3_01bool_01_4.html#a8ffcd8b99049574309a038e07b31160e">m_dist</a></td></tr>
-<tr class="separator:a8ffcd8b99049574309a038e07b31160e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ad759af0a6f8d34dd6ab711239d8a209d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad759af0a6f8d34dd6ab711239d8a209d">&#9670;&nbsp;</a></span>RandomDistribution()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classlucid_1_1RandomDistribution.html">lucid::RandomDistribution</a>&lt; bool &gt;::<a class="el" href="classlucid_1_1RandomDistribution.html">RandomDistribution</a> </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>p</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a2c2853c5789d6cdb6a51db3894a68174"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c2853c5789d6cdb6a51db3894a68174">&#9670;&nbsp;</a></span>operator()() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Generator &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto <a class="el" href="classlucid_1_1RandomDistribution.html">lucid::RandomDistribution</a>&lt; bool &gt;::operator() </td>
-          <td>(</td>
-          <td class="paramtype">Generator &amp;&#160;</td>
-          <td class="paramname"><em>g</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a67976caaffc3d6765e1dd72e663b1185"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67976caaffc3d6765e1dd72e663b1185">&#9670;&nbsp;</a></span>operator()() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;size_t N, typename Generator , template&lt; typename, size_t &gt; typename Container = std::array&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto <a class="el" href="classlucid_1_1RandomDistribution.html">lucid::RandomDistribution</a>&lt; bool &gt;::operator() </td>
-          <td>(</td>
-          <td class="paramtype">Generator &amp;&#160;</td>
-          <td class="paramname"><em>g</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a8ffcd8b99049574309a038e07b31160e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ffcd8b99049574309a038e07b31160e">&#9670;&nbsp;</a></span>m_dist</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::bernoulli_distribution <a class="el" href="classlucid_1_1RandomDistribution.html">lucid::RandomDistribution</a>&lt; bool &gt;::m_dist</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>base/<a class="el" href="rng_8hpp_source.html">rng.hpp</a></li>
 </ul>
@@ -222,7 +116,7 @@ template&lt;size_t N, typename Generator , template&lt; typename, size_t &gt; ty
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="classlucid_1_1RandomDistribution_3_01bool_01_4.html">RandomDistribution&lt; bool &gt;</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="classlucid_1_1RandomDistribution_3_01bool_01_4.html">RandomDistribution&lt; bool &gt;</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

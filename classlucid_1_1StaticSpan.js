@@ -18,6 +18,5 @@ var classlucid_1_1StaticSpan =
     [ "get", "classlucid_1_1StaticSpan.html#a6033bd7d68a326215558ba5fb0f3f234", null ],
     [ "get", "classlucid_1_1StaticSpan.html#a53c47d61706622d08312a9b1ce10c75c", null ],
     [ "operator[]", "classlucid_1_1StaticSpan.html#a8b386a54e279065599e48aa254e76104", null ],
-    [ "operator[]", "classlucid_1_1StaticSpan.html#ad140ec843f2a2a2a700e7138f6b8c0ea", null ],
-    [ "p_data", "classlucid_1_1StaticSpan.html#a4621f18c37557543d3ef60b75f1edcfb", null ]
+    [ "operator[]", "classlucid_1_1StaticSpan.html#ad140ec843f2a2a2a700e7138f6b8c0ea", null ]
 ];

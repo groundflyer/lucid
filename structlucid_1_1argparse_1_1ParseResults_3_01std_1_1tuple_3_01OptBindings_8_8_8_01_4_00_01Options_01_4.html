@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -88,108 +94,23 @@ $(document).ready(function(){initNavTree('structlucid_1_1argparse_1_1ParseResult
 <div class="title">lucid::argparse::ParseResults&lt; std::tuple&lt; OptBindings... &gt;, Options &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="argparse_8hpp_source.html">argparse.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a55462e3a6a5f44f6322ec29886e70fa6"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1ParseResults_3_01std_1_1tuple_3_01OptBindings_8_8_8_01_4_00_01Options_01_4.html#a55462e3a6a5f44f6322ec29886e70fa6">ParseResults</a> (const std::tuple&lt; OptBindings... &gt; &amp;_bindings, const Options &amp;) noexcept</td></tr>
+<tr class="memitem:a55462e3a6a5f44f6322ec29886e70fa6"><td class="memItemLeft" align="right" valign="top"><a id="a55462e3a6a5f44f6322ec29886e70fa6"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>ParseResults</b> (const std::tuple&lt; OptBindings... &gt; &amp;_bindings, const Options &amp;) noexcept</td></tr>
 <tr class="separator:a55462e3a6a5f44f6322ec29886e70fa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a760e4ee2a341e0d501cb629efc299446"><td class="memTemplParams" colspan="2">template&lt;char Key&gt; </td></tr>
-<tr class="memitem:a760e4ee2a341e0d501cb629efc299446"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1ParseResults_3_01std_1_1tuple_3_01OptBindings_8_8_8_01_4_00_01Options_01_4.html#a760e4ee2a341e0d501cb629efc299446">get_opt</a> () const noexcept</td></tr>
+<tr class="memitem:a760e4ee2a341e0d501cb629efc299446"><td class="memTemplParams" colspan="2"><a id="a760e4ee2a341e0d501cb629efc299446"></a>
+template&lt;char Key&gt; </td></tr>
+<tr class="memitem:a760e4ee2a341e0d501cb629efc299446"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get_opt</b> () const noexcept</td></tr>
 <tr class="separator:a760e4ee2a341e0d501cb629efc299446"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a048c3bcd2013f3240ac3d2199e5d97be"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; OptBindings... &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1argparse_1_1ParseResults_3_01std_1_1tuple_3_01OptBindings_8_8_8_01_4_00_01Options_01_4.html#a048c3bcd2013f3240ac3d2199e5d97be">opt_bindings</a></td></tr>
+<tr class="memitem:a048c3bcd2013f3240ac3d2199e5d97be"><td class="memItemLeft" align="right" valign="top"><a id="a048c3bcd2013f3240ac3d2199e5d97be"></a>
+std::tuple&lt; OptBindings... &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>opt_bindings</b></td></tr>
 <tr class="separator:a048c3bcd2013f3240ac3d2199e5d97be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a55462e3a6a5f44f6322ec29886e70fa6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a55462e3a6a5f44f6322ec29886e70fa6">&#9670;&nbsp;</a></span>ParseResults()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... OptBindings, typename Options &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="structlucid_1_1argparse_1_1ParseResults.html">lucid::argparse::ParseResults</a>&lt; std::tuple&lt; OptBindings... &gt;, Options &gt;::<a class="el" href="structlucid_1_1argparse_1_1ParseResults.html">ParseResults</a> </td>
-          <td>(</td>
-          <td class="paramtype">const std::tuple&lt; OptBindings... &gt; &amp;&#160;</td>
-          <td class="paramname"><em>_bindings</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Options &amp;&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a760e4ee2a341e0d501cb629efc299446"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a760e4ee2a341e0d501cb629efc299446">&#9670;&nbsp;</a></span>get_opt()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... OptBindings, typename Options &gt; </div>
-<div class="memtemplate">
-template&lt;char Key&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="structlucid_1_1argparse_1_1ParseResults.html">lucid::argparse::ParseResults</a>&lt; std::tuple&lt; OptBindings... &gt;, Options &gt;::get_opt </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a048c3bcd2013f3240ac3d2199e5d97be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a048c3bcd2013f3240ac3d2199e5d97be">&#9670;&nbsp;</a></span>opt_bindings</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... OptBindings, typename Options &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::tuple&lt;OptBindings...&gt; <a class="el" href="structlucid_1_1argparse_1_1ParseResults.html">lucid::argparse::ParseResults</a>&lt; std::tuple&lt; OptBindings... &gt;, Options &gt;::opt_bindings</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>utils/<a class="el" href="argparse_8hpp_source.html">argparse.hpp</a></li>
 </ul>
@@ -198,7 +119,7 @@ template&lt;typename... OptBindings, typename Options &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="namespacelucid_1_1argparse.html">argparse</a></li><li class="navelem"><a class="el" href="structlucid_1_1argparse_1_1ParseResults_3_01std_1_1tuple_3_01OptBindings_8_8_8_01_4_00_01Options_01_4.html">ParseResults&lt; std::tuple&lt; OptBindings... &gt;, Options &gt;</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><b>argparse</b></li><li class="navelem"><a class="el" href="structlucid_1_1argparse_1_1ParseResults_3_01std_1_1tuple_3_01OptBindings_8_8_8_01_4_00_01Options_01_4.html">ParseResults&lt; std::tuple&lt; OptBindings... &gt;, Options &gt;</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

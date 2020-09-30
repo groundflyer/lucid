@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -88,108 +94,23 @@ $(document).ready(function(){initNavTree('structfmt_1_1formatter_3_01lucid_1_1ar
 <div class="title">fmt::formatter&lt; lucid::argparse::detail::fmt_data&lt; std::tuple&lt; Options... &gt;, std::tuple&lt; Positionals... &gt; &gt; &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="argparse_8hpp_source.html">argparse.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ae1885f607ec281b3468a396ebe53c45d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfmt_1_1formatter_3_01lucid_1_1argparse_1_1detail_1_1fmt__data_3_01std_1_1tuple_3_01Options4ef399db7b77ecc75752d8a2ef56743f.html#ae1885f607ec281b3468a396ebe53c45d">Desc</a> = <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">lucid::argparse::detail::fmt_data</a>&lt; std::tuple&lt; Options... &gt;, std::tuple&lt; Positionals... &gt; &gt;</td></tr>
+<tr class="memitem:ae1885f607ec281b3468a396ebe53c45d"><td class="memItemLeft" align="right" valign="top"><a id="ae1885f607ec281b3468a396ebe53c45d"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>Desc</b> = <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">lucid::argparse::detail::fmt_data</a>&lt; std::tuple&lt; Options... &gt;, std::tuple&lt; Positionals... &gt; &gt;</td></tr>
 <tr class="separator:ae1885f607ec281b3468a396ebe53c45d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa52ef85daf1b4bc289764142198d7d41"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfmt_1_1formatter_3_01lucid_1_1argparse_1_1detail_1_1fmt__data_3_01std_1_1tuple_3_01Options4ef399db7b77ecc75752d8a2ef56743f.html#aa52ef85daf1b4bc289764142198d7d41">parse</a> (format_parse_context &amp;ctx) const</td></tr>
+<tr class="memitem:aa52ef85daf1b4bc289764142198d7d41"><td class="memItemLeft" align="right" valign="top"><a id="aa52ef85daf1b4bc289764142198d7d41"></a>
+constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><b>parse</b> (format_parse_context &amp;ctx) const</td></tr>
 <tr class="separator:aa52ef85daf1b4bc289764142198d7d41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5347238278514ae9716a66ff0df5e88"><td class="memTemplParams" colspan="2">template&lt;typename FormatContext &gt; </td></tr>
-<tr class="memitem:aa5347238278514ae9716a66ff0df5e88"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structfmt_1_1formatter_3_01lucid_1_1argparse_1_1detail_1_1fmt__data_3_01std_1_1tuple_3_01Options4ef399db7b77ecc75752d8a2ef56743f.html#aa5347238278514ae9716a66ff0df5e88">format</a> (const <a class="el" href="structfmt_1_1formatter_3_01lucid_1_1argparse_1_1detail_1_1fmt__data_3_01std_1_1tuple_3_01Options4ef399db7b77ecc75752d8a2ef56743f.html#ae1885f607ec281b3468a396ebe53c45d">Desc</a> &amp;desc, FormatContext &amp;ctx) const</td></tr>
+<tr class="memitem:aa5347238278514ae9716a66ff0df5e88"><td class="memTemplParams" colspan="2"><a id="aa5347238278514ae9716a66ff0df5e88"></a>
+template&lt;typename FormatContext &gt; </td></tr>
+<tr class="memitem:aa5347238278514ae9716a66ff0df5e88"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>format</b> (const <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">Desc</a> &amp;desc, FormatContext &amp;ctx) const</td></tr>
 <tr class="separator:aa5347238278514ae9716a66ff0df5e88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="ae1885f607ec281b3468a396ebe53c45d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae1885f607ec281b3468a396ebe53c45d">&#9670;&nbsp;</a></span>Desc</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Options, typename... Positionals&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using fmt::formatter&lt; <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">lucid::argparse::detail::fmt_data</a>&lt; std::tuple&lt; Options... &gt;, std::tuple&lt; Positionals... &gt; &gt; &gt;::<a class="el" href="structfmt_1_1formatter_3_01lucid_1_1argparse_1_1detail_1_1fmt__data_3_01std_1_1tuple_3_01Options4ef399db7b77ecc75752d8a2ef56743f.html#ae1885f607ec281b3468a396ebe53c45d">Desc</a> =  <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">lucid::argparse::detail::fmt_data</a>&lt;std::tuple&lt;Options...&gt;, std::tuple&lt;Positionals...&gt; &gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa5347238278514ae9716a66ff0df5e88"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5347238278514ae9716a66ff0df5e88">&#9670;&nbsp;</a></span>format()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Options, typename... Positionals&gt; </div>
-<div class="memtemplate">
-template&lt;typename FormatContext &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto fmt::formatter&lt; <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">lucid::argparse::detail::fmt_data</a>&lt; std::tuple&lt; Options... &gt;, std::tuple&lt; Positionals... &gt; &gt; &gt;::format </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structfmt_1_1formatter_3_01lucid_1_1argparse_1_1detail_1_1fmt__data_3_01std_1_1tuple_3_01Options4ef399db7b77ecc75752d8a2ef56743f.html#ae1885f607ec281b3468a396ebe53c45d">Desc</a> &amp;&#160;</td>
-          <td class="paramname"><em>desc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">FormatContext &amp;&#160;</td>
-          <td class="paramname"><em>ctx</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa52ef85daf1b4bc289764142198d7d41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa52ef85daf1b4bc289764142198d7d41">&#9670;&nbsp;</a></span>parse()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename... Options, typename... Positionals&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto fmt::formatter&lt; <a class="el" href="structlucid_1_1argparse_1_1detail_1_1fmt__data.html">lucid::argparse::detail::fmt_data</a>&lt; std::tuple&lt; Options... &gt;, std::tuple&lt; Positionals... &gt; &gt; &gt;::parse </td>
-          <td>(</td>
-          <td class="paramtype">format_parse_context &amp;&#160;</td>
-          <td class="paramname"><em>ctx</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>utils/<a class="el" href="argparse_8hpp_source.html">argparse.hpp</a></li>
 </ul>
@@ -198,7 +119,7 @@ template&lt;typename... Options, typename... Positionals&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacefmt.html">fmt</a></li><li class="navelem"><a class="el" href="structfmt_1_1formatter_3_01lucid_1_1argparse_1_1detail_1_1fmt__data_3_01std_1_1tuple_3_01Options4ef399db7b77ecc75752d8a2ef56743f.html">formatter&lt; lucid::argparse::detail::fmt_data&lt; std::tuple&lt; Options... &gt;, std::tuple&lt; Positionals... &gt; &gt; &gt;</a></li>
+    <li class="navelem"><b>fmt</b></li><li class="navelem"><a class="el" href="structfmt_1_1formatter_3_01lucid_1_1argparse_1_1detail_1_1fmt__data_3_01std_1_1tuple_3_01Options4ef399db7b77ecc75752d8a2ef56743f.html">formatter&lt; lucid::argparse::detail::fmt_data&lt; std::tuple&lt; Options... &gt;, std::tuple&lt; Positionals... &gt; &gt; &gt;</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

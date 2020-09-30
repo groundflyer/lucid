@@ -1,7 +1,10 @@
 var searchData=
 [
-  ['unexpectedvalue',['UnexpectedValue',['../structlucid_1_1argparse_1_1UnexpectedValue.html',1,'lucid::argparse']]],
-  ['uniform_5finit',['uniform_init',['../structlucid_1_1uniform__init.html',1,'lucid']]],
-  ['unpack',['unpack',['../classlucid_1_1Matrix.html#a2218073109c3b0f10965450915744c0b',1,'lucid::Matrix::unpack() const noexcept'],['../classlucid_1_1Matrix.html#a8a6886209cc5565e4b20914ee6febe2a',1,'lucid::Matrix::unpack(const T &amp;head, Ts &amp;&amp;... tail) noexcept'],['../classlucid_1_1Matrix.html#a7d9c01888f7b4b2a23b78b7fe1813882',1,'lucid::Matrix::unpack(const VectorType&lt; T, MN1, Container2 &gt; &amp;head, Ts &amp;&amp;... tail) noexcept'],['../classlucid_1_1Matrix.html#a9d1a32c90aa7e015d559243c9423ed27',1,'lucid::Matrix::unpack(const Container&lt; T, MN1 &gt; &amp;head, Ts &amp;&amp;... tail) noexcept'],['../classlucid_1_1Matrix.html#af01b16e06e0b59dc5bcee5c587662cab',1,'lucid::Matrix::unpack(const Matrix&lt; T, M1, N1, Container1 &gt; &amp;head, Ts &amp;&amp;... tail) noexcept']]],
-  ['update_5fargv',['update_argv',['../structArgvMock.html#a193de333a4e2d4ac76ae41b838ca3eaf',1,'ArgvMock']]]
+  ['value',['Value',['../structlucid_1_1argparse_1_1Value.html',1,'lucid::argparse']]],
+  ['vector',['Vector',['../classlucid_1_1Vector.html',1,'lucid::Vector&lt; T, N, Container &gt;'],['../classlucid_1_1Vector.html#ae4463f8c82234b1881b0c5d354957d61',1,'lucid::Vector::Vector()']]],
+  ['vector_2ehpp',['vector.hpp',['../vector_8hpp.html',1,'']]],
+  ['vector_3c_20container_20_3e',['Vector&lt; Container &gt;',['../classlucid_1_1Vector.html',1,'lucid']]],
+  ['vector_3c_20std_3a_3aarray_20_3e',['Vector&lt; std::array &gt;',['../classlucid_1_1Vector.html',1,'lucid']]],
+  ['vector_5foperators_2ehpp',['vector_operators.hpp',['../vector__operators_8hpp.html',1,'']]],
+  ['visitor',['Visitor',['../classlucid_1_1argparse_1_1Visitor.html',1,'lucid::argparse']]]
 ];

@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -88,204 +94,43 @@ $(document).ready(function(){initNavTree('structlucid_1_1Film.html','');});
 <div class="title">lucid::Film&lt; Image &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="image__reconstruction_2film_8hpp_source.html">film.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for lucid::Film&lt; Image &gt;:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="structlucid_1_1Film__coll__graph.svg" width="100%" height="410"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="structlucid_1_1Film__coll__graph.svg" width="100%" height="424"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4f2f7433d0d226b0f974e84a5be3836d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Film.html#a4f2f7433d0d226b0f974e84a5be3836d">Film</a> (const <a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a> &amp;res_u) noexcept</td></tr>
+<tr class="memitem:a4f2f7433d0d226b0f974e84a5be3836d"><td class="memItemLeft" align="right" valign="top"><a id="a4f2f7433d0d226b0f974e84a5be3836d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Film</b> (const <a class="el" href="classlucid_1_1Vector.html">Vec2u</a> &amp;res_u) noexcept</td></tr>
 <tr class="separator:a4f2f7433d0d226b0f974e84a5be3836d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa65904414ed7f72fe751b742a1f3a2ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Film.html#aa65904414ed7f72fe751b742a1f3a2ac">sample_space</a> (const <a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a> &amp;_pidx) const noexcept</td></tr>
+<tr class="memitem:aa65904414ed7f72fe751b742a1f3a2ac"><td class="memItemLeft" align="right" valign="top"><a id="aa65904414ed7f72fe751b742a1f3a2ac"></a>
+<a class="el" href="classlucid_1_1Vector.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>sample_space</b> (const <a class="el" href="classlucid_1_1Vector.html">Vec2u</a> &amp;_pidx) const noexcept</td></tr>
 <tr class="separator:aa65904414ed7f72fe751b742a1f3a2ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3c3cec08be7f7a33bc130d892b2deaf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Film.html#aa3c3cec08be7f7a33bc130d892b2deaf">pixel_index</a> (const <a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a> &amp;pos) const noexcept</td></tr>
+<tr class="memitem:aa3c3cec08be7f7a33bc130d892b2deaf"><td class="memItemLeft" align="right" valign="top"><a id="aa3c3cec08be7f7a33bc130d892b2deaf"></a>
+<a class="el" href="classlucid_1_1Vector.html">Vec2u</a>&#160;</td><td class="memItemRight" valign="bottom"><b>pixel_index</b> (const <a class="el" href="classlucid_1_1Vector.html">Vec2</a> &amp;pos) const noexcept</td></tr>
 <tr class="separator:aa3c3cec08be7f7a33bc130d892b2deaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a99e7ce764b93a47edc40d2596ad6508a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="lucid_8cpp.html#a6183ac6a3e68656f790e96ced506ab7b">Image</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Film.html#a99e7ce764b93a47edc40d2596ad6508a">img</a></td></tr>
+<tr class="memitem:a99e7ce764b93a47edc40d2596ad6508a"><td class="memItemLeft" align="right" valign="top"><a id="a99e7ce764b93a47edc40d2596ad6508a"></a>
+Image&#160;</td><td class="memItemRight" valign="bottom"><b>img</b></td></tr>
 <tr class="separator:a99e7ce764b93a47edc40d2596ad6508a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5a042ed068f5cb1d6acbb3d324e2da8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Film.html#ad5a042ed068f5cb1d6acbb3d324e2da8">res</a></td></tr>
+<tr class="memitem:ad5a042ed068f5cb1d6acbb3d324e2da8"><td class="memItemLeft" align="right" valign="top"><a id="ad5a042ed068f5cb1d6acbb3d324e2da8"></a>
+<a class="el" href="classlucid_1_1Vector.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>res</b></td></tr>
 <tr class="separator:ad5a042ed068f5cb1d6acbb3d324e2da8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e39e3862569e16733ce349004ec7877"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Film.html#a7e39e3862569e16733ce349004ec7877">_ratio</a></td></tr>
+<tr class="memitem:a7e39e3862569e16733ce349004ec7877"><td class="memItemLeft" align="right" valign="top"><a id="a7e39e3862569e16733ce349004ec7877"></a>
+real&#160;</td><td class="memItemRight" valign="bottom"><b>_ratio</b></td></tr>
 <tr class="separator:a7e39e3862569e16733ce349004ec7877"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34743bfb39ea35c6d8d54eadf53e38ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Film.html#a34743bfb39ea35c6d8d54eadf53e38ab">_pixel_width</a></td></tr>
+<tr class="memitem:a34743bfb39ea35c6d8d54eadf53e38ab"><td class="memItemLeft" align="right" valign="top"><a id="a34743bfb39ea35c6d8d54eadf53e38ab"></a>
+real&#160;</td><td class="memItemRight" valign="bottom"><b>_pixel_width</b></td></tr>
 <tr class="separator:a34743bfb39ea35c6d8d54eadf53e38ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68c6fbb4d1c5e44ea8d888e2ecebf17d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1Film.html#a68c6fbb4d1c5e44ea8d888e2ecebf17d">_pixel_radius</a></td></tr>
+<tr class="memitem:a68c6fbb4d1c5e44ea8d888e2ecebf17d"><td class="memItemLeft" align="right" valign="top"><a id="a68c6fbb4d1c5e44ea8d888e2ecebf17d"></a>
+real&#160;</td><td class="memItemRight" valign="bottom"><b>_pixel_radius</b></td></tr>
 <tr class="separator:a68c6fbb4d1c5e44ea8d888e2ecebf17d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a4f2f7433d0d226b0f974e84a5be3836d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f2f7433d0d226b0f974e84a5be3836d">&#9670;&nbsp;</a></span>Film()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Image&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structlucid_1_1Film.html">lucid::Film</a>&lt; <a class="el" href="lucid_8cpp.html#a6183ac6a3e68656f790e96ced506ab7b">Image</a> &gt;::<a class="el" href="structlucid_1_1Film.html">Film</a> </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a> &amp;&#160;</td>
-          <td class="paramname"><em>res_u</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa3c3cec08be7f7a33bc130d892b2deaf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3c3cec08be7f7a33bc130d892b2deaf">&#9670;&nbsp;</a></span>pixel_index()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Image&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a> <a class="el" href="structlucid_1_1Film.html">lucid::Film</a>&lt; <a class="el" href="lucid_8cpp.html#a6183ac6a3e68656f790e96ced506ab7b">Image</a> &gt;::pixel_index </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a> &amp;&#160;</td>
-          <td class="paramname"><em>pos</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa65904414ed7f72fe751b742a1f3a2ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa65904414ed7f72fe751b742a1f3a2ac">&#9670;&nbsp;</a></span>sample_space()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Image&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a> <a class="el" href="structlucid_1_1Film.html">lucid::Film</a>&lt; <a class="el" href="lucid_8cpp.html#a6183ac6a3e68656f790e96ced506ab7b">Image</a> &gt;::sample_space </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#ab25b9e667879cdfec35bb905c9267d00">Vec2u</a> &amp;&#160;</td>
-          <td class="paramname"><em>_pidx</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a68c6fbb4d1c5e44ea8d888e2ecebf17d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68c6fbb4d1c5e44ea8d888e2ecebf17d">&#9670;&nbsp;</a></span>_pixel_radius</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Image&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> <a class="el" href="structlucid_1_1Film.html">lucid::Film</a>&lt; <a class="el" href="lucid_8cpp.html#a6183ac6a3e68656f790e96ced506ab7b">Image</a> &gt;::_pixel_radius</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a34743bfb39ea35c6d8d54eadf53e38ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a34743bfb39ea35c6d8d54eadf53e38ab">&#9670;&nbsp;</a></span>_pixel_width</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Image&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> <a class="el" href="structlucid_1_1Film.html">lucid::Film</a>&lt; <a class="el" href="lucid_8cpp.html#a6183ac6a3e68656f790e96ced506ab7b">Image</a> &gt;::_pixel_width</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7e39e3862569e16733ce349004ec7877"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7e39e3862569e16733ce349004ec7877">&#9670;&nbsp;</a></span>_ratio</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Image&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> <a class="el" href="structlucid_1_1Film.html">lucid::Film</a>&lt; <a class="el" href="lucid_8cpp.html#a6183ac6a3e68656f790e96ced506ab7b">Image</a> &gt;::_ratio</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a99e7ce764b93a47edc40d2596ad6508a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99e7ce764b93a47edc40d2596ad6508a">&#9670;&nbsp;</a></span>img</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Image&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="lucid_8cpp.html#a6183ac6a3e68656f790e96ced506ab7b">Image</a> <a class="el" href="structlucid_1_1Film.html">lucid::Film</a>&lt; <a class="el" href="lucid_8cpp.html#a6183ac6a3e68656f790e96ced506ab7b">Image</a> &gt;::img</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad5a042ed068f5cb1d6acbb3d324e2da8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad5a042ed068f5cb1d6acbb3d324e2da8">&#9670;&nbsp;</a></span>res</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Image&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a> <a class="el" href="structlucid_1_1Film.html">lucid::Film</a>&lt; <a class="el" href="lucid_8cpp.html#a6183ac6a3e68656f790e96ced506ab7b">Image</a> &gt;::res</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>image_reconstruction/<a class="el" href="image__reconstruction_2film_8hpp_source.html">film.hpp</a></li>
 </ul>
@@ -294,7 +139,7 @@ template&lt;typename Image&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="structlucid_1_1Film.html">Film</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="structlucid_1_1Film.html">Film</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

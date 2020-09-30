@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -82,195 +88,27 @@ $(document).ready(function(){initNavTree('classlucid_1_1argparse_1_1PositionalBi
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classlucid_1_1argparse_1_1PositionalBinding_3_01Converter_00_011_01_4-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">lucid::argparse::PositionalBinding&lt; Converter, 1 &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="argparse_8hpp_source.html">argparse.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae3d85164a63151870512dfa96771b5a9"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1argparse_1_1PositionalBinding_3_01Converter_00_011_01_4.html#ae3d85164a63151870512dfa96771b5a9">PositionalBinding</a> (const Converter &amp;_converter) noexcept</td></tr>
+<tr class="memitem:ae3d85164a63151870512dfa96771b5a9"><td class="memItemLeft" align="right" valign="top"><a id="ae3d85164a63151870512dfa96771b5a9"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>PositionalBinding</b> (const Converter &amp;_converter) noexcept</td></tr>
 <tr class="separator:ae3d85164a63151870512dfa96771b5a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6634f472e7e0b99230c25733f39f2419"><td class="memItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1argparse_1_1PositionalBinding_3_01Converter_00_011_01_4.html#a6634f472e7e0b99230c25733f39f2419">set</a> (std::string_view new_word) noexcept</td></tr>
+<tr class="memitem:a6634f472e7e0b99230c25733f39f2419"><td class="memItemLeft" align="right" valign="top"><a id="a6634f472e7e0b99230c25733f39f2419"></a>
+constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>set</b> (std::string_view new_word) noexcept</td></tr>
 <tr class="separator:a6634f472e7e0b99230c25733f39f2419"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8e1030bb0f4cd5b387a8da08b14c663"><td class="memItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1argparse_1_1PositionalBinding_3_01Converter_00_011_01_4.html#af8e1030bb0f4cd5b387a8da08b14c663">set</a> (char **data) noexcept</td></tr>
+<tr class="memitem:af8e1030bb0f4cd5b387a8da08b14c663"><td class="memItemLeft" align="right" valign="top"><a id="af8e1030bb0f4cd5b387a8da08b14c663"></a>
+constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>set</b> (char **data) noexcept</td></tr>
 <tr class="separator:af8e1030bb0f4cd5b387a8da08b14c663"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91db5340106531d7cd6da6fd0102fcf5"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1argparse_1_1PositionalBinding_3_01Converter_00_011_01_4.html#a91db5340106531d7cd6da6fd0102fcf5">operator()</a> () const</td></tr>
+<tr class="memitem:a91db5340106531d7cd6da6fd0102fcf5"><td class="memItemLeft" align="right" valign="top"><a id="a91db5340106531d7cd6da6fd0102fcf5"></a>
+constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> () const</td></tr>
 <tr class="separator:a91db5340106531d7cd6da6fd0102fcf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:a4a0b431bcfb92bd2ee97edb3ec667035"><td class="memItemLeft" align="right" valign="top">Converter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1argparse_1_1PositionalBinding_3_01Converter_00_011_01_4.html#a4a0b431bcfb92bd2ee97edb3ec667035">converter</a></td></tr>
-<tr class="separator:a4a0b431bcfb92bd2ee97edb3ec667035"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab52f2545b2c718c21793debd84a7f7a9"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1argparse_1_1PositionalBinding_3_01Converter_00_011_01_4.html#ab52f2545b2c718c21793debd84a7f7a9">word</a></td></tr>
-<tr class="separator:ab52f2545b2c718c21793debd84a7f7a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ae3d85164a63151870512dfa96771b5a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3d85164a63151870512dfa96771b5a9">&#9670;&nbsp;</a></span>PositionalBinding()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Converter &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="classlucid_1_1argparse_1_1PositionalBinding.html">lucid::argparse::PositionalBinding</a>&lt; Converter, 1 &gt;::<a class="el" href="classlucid_1_1argparse_1_1PositionalBinding.html">PositionalBinding</a> </td>
-          <td>(</td>
-          <td class="paramtype">const Converter &amp;&#160;</td>
-          <td class="paramname"><em>_converter</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a91db5340106531d7cd6da6fd0102fcf5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a91db5340106531d7cd6da6fd0102fcf5">&#9670;&nbsp;</a></span>operator()()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Converter &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto <a class="el" href="classlucid_1_1argparse_1_1PositionalBinding.html">lucid::argparse::PositionalBinding</a>&lt; Converter, 1 &gt;::operator() </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6634f472e7e0b99230c25733f39f2419"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6634f472e7e0b99230c25733f39f2419">&#9670;&nbsp;</a></span>set() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Converter &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr void <a class="el" href="classlucid_1_1argparse_1_1PositionalBinding.html">lucid::argparse::PositionalBinding</a>&lt; Converter, 1 &gt;::set </td>
-          <td>(</td>
-          <td class="paramtype">std::string_view&#160;</td>
-          <td class="paramname"><em>new_word</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af8e1030bb0f4cd5b387a8da08b14c663"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8e1030bb0f4cd5b387a8da08b14c663">&#9670;&nbsp;</a></span>set() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Converter &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr void <a class="el" href="classlucid_1_1argparse_1_1PositionalBinding.html">lucid::argparse::PositionalBinding</a>&lt; Converter, 1 &gt;::set </td>
-          <td>(</td>
-          <td class="paramtype">char **&#160;</td>
-          <td class="paramname"><em>data</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a4a0b431bcfb92bd2ee97edb3ec667035"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a0b431bcfb92bd2ee97edb3ec667035">&#9670;&nbsp;</a></span>converter</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Converter &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Converter <a class="el" href="classlucid_1_1argparse_1_1PositionalBinding.html">lucid::argparse::PositionalBinding</a>&lt; Converter, 1 &gt;::converter</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab52f2545b2c718c21793debd84a7f7a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab52f2545b2c718c21793debd84a7f7a9">&#9670;&nbsp;</a></span>word</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Converter &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string_view <a class="el" href="classlucid_1_1argparse_1_1PositionalBinding.html">lucid::argparse::PositionalBinding</a>&lt; Converter, 1 &gt;::word</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>utils/<a class="el" href="argparse_8hpp_source.html">argparse.hpp</a></li>
 </ul>
@@ -279,7 +117,7 @@ template&lt;typename Converter &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="namespacelucid_1_1argparse.html">argparse</a></li><li class="navelem"><a class="el" href="classlucid_1_1argparse_1_1PositionalBinding_3_01Converter_00_011_01_4.html">PositionalBinding&lt; Converter, 1 &gt;</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><b>argparse</b></li><li class="navelem"><a class="el" href="classlucid_1_1argparse_1_1PositionalBinding_3_01Converter_00_011_01_4.html">PositionalBinding&lt; Converter, 1 &gt;</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

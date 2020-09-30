@@ -19,6 +19,12 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -88,8 +94,6 @@ $(document).ready(function(){initNavTree('structlucid_1_1perspective_1_1shoot.ht
 <div class="title">lucid::perspective::shoot Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="perspective_8hpp_source.html">perspective.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for lucid::perspective::shoot:</div>
 <div class="dyncontent">
@@ -99,144 +103,24 @@ Collaboration diagram for lucid::perspective::shoot:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aabb9f1e2050740b2ff229224afdcbf19"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1perspective_1_1shoot.html#aabb9f1e2050740b2ff229224afdcbf19">shoot</a> () noexcept</td></tr>
-<tr class="separator:aabb9f1e2050740b2ff229224afdcbf19"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22f62f87f8b8eccc666177412be2b18a"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a22f62f87f8b8eccc666177412be2b18a"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structlucid_1_1perspective_1_1shoot.html#a22f62f87f8b8eccc666177412be2b18a">shoot</a> (const <a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a> cfovy, const <a class="el" href="namespacelucid.html#afdedb2479af979b4501c9c927b27a465">Mat4_</a>&lt; Container &gt; &amp;_transform) noexcept</td></tr>
+<tr class="memitem:a22f62f87f8b8eccc666177412be2b18a"><td class="memTemplParams" colspan="2"><a id="a22f62f87f8b8eccc666177412be2b18a"></a>
+template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a22f62f87f8b8eccc666177412be2b18a"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>shoot</b> (const real cfovy, const <a class="el" href="classlucid_1_1Matrix.html">Mat4_</a>&lt; Container &gt; &amp;_transform) noexcept</td></tr>
 <tr class="separator:a22f62f87f8b8eccc666177412be2b18a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f87a3bcb9b130877f4d2b82816cb2e0"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a4f87a3bcb9b130877f4d2b82816cb2e0"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="namespacelucid.html#a2d13e5ff86ee839a96cf940cf9587df4">Ray</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structlucid_1_1perspective_1_1shoot.html#a4f87a3bcb9b130877f4d2b82816cb2e0">operator()</a> (const <a class="el" href="namespacelucid.html#a47c863ae187db0fe6f83e50c8346e781">Vec2_</a>&lt; Container &gt; &amp;ndc) const noexcept</td></tr>
+<tr class="memitem:a4f87a3bcb9b130877f4d2b82816cb2e0"><td class="memTemplParams" colspan="2"><a id="a4f87a3bcb9b130877f4d2b82816cb2e0"></a>
+template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a4f87a3bcb9b130877f4d2b82816cb2e0"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="structlucid_1_1Ray__.html">Ray</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator()</b> (const <a class="el" href="classlucid_1_1Vector.html">Vec2_</a>&lt; Container &gt; &amp;ndc) const noexcept</td></tr>
 <tr class="separator:a4f87a3bcb9b130877f4d2b82816cb2e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aa325460c0dc911deb5c16b97d7e47916"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1perspective_1_1shoot.html#aa325460c0dc911deb5c16b97d7e47916">tan_fov_half</a> {1_r}</td></tr>
+<tr class="memitem:aa325460c0dc911deb5c16b97d7e47916"><td class="memItemLeft" align="right" valign="top"><a id="aa325460c0dc911deb5c16b97d7e47916"></a>
+<a class="el" href="classlucid_1_1Vector.html">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><b>tan_fov_half</b> {1_r}</td></tr>
 <tr class="separator:aa325460c0dc911deb5c16b97d7e47916"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba8d91d90daacdefc9a618dff7579255"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacelucid.html#a68def036f0ebb1d1ca46ef084c784fe3">Mat4</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1perspective_1_1shoot.html#aba8d91d90daacdefc9a618dff7579255">transform</a> {<a class="el" href="classlucid_1_1Matrix.html#ab57fd922f8d9074fc7fb07bacf8a8e5e">Mat4::identity</a>()}</td></tr>
+<tr class="memitem:aba8d91d90daacdefc9a618dff7579255"><td class="memItemLeft" align="right" valign="top"><a id="aba8d91d90daacdefc9a618dff7579255"></a>
+<a class="el" href="classlucid_1_1Matrix.html">Mat4</a>&#160;</td><td class="memItemRight" valign="bottom"><b>transform</b> {Mat4::identity()}</td></tr>
 <tr class="separator:aba8d91d90daacdefc9a618dff7579255"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aabb9f1e2050740b2ff229224afdcbf19"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aabb9f1e2050740b2ff229224afdcbf19">&#9670;&nbsp;</a></span>shoot() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr lucid::perspective::shoot::shoot </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a22f62f87f8b8eccc666177412be2b18a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22f62f87f8b8eccc666177412be2b18a">&#9670;&nbsp;</a></span>shoot() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr lucid::perspective::shoot::shoot </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#a77cd7532e1e23219115e239f1584df40">real</a>&#160;</td>
-          <td class="paramname"><em>cfovy</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#afdedb2479af979b4501c9c927b27a465">Mat4_</a>&lt; Container &gt; &amp;&#160;</td>
-          <td class="paramname"><em>_transform</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a4f87a3bcb9b130877f4d2b82816cb2e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f87a3bcb9b130877f4d2b82816cb2e0">&#9670;&nbsp;</a></span>operator()()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="namespacelucid.html#a2d13e5ff86ee839a96cf940cf9587df4">Ray</a> lucid::perspective::shoot::operator() </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacelucid.html#a47c863ae187db0fe6f83e50c8346e781">Vec2_</a>&lt; Container &gt; &amp;&#160;</td>
-          <td class="paramname"><em>ndc</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="aa325460c0dc911deb5c16b97d7e47916"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa325460c0dc911deb5c16b97d7e47916">&#9670;&nbsp;</a></span>tan_fov_half</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#aa2a5a71bcb11e25146cd84e70c51b0d0">Vec2</a> lucid::perspective::shoot::tan_fov_half {1_r}</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aba8d91d90daacdefc9a618dff7579255"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba8d91d90daacdefc9a618dff7579255">&#9670;&nbsp;</a></span>transform</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacelucid.html#a68def036f0ebb1d1ca46ef084c784fe3">Mat4</a> lucid::perspective::shoot::transform {<a class="el" href="classlucid_1_1Matrix.html#ab57fd922f8d9074fc7fb07bacf8a8e5e">Mat4::identity</a>()}</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>cameras/<a class="el" href="perspective_8hpp_source.html">perspective.hpp</a></li>
 </ul>
@@ -245,7 +129,7 @@ template&lt;template&lt; typename, size_t &gt; typename Container&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacelucid.html">lucid</a></li><li class="navelem"><a class="el" href="structlucid_1_1perspective.html">perspective</a></li><li class="navelem"><a class="el" href="structlucid_1_1perspective_1_1shoot.html">shoot</a></li>
+    <li class="navelem"><b>lucid</b></li><li class="navelem"><a class="el" href="structlucid_1_1perspective.html">perspective</a></li><li class="navelem"><a class="el" href="structlucid_1_1perspective_1_1shoot.html">shoot</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
