@@ -2,6 +2,9 @@
 // triangle.h --
 //
 
+/// @file
+/// Triangle primitive definitions.
+
 #pragma once
 
 #include "aabb.hpp"
@@ -79,7 +82,8 @@ s2t(Vec2_<Container> s) noexcept
     return s;
 }
 
-// Eric Heitz A Low-Distortion Map Between Triangle and Square, 2019
+/// @brief Sample triangle.
+/// @cite heitz:hal-02073696
 template <template <typename, size_t> typename Container1,
           template <typename, size_t>
           typename Container2>

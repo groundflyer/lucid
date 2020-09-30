@@ -2,6 +2,9 @@
 // vector.hpp --
 //
 
+/// @file
+/// Contains the definition of a generic vector with constant dimensionality.
+
 #pragma once
 
 #include "vector_operators.hpp"
@@ -10,6 +13,10 @@
 
 namespace lucid
 {
+/// @brief Generic vector with constant dimensionality.
+/// @tparam T value type.
+/// @tparam N dimensionality.
+/// @tparam Container defines how to store values.
 template <typename T,
           std::size_t N,
           template <typename, std::size_t> typename Container = std::array>
@@ -32,9 +39,13 @@ class Vector :
 
     explicit constexpr Vector(Data&& rhs) noexcept : m_data(std::move(rhs)) {}
 
+    /// @brief OpenGL-style constructor.
+    ///
+    /// Allows to construct vector from mix of vectors of different dimensionality
+    /// and scalar values.
     template <typename... Ts>
     explicit constexpr Vector(Ts&&... rhs) noexcept :
-        m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...))
+        m_data(detail::vector_constructor<0>(m_data, std::forward<Ts>(rhs)...))
     {
     }
 

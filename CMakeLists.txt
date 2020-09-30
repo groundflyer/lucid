@@ -102,11 +102,11 @@ if(BUILD_DOC)
   if(DOXYGEN_FOUND)
     message(STATUS "Building documentation")
 
+    set(_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+    set(DOC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/doc)
+    set(BIB_DIR ${DOC_DIR}/bib)
+
     set(DOXYGEN_PROJECT_BRIEF "Experimental renderer")
-    set(DOXYGEN_EXTRACT_ALL YES)
-    set(DOXYGEN_EXTRACT_PRIVATE YES)
-    set(DOXYGEN_EXTRACT_STATIC YES)
-    set(DOXYGEN_EXTRACT_ANON_NSPACES YES)
     set(DOXYGEN_FILE_PATTERNS *.cpp *.hpp *.md)
     set(DOXYGEN_GENERATE_TREEVIEW YES)
     set(DOXYGEN_INCLUDE_GRAPH NO)
@@ -115,9 +115,9 @@ if(BUILD_DOC)
     set(DOXYGEN_DOT_IMAGE_FORMAT svg)
     set(DOXYGEN_INTERACTIVE_SVG YES)
     set(DOXYGEN_TOC_EXPAND YES)
-    set(_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-    set(_DOC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/doc)
-    doxygen_add_docs(doc ${_SRC_DIR} ${_DOC_DIR} ALL
+    set(DOXYGEN_USE_MATHJAX YES)
+    set(DOXYGEN_CITE_BIB_FILES ${BIB_DIR}/Duff2017Basis.bib ${BIB_DIR}/other.bib)
+    doxygen_add_docs(doc ${_SRC_DIR} ${DOC_DIR} ALL
       COMMENT "Generating documentation with Doxygen"
       WORKING_DIRECTORY ${_SRC_DIR})
   else()

@@ -2,15 +2,17 @@
 // math.hpp
 //
 
+/// @file
+/// Mathematical functions.
+
 #pragma once
 
-#include <cmath>
-#include <limits>
-#include <utility>
-#include <iterator>
 #include <algorithm>
+#include <cmath>
+#include <iterator>
+#include <limits>
 #include <type_traits>
-
+#include <utility>
 
 namespace lucid
 {
@@ -33,6 +35,7 @@ template <typename T>
 const constexpr T Pi_ = T{3.141592653589793};
 } // namespace math
 
+/// @brief Test whether the value is even.
 template <typename T>
 constexpr typename std::enable_if_t<std::is_integral_v<T>, bool>
 is_even(const T val) noexcept
@@ -40,7 +43,7 @@ is_even(const T val) noexcept
     return val % 2 == 0;
 }
 
-// return result of (-1)^a
+/// @brief Return result of @f$(-1)^{a}@f$.
 template <typename T>
 constexpr int
 minus_one_pow(const T a)
@@ -48,7 +51,7 @@ minus_one_pow(const T a)
     return is_even(a) ? 1 : -1;
 }
 
-// factorial
+/// @brief Compute number factorial.
 constexpr std::size_t
 fac(const std::size_t val) noexcept
 {
@@ -60,7 +63,10 @@ fac(const std::size_t val) noexcept
     return ret;
 }
 
-// compute inversion number, O(N^2)-version
+/// @brief Compute inversion number.
+///
+/// Complexity @f$O(N^{2})@f$.
+/// https://en.wikipedia.org/wiki/Inversion_(discrete_mathematics)
 template <typename Iterable>
 constexpr unsigned
 inversion_number(const Iterable& input) noexcept
@@ -74,7 +80,9 @@ inversion_number(const Iterable& input) noexcept
     return ret;
 }
 
-// const iterator version
+/// @brief Test whether the input contains equal elements.
+///
+/// Complexity @f$O(N^{2})@f$.
 template <typename Iterable>
 constexpr bool
 has_equal(const Iterable& input) noexcept
@@ -85,7 +93,9 @@ has_equal(const Iterable& input) noexcept
     return false;
 }
 
-// compute Levi-Civita symbol (signature of permutation)
+/// @brief Compute Levi-Civita symbol (signature of permutation).
+///
+/// https://en.wikipedia.org/wiki/Levi-Civita_symbol
 template <typename Iterable>
 constexpr int
 sgn(const Iterable& numbers) noexcept
@@ -97,13 +107,21 @@ sgn(const Iterable& numbers) noexcept
     return ret;
 }
 
+/// @brief Perform linear interpolation between two values.
+/// @param bias interpolation bias.
 template <typename T, typename Bias>
-constexpr auto
+constexpr T
 lerp(const T a, const T b, const Bias bias)
 {
     return b * bias + a * (T{1} - bias);
 }
 
+/// @brief Compare floating-point values for equality using maching epsilon.
+///
+/// The implementation is taken from https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon
+///
+/// @param ulp spacing between adjascent numbers (see
+/// https://en.wikipedia.org/wiki/Unit_in_the_last_place). @anchor ulp
 template <typename T, typename ULP>
 constexpr typename std::enable_if_t<std::is_floating_point_v<T>, bool>
 almost_equal(const T a, const T b, const ULP ulp)
@@ -111,18 +129,24 @@ almost_equal(const T a, const T b, const ULP ulp)
     // the machine epsilon has to be scaled to the magnitude of the values used
     // and multiplied by the desired precision in ULPs (units in the last place)
     // unless the result is subnormal
-    const auto amb = abs(a - b);
+    const T amb = abs(a - b);
     return amb <= std::numeric_limits<T>::epsilon() * abs(a + b) * ulp ||
            amb < std::numeric_limits<T>::min();
 }
 
+/// @brief Shift value into a new range.
 template <typename T>
-constexpr auto
+constexpr T
 fit(const T val, const T minval, const T maxval)
 {
     return (val - minval) / (maxval - minval);
 }
 
+/// @brief Rise a number to a constant power.
+///
+/// Fast implementation by Alister Chowdhury.
+///
+/// @tparam exp power exponent.
 template <unsigned exp, typename T>
 constexpr T
 pow(const T value) noexcept
@@ -138,6 +162,7 @@ pow(const T value) noexcept
     }
 }
 
+/// @brief Convert radians to degrees.
 template <typename T>
 constexpr T
 degrees(const T _radians)
@@ -145,6 +170,7 @@ degrees(const T _radians)
     return _radians * T{180} / math::Pi_<T>;
 }
 
+/// @brief Convert degrees to radians.
 template <typename T>
 constexpr T
 radians(const T _degrees)
@@ -152,9 +178,8 @@ radians(const T _degrees)
     return _degrees * math::Pi_<T> / T{180};
 }
 
-// solves quadratic equation ax^2 + bx + c
-// for non-complex cases
-// returns bool and the smallest of two positive roots
+/// @brief Solve quadratic equation @f$ax^{2} + bx + c@f$ for non-complex cases.
+/// @return pair of bool and the smallest of two positive roots.
 template <typename T>
 constexpr std::pair<bool, T>
 quadratic(const T a, const T b, const T c) noexcept
