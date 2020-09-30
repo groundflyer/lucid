@@ -924,8 +924,6 @@ class MutableVectorOperators
     }
 };
 
-namespace detail
-{
 template <std::size_t idx, typename OutType, std::size_t OutSize, typename InType, typename... Tail>
 constexpr std::array<OutType, OutSize>&
 vector_constructor(std::array<OutType, OutSize>& out, const InType& head, Tail&&... tail) noexcept
@@ -974,5 +972,4 @@ vector_constructor(std::array<OutType, OutSize>&                out,
 
     return out;
 }
-} // namespace detail
 } // namespace lucid

@@ -36,13 +36,13 @@ class NormalN_ : public ImmutableVectorOperators<T, N, Container, NormalN_>
 
     template <template <typename, std::size_t> typename Container2>
     constexpr NormalN_(const NormalN_<T, 3, Container2>& rhs) noexcept :
-        m_data(detail::vector_constructor<0>(m_data, rhs))
+        m_data(vector_constructor<0>(m_data, rhs))
     {
     }
 
     template <template <typename, std::size_t> typename Container2>
     constexpr NormalN_(NormalN_<T, 3, Container2>&& rhs) noexcept :
-        m_data(detail::vector_constructor<0>(m_data, std::move(rhs)))
+        m_data(vector_constructor<0>(m_data, std::move(rhs)))
     {
     }
 
@@ -52,7 +52,7 @@ class NormalN_ : public ImmutableVectorOperators<T, N, Container, NormalN_>
 
     template <typename... Ts>
     explicit constexpr NormalN_(Ts&&... rhs) noexcept :
-        m_data(detail::vector_constructor<0>(m_data, std::forward<Ts>(rhs)...))
+        m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...))
     {
         normalize();
     }

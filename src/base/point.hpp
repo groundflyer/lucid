@@ -34,13 +34,13 @@ class PointN_ :
 
     template <template <typename, std::size_t> typename Container2>
     constexpr PointN_(const PointN_<T, N, Container2>& rhs) noexcept :
-        m_data(detail::vector_constructor<0>(m_data, rhs))
+        m_data(vector_constructor<0>(m_data, rhs))
     {
     }
 
     template <template <typename, std::size_t> typename Container2>
     constexpr PointN_(PointN_<T, N, Container2>&& rhs) noexcept :
-        m_data(detail::vector_constructor<0>(m_data, std::move(rhs)))
+        m_data(vector_constructor<0>(m_data, std::move(rhs)))
     {
     }
 
@@ -50,7 +50,7 @@ class PointN_ :
 
     template <typename... Ts>
     explicit constexpr PointN_(Ts&&... rhs) noexcept :
-        m_data(detail::vector_constructor<0>(m_data, std::forward<Ts>(rhs)...))
+        m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...))
     {
     }
 

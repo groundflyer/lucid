@@ -45,7 +45,7 @@ class Vector :
     /// and scalar values.
     template <typename... Ts>
     explicit constexpr Vector(Ts&&... rhs) noexcept :
-        m_data(detail::vector_constructor<0>(m_data, std::forward<Ts>(rhs)...))
+        m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...))
     {
     }
 
