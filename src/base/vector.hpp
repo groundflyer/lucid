@@ -83,12 +83,12 @@ class Vector :
     }
 
     constexpr auto
-    begin() noexcept
+    begin() const noexcept
     {
         return m_data.begin();
     }
     constexpr auto
-    end() noexcept
+    end() const noexcept
     {
         return m_data.end();
     }

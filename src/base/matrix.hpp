@@ -150,11 +150,12 @@ namespace lucid
         Matrix(Matrix&& rhs) noexcept : m_data(std::move(rhs.m_data)) {}
 
 		// single scalar construcor
-    	explicit constexpr
-    	Matrix(T&& rhs) noexcept
-    	{ for (auto & elem : *this) elem = rhs;	}
+        explicit constexpr Matrix(T&& rhs) noexcept
+        {
+            for(auto& elem: m_data) elem = rhs;
+        }
 
-    	explicit constexpr
+        explicit constexpr
     	Matrix(Data&& rhs) noexcept : m_data(std::move(rhs)) {}
 
     	explicit constexpr
@@ -248,15 +249,19 @@ namespace lucid
 			return m_data[pos(i, j)];
 		}
 
-		constexpr auto
-		begin() noexcept
-		{ return m_data.begin(); }
-		constexpr auto
-		end() noexcept
-		{ return m_data.end(); }
-		constexpr decltype(auto)
-		cbegin() const noexcept
-		{ return m_data.cbegin(); }
+                constexpr auto
+                begin() const noexcept
+                {
+                    return m_data.begin();
+                }
+                constexpr auto
+                end() const noexcept
+                {
+                    return m_data.end();
+                }
+                constexpr decltype(auto)
+                cbegin() const noexcept
+                { return m_data.cbegin(); }
 		constexpr decltype(auto)
 		cend() const noexcept
 		{ return m_data.cend(); }

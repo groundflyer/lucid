@@ -18,8 +18,10 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
 {
     using Mat                                  = Matrix<T, M, N>;
     using Vec                                  = Vector<T, N>;
-    const auto                  t_typestring   = get_typeinfo_string(T{});
-    const auto                  mat_typestring = "Matrix<{}, {}, {}>"_format(t_typestring, M, N);
+    const constexpr auto        t_typestring   = get_typeinfo_string(T{});
+    const auto                  mat_typestring = get_typeinfo_string(Mat{});
+    const auto                  vec_typestring = get_typeinfo_string(Vec{});
+    const auto                  arr_typestring = get_typeinfo_string(Mat().data());
     RandomDistribution<T>       dist(T{-10000}, T{10000});
     static const constexpr auto MN              = M * N;
     auto                        array_mn_gen    = [&]() { return dist.template operator()<MN>(g); };
@@ -59,13 +61,13 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
         });
 
     ret += test_property_n(
-        "{}({})"_format(mat_typestring, get_typeinfo_string(array<T, MN>{})),
+        "{}({})"_format(mat_typestring, arr_typestring),
         array_mn_gen,
         [](const auto& feed) { return std::make_from_tuple<Mat>(feed); },
         array_assertion);
 
     ret += test_property_n(
-        "{}(array<{}, {}>)"_format(mat_typestring, t_typestring, N),
+        "{}({})"_format(mat_typestring, arr_typestring, N),
         array_mn_gen,
         [](const auto& feed) { return Mat(feed); },
         array_assertion);
@@ -84,12 +86,10 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
             return ret || !all(lucid::isfinite(flat_ref(testing)));
         });
 
-    stringstream ss;
-    const auto   at_string = "array<{}, {}>"_format(t_typestring, N);
-    for(size_t i = 0; i < M - 1; ++i) ss << at_string << ", ";
-    ss << at_string;
+    array<string, M> strs;
+    std::fill(strs.begin(), strs.end(), "{}"_format(get_typeinfo_string(Vec().data())));
     ret += test_property_n(
-        "{}({})"_format(mat_typestring, ss.str()),
+        "{}({})"_format(mat_typestring, strs),
         [&]() {
             array<array<T, N>, M> ret;
             for(size_t i = 0; i < M; ++i) ret[i] = array_n_gen();
@@ -289,7 +289,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
         });
 
     ret += test_property_n(
-        "{}[] +-= Vector<{}, {}>"_format(mat_typestring, t_typestring, N),
+        "{}[] +-= {}"_format(mat_typestring, vec_typestring),
         [&]() { return tuple(mat_gen(), vgen(), rowdist(g)); },
         [](auto feed) {
             auto& [mat, vec, idx] = feed;
@@ -303,7 +303,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
         });
 
     ret += test_property_n(
-        "{}[] */= Vector<{}, {}>"_format(mat_typestring, t_typestring, N),
+        "{}[] */= {}"_format(mat_typestring, vec_typestring),
         [&]() { return tuple(mat_gen(), div_vec_gen(), rowdist(g)); },
         [](auto feed) {
             auto& [mat, vec, idx] = feed;

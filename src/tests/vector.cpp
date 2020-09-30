@@ -21,7 +21,8 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
 {
     using Vec                            = Vector<T, N>;
     const auto            t_typestring   = get_typeinfo_string(T{});
-    const auto            vec_typestring = "Vector<{}, {}>"_format(t_typestring, N);
+    const auto            vec_typestring = get_typeinfo_string(Vec{});
+    const auto            arr_typestring = get_typeinfo_string(Vec().data());
     RandomDistribution<T> dist(T{-10000}, T{10000});
     unsigned              ret = 0;
 
@@ -46,13 +47,13 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
     };
 
     ret += test_property_n(
-        "{}({})"_format(vec_typestring, get_typeinfo_string(array<T, N>{})),
+        "{}({})"_format(vec_typestring, arr_typestring),
         argen,
         [](const array<T, N>& feed) { return std::make_from_tuple<Vec>(feed); },
         arass);
 
     ret += test_property_n(
-        "{}(array<{}, {}>)"_format(vec_typestring, t_typestring, N),
+        "{}({})"_format(vec_typestring, arr_typestring, N),
         argen,
         [](const array<T, N>& feed) { return Vec(feed); },
         arass);
@@ -291,29 +292,31 @@ auto
 __boolean_test(RandomEngine& g, const size_t num_tests) noexcept
 {
     RandomDistribution<bool> dist(0.5);
-    unsigned ret = 0;
+    unsigned                 ret            = 0;
+    auto                     vec_typestring = get_typeinfo_string(Vector<bool, N>{});
 
-    static const constexpr double threshold = 0.0;
-    auto test_property_n = [num_tests](auto&& ... args)
-                           { return test_property(num_tests, threshold, forward<decltype(args)>(args)...); };
+    static const constexpr double threshold       = 0.0;
+    auto                          test_property_n = [num_tests](auto&&... args) {
+        return test_property(num_tests, threshold, forward<decltype(args)>(args)...);
+    };
 
-    ret += test_property_n("any(Vector<bool, {}>)"_format(N),
-                           [&]() { return Vector(dist.template operator()<N>(g)); },
-                           [](const Vector<bool, N>& feed) { return any(feed); },
-                           [](const bool testing, const Vector<bool, N>& feed)
-                           {
-                               return testing != apply([](auto... vals) { return (false || ... || vals); },
-                                                        feed.data());
-                           });
+    ret += test_property_n(
+        "any({})"_format(vec_typestring),
+        [&]() { return Vector(dist.template operator()<N>(g)); },
+        [](const Vector<bool, N>& feed) { return any(feed); },
+        [](const bool testing, const Vector<bool, N>& feed) {
+            return testing !=
+                   apply([](auto... vals) { return (false || ... || vals); }, feed.data());
+        });
 
-    ret += test_property_n("all(Vector<bool, {}>)"_format(N),
-                           [&]() { return Vector(dist.template operator()<N>(g)); },
-                           [](const Vector<bool, N>& feed) { return all(feed); },
-                           [](const bool testing, const Vector<bool, N>& feed)
-                           {
-                               return testing != apply([](auto... vals) { return (true && ... && vals); },
-                                                        feed.data());
-                           });
+    ret += test_property_n(
+        "all({})"_format(vec_typestring),
+        [&]() { return Vector(dist.template operator()<N>(g)); },
+        [](const Vector<bool, N>& feed) { return all(feed); },
+        [](const bool testing, const Vector<bool, N>& feed) {
+            return testing !=
+                   apply([](auto... vals) { return (true && ... && vals); }, feed.data());
+        });
 
     return ret;
 }
@@ -323,13 +326,14 @@ auto
 boolean_test(RandomEngine& g, const size_t num_tests, index_sequence<Ns...>) noexcept
 { return (0u + ... + __boolean_test<Ns + 2>(g, num_tests)); }
 
-int main(int argc, char* argv[])
+int
+main(int argc, char* argv[])
 {
     const size_t num_tests = argc == 2 ? atoi(argv[1]) : 1000000;
 
     int ret = 0;
 
-    random_device rd;
+    random_device         rd;
     default_random_engine g(rd());
 
     Indicies idxs;

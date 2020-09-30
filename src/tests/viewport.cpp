@@ -7,7 +7,6 @@
 #include <scene/cornell_box.hpp>
 #include <utils/functional.hpp>
 #include <utils/logging.hpp>
-#include <utils/printing.hpp>
 #include <utils/timer.hpp>
 
 using namespace lucid;
