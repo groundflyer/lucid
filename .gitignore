@@ -6,6 +6,7 @@ build_*
 *.jpg
 *.exr
 *.ppm
+*.el
 compile_commands.json
 .ccls-cache
 .dir-locals.el
