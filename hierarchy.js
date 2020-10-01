@@ -32,6 +32,9 @@ var hierarchy =
     [ "lucid::argparse::detail::has_repeating_key_impl< Options >", "structlucid_1_1argparse_1_1detail_1_1has__repeating__key__impl.html", null ],
     [ "lucid::argparse::detail::has_repeating_key_impl< First, Rest... >", "structlucid_1_1argparse_1_1detail_1_1has__repeating__key__impl_3_01First_00_01Rest_8_8_8_01_4.html", null ],
     [ "lucid::argparse::detail::has_repeating_key_impl< Last >", "structlucid_1_1argparse_1_1detail_1_1has__repeating__key__impl_3_01Last_01_4.html", null ],
+    [ "lucid::detail::helper< T >", "structlucid_1_1detail_1_1helper.html", null ],
+    [ "lucid::detail::helper< std::pair< T1, T2 > >", "structlucid_1_1detail_1_1helper_3_01std_1_1pair_3_01T1_00_01T2_01_4_01_4.html", null ],
+    [ "lucid::detail::helper< std::tuple< Ts... > >", "structlucid_1_1detail_1_1helper_3_01std_1_1tuple_3_01Ts_8_8_8_01_4_01_4.html", null ],
     [ "lucid::identity", "structlucid_1_1identity.html", null ],
     [ "lucid::ImmutableVectorOperators< T, N, Container, VectorType >", "classlucid_1_1ImmutableVectorOperators.html", null ],
     [ "lucid::ImmutableVectorOperators< Container, 3, std::array, NormalN_ >", "classlucid_1_1ImmutableVectorOperators.html", [
@@ -75,6 +78,7 @@ var hierarchy =
     [ "lucid::argparse::KeyCharSeq", "structlucid_1_1argparse_1_1KeyCharSeq.html", null ],
     [ "lucid::argparse::KeyException< Key >", "structlucid_1_1argparse_1_1KeyException.html", null ],
     [ "lucid::argparse::KeywordValue", "structlucid_1_1argparse_1_1KeywordValue.html", null ],
+    [ "lucid::LogFile", "structlucid_1_1LogFile.html", null ],
     [ "lucid::Logger", "classlucid_1_1Logger.html", null ],
     [ "lucid::CornellBox::MatGetter", "classlucid_1_1CornellBox_1_1MatGetter.html", null ],
     [ "lucid::Matrix< T, M, N, Container >", "classlucid_1_1Matrix.html", null ],

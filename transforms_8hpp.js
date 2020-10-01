@@ -8,6 +8,6 @@ var transforms_8hpp =
     [ "dehomogenize", "transforms_8hpp.html#a8d03f36d7ae83bc1f860ffd321dbd313", null ],
     [ "look_at", "transforms_8hpp.html#ac1b89b15e1c8b02ed01c1a54c6d12cc6", null ],
     [ "rotate", "transforms_8hpp.html#a9629fde63b7e85a5036e766eaa283a65", null ],
-    [ "scale", "transforms_8hpp.html#aed2a9ba3c7fd96ec7cca3041eef69661", null ],
+    [ "scale", "transforms_8hpp.html#a1e34135d36e7f7b50adbf093579d4d0f", null ],
     [ "translate", "transforms_8hpp.html#a5141f2669f241db3ef911f2cb9440d17", null ]
 ];

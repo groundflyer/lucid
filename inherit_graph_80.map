@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structlucid_1_1out__of__range.html" title="lucid::out_of_range" alt="" coords="5,5,152,32"/>
+<area shape="rect" id="node1" href="$classlucid_1_1ImmutableVectorOperators.html" title="lucid::ImmutableVectorOperators\l\&lt; std::array, N, std::array,\l Vector \&gt;" alt="" coords="5,5,243,61"/>
+<area shape="rect" id="node2" href="$classlucid_1_1Vector.html" title="lucid::Vector\&lt; std\l::array \&gt;" alt="" coords="291,53,428,94"/>
+<area shape="rect" id="node3" href="$classlucid_1_1MutableVectorOperators.html" title="lucid::MutableVectorOperators\l\&lt; std::array, N, std::array,\l Vector \&gt;" alt="" coords="15,85,233,141"/>
 </map>

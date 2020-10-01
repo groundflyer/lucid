@@ -1,7 +1,7 @@
 var searchData=
 [
   ['sample',['Sample',['../structlucid_1_1CornellBox_1_1MatGetter_1_1BSDF_1_1Sample.html',1,'lucid::CornellBox::MatGetter::BSDF']]],
-  ['scale',['scale',['../transforms_8hpp.html#aed2a9ba3c7fd96ec7cca3041eef69661',1,'lucid']]],
+  ['scale',['scale',['../transforms_8hpp.html#a1e34135d36e7f7b50adbf093579d4d0f',1,'lucid']]],
   ['scanline_5fiterator',['scanline_iterator',['../structlucid_1_1scanline__iterator.html',1,'lucid']]],
   ['scanlineimage',['ScanlineImage',['../classlucid_1_1ScanlineImage.html',1,'lucid']]],
   ['scanlineimage_3c_20float_2c_204_20_3e',['ScanlineImage&lt; float, 4 &gt;',['../classlucid_1_1ScanlineImage.html',1,'lucid']]],

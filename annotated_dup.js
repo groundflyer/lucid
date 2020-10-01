@@ -46,6 +46,9 @@ var annotated_dup =
         [ "_Viewport", "classlucid_1_1detail_1_1__Viewport.html", "classlucid_1_1detail_1_1__Viewport" ],
         [ "ComposeOp", "structlucid_1_1detail_1_1ComposeOp.html", "structlucid_1_1detail_1_1ComposeOp" ],
         [ "fold_wrapper", "structlucid_1_1detail_1_1fold__wrapper.html", "structlucid_1_1detail_1_1fold__wrapper" ],
+        [ "helper", "structlucid_1_1detail_1_1helper.html", "structlucid_1_1detail_1_1helper" ],
+        [ "helper< std::pair< T1, T2 > >", "structlucid_1_1detail_1_1helper_3_01std_1_1pair_3_01T1_00_01T2_01_4_01_4.html", "structlucid_1_1detail_1_1helper_3_01std_1_1pair_3_01T1_00_01T2_01_4_01_4" ],
+        [ "helper< std::tuple< Ts... > >", "structlucid_1_1detail_1_1helper_3_01std_1_1tuple_3_01Ts_8_8_8_01_4_01_4.html", "structlucid_1_1detail_1_1helper_3_01std_1_1tuple_3_01Ts_8_8_8_01_4_01_4" ],
         [ "steady_tuple_impl", "classlucid_1_1detail_1_1steady__tuple__impl.html", null ],
         [ "steady_tuple_impl< std::index_sequence< Idxs... >, Ts... >", "classlucid_1_1detail_1_1steady__tuple__impl_3_01std_1_1index__sequence_3_01Idxs_8_8_8_01_4_00_01Ts_8_8_8_01_4.html", "classlucid_1_1detail_1_1steady__tuple__impl_3_01std_1_1index__sequence_3_01Idxs_8_8_8_01_4_00_01Ts_8_8_8_01_4" ],
         [ "steady_tuple_leaf", "classlucid_1_1detail_1_1steady__tuple__leaf.html", "classlucid_1_1detail_1_1steady__tuple__leaf" ]
@@ -63,6 +66,7 @@ var annotated_dup =
       [ "join", "structlucid_1_1join.html", null ],
       [ "join< std::integer_sequence< Int, Ints1... >, std::integer_sequence< Int, Ints2... > >", "structlucid_1_1join_3_01std_1_1integer__sequence_3_01Int_00_01Ints1_8_8_8_01_4_00_01std_1_1integba06621a7292dceeb543aaccf5f7d012.html", "structlucid_1_1join_3_01std_1_1integer__sequence_3_01Int_00_01Ints1_8_8_8_01_4_00_01std_1_1integba06621a7292dceeb543aaccf5f7d012" ],
       [ "join< typelist< Ts1... >, typelist< Ts2... > >", "structlucid_1_1join_3_01typelist_3_01Ts1_8_8_8_01_4_00_01typelist_3_01Ts2_8_8_8_01_4_01_4.html", "structlucid_1_1join_3_01typelist_3_01Ts1_8_8_8_01_4_00_01typelist_3_01Ts2_8_8_8_01_4_01_4" ],
+      [ "LogFile", "structlucid_1_1LogFile.html", "structlucid_1_1LogFile" ],
       [ "Logger", "classlucid_1_1Logger.html", "classlucid_1_1Logger" ],
       [ "Matrix", "classlucid_1_1Matrix.html", "classlucid_1_1Matrix" ],
       [ "MutableVectorOperators", "classlucid_1_1MutableVectorOperators.html", "classlucid_1_1MutableVectorOperators" ],
