@@ -75,7 +75,7 @@ translate(const Point_<Container>& delta) noexcept
 /// @param delta scale delta.
 template <template <typename, size_t> typename Container>
 constexpr Mat4
-scale(const Point_<Container>& delta) noexcept
+scale(const Vec3_<Container>& delta) noexcept
 {
     const auto& [x, y, z] = delta;
     return Mat4(x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, 0, 0, 0, 1);

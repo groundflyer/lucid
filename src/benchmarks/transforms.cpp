@@ -10,8 +10,7 @@ using namespace lucid;
 int
 main(int argc, char* argv[])
 {
-    std::FILE*   log = argc >= 2 ? std::fopen(argv[1], "a") : nullptr;
-    const size_t n   = argc == 3 ? atoi(argv[2]) : 10000000;
+    INIT_LOG
 
     random_device         rd;
     default_random_engine g(rd());
@@ -22,87 +21,59 @@ main(int argc, char* argv[])
     auto vgen      = [&]() noexcept { return Vec3(argen()); };
     auto pgen      = [&]() noexcept { return Point(argen()); };
     auto ngen      = [&]() noexcept { return Normal(argen()); };
-    auto applytest = [](auto& val) noexcept {
-        auto& [t, v1, v2] = val;
-        v2                = apply_transform(t, v1);
-    };
+    auto applytest = [](const Mat4& t, const auto& v) noexcept { return apply_transform(t, v); };
 
-    bench(
+    microbench(
         log,
         n,
         "apply_transform Vec3",
         [&]() noexcept {
-            return tuple{mgen(), vgen(), Vec3{0_r}};
+            return pair{mgen(), vgen()};
         },
         applytest);
 
-    bench(
+    microbench(
         log,
         n,
         "apply_transform Point",
         [&]() noexcept {
-            return tuple{mgen(), pgen(), Vec3{0_r}};
+            return pair{mgen(), pgen()};
         },
         applytest);
 
-    bench(
+    microbench(
         log,
         n,
         "apply_transform Normal",
         [&]() noexcept {
-            return tuple{mgen(), ngen(), Vec3{0_r}};
+            return pair{mgen(), ngen()};
         },
         applytest);
 
-    auto tsgen = [&]() noexcept { return tuple{pgen(), Mat4{}}; };
+    microbench(log, n, "translate", pgen, [](const Point& p) noexcept { return translate(p); });
 
-    bench(log, n, "translate", tsgen, [](auto& v) noexcept {
-        auto& [p, m] = v;
-        m            = translate(p);
-    });
+    microbench(log, n, "scale", vgen, [](const Vec3& v) noexcept { return scale(v); });
 
-    bench(log, n, "scale", tsgen, [](auto& v) noexcept {
-        auto& [p, m] = v;
-        m            = scale(p);
-    });
-
-    bench(
+    microbench(
         log,
         n,
         "rotate",
         [&]() noexcept {
-            return tuple{dist(g), ngen(), Mat4{}};
+            return pair{dist(g), ngen()};
         },
-        [](auto& v) noexcept {
-            auto& [a, n, m] = v;
-            m               = rotate(a, n);
-        });
+        [](const auto a, const Normal& n) noexcept { return rotate(a, n); });
 
-    bench(
+    microbench(
         log,
         n,
         "look_at",
         [&]() noexcept {
-            return tuple{pgen(), pgen(), ngen(), Mat4{}};
+            return tuple{pgen(), pgen(), ngen()};
         },
-        [](auto& v) noexcept {
-            auto& [e, t, u, m] = v;
-            m                  = look_at(e, t, u);
-        });
+        [](const Point& e, const Point& t, const Normal& u) noexcept { return look_at(e, t, u); });
 
-    bench(
-        log,
-        n,
-        "basis_matrix",
-        [&]() noexcept {
-            return pair{ngen(), Mat3{}};
-        },
-        [](auto& v) noexcept {
-            auto& [n, m] = v;
-            m            = basis_matrix(n);
-        });
-
-    if(log) std::fclose(log);
+    microbench(
+        log, n, "basis_matrix", ngen, [](const Normal& n) noexcept { return basis_matrix(n); });
 
     return 0;
 }
