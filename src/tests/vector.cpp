@@ -1,7 +1,5 @@
 #include "property_test.hpp"
 
-#include <base/normal.hpp>
-#include <base/point.hpp>
 #include <base/rng.hpp>
 #include <base/vector.hpp>
 #include <utils/typelist.hpp>
