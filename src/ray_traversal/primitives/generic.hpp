@@ -38,7 +38,7 @@ template <template <typename, size_t> typename RayContainer,
           template <typename, size_t>
           typename IsectContainer,
           typename... Prims>
-constexpr Normal
+constexpr Vec3
 normal(const Ray_<RayContainer>&            ray,
        const Intersection_<IsectContainer>& isect,
        const std::variant<Prims...>&        prim) noexcept
@@ -48,14 +48,14 @@ normal(const Ray_<RayContainer>&            ray,
 }
 
 template <template <typename, size_t> typename SContainer, typename... Prims>
-constexpr Point
+constexpr Vec3
 sample(const Vec2_<SContainer>& s, const std::variant<Prims...>& prim) noexcept
 {
     return std::visit([&](const auto& held_prim) noexcept { return sample(s, held_prim); }, prim);
 }
 
 template <typename... Prims>
-constexpr Point
+constexpr Vec3
 centroid(const std::variant<Prims...>& prim) noexcept
 {
     return std::visit([](const auto& held_prim) noexcept { return centroid(held_prim); }, prim);

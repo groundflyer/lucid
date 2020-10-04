@@ -16,8 +16,8 @@ template <typename T, size_t M, size_t N, typename RandomEngine>
 auto
 test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
 {
-    using Mat                                  = Matrix<T, M, N>;
-    using Vec                                  = Vector<T, N>;
+    using Mat                                  = Matrix<T, M, N, array>;
+    using Vec                                  = Vector<T, N, array>;
     const constexpr auto        t_typestring   = get_typeinfo_string(T{});
     const auto                  mat_typestring = get_typeinfo_string(Mat{});
     const auto                  vec_typestring = get_typeinfo_string(Vec{});
@@ -108,8 +108,8 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
         const constexpr auto M1  = M - 1;
         const constexpr auto N1  = N - 1;
         const constexpr auto MN1 = M1 * N1;
-        using sMat               = Matrix<T, M1, N1>;
-        using sVec               = Vector<T, N1>;
+        using sMat               = Matrix<T, M1, N1, array>;
+        using sVec               = Vector<T, N1, array>;
         auto smat_gen            = [&]() { return sMat(dist.template operator()<MN1>(g)); };
         auto svecgen             = [&]() { return sVec(dist.template operator()<N1>(g)); };
 
@@ -146,7 +146,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
                 [](const auto& testing, const auto& feed) {
                     // identity mantrix elements have different magnitude
                     // equalizing them as ulp is same for all of them
-                    const auto           zero = Mat::identity() - feed.dot(testing);
+                    const auto           zero = Mat::identity() - dot(feed, testing);
                     const constexpr auto ulp  = pow<sizeof(T)>(100ul);
                     return any(!almost_equal(flat_ref(zero), T{0}, ulp)) ||
                            !all(lucid::isfinite(flat_ref(testing)));
@@ -214,63 +214,8 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
         return static_cast<T>(minus_one_pow(bdist(g)));
     };
 
-    auto div_scalar_gen = [&]() { return divdist(g) * sign_gen(); };
-    auto div_mat_gen    = [&]() { return Mat(divdist.template operator()<MN>(g)) * sign_gen(); };
-    auto div_vec_gen    = [&]() { return Vec(divdist.template operator()<N>(g)) * sign_gen(); };
-
-    ret += test_property_n(
-        "{} */ {}"_format(mat_typestring, t_typestring),
-        [&]() { return pair(mat_gen(), div_scalar_gen()); },
-        [](const auto& feed) {
-            const auto& [mat, scalar] = feed;
-            return mat * scalar;
-        },
-        [&](const Mat& testing, const auto& feed) {
-            const auto& [mat, scalar] = feed;
-            const auto mm             = testing / scalar;
-            return assertion(mm, mat);
-        });
-
-    ret += test_property_n(
-        "{} */= {}"_format(mat_typestring, t_typestring),
-        [&]() { return pair(mat_gen(), div_scalar_gen()); },
-        [](const auto& feed) {
-            auto [mat, scalar] = feed;
-            mat *= scalar;
-            return mat;
-        },
-        [&](Mat testing, const auto& feed) {
-            const auto& [mat, scalar] = feed;
-            testing /= scalar;
-            return assertion(testing, mat);
-        });
-
-    ret += test_property_n(
-        "{0} */ {0}"_format(mat_typestring),
-        [&]() { return pair(mat_gen(), div_mat_gen()); },
-        [](const auto& feed) {
-            const auto& [mat1, mat2] = feed;
-            return mat1 * mat2;
-        },
-        [&](const Mat& testing, const auto& feed) {
-            const auto& [mat1, mat2] = feed;
-            const auto mm            = testing / mat2;
-            return assertion(mm, mat1);
-        });
-
-    ret += test_property_n(
-        "{0} */= {0}"_format(mat_typestring),
-        [&]() { return pair(mat_gen(), div_mat_gen()); },
-        [](const auto& feed) {
-            auto [mat1, mat2] = feed;
-            mat1 *= mat2;
-            return mat1;
-        },
-        [&](Mat testing, const auto& feed) {
-            const auto& [mat1, mat2] = feed;
-            testing /= mat2;
-            return assertion(testing, mat1);
-        });
+    auto div_mat_gen = [&]() { return Mat(divdist.template operator()<MN>(g)) * sign_gen(); };
+    auto div_vec_gen = [&]() { return Vec(divdist.template operator()<N>(g)) * sign_gen(); };
 
     RandomDistribution<size_t> rowdist(0, M - 1);
 
@@ -320,16 +265,16 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
         "{}: transpose(A dot B) = transpose(B) dot transpose(A)"_format(mat_typestring),
         [&]() {
             return pair(div_mat_gen(),
-                        Matrix<T, N, M>(divdist.template operator()<MN>(g)) * sign_gen());
+                        Matrix<T, N, M, array>(divdist.template operator()<MN>(g)) * sign_gen());
         },
         [](const auto& feed) {
             const auto& [a, b] = feed;
-            return transpose(a.dot(b));
+            return transpose(dot(a, b));
         },
         [&](const auto& testing, const auto& feed) {
             const auto& ab_t   = testing;
             const auto& [a, b] = feed;
-            const auto bt_at   = transpose(b).dot(transpose(a));
+            const auto bt_at   = dot(transpose(b), transpose(a));
             return assertion(ab_t, bt_at);
         });
 

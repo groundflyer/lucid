@@ -12,7 +12,7 @@ namespace lucid
 {
 // v00, v01, v11, v10
 template <template <typename, size_t> typename Container>
-using Quad_ = std::array<Point_<Container>, 4>;
+using Quad_ = std::array<Vec3_<Container>, 4>;
 
 using Quad = Quad_<std::array>;
 
@@ -24,50 +24,50 @@ intersect(const Ray_<RayContainer>& ray, const Quad_<QuadContainer>& prim) noexc
 {
     const auto& [o, d]               = ray;
     const auto& [v00, v01, v11, v10] = prim;
-    const auto e01                   = v10 - v00;
-    const auto e03                   = v01 - v00;
-    const auto p                     = d.cross(e03);
-    const real D                     = e01.dot(p);
+    const Vec3 e01                   = v10 - v00;
+    const Vec3 e03                   = v01 - v00;
+    const Vec3 p                     = cross(d, e03);
+    const real D                     = dot(e01, p);
 
     if(math::abs(D) < std::numeric_limits<real>::min()) return Intersection();
 
-    const auto T     = o - v00;
-    const auto alpha = T.dot(p) / D;
+    const Vec3 T     = o - v00;
+    const real alpha = dot(T, p) / D;
 
     const constexpr auto range01 = range(0_r, 1_r);
 
     if(!range01(alpha)) return Intersection();
 
-    const auto Q    = T.cross(e01);
-    const auto beta = d.dot(Q) / D;
+    const Vec3 Q    = cross(T, e01);
+    const real beta = dot(d, Q) / D;
     if(!range01(beta)) return Intersection();
 
     if((alpha + beta) > 1)
     {
-        const auto e23 = v01 - v11;
-        const auto e21 = v10 - v11;
-        const auto p_  = d.cross(e21);
-        const auto D_  = e23.dot(p_);
+        const Vec3 e23 = v01 - v11;
+        const Vec3 e21 = v10 - v11;
+        const Vec3 p_  = cross(d, e21);
+        const real D_  = dot(e23, p_);
 
         if(math::abs(D_) < std::numeric_limits<real>::min()) return Intersection();
 
-        const auto T_     = o - v11;
-        const auto alpha_ = T_.dot(p_) / D_;
+        const Vec3 T_     = o - v11;
+        const real alpha_ = dot(T_, p_) / D_;
 
         if(alpha_ < 0) return Intersection();
 
-        const auto Q_    = T_.cross(e23);
-        const auto beta_ = d.dot(Q_) / D_;
+        const Vec3 Q_    = cross(T_, e23);
+        const real beta_ = dot(d, Q_) / D_;
         if(beta_ < 0) return Intersection();
     }
 
-    const auto t = e03.dot(Q) / D;
+    const real t = dot(e03, Q) / D;
 
     if(t < 0) return Intersection();
 
-    const auto e02              = v11 - v00;
-    const auto N                = e01.cross(e03);
-    const auto aN               = abs(N);
+    const Vec3 e02              = v11 - v00;
+    const Vec3 N                = cross(e01, e03);
+    const Vec3 aN               = abs(N);
     const auto& [Nx, Ny, Nz]    = N;
     const auto& [aNx, aNy, aNz] = aN;
 
@@ -104,11 +104,11 @@ intersect(const Ray_<RayContainer>& ray, const Quad_<QuadContainer>& prim) noexc
     }
     else
     {
-        const auto A     = -(b11 - 1);
-        const auto B     = alpha * (b11 - 1) - beta * (a11 - 1) - 1;
-        const auto C     = alpha;
-        const auto Delta = B * B - 4 * A * C;
-        const auto QQ    = -0.5_r * (B + std::copysign(math::sqrt(Delta), B));
+        const real A     = -(b11 - 1);
+        const real B     = alpha * (b11 - 1) - beta * (a11 - 1) - 1;
+        const real C     = alpha;
+        const real Delta = B * B - 4 * A * C;
+        const real QQ    = -0.5_r * (B + std::copysign(math::sqrt(Delta), B));
         u                = QQ / A;
 
         if(!range01(u)) u = C / QQ;
@@ -124,30 +124,30 @@ template <template <typename, size_t> typename QuadContainer,
           typename RayContainer,
           template <typename, size_t>
           typename IsectContainer>
-constexpr Normal
+constexpr Vec3
 normal(const Ray_<RayContainer>&,
        const Intersection_<IsectContainer>&,
        const Quad_<QuadContainer>& prim) noexcept
 {
     const auto e01 = std::get<3>(prim) - std::get<0>(prim);
     const auto e03 = std::get<1>(prim) - std::get<0>(prim);
-    return Normal(e03.cross(e01));
+    return normalize(cross(e03, e01));
 }
 
 template <template <typename, size_t> typename SContainer,
           template <typename, size_t>
           typename PContainer>
-constexpr Point
+constexpr Vec3
 sample(const Vec2_<SContainer>& s, const Quad_<PContainer>& prim) noexcept
 {
     const auto& [a, c1, b, c2] = prim;
     const auto& [t1, t2]       = s;
     const auto& c              = t1 > 0.5_r ? c1 : c2;
-    return Point(detail::triangle_sample(Vec2(resample(t1), t2), a, b, c));
+    return Vec3(detail::triangle_sample(Vec2(resample(t1), t2), a, b, c));
 }
 
 template <template <typename, size_t> typename Container>
-constexpr Point
+constexpr Vec3
 centroid(const Quad_<Container>& prim) noexcept
 {
     return centroid(detail::bound(prim));

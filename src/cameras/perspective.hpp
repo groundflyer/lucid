@@ -38,8 +38,8 @@ struct perspective
         constexpr Ray
         operator()(const Vec2_<Container>& ndc) const noexcept
         {
-            const Normal d(ndc * tan_fov_half, 1_r);
-            return apply_transform(transform, Ray(Point(0_r), d));
+            const Vec3 d(ndc * tan_fov_half, 1_r);
+            return apply_transform(transform, Ray(Vec3(0_r), normalize(d)));
         }
     };
 };

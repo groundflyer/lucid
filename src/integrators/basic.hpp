@@ -24,7 +24,7 @@ struct Constant
     {
         const auto [pid, isect]    = hider(ray, *scene);
         const auto& [bsdf, emit_f] = (*material_getter)(pid);
-        const Normal n             = lucid::visit(
+        const Vec3 n               = lucid::visit(
             pid,
             [&, &iss = isect](const auto& prim) noexcept { return normal(ray, iss, prim); },
             *scene);
@@ -62,16 +62,16 @@ struct PathTracer_
 
             const auto& [bsdf, emit_f] = (*material_getter)(pid);
 
-            const Normal n = lucid::visit(
+            const Vec3 n = lucid::visit(
                 pid,
                 [&, &iss = isect](const auto& prim) noexcept { return normal(ray, iss, prim); },
                 *scene);
 
             const auto [eval, sample] = bsdf(n);
 
-            const Normal wi       = sample(wo, Vec2(rand<real, 2>(*g)));
-            const RGB    color    = eval(wi, wo);
-            const RGB    emission = emit_f();
+            const Vec3 wi       = normalize(sample(wo, Vec2(rand<real, 2>(*g))));
+            const RGB  color    = eval(wi, wo);
+            const RGB  emission = emit_f();
 
             has_rad |= any(emission > 0_r);
 
@@ -81,7 +81,7 @@ struct PathTracer_
                 break;
             }
 
-            const Point p = ro + wo * isect.t;
+            const Vec3 p = ro + wo * isect.t;
 
             radiance = radiance * color + emission;
 

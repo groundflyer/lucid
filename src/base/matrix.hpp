@@ -6,57 +6,8 @@
 
 #include "vector.hpp"
 
-#include <utils/debug.hpp>
-#include <utils/static_span.hpp>
-
 namespace lucid
 {
-template <typename T,
-          size_t M,
-          size_t N,
-          template <typename, size_t> typename Container = std::array>
-class Matrix;
-
-template <typename T,
-          size_t M,
-          size_t N,
-          template <typename, size_t>
-          typename MContainer,
-          template <typename, size_t>
-          typename VContainer>
-constexpr Vector<T, N, std::array>
-dot(const Matrix<T, M, N, MContainer>& lhs, const Vector<T, N, VContainer>& rhs) noexcept
-{
-    Vector<T, N, std::array> ret{};
-
-    for(size_t i = 0; i < M; ++i)
-        for(size_t j = 0; j < N; ++j) ret[i] += lhs.at(i, j) * rhs[j];
-
-    return ret;
-}
-
-// Matrix-Matrix mupltiply
-template <typename T,
-          size_t M1,
-          size_t N1,
-          size_t M2,
-          size_t N2,
-          template <typename, size_t>
-          typename Container1,
-          template <typename, size_t>
-          typename Container2>
-constexpr typename std::enable_if_t<N1 == M2, Matrix<T, M1, N2, Container2>>
-dot(const Matrix<T, M1, N1, Container1>& lhs, const Matrix<T, M2, N2, Container2>& rhs) noexcept
-{
-    Matrix<T, M1, N2> ret(0);
-
-    for(size_t i = 0; i < M1; ++i)
-        for(size_t j = 0; j < N2; ++j)
-            for(size_t r = 0; r < N1; ++r) ret.at(i, j) += lhs.at(i, r) * rhs.at(r, j);
-
-    return ret;
-}
-
 template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
 class Matrix
 {
@@ -284,7 +235,7 @@ class Matrix
     constexpr Matrix
     operator+(const Matrix<T, M, N, Container2>& rhs) const noexcept
     {
-        Matrix ret;
+        Matrix ret{};
 
         for(size_t i = 0; i < MN; ++i) ret.at(i) = at(i) + rhs.at(i);
 
@@ -293,7 +244,7 @@ class Matrix
     constexpr Matrix
     operator+(const T& rhs) const noexcept
     {
-        Matrix ret;
+        Matrix ret{};
 
         for(size_t i = 0; i < MN; ++i) ret.at(i) = at(i) + rhs;
 
@@ -319,7 +270,7 @@ class Matrix
     constexpr Matrix
     operator-(const Matrix<T, M, N, Container2>& rhs) const noexcept
     {
-        Matrix ret;
+        Matrix ret{};
 
         for(size_t i = 0; i < MN; ++i) ret.at(i) = at(i) - rhs.at(i);
 
@@ -328,7 +279,7 @@ class Matrix
     constexpr Matrix
     operator-(const T& rhs) const noexcept
     {
-        Matrix ret;
+        Matrix ret{};
 
         for(size_t i = 0; i < MN; ++i) ret.at(i) = at(i) - rhs;
 
@@ -337,7 +288,7 @@ class Matrix
     constexpr Matrix
     operator-() const noexcept
     {
-        Matrix ret;
+        Matrix ret{};
 
         for(size_t i = 0; i < MN; ++i) ret.at(i) = -at(i);
 
@@ -359,73 +310,19 @@ class Matrix
         return *this;
     }
 
-    // element-wise product
-    template <template <typename, size_t> typename Container2>
-    constexpr Matrix
-    operator*(const Matrix<T, M, N, Container2>& rhs) const noexcept
-    {
-        Matrix ret;
-
-        for(size_t i = 0; i < MN; ++i) ret.at(i) = at(i) * rhs.at(i);
-
-        return ret;
-    }
     constexpr Matrix
     operator*(const T& rhs) const noexcept
     {
-        Matrix ret;
+        Matrix ret{};
 
         for(size_t i = 0; i < MN; ++i) ret.at(i) = at(i) * rhs;
 
         return ret;
     }
-    template <template <typename, size_t> typename Container2>
-    constexpr Matrix&
-    operator*=(const Matrix<T, M, N, Container2>& rhs)
-    {
-        for(size_t i = 0; i < MN; ++i) at(i) *= rhs.at(i);
-
-        return *this;
-    }
     constexpr Matrix&
     operator*=(const T& rhs) noexcept
     {
         for(size_t i = 0; i < MN; ++i) at(i) *= rhs;
-
-        return *this;
-    }
-
-    template <template <typename, size_t> typename Container2>
-    constexpr Matrix
-    operator/(const Matrix<T, M, N, Container2>& rhs) const noexcept
-    {
-        Matrix ret;
-
-        for(size_t i = 0; i < MN; ++i) ret.at(i) = at(i) / rhs.at(i);
-
-        return ret;
-    }
-    constexpr Matrix
-    operator/(const T& rhs) const noexcept
-    {
-        Matrix ret;
-
-        for(size_t i = 0; i < MN; ++i) ret.at(i) = at(i) / rhs;
-
-        return ret;
-    }
-    template <template <typename, size_t> typename Container2>
-    constexpr Matrix&
-    operator/=(const Matrix<T, M, N, Container2>& rhs)
-    {
-        for(size_t i = 0; i < MN; ++i) at(i) /= rhs.at(i);
-
-        return *this;
-    }
-    constexpr Matrix&
-    operator/=(const T& rhs) noexcept
-    {
-        for(size_t i = 0; i < MN; ++i) at(i) /= rhs;
 
         return *this;
     }
@@ -550,13 +447,6 @@ class Matrix
         return ret;
     }
 
-    template <typename Rhs>
-    constexpr auto
-    dot(const Rhs& rhs) const noexcept
-    {
-        return lucid::dot(*this, rhs);
-    }
-
     const constexpr Data&
     data() const noexcept
     {
@@ -566,7 +456,7 @@ class Matrix
     static constexpr Matrix
     identity()
     {
-        Matrix ret;
+        Matrix ret{};
 
         for(size_t i = 0; i < M; ++i)
             for(size_t j = 0; j < N; ++j) ret.at(i, j) = i == j ? 1 : 0;
@@ -579,7 +469,7 @@ template <typename T, size_t M, size_t N, template <typename, size_t> typename C
 constexpr auto
 ref(const Matrix<T, M, N, Container>& m) noexcept
 {
-    return Matrix<T, M, N, StaticSpan>(m.at(0));
+    return Matrix<T, M, N, StaticSpan>(StaticSpan<T, M * N>(m.at(0)));
 }
 
 template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
@@ -593,10 +483,50 @@ template <typename T, size_t M, size_t N, template <typename, size_t> class Cont
 constexpr auto
 transpose(const Matrix<T, M, N, Container>& a) noexcept
 {
-    Matrix<T, N, M, Container> ret;
+    Matrix<T, N, M, std::array> ret{};
 
     for(size_t i = 0; i < N; ++i)
         for(size_t j = 0; j < M; ++j) ret[i][j] = a[j][i];
+
+    return ret;
+}
+
+template <typename T,
+          size_t M,
+          size_t N,
+          template <typename, size_t>
+          typename MContainer,
+          template <typename, size_t>
+          typename VContainer>
+constexpr Vector<T, N, std::array>
+dot(const Matrix<T, M, N, MContainer>& lhs, const Vector<T, N, VContainer>& rhs) noexcept
+{
+    Vector<T, N, std::array> ret{};
+
+    for(size_t i = 0; i < M; ++i)
+        for(size_t j = 0; j < N; ++j) ret[i] += lhs.at(i, j) * rhs[j];
+
+    return ret;
+}
+
+// Matrix-Matrix mupltiply
+template <typename T,
+          size_t M1,
+          size_t N1,
+          size_t M2,
+          size_t N2,
+          template <typename, size_t>
+          typename Container1,
+          template <typename, size_t>
+          typename Container2>
+constexpr typename std::enable_if_t<N1 == M2, Matrix<T, M1, N2, Container2>>
+dot(const Matrix<T, M1, N1, Container1>& lhs, const Matrix<T, M2, N2, Container2>& rhs) noexcept
+{
+    Matrix<T, M1, N2, std::array> ret(0);
+
+    for(size_t i = 0; i < M1; ++i)
+        for(size_t j = 0; j < N2; ++j)
+            for(size_t r = 0; r < N1; ++r) ret.at(i, j) += lhs.at(i, r) * rhs.at(r, j);
 
     return ret;
 }
@@ -636,7 +566,7 @@ minor_matrix(const Matrix<T, M, N, Container>& a, const size_t I, const size_t J
 {
     ASSERT(I < M || J < N, "Indicies out of range");
 
-    Matrix<T, (M - 1), (N - 1), Container> ret;
+    Matrix<T, (M - 1), (N - 1), std::array> ret{};
 
     for(size_t i = 0; i < M - 1; ++i)
         for(size_t j = 0; j < N - 1; ++j)
@@ -659,7 +589,7 @@ template <typename T, size_t M, size_t N, template <typename, size_t> class Cont
 constexpr auto
 cofactor(const Matrix<T, M, N, Container>& a) noexcept
 {
-    Matrix<T, M, N, Container> ret;
+    Matrix<T, M, N, std::array> ret{};
 
     for(size_t i = 0; i < M; ++i)
         for(size_t j = 0; j < N; ++j) ret[i][j] = minus_one_pow(i + j) * det(minor_matrix(a, i, j));
@@ -682,7 +612,7 @@ inverse(const Matrix<T, M, N, Container>& a) noexcept
     const auto d = det(a);
 
     if(!is_zero(d))
-        return transpose(cofactor(a)) / d;
+        return transpose(cofactor(a)) * (T{1} / d);
     else
         return a;
 }

@@ -12,22 +12,22 @@ namespace lucid
 template <template <typename, size_t> typename Container>
 struct Ray_
 {
-    Point_<Container>  origin;
-    Normal_<Container> dir;
+    Vec3_<Container> origin;
+    Vec3_<Container> dir;
 
     constexpr Ray_() noexcept {};
 
     template <template <typename, size_t> typename Container1,
               template <typename, size_t>
               typename Container2>
-    constexpr Ray_(const Point_<Container1>& _origin, const Normal_<Container2>& _dir) noexcept :
-        origin(_origin), dir(_dir)
+    constexpr Ray_(const Vec3_<Container1>& _origin, const Vec3_<Container2>& _dir) noexcept :
+        origin(_origin), dir(normalize(_dir))
     {
     }
 };
 
 template <template <typename, size_t> typename Container>
-Ray_(const Point_<Container>&, const Normal_<Container>&)->Ray_<Container>;
+Ray_(const Vec3_<Container>&, const Vec3_<Container>&) -> Ray_<Container>;
 
 using Ray = Ray_<std::array>;
 

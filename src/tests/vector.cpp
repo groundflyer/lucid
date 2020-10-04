@@ -17,7 +17,7 @@ template <typename T, size_t N, typename RandomEngine>
 auto
 test_t_n(RandomEngine& g, const size_t num_tests) noexcept
 {
-    using Vec                            = Vector<T, N>;
+    using Vec                            = Vector<T, N, array>;
     const auto            t_typestring   = get_typeinfo_string(T{});
     const auto            vec_typestring = get_typeinfo_string(Vec{});
     const auto            arr_typestring = get_typeinfo_string(Vec().data());
@@ -61,7 +61,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
         const constexpr auto N1 = N - 1;
         ret += test_property_n(
             "{0}({1}, Vector<{1}, {2}>)"_format(vec_typestring, t_typestring, N1),
-            [&]() { return tuple(dist(g), Vector<T, N1>(dist.template operator()<N1>(g))); },
+            [&]() { return tuple(dist(g), Vector<T, N1, array>(dist.template operator()<N1>(g))); },
             [](const auto& feed) { return std::make_from_tuple<Vec>(feed); },
             [](const Vec& testing, const auto& feed) {
                 const auto& [v0, vv] = feed;
@@ -253,8 +253,8 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
                 },
                 [](const Vec& testing, const auto& feed) {
                     const auto& [a, b]       = feed;
-                    const auto           at  = a.dot(testing);
-                    const auto           bt  = b.dot(testing);
+                    const auto           at  = dot(a, testing);
+                    const auto           bt  = dot(b, testing);
                     const constexpr auto ulp = pow<sizeof(T)>(is_same_v<T, double> ? 100ul : 55u);
                     return !(almost_equal(at, T{0}, ulp) || almost_equal(bt, T{0}, ulp)) ||
                            !all(lucid::isfinite(testing));
@@ -291,7 +291,7 @@ __boolean_test(RandomEngine& g, const size_t num_tests) noexcept
 {
     RandomDistribution<bool> dist(0.5);
     unsigned                 ret            = 0;
-    auto                     vec_typestring = get_typeinfo_string(Vector<bool, N>{});
+    auto                     vec_typestring = get_typeinfo_string(Vector<bool, N, array>{});
 
     static const constexpr double threshold       = 0.0;
     auto                          test_property_n = [num_tests](auto&&... args) {
@@ -301,8 +301,8 @@ __boolean_test(RandomEngine& g, const size_t num_tests) noexcept
     ret += test_property_n(
         "any({})"_format(vec_typestring),
         [&]() { return Vector(dist.template operator()<N>(g)); },
-        [](const Vector<bool, N>& feed) { return any(feed); },
-        [](const bool testing, const Vector<bool, N>& feed) {
+        [](const Vector<bool, N, array>& feed) { return any(feed); },
+        [](const bool testing, const Vector<bool, N, array>& feed) {
             return testing !=
                    apply([](auto... vals) { return (false || ... || vals); }, feed.data());
         });
@@ -310,8 +310,8 @@ __boolean_test(RandomEngine& g, const size_t num_tests) noexcept
     ret += test_property_n(
         "all({})"_format(vec_typestring),
         [&]() { return Vector(dist.template operator()<N>(g)); },
-        [](const Vector<bool, N>& feed) { return all(feed); },
-        [](const bool testing, const Vector<bool, N>& feed) {
+        [](const Vector<bool, N, array>& feed) { return all(feed); },
+        [](const bool testing, const Vector<bool, N, array>& feed) {
             return testing !=
                    apply([](auto... vals) { return (true && ... && vals); }, feed.data());
         });

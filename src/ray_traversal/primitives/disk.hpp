@@ -11,26 +11,26 @@ namespace lucid
 template <template <typename, size_t> typename Container>
 struct Disk_
 {
-    Point_<Container>  position;
-    Normal_<Container> normal;
-    real               radius;
+    Vec3_<Container> position;
+    Vec3_<Container> normal;
+    real             radius;
 
     constexpr Disk_() noexcept {}
 
     template <template <typename, size_t> typename Container1,
               template <typename, size_t>
               typename Container2>
-    constexpr Disk_(const Point_<Container1>&  _position,
-                    const Normal_<Container2>& _normal,
-                    const real                 _radius) noexcept :
+    constexpr Disk_(const Vec3_<Container1>& _position,
+                    const Vec3_<Container2>& _normal,
+                    const real               _radius) noexcept :
         position(_position),
-        normal(_normal), radius(_radius)
+        normal(normalize(_normal)), radius(_radius)
     {
     }
 };
 
 template <template <typename, size_t> typename Container>
-Disk_(const Point_<Container>&, const Normal_<Container>&, const real)->Disk_<Container>;
+Disk_(const Vec3_<Container>&, const Vec3_<Container>&, const real) -> Disk_<Container>;
 
 using Disk = Disk_<std::array>;
 
@@ -42,7 +42,7 @@ intersect(const Ray_<RayContainer>& ray, const Disk_<DiskContainer>& prim) noexc
 {
     const auto& [o, d]    = ray;
     const auto& [p, n, r] = prim;
-    const real t          = ((p - o).dot(n) / (d.dot(n)));
+    const real t          = dot(p - o, n) / dot(d, n);
     return Intersection(!std::signbit(t) && distance(o + d * t, p) < r, t, Vec2{});
 }
 
@@ -51,7 +51,7 @@ template <template <typename, size_t> typename DiskContainer,
           typename RayContainer,
           template <typename, size_t>
           typename IsectContainer>
-constexpr Normal
+constexpr Vec3
 normal(const Ray_<RayContainer>&,
        const Intersection_<IsectContainer>&,
        const Disk_<DiskContainer>& prim) noexcept
@@ -62,19 +62,19 @@ normal(const Ray_<RayContainer>&,
 template <template <typename, size_t> typename SContainer,
           template <typename, size_t>
           typename PContainer>
-constexpr Point
+constexpr Vec3
 sample(const Vec2_<SContainer>& s, const Disk_<PContainer>& prim) noexcept
 {
     const auto& [p, zaxis, r] = prim;
     const auto& [t1, t2]      = s;
-    const real  sr            = r * math::sqrt(t1);
-    const real  theta         = 2_r * Pi * t2;
-    const Point point{sr * math::sin(theta), sr * math::cos(theta), 0_r};
-    return Point(basis_matrix(zaxis).dot(point) + p);
+    const real sr             = r * math::sqrt(t1);
+    const real theta          = 2_r * Pi * t2;
+    const Vec3 point{sr * math::sin(theta), sr * math::cos(theta), 0_r};
+    return dot(basis_matrix(zaxis), point) + p;
 }
 
 template <template <typename, size_t> typename Container>
-constexpr Point
+constexpr Vec3
 centroid(const Disk_<Container>& prim) noexcept
 {
     return prim.position;
@@ -85,8 +85,8 @@ constexpr AABB
 bound(const Disk_<Container>& prim) noexcept
 {
     const auto& [p, n, r] = prim;
-    const real  h         = math::abs(math::sqrt(1_r - pow<2>(n.dot(Vec3(0, 1, 0)))) * r);
-    const Point offset(r, h, r);
+    const real h          = math::abs(math::sqrt(1_r - pow<2>(dot(n, Vec3(0, 1, 0)))) * r);
+    const Vec3 offset(r, h, r);
     return AABB{p - offset, p + offset};
 }
 

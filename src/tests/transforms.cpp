@@ -29,11 +29,11 @@ main(int argc, char* argv[])
     ret += test_property_n(
         "translate",
         [&]() {
-            return pair{Point{argen()}, Point{argen()}};
+            return pair{Vec3{argen()}, Vec3{argen()}};
         },
         [](const auto& feed) {
             const auto& [origin, delta] = feed;
-            return apply_transform(translate(delta), origin);
+            return apply_transform_p(translate(delta), origin);
         },
         [](const auto& testing, const auto& feed) {
             const auto& [origin, delta] = feed;
@@ -44,7 +44,7 @@ main(int argc, char* argv[])
     ret += test_property_n(
         "scale",
         [&]() {
-            return pair{Point{argen()}, Vec3{argen()}};
+            return pair{Vec3{argen()}, Vec3{argen()}};
         },
         [](const auto& feed) {
             const auto& [origin, delta] = feed;
@@ -59,7 +59,7 @@ main(int argc, char* argv[])
     ret += test_property_n(
         "rotate",
         [&]() {
-            return pair{Normal{argen()}, Pi * generate_canonical<real, 10>(g)};
+            return pair{normalize(Vec3{argen()}), Pi * generate_canonical<real, 10>(g)};
         },
         [](const auto& feed) {
             const auto& [axis, angle] = feed;
@@ -80,27 +80,27 @@ main(int argc, char* argv[])
         0.071,
         "look at",
         [&]() {
-            return pair{Point{argen()}, Point{argen()}};
+            return pair{Vec3{argen()}, Vec3{argen()}};
         },
         [&](const auto& feed) {
             const auto& [eye, target] = feed;
-            return apply_transform(look_at(eye, target, Normal(0_r, 1_r, 0_r)),
-                                   Normal(0_r, 0_r, 1_r));
+            return apply_transform_n(look_at(eye, target, Vec3(0_r, 1_r, 0_r)),
+                                     Vec3(0_r, 0_r, 1_r));
         },
         [](const auto& testing, const auto& feed) {
             const auto& [eye, target] = feed;
-            const auto expected       = Normal(target - eye);
+            const Vec3 expected       = normalize(target - eye);
             return any(!almost_equal(expected, testing, ULP)) || !all(lucid::isfinite(testing));
         });
 
     ret += test_property_n(
         "orthonormal basis",
-        [&]() { return Normal(argen()); },
+        [&]() { return normalize(Vec3(argen())); },
         [](const auto& feed) { return basis(feed); },
         [](const auto& testing, const auto& feed) {
             const auto& [a, b] = testing;
             const Mat3           mm{a, b, feed};
-            const auto           zero = Mat3::identity() - mm.dot(transpose(mm));
+            const auto           zero = Mat3::identity() - dot(mm, transpose(mm));
             const constexpr auto ulp  = pow<sizeof(real)>(60ul);
             return any(!almost_equal(flat_ref(zero), 0_r, ulp));
         });

@@ -9,6 +9,7 @@
 
 #include <utils/debug.hpp>
 #include <utils/math.hpp>
+#include <utils/static_span.hpp>
 
 #include <algorithm>
 #include <array>
@@ -20,89 +21,6 @@
 
 namespace lucid
 {
-template <typename T, size_t N, template <typename, size_t> typename Container = std::array>
-class Vector;
-
-/// @brief Compute dot product of the given vectors.
-template <typename T,
-          size_t N,
-          template <typename, size_t>
-          typename Container1,
-          template <typename, size_t>
-          typename Container2>
-constexpr T
-dot(const Vector<T, N, Container1>& a, const Vector<T, N, Container2>& b) noexcept
-{
-    return transform_reduce(std::multiplies<T>(), std::plus<T>(), a, b, T{0});
-}
-
-/// @brief Compute cross product of the given vectors.
-template <typename T,
-          size_t N,
-          template <typename, size_t>
-          typename Container1,
-          template <typename, size_t>
-          typename Container2>
-constexpr auto
-cross(const Vector<T, N, Container1>& a, const Vector<T, N, Container2>& b) noexcept
-{
-    Vector<T, N, std::array> ret;
-
-    for(size_t i = 0; i < N; ++i)
-        for(size_t j = 0; j < N; ++j)
-            for(size_t k = 0; k < N; ++k)
-                ret[i] += sgn(std::array<size_t, 3>{i, j, k}) * a[j] * b[k];
-
-    return ret;
-}
-
-template <std::size_t idx, typename OutType, std::size_t OutSize, typename InType, typename... Tail>
-constexpr std::array<OutType, OutSize>&
-vector_constructor(std::array<OutType, OutSize>& out, const InType& head, Tail&&... tail) noexcept
-{
-    static_assert(idx < OutSize, "Too many elements.");
-
-    out[idx] = static_cast<OutType>(head);
-
-    if constexpr(sizeof...(tail) > 0)
-        return vector_constructor<idx + 1>(out, std::forward<Tail>(tail)...);
-
-    if constexpr(idx < (OutSize - 1)) return vector_constructor<idx + 1>(out, head);
-
-    if constexpr(sizeof...(tail) == 0 && (idx + 1) < OutSize)
-        return vector_constructor<idx + 1>(out, OutType{0});
-
-    return out;
-}
-
-template <std::size_t idx,
-          typename OutType,
-          std::size_t OutSize,
-          typename InType,
-          std::size_t InSize,
-          template <typename, std::size_t>
-          typename Container,
-          typename... Tail>
-constexpr std::array<OutType, OutSize>&
-vector_constructor(std::array<OutType, OutSize>&            out,
-                   const Vector<InType, InSize, Container>& head,
-                   Tail&&... tail) noexcept
-{
-    static_assert(idx < OutSize, "Too many elements.");
-
-    const constexpr auto N = std::min(OutSize - idx, InSize);
-    for(std::size_t i = 0; i < N; ++i) out[idx + i] = static_cast<OutType>(head[i]);
-
-    if constexpr(sizeof...(tail) > 0)
-        return vector_constructor<idx + N>(out, std::forward<Tail>(tail)...);
-
-    // fill remaining with zeros
-    if constexpr(sizeof...(tail) == 0 && (idx + N) < OutSize)
-        return vector_constructor<idx + N>(out, OutType{0});
-
-    return out;
-}
-
 template <typename T, size_t N, template <typename, size_t> typename Container>
 class Vector
 {
@@ -112,21 +30,71 @@ class Vector
 
     Data m_data{};
 
+    template <size_t idx>
+    constexpr void
+    unpack()
+    {
+        if constexpr(idx < N)
+            for(auto i = idx; i < N; ++i) m_data[i] = static_cast<T>(0);
+    }
+
+    template <size_t idx, typename... Ts>
+    constexpr void
+    unpack(const T& first, const Ts&... other)
+    {
+        static_assert(idx < N, "Too many elements.");
+        m_data[idx] = first;
+        if constexpr(sizeof...(other) == 0 && idx < N - 1)
+            unpack<idx + 1>(first);
+        else
+            unpack<idx + 1>(other...);
+    }
+
+    template <size_t idx,
+              typename T1,
+              size_t N1,
+              template <typename, size_t>
+              typename Container1,
+              typename... Ts>
+    constexpr void
+    unpack(const Vector<T1, N1, Container1>& first, const Ts&... other)
+    {
+        static_assert(idx < N, "Too many elements.");
+        for(size_t i = 0; i < std::min(N - idx, N1); ++i)
+            m_data[idx + i] = static_cast<T>(first[i]);
+        unpack<idx + N1>(other...);
+    }
+
+    template <size_t idx, typename T1, size_t N1, typename... Ts>
+    constexpr void
+    unpack(const Container<T1, N1>& first, const Ts&... other)
+    {
+        static_assert(idx < N, "Too many elements.");
+        for(size_t i = 0; i < std::min(N - idx, N1); ++i)
+            m_data[idx + i] = static_cast<T>(first[i]);
+        unpack<idx + N1>(other...);
+    }
+
   public:
     constexpr Vector() noexcept {}
 
     constexpr Vector(const Vector& rhs) noexcept : m_data(rhs.m_data) {}
 
-    explicit constexpr Vector(Data&& rhs) noexcept : m_data(std::forward<Data>(rhs)) {}
+    explicit constexpr Vector(Data&& rhs) noexcept : m_data(std::move(rhs)) {}
 
     explicit constexpr Vector(const Data& rhs) noexcept : m_data(rhs) {}
 
     explicit constexpr Vector(Data& rhs) noexcept : m_data(rhs) {}
 
-    template <typename... Ts>
-    explicit constexpr Vector(Ts&&... rhs) noexcept :
-        m_data(vector_constructor<0>(m_data, std::forward<Ts>(rhs)...))
+    explicit constexpr Vector(T&& rhs) noexcept
     {
+        for(T& i: m_data) i = rhs;
+    }
+
+    template <typename... Ts>
+    explicit constexpr Vector(const Ts&... rhs) noexcept
+    {
+        unpack<0>(rhs...);
     }
 
     constexpr Vector&
@@ -173,7 +141,7 @@ class Vector
         return m_data.cend();
     }
 
-    const constexpr T&
+    constexpr const T&
     operator[](const size_t i) const noexcept
     {
         CHECK_INDEX(i, N);
@@ -200,7 +168,7 @@ class Vector
         return std::get<I>(m_data);
     }
 
-    const constexpr T&
+    constexpr const T&
     at(const size_t i) const noexcept
     {
         CHECK_INDEX(i, N);
@@ -213,7 +181,7 @@ class Vector
         return m_data[i];
     }
 
-    const constexpr Data&
+    constexpr const Data&
     data() const noexcept
     {
         return m_data;
@@ -415,20 +383,6 @@ class Vector
         return transform(std::logical_not<T>(), *this);
     }
 
-    template <template <typename, size_t> typename Container2>
-    constexpr T
-    dot(const Vector<T, N, Container2>& rhs) const noexcept
-    {
-        return lucid::dot(*this, rhs);
-    }
-
-    template <template <typename, size_t> typename Container2>
-    constexpr Vector<T, N, std::array>
-    cross(const Vector<T, N, Container2>& rhs) const noexcept
-    {
-        return lucid::cross(*this, rhs);
-    }
-
     constexpr std::size_t
     size() const noexcept
     {
@@ -438,6 +392,13 @@ class Vector
 
 template <typename T, size_t N, template <typename, size_t> typename Container>
 Vector(Container<T, N> &&) -> Vector<T, N, Container>;
+
+template <typename T, size_t N, template <typename, size_t> typename Container>
+constexpr const Vector<T, N, StaticSpan>
+ref(const Vector<T, N, Container>& v)
+{
+    return Vector<T, N, StaticSpan>(StaticSpan<T, N>(v.template get<0>()));
+}
 
 /// @brief Apply binary operator to the corresponding elements of input vectors.
 /// @return @p vector of VectorType1 with dimensionality @p N and element type @p c.
@@ -543,6 +504,39 @@ transform_reduce(UnaryOperation                 unary_op,
     for(size_t i = 0; i < N; ++i) init = binary_op(init, unary_op(a[i]));
 
     return init;
+}
+
+/// @brief Compute dot product of the given vectors.
+template <typename T,
+          size_t N,
+          template <typename, size_t>
+          typename Container1,
+          template <typename, size_t>
+          typename Container2>
+constexpr T
+dot(const Vector<T, N, Container1>& a, const Vector<T, N, Container2>& b) noexcept
+{
+    return transform_reduce(std::multiplies<T>(), std::plus<T>(), a, b, T{0});
+}
+
+/// @brief Compute cross product of the given vectors.
+template <typename T,
+          size_t N,
+          template <typename, size_t>
+          typename Container1,
+          template <typename, size_t>
+          typename Container2>
+constexpr auto
+cross(const Vector<T, N, Container1>& a, const Vector<T, N, Container2>& b) noexcept
+{
+    Vector<T, N, std::array> ret;
+
+    for(size_t i = 0; i < N; ++i)
+        for(size_t j = 0; j < N; ++j)
+            for(size_t k = 0; k < N; ++k)
+                ret[i] += sgn(std::array<size_t, 3>{i, j, k}) * a[j] * b[k];
+
+    return ret;
 }
 
 /// @brief Compute squared length of a vector.
@@ -762,6 +756,62 @@ isfinite(const Vector<T, N, Container>& v) noexcept
 {
     return transform(static_cast<bool (*)(T)>(std::isfinite), v);
 }
+
+template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
+constexpr const T&
+get_x(const Vector<T, N, Container>& v) noexcept
+{
+    return v.template get<0>();
+}
+
+template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
+constexpr T&
+get_x(Vector<T, N, Container>& v) noexcept
+{
+    return v.template get<0>();
+}
+
+template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
+constexpr const T&
+get_y(const Vector<T, N, Container>& v) noexcept
+{
+    return v.template get<1>();
+}
+
+template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
+constexpr T&
+get_y(Vector<T, N, Container>& v) noexcept
+{
+    return v.template get<1>();
+}
+
+template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
+constexpr const T&
+get_z(const Vector<T, N, Container>& v) noexcept
+{
+    return v.template get<2>();
+}
+
+template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
+constexpr T&
+get_z(Vector<T, N, Container>& v) noexcept
+{
+    return v.template get<2>();
+}
+
+template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
+constexpr const T&
+get_w(const Vector<T, N, Container>& v) noexcept
+{
+    return v.template get<3>();
+}
+
+template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
+constexpr T&
+get_w(Vector<T, N, Container>& v) noexcept
+{
+    return v.template get<3>();
+}
 } // namespace lucid
 
 namespace std
@@ -770,7 +820,7 @@ template <typename T, size_t N, template <typename, size_t> typename Container>
 class tuple_size<lucid::Vector<T, N, Container>>
 {
   public:
-    static const constexpr size_t value = N;
+    static constexpr const size_t value = N;
 };
 
 template <size_t I, typename T, size_t N, template <typename, size_t> typename Container>

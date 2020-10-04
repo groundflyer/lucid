@@ -14,16 +14,16 @@ namespace lucid
 
 class CornellBox
 {
-    static const constexpr std::array<Point, 8> box_points{Point(-1, -1, 1),
-                                                           Point(-1, -1, -1),
-                                                           Point(1, -1, -1),
-                                                           Point(1, -1, 1),
-                                                           Point(-1, 1, 1),
-                                                           Point(-1, 1, -1),
-                                                           Point(1, 1, -1),
-                                                           Point(1, 1, 1)};
+    static constexpr const std::array<Vec3, 8> box_points{Vec3(-1, -1, 1),
+                                                          Vec3(-1, -1, -1),
+                                                          Vec3(1, -1, -1),
+                                                          Vec3(1, -1, 1),
+                                                          Vec3(-1, 1, 1),
+                                                          Vec3(-1, 1, -1),
+                                                          Vec3(1, 1, -1),
+                                                          Vec3(1, 1, 1)};
 
-    static const constexpr std::tuple box_geo_descr{
+    static constexpr const std::tuple box_geo_descr{
         std::index_sequence<0, 3, 2, 1>{}, // floor
         std::index_sequence<0, 1, 5, 4>{}, // left wall
         std::index_sequence<2, 3, 7, 6>{}, // right wall
@@ -53,11 +53,11 @@ class CornellBox
         {
             struct Eval
             {
-                const Normal& n;
-                const RGB&    color;
+                const Vec3& n;
+                const RGB&  color;
 
                 RGB
-                operator()(const Normal& wi, const Normal& /* wo */) const noexcept
+                operator()(const Vec3& wi, const Vec3& /* wo */) const noexcept
                 {
                     return color * std::max(dot(n, wi), 0_r);
                 }
@@ -65,19 +65,19 @@ class CornellBox
 
             struct Sample
             {
-                const Normal& n;
+                const Vec3& n;
 
-                Normal
-                operator()(const Normal& /* wo */, const Vec2& u) const noexcept
+                Vec3
+                operator()(const Vec3& /* wo */, const Vec2& u) const noexcept
                 {
-                    return Normal(sample_hemisphere(n, u));
+                    return normalize(sample_hemisphere(n, u));
                 }
             };
 
             const RGB color{0};
 
-            std::pair<Eval, Sample>
-            operator()(const Normal& n) const noexcept
+            constexpr std::pair<Eval, Sample>
+            operator()(const Vec3& n) const noexcept
             {
                 return {{n, color}, {n}};
             }
@@ -94,7 +94,7 @@ class CornellBox
             }
         };
 
-        static const constexpr std::array<std::size_t, 7> mat_idxs{1, // white
+        static constexpr const std::array<std::size_t, 7> mat_idxs{1, // white
                                                                    2, // red
                                                                    3, // green
                                                                    1, // white
@@ -102,20 +102,20 @@ class CornellBox
                                                                    4,
                                                                    5};
 
-        static const constexpr RGB black{0_r};
-        static const constexpr RGB white{1_r};
-        static const constexpr RGB red{1, 0.1_r, 0.1_r};
-        static const constexpr RGB green{0.1_r, 1, 0.1_r};
+        static constexpr const RGB black{0_r};
+        static constexpr const RGB white{1_r};
+        static constexpr const RGB red{1, 0.1_r, 0.1_r};
+        static constexpr const RGB green{0.1_r, 1, 0.1_r};
         using Material = std::pair<BSDF, Emission>;
-        static inline const Material materials[]{{{black}, {black}},
-                                                 {{white}, {black}},
-                                                 {{red}, {black}},
-                                                 {{green}, {black}},
-                                                 {{green}, {black}},
-                                                 {{black}, {RGB(10_r)}}};
+        static constexpr const Material materials[]{{{black}, {black}},
+                                                    {{white}, {black}},
+                                                    {{red}, {black}},
+                                                    {{green}, {black}},
+                                                    {{green}, {black}},
+                                                    {{black}, {RGB(10_r)}}};
 
       public:
-        const Material&
+        constexpr const Material&
         operator()(const std::size_t pid) const noexcept
         {
             return materials[mat_idxs[pid]];
@@ -128,15 +128,15 @@ class CornellBox
         return std::tuple_cat(
             std::apply([](auto... pns) { return std::tuple{make_wall_geo(pns)...}; },
                        box_geo_descr),
-            std::tuple{Sphere(Point(0.5_r, -0.6_r, 0.2_r), 0.4_r),
-                       Disk(Point(0, 0.99_r, 0), Normal(0, -1, 0), 0.3_r)});
+            std::tuple{Sphere(Vec3(0.5_r, -0.6_r, 0.2_r), 0.4_r),
+                       Disk(Vec3(0, 0.99_r, 0), Vec3(0, -1, 0), 0.3_r)});
     }
 
     static perspective::shoot
     camera(const real fov = radians(60_r)) noexcept
     {
         return perspective::shoot(convert_fov(fov),
-                                  look_at(Point(0, 0, 4), Point(0, 0, 0), Normal(0, 1, 0)));
+                                  look_at(Vec3(0, 0, 4), Vec3(0, 0, 0), Vec3(0, 1, 0)));
     }
 
     static constexpr MatGetter

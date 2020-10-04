@@ -13,7 +13,7 @@
 namespace lucid
 {
 template <template <typename, size_t> typename Container>
-using Triangle_ = std::array<Point_<Container>, 3>;
+using Triangle_ = std::array<Vec3_<Container>, 3>;
 
 using Triangle = Triangle_<std::array>;
 
@@ -25,16 +25,16 @@ intersect(const Ray_<RayContainer>& ray, const Triangle_<TriangleContainer>& pri
 {
     const auto& [o, d]       = ray;
     const auto& [v0, v1, v2] = prim;
-    const auto edge1         = v1 - v0;
-    const auto edge2         = v2 - v0;
-    const auto pvec          = d.cross(edge2);
-    const auto D             = edge1.dot(pvec);
-    const auto invD          = 1_r / D;
-    const auto tvec          = o - v0;
-    const auto u             = tvec.dot(pvec) * invD;
-    const auto qvec          = tvec.cross(edge1);
-    const auto v             = d.dot(qvec) * invD;
-    const auto t             = edge2.dot(qvec) * invD;
+    const Vec3 edge1         = v1 - v0;
+    const Vec3 edge2         = v2 - v0;
+    const Vec3 pvec          = cross(d, edge2);
+    const real D             = dot(edge1, pvec);
+    const real invD          = 1_r / D;
+    const Vec3 tvec          = o - v0;
+    const real u             = dot(tvec, pvec) * invD;
+    const Vec3 qvec          = cross(tvec, edge1);
+    const real v             = dot(d, qvec) * invD;
+    const real t             = dot(edge2, qvec) * invD;
     const bool not_intersected =
         almost_equal(D, 0_r, 10) || std::signbit(v) || std::signbit(t) || u + v > 1_r;
 
@@ -48,15 +48,15 @@ template <template <typename, size_t> typename TriangleContainer,
           typename RayContainer,
           template <typename, size_t>
           typename IsectContainer>
-constexpr Normal
+constexpr Vec3
 normal(const Ray_<RayContainer>&,
        const Intersection_<IsectContainer>&,
        const Triangle_<TriangleContainer>& prim) noexcept
 {
     const auto& [v0, v1, v2] = prim;
-    const auto edge1         = v1 - v0;
-    const auto edge2         = v2 - v0;
-    return Normal(edge1.cross(edge2));
+    const Vec3 edge1         = v1 - v0;
+    const Vec3 edge2         = v2 - v0;
+    return normalize(cross(edge1, edge2));
 }
 
 namespace detail
@@ -68,9 +68,8 @@ shift(real& x, real& y) noexcept
     y -= x;
 }
 
-template <template <typename, size_t> typename Container>
-constexpr auto
-s2t(Vec2_<Container> s) noexcept
+constexpr Vec2&
+s2t(Vec2& s) noexcept
 {
     auto& [x, y] = s;
 
@@ -84,16 +83,14 @@ s2t(Vec2_<Container> s) noexcept
 
 /// @brief Sample triangle.
 /// @cite heitz:hal-02073696
-template <template <typename, size_t> typename Container1,
-          template <typename, size_t>
-          typename Container2>
+template <template <typename, size_t> typename Container2>
 constexpr auto
-triangle_sample(const Vec2_<Container1>&  s,
-                const Point_<Container2>& v1,
-                const Point_<Container2>& v2,
-                const Point_<Container2>& v3) noexcept
+triangle_sample(Vec2                     s,
+                const Vec3_<Container2>& v1,
+                const Vec3_<Container2>& v2,
+                const Vec3_<Container2>& v3) noexcept
 {
-    const auto [t1, t2] = s2t(s);
+    auto& [t1, t2] = s2t(s);
     return v1 * t1 + v2 * t2 + v3 * (1_r - t1 - t2);
 }
 
@@ -101,17 +98,17 @@ template <typename Prim>
 constexpr auto
 bound(const Prim& prim) noexcept
 {
-    const Point vmin(std::apply(
+    const Vec3 vmin(std::apply(
         [](const auto& v1, const auto&... verts) {
             return reduce(
-                [](const auto& a, const auto& b) { return lucid::min(a, b); }, v1, verts...);
+                static_cast<Vec3 (*)(const Vec3&, const Vec3&)>(lucid::min), v1, verts...);
         },
         prim));
 
-    const Point vmax(std::apply(
+    const Vec3 vmax(std::apply(
         [](const auto& v1, const auto&... verts) {
             return reduce(
-                [](const auto& a, const auto& b) { return lucid::max(a, b); }, v1, verts...);
+                static_cast<Vec3 (*)(const Vec3&, const Vec3&)>(lucid::max), v1, verts...);
         },
         prim));
     return AABB{vmin, vmax};
@@ -121,15 +118,15 @@ bound(const Prim& prim) noexcept
 template <template <typename, size_t> typename SContainer,
           template <typename, size_t>
           typename PContainer>
-constexpr Point
+constexpr Vec3
 sample(const Vec2_<SContainer>& s, const Triangle_<PContainer>& prim) noexcept
 {
-    return Point(std::apply(
+    return Vec3(std::apply(
         [&](const auto&... verts) { return detail::triangle_sample(s, verts...); }, prim));
 }
 
 template <template <typename, size_t> typename Container>
-constexpr Point
+constexpr Vec3
 centroid(const Triangle_<Container>& prim) noexcept
 {
     return centroid(detail::bound(prim));

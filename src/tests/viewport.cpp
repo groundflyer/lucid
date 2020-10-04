@@ -58,11 +58,11 @@ struct CameraCapture
     Mat4
     get_transform(int key) const noexcept
     {
-        auto tt = [&](const Point& t) noexcept { return dot(cam.transform, translate(t)); };
+        auto tt = [&](const Vec3& t) noexcept { return dot(cam.transform, translate(t)); };
         switch(key)
         {
-        case GLFW_KEY_UP: return tt(Point(0_r, 0.1_r, 0_r));
-        case GLFW_KEY_DOWN: return tt(Point(0_r, -0.1_r, 0_r));
+        case GLFW_KEY_UP: return tt(Vec3(0_r, 0.1_r, 0_r));
+        case GLFW_KEY_DOWN: return tt(Vec3(0_r, -0.1_r, 0_r));
         }
 
         return cam.transform;

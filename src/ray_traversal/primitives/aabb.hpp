@@ -16,15 +16,15 @@ namespace lucid
 template <template <typename, size_t> typename Container>
 struct AABB_
 {
-    Point_<Container> vmin;
-    Point_<Container> vmax;
+    Vec3_<Container> vmin;
+    Vec3_<Container> vmax;
 
     constexpr AABB_() noexcept {};
 
     template <template <typename, size_t> typename Container1,
               template <typename, size_t>
               typename Container2>
-    constexpr AABB_(const Point_<Container1>& _vmin, const Point_<Container2>& _vmax) noexcept :
+    constexpr AABB_(const Vec3_<Container1>& _vmin, const Vec3_<Container2>& _vmax) noexcept :
         vmin(lucid::min(_vmin, _vmax)), vmax(lucid::max(_vmin, _vmax))
     {
     }
@@ -34,16 +34,17 @@ struct AABB_
     constexpr auto& operator[](const bool i) noexcept { return i ? vmax : vmin; }
 
     template <typename Idxs>
-    constexpr auto operator[](const Idxs& idxs) const noexcept
+    constexpr auto
+    operator[](const Idxs& idxs) const noexcept
     {
-        Point ret{};
+        Vec3 ret{};
         for(size_t i = 0; i < 3; ++i) ret[i] = (*this)[bool{idxs[i]}][i];
         return ret;
     }
 };
 
 template <template <typename, size_t> typename Container>
-AABB_(const Point_<Container>&, const Point_<Container>&)->AABB_<Container>;
+AABB_(const Vec3_<Container>&, const Vec3_<Container>&) -> AABB_<Container>;
 
 using AABB = AABB_<std::array>;
 
@@ -54,10 +55,10 @@ constexpr Intersection
 intersect(const Ray_<RayContainer>& ray, const AABB_<AABBContainer>& prim) noexcept
 {
     const auto& [o, d]             = ray;
-    const auto inv_d               = Vec3{1_r} / d;
+    const Vec3 inv_d               = Vec3{1_r} / d;
     const auto sign                = inv_d < 0_r;
-    const auto vmin                = inv_d * (prim[sign] - o);
-    const auto vmax                = inv_d * (prim[!sign] - o);
+    const Vec3 vmin                = inv_d * (prim[sign] - o);
+    const Vec3 vmax                = inv_d * (prim[!sign] - o);
     const auto& [xmin, ymin, zmin] = vmin;
     const auto& [xmax, ymax, zmax] = vmax;
     const real& tmin1              = std::max(ymin, xmin);
@@ -72,24 +73,24 @@ template <template <typename, size_t> typename AABBContainer,
           typename RayContainer,
           template <typename, size_t>
           typename IsectContainer>
-constexpr Normal
+constexpr Vec3
 normal(const Ray_<RayContainer>&            ray,
        const Intersection_<IsectContainer>& isect,
        const AABB_<AABBContainer>&          prim) noexcept
 {
     const auto& [o, d] = ray;
-    const Point pos    = o + d * isect.t;
-    const real  nsign[2]{-1_r, 1_r};
-    Vec3        vd[2]{};
-    real        md[2]{};
+    const Vec3 pos     = o + d * isect.t;
+    const real nsign[2]{-1_r, 1_r};
+    Vec3       vd[2]{};
+    real       md[2]{};
     for(unsigned i = 0; i < 2; ++i)
     {
-        const auto ad = lucid::abs(pos - prim[bool(i)]);
+        const Vec3 ad = lucid::abs(pos - prim[bool(i)]);
         md[i]         = lucid::min(ad);
         vd[i]         = Vec3(ad == md[i]);
     }
     const auto pp = md[0] > md[1];
-    return Normal(vd[pp] * nsign[pp]);
+    return normalize(vd[pp] * nsign[pp]);
 }
 
 namespace detail
@@ -99,8 +100,8 @@ constexpr auto
 diag(const AABB_<Container>& prim, const unsigned shift, const bool side) noexcept
 {
     const auto& [vmin, vmax] = prim;
-    const auto& startpoint   = side ? vmin : vmax;
-    const auto  diag         = side ? vmax - vmin : vmin - vmax;
+    const Vec3& startpoint   = side ? vmin : vmax;
+    const Vec3  diag         = side ? vmax - vmin : vmin - vmax;
     return std::pair(startpoint, startpoint + diag * roll(Vec3(1_r, 1_r, 0_r), shift));
 }
 } // namespace detail
@@ -108,7 +109,7 @@ diag(const AABB_<Container>& prim, const unsigned shift, const bool side) noexce
 template <template <typename, size_t> typename SContainer,
           template <typename, size_t>
           typename PContainer>
-constexpr Point
+constexpr Vec3
 sample(const Vec2_<SContainer>& s, const AABB_<PContainer>& prim) noexcept
 {
     const auto& [s1, s2] = s;
@@ -119,7 +120,7 @@ sample(const Vec2_<SContainer>& s, const AABB_<PContainer>& prim) noexcept
 }
 
 template <template <typename, size_t> typename Container>
-constexpr Point
+constexpr Vec3
 centroid(const AABB_<Container>& prim) noexcept
 {
     const auto& [vmin, vmax] = prim;
