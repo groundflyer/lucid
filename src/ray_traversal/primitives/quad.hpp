@@ -166,7 +166,7 @@ template <template <typename, size_t> typename MatContainer,
 constexpr auto
 apply_transform(const Mat4_<MatContainer>& t, const Quad_<QuadContainer>& prim) noexcept
 {
-    return std::apply([&](const auto&... points) { return Quad{apply_transform(t, points)...}; },
+    return std::apply([&](const auto&... points) { return Quad{apply_transform_p(t, points)...}; },
                       prim);
 }
 } // namespace lucid

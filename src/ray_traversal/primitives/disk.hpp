@@ -97,6 +97,6 @@ constexpr Disk
 apply_transform(const Mat4_<MatContainer>& t, const Disk_<PrimContainer>& prim) noexcept
 {
     const auto& [p, n, r] = prim;
-    return Disk(apply_transform(t, p), apply_transform(t, n), r);
+    return Disk(apply_transform_p(t, p), apply_transform_p(t, n), r);
 }
 } // namespace lucid

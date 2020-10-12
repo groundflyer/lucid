@@ -67,9 +67,9 @@ main(int argc, char* argv[])
         },
         [&](const auto& testing, const auto&) {
             const Vec3 o{argen()};
-            const auto ot = apply_transform(testing, o);
-            const auto l  = length(o);
-            const auto lt = length(ot);
+            const Vec3 ot = apply_transform(testing, o);
+            const real l  = length(o);
+            const real lt = length(ot);
             return !(almost_equal(1_r, det(Mat3(testing)), ULP) && almost_equal(l, lt, ULP)) ||
                    all(almost_equal(o, ot, ULP)) || !all(lucid::isfinite(ot));
         });
@@ -87,7 +87,7 @@ main(int argc, char* argv[])
             return apply_transform_n(look_at(eye, target, Vec3(0_r, 1_r, 0_r)),
                                      Vec3(0_r, 0_r, 1_r));
         },
-        [](const auto& testing, const auto& feed) {
+        [](const Vec3& testing, const auto& feed) {
             const auto& [eye, target] = feed;
             const Vec3 expected       = normalize(target - eye);
             return any(!almost_equal(expected, testing, ULP)) || !all(lucid::isfinite(testing));

@@ -146,6 +146,6 @@ constexpr auto
 apply_transform(const Mat4_<MatContainer>& t, const Triangle_<TriangleContainer>& prim) noexcept
 {
     return std::apply(
-        [&](const auto&... points) { return Triangle{apply_transform(t, points)...}; }, prim);
+        [&](const auto&... points) { return Triangle{apply_transform_p(t, points)...}; }, prim);
 }
 } // namespace lucid

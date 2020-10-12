@@ -58,7 +58,7 @@ template <template <typename, size_t> typename MatContainer,
 constexpr Vec3
 apply_transform_n(const Mat4_<MatContainer>& t, const Vec3_<NormalContainer>& n) noexcept
 {
-    return dehomogenize(dot(transpose(inverse(t)), (Vec4(n))));
+    return normalize(dehomogenize(dot(transpose(inverse(t)), (Vec4(n)))));
 }
 
 /// @brief Create translation transform.

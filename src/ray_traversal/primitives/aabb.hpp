@@ -141,6 +141,6 @@ constexpr AABB
 apply_transform(const Mat4_<MatContainer>& t, const AABB_<PrimContainer>& prim) noexcept
 {
     const auto& [vmin, vmax] = prim;
-    return AABB(apply_transform(t, vmin), apply_transform(t, vmax));
+    return AABB(apply_transform_p(t, vmin), apply_transform_p(t, vmax));
 }
 } // namespace lucid

@@ -96,6 +96,6 @@ constexpr Sphere
 apply_transform(const Mat4_<MatContainer>& t, const Sphere_<PrimContainer>& prim) noexcept
 {
     const auto& [c, r] = prim;
-    return Sphere(apply_transform(t, c), r);
+    return Sphere(apply_transform_p(t, c), r);
 }
 } // namespace lucid
