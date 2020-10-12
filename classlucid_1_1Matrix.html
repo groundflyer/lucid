@@ -116,7 +116,7 @@ constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>Matrix</b> (Data
 constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>Matrix</b> (const Data &amp;rhs) noexcept</td></tr>
 <tr class="separator:a65056b9f3285e8da674584b9bc959293"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27c98a7d67a4de2ace43b6ffcd47495d"><td class="memTemplParams" colspan="2"><a id="a27c98a7d67a4de2ace43b6ffcd47495d"></a>
-template&lt;typename ... Ts&gt; </td></tr>
+template&lt;typename... Ts&gt; </td></tr>
 <tr class="memitem:a27c98a7d67a4de2ace43b6ffcd47495d"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Matrix</b> (Ts &amp;&amp;... rhs) noexcept</td></tr>
 <tr class="separator:a27c98a7d67a4de2ace43b6ffcd47495d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ea01aaff9a6367fd52f3995b8699f43"><td class="memItemLeft" align="right" valign="top"><a id="a1ea01aaff9a6367fd52f3995b8699f43"></a>
@@ -201,34 +201,12 @@ template&lt;template&lt; typename, size_t &gt; typename Container2&gt; </td></tr
 <tr class="memitem:aba20c6432a7582f5749ee6c44a1b4010"><td class="memItemLeft" align="right" valign="top"><a id="aba20c6432a7582f5749ee6c44a1b4010"></a>
 constexpr <a class="el" href="classlucid_1_1Matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator-=</b> (const T &amp;rhs) noexcept</td></tr>
 <tr class="separator:aba20c6432a7582f5749ee6c44a1b4010"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb1db12ca5d43e5044e0ec4c157d9bc0"><td class="memTemplParams" colspan="2"><a id="acb1db12ca5d43e5044e0ec4c157d9bc0"></a>
-template&lt;template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
-<tr class="memitem:acb1db12ca5d43e5044e0ec4c157d9bc0"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classlucid_1_1Matrix.html">Matrix</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator*</b> (const <a class="el" href="classlucid_1_1Matrix.html">Matrix</a>&lt; T, M, N, Container2 &gt; &amp;rhs) const noexcept</td></tr>
-<tr class="separator:acb1db12ca5d43e5044e0ec4c157d9bc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b323b5cc13b082c0bb0ce375939dbca"><td class="memItemLeft" align="right" valign="top"><a id="a1b323b5cc13b082c0bb0ce375939dbca"></a>
 constexpr <a class="el" href="classlucid_1_1Matrix.html">Matrix</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator*</b> (const T &amp;rhs) const noexcept</td></tr>
 <tr class="separator:a1b323b5cc13b082c0bb0ce375939dbca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8435bb9294a4d999ed74e0b15a00c26"><td class="memTemplParams" colspan="2"><a id="ac8435bb9294a4d999ed74e0b15a00c26"></a>
-template&lt;template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
-<tr class="memitem:ac8435bb9294a4d999ed74e0b15a00c26"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classlucid_1_1Matrix.html">Matrix</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator*=</b> (const <a class="el" href="classlucid_1_1Matrix.html">Matrix</a>&lt; T, M, N, Container2 &gt; &amp;rhs)</td></tr>
-<tr class="separator:ac8435bb9294a4d999ed74e0b15a00c26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75772073dbda8f9f3dc856b45d032ca3"><td class="memItemLeft" align="right" valign="top"><a id="a75772073dbda8f9f3dc856b45d032ca3"></a>
 constexpr <a class="el" href="classlucid_1_1Matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator*=</b> (const T &amp;rhs) noexcept</td></tr>
 <tr class="separator:a75772073dbda8f9f3dc856b45d032ca3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef9ee417fddacb121596a4be33775b13"><td class="memTemplParams" colspan="2"><a id="aef9ee417fddacb121596a4be33775b13"></a>
-template&lt;template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
-<tr class="memitem:aef9ee417fddacb121596a4be33775b13"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classlucid_1_1Matrix.html">Matrix</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator/</b> (const <a class="el" href="classlucid_1_1Matrix.html">Matrix</a>&lt; T, M, N, Container2 &gt; &amp;rhs) const noexcept</td></tr>
-<tr class="separator:aef9ee417fddacb121596a4be33775b13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5eeb6282fac7efb90e034539b3e05c4f"><td class="memItemLeft" align="right" valign="top"><a id="a5eeb6282fac7efb90e034539b3e05c4f"></a>
-constexpr <a class="el" href="classlucid_1_1Matrix.html">Matrix</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator/</b> (const T &amp;rhs) const noexcept</td></tr>
-<tr class="separator:a5eeb6282fac7efb90e034539b3e05c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac53244503f228f50849eb358f0098e7b"><td class="memTemplParams" colspan="2"><a id="ac53244503f228f50849eb358f0098e7b"></a>
-template&lt;template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
-<tr class="memitem:ac53244503f228f50849eb358f0098e7b"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classlucid_1_1Matrix.html">Matrix</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator/=</b> (const <a class="el" href="classlucid_1_1Matrix.html">Matrix</a>&lt; T, M, N, Container2 &gt; &amp;rhs)</td></tr>
-<tr class="separator:ac53244503f228f50849eb358f0098e7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a171ac2d1befc565c639391248c246fb0"><td class="memItemLeft" align="right" valign="top"><a id="a171ac2d1befc565c639391248c246fb0"></a>
-constexpr <a class="el" href="classlucid_1_1Matrix.html">Matrix</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator/=</b> (const T &amp;rhs) noexcept</td></tr>
-<tr class="separator:a171ac2d1befc565c639391248c246fb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c61eb43e56b4abc3a72bd7c7bd355fc"><td class="memTemplParams" colspan="2"><a id="a5c61eb43e56b4abc3a72bd7c7bd355fc"></a>
 template&lt;template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
 <tr class="memitem:a5c61eb43e56b4abc3a72bd7c7bd355fc"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classlucid_1_1Matrix.html">Matrix</a>&lt; T, M, N, Container2 &gt; &amp;rhs) const noexcept</td></tr>
@@ -271,10 +249,6 @@ template&lt;template&lt; typename, size_t &gt; typename Container2&gt; </td></tr
 <tr class="memitem:a075d06bae9443d5fe5f36575d3c58b48"><td class="memItemLeft" align="right" valign="top"><a id="a075d06bae9443d5fe5f36575d3c58b48"></a>
 constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;=</b> (const T &amp;rhs) const noexcept</td></tr>
 <tr class="separator:a075d06bae9443d5fe5f36575d3c58b48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdb1e4567a3570b979668510981c2a09"><td class="memTemplParams" colspan="2"><a id="abdb1e4567a3570b979668510981c2a09"></a>
-template&lt;typename Rhs &gt; </td></tr>
-<tr class="memitem:abdb1e4567a3570b979668510981c2a09"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>dot</b> (const Rhs &amp;rhs) const noexcept</td></tr>
-<tr class="separator:abdb1e4567a3570b979668510981c2a09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6621ed854a0ad2a88a7d18765ff8586d"><td class="memItemLeft" align="right" valign="top"><a id="a6621ed854a0ad2a88a7d18765ff8586d"></a>
 const constexpr Data &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> () const noexcept</td></tr>
 <tr class="separator:a6621ed854a0ad2a88a7d18765ff8586d"><td class="memSeparator" colspan="2">&#160;</td></tr>

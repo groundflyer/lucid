@@ -1,11 +1,4 @@
 <map id="lucid::Constant&lt; Scene, MaterialGetter &gt;" name="lucid::Constant&lt; Scene, MaterialGetter &gt;">
-<area shape="rect" id="node2" href="$structlucid_1_1Ray__.html" title="lucid::Ray_\&lt; std::array \&gt;" alt="" coords="619,172,804,199"/>
-<area shape="rect" id="node3" href="$classlucid_1_1PointN__.html" title="lucid::PointN_\&lt; std\l::array \&gt;" alt="" coords="337,93,484,134"/>
-<area shape="rect" id="node4" href="$classlucid_1_1ImmutableVectorOperators.html" title="lucid::ImmutableVectorOperators\l\&lt; std::array, 3, std::array,\l PointN_ \&gt;" alt="" coords="5,5,243,61"/>
-<area shape="rect" id="node5" href="$classlucid_1_1MutableVectorOperators.html" title="lucid::MutableVectorOperators\l\&lt; std::array, 3, std::array,\l PointN_ \&gt;" alt="" coords="15,85,233,141"/>
-<area shape="rect" id="node6" href="$classlucid_1_1NormalN__.html" title="lucid::NormalN_\&lt; std\l::array \&gt;" alt="" coords="330,165,491,206"/>
-<area shape="rect" id="node7" href="$classlucid_1_1ImmutableVectorOperators.html" title="lucid::ImmutableVectorOperators\l\&lt; std::array, 3, std::array,\l NormalN_ \&gt;" alt="" coords="5,165,243,221"/>
-<area shape="rect" id="node8" href="$classlucid_1_1Vector.html" title="lucid::Vector\&lt; std\l::array \&gt;" alt="" coords="643,238,780,279"/>
-<area shape="rect" id="node9" href="$classlucid_1_1ImmutableVectorOperators.html" title="lucid::ImmutableVectorOperators\l\&lt; std::array, N, std::array,\l Vector \&gt;" alt="" coords="292,231,529,287"/>
-<area shape="rect" id="node10" href="$classlucid_1_1MutableVectorOperators.html" title="lucid::MutableVectorOperators\l\&lt; std::array, N, std::array,\l Vector \&gt;" alt="" coords="301,311,520,367"/>
+<area shape="rect" id="node2" href="$structlucid_1_1Ray__.html" title="lucid::Ray_\&lt; std::array \&gt;" alt="" coords="160,124,345,151"/>
+<area shape="rect" id="node3" href="$classlucid_1_1Vector.html" title="lucid::Vector\&lt; std\l::array \&gt;" alt="" coords="5,5,143,47"/>
 </map>

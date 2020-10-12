@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['normalize',['normalize',['../vector__operators_8hpp.html#ace469f9cd361998730146348fb4c5f81',1,'lucid']]]
+  ['normalize',['normalize',['../vector_8hpp.html#af650f4c2a47ccf0bb71d0a96bd0fc99d',1,'lucid']]]
 ];

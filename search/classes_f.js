@@ -7,9 +7,6 @@ var searchData=
   ['perspective',['perspective',['../structlucid_1_1perspective.html',1,'lucid']]],
   ['pixelreset',['PixelReset',['../structlucid_1_1PixelReset.html',1,'lucid']]],
   ['pixelupdate',['PixelUpdate',['../structlucid_1_1PixelUpdate.html',1,'lucid']]],
-  ['pointn_5f',['PointN_',['../classlucid_1_1PointN__.html',1,'lucid']]],
-  ['pointn_5f_3c_20container_20_3e',['PointN_&lt; Container &gt;',['../classlucid_1_1PointN__.html',1,'lucid']]],
-  ['pointn_5f_3c_20std_3a_3aarray_20_3e',['PointN_&lt; std::array &gt;',['../classlucid_1_1PointN__.html',1,'lucid']]],
   ['positional',['Positional',['../structlucid_1_1argparse_1_1Positional.html',1,'lucid::argparse']]],
   ['positionalbinding',['PositionalBinding',['../classlucid_1_1argparse_1_1PositionalBinding.html',1,'lucid::argparse']]],
   ['positionalbinding_3c_20converter_2c_201_20_3e',['PositionalBinding&lt; Converter, 1 &gt;',['../classlucid_1_1argparse_1_1PositionalBinding_3_01Converter_00_011_01_4.html',1,'lucid::argparse']]]

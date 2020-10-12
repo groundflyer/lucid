@@ -36,34 +36,6 @@ var hierarchy =
     [ "lucid::detail::helper< std::pair< T1, T2 > >", "structlucid_1_1detail_1_1helper_3_01std_1_1pair_3_01T1_00_01T2_01_4_01_4.html", null ],
     [ "lucid::detail::helper< std::tuple< Ts... > >", "structlucid_1_1detail_1_1helper_3_01std_1_1tuple_3_01Ts_8_8_8_01_4_01_4.html", null ],
     [ "lucid::identity", "structlucid_1_1identity.html", null ],
-    [ "lucid::ImmutableVectorOperators< T, N, Container, VectorType >", "classlucid_1_1ImmutableVectorOperators.html", null ],
-    [ "lucid::ImmutableVectorOperators< Container, 3, std::array, NormalN_ >", "classlucid_1_1ImmutableVectorOperators.html", [
-      [ "lucid::NormalN_< Container >", "classlucid_1_1NormalN__.html", null ]
-    ] ],
-    [ "lucid::ImmutableVectorOperators< Container, 3, std::array, PointN_ >", "classlucid_1_1ImmutableVectorOperators.html", [
-      [ "lucid::PointN_< Container >", "classlucid_1_1PointN__.html", null ]
-    ] ],
-    [ "lucid::ImmutableVectorOperators< Container, N, std::array, Vector >", "classlucid_1_1ImmutableVectorOperators.html", [
-      [ "lucid::Vector< Container >", "classlucid_1_1Vector.html", null ]
-    ] ],
-    [ "lucid::ImmutableVectorOperators< std::array, 3, std::array, NormalN_ >", "classlucid_1_1ImmutableVectorOperators.html", [
-      [ "lucid::NormalN_< std::array >", "classlucid_1_1NormalN__.html", null ]
-    ] ],
-    [ "lucid::ImmutableVectorOperators< std::array, 3, std::array, PointN_ >", "classlucid_1_1ImmutableVectorOperators.html", [
-      [ "lucid::PointN_< std::array >", "classlucid_1_1PointN__.html", null ]
-    ] ],
-    [ "lucid::ImmutableVectorOperators< std::array, N, std::array, Vector >", "classlucid_1_1ImmutableVectorOperators.html", [
-      [ "lucid::Vector< std::array >", "classlucid_1_1Vector.html", null ]
-    ] ],
-    [ "lucid::ImmutableVectorOperators< T, N, Container, NormalN_ >", "classlucid_1_1ImmutableVectorOperators.html", [
-      [ "lucid::NormalN_< T, N, Container >", "classlucid_1_1NormalN__.html", null ]
-    ] ],
-    [ "lucid::ImmutableVectorOperators< T, N, Container, PointN_ >", "classlucid_1_1ImmutableVectorOperators.html", [
-      [ "lucid::PointN_< T, N, Container >", "classlucid_1_1PointN__.html", null ]
-    ] ],
-    [ "lucid::ImmutableVectorOperators< T, N, Container, Vector >", "classlucid_1_1ImmutableVectorOperators.html", [
-      [ "lucid::Vector< T, N, Container >", "classlucid_1_1Vector.html", null ]
-    ] ],
     [ "lucid::Intersection_< Container >", "structlucid_1_1Intersection__.html", null ],
     [ "lucid::detail::ComposeOp::Invoker< LHS, RHS >", "structlucid_1_1detail_1_1ComposeOp_1_1Invoker.html", null ],
     [ "lucid::join< Seq1, Seq2 >", "structlucid_1_1join.html", null ],
@@ -83,25 +55,6 @@ var hierarchy =
     [ "lucid::CornellBox::MatGetter", "classlucid_1_1CornellBox_1_1MatGetter.html", null ],
     [ "lucid::Matrix< T, M, N, Container >", "classlucid_1_1Matrix.html", null ],
     [ "lucid::Matrix< std::array >", "classlucid_1_1Matrix.html", null ],
-    [ "lucid::MutableVectorOperators< T, N, Container, VectorType >", "classlucid_1_1MutableVectorOperators.html", null ],
-    [ "lucid::MutableVectorOperators< Container, 3, std::array, PointN_ >", "classlucid_1_1MutableVectorOperators.html", [
-      [ "lucid::PointN_< Container >", "classlucid_1_1PointN__.html", null ]
-    ] ],
-    [ "lucid::MutableVectorOperators< Container, N, std::array, Vector >", "classlucid_1_1MutableVectorOperators.html", [
-      [ "lucid::Vector< Container >", "classlucid_1_1Vector.html", null ]
-    ] ],
-    [ "lucid::MutableVectorOperators< std::array, 3, std::array, PointN_ >", "classlucid_1_1MutableVectorOperators.html", [
-      [ "lucid::PointN_< std::array >", "classlucid_1_1PointN__.html", null ]
-    ] ],
-    [ "lucid::MutableVectorOperators< std::array, N, std::array, Vector >", "classlucid_1_1MutableVectorOperators.html", [
-      [ "lucid::Vector< std::array >", "classlucid_1_1Vector.html", null ]
-    ] ],
-    [ "lucid::MutableVectorOperators< T, N, Container, PointN_ >", "classlucid_1_1MutableVectorOperators.html", [
-      [ "lucid::PointN_< T, N, Container >", "classlucid_1_1PointN__.html", null ]
-    ] ],
-    [ "lucid::MutableVectorOperators< T, N, Container, Vector >", "classlucid_1_1MutableVectorOperators.html", [
-      [ "lucid::Vector< T, N, Container >", "classlucid_1_1Vector.html", null ]
-    ] ],
     [ "lucid::argparse::NeedHelpException", "structlucid_1_1argparse_1_1NeedHelpException.html", null ],
     [ "lucid::argparse::Option< Key, Converter, nvals >", "structlucid_1_1argparse_1_1Option.html", null ],
     [ "lucid::argparse::Option< Key, Converter, -1ul >", "structlucid_1_1argparse_1_1Option_3_01Key_00_01Converter_00_01-1ul_01_4.html", null ],
@@ -143,19 +96,18 @@ var hierarchy =
     [ "to_unsigned", "structto__unsigned.html", null ],
     [ "lucid::TriangleFilter", "structlucid_1_1TriangleFilter.html", null ],
     [ "std::tuple_element< I, lucid::Matrix< T, M, N, Container > >", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1Matrix_3_01T_00_01M_00_01N_00_01Container_01_4_01_4.html", null ],
-    [ "std::tuple_element< I, lucid::NormalN_< T, N, Container > >", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1NormalN___3_01T_00_01N_00_01Container_01_4_01_4.html", null ],
-    [ "std::tuple_element< I, lucid::PointN_< T, N, Container > >", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1PointN___3_01T_00_01N_00_01Container_01_4_01_4.html", null ],
     [ "std::tuple_element< I, lucid::StaticSpan< T, N > >", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1StaticSpan_3_01T_00_01N_01_4_01_4.html", null ],
     [ "std::tuple_element< I, lucid::Vector< T, N, Container > >", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1Vector_3_01T_00_01N_00_01Container_01_4_01_4.html", null ],
     [ "std::tuple_size< lucid::Matrix< T, M, N, Container > >", "classstd_1_1tuple__size_3_01lucid_1_1Matrix_3_01T_00_01M_00_01N_00_01Container_01_4_01_4.html", null ],
-    [ "std::tuple_size< lucid::NormalN_< T, N, Container > >", "classstd_1_1tuple__size_3_01lucid_1_1NormalN___3_01T_00_01N_00_01Container_01_4_01_4.html", null ],
-    [ "std::tuple_size< lucid::PointN_< T, N, Container > >", "classstd_1_1tuple__size_3_01lucid_1_1PointN___3_01T_00_01N_00_01Container_01_4_01_4.html", null ],
     [ "std::tuple_size< lucid::StaticSpan< T, N > >", "classstd_1_1tuple__size_3_01lucid_1_1StaticSpan_3_01T_00_01N_01_4_01_4.html", null ],
     [ "std::tuple_size< lucid::Vector< T, N, Container > >", "classstd_1_1tuple__size_3_01lucid_1_1Vector_3_01T_00_01N_00_01Container_01_4_01_4.html", null ],
     [ "lucid::typelist< Ts >", "structlucid_1_1typelist.html", null ],
     [ "lucid::argparse::UnexpectedValue", "structlucid_1_1argparse_1_1UnexpectedValue.html", null ],
     [ "lucid::uniform_init", "structlucid_1_1uniform__init.html", null ],
     [ "lucid::argparse::Value", "structlucid_1_1argparse_1_1Value.html", null ],
+    [ "lucid::Vector< T, N, Container >", "classlucid_1_1Vector.html", null ],
+    [ "lucid::Vector< Container >", "classlucid_1_1Vector.html", null ],
+    [ "lucid::Vector< std::array >", "classlucid_1_1Vector.html", null ],
     [ "view_facade", null, [
       [ "lucid::argparse::ArgsRange", "classlucid_1_1argparse_1_1ArgsRange.html", null ]
     ] ],

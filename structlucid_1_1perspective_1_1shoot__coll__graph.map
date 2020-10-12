@@ -1,6 +1,4 @@
 <map id="lucid::perspective::shoot" name="lucid::perspective::shoot">
-<area shape="rect" id="node2" href="$classlucid_1_1Matrix.html" title="lucid::Matrix\&lt; std\l::array \&gt;" alt="" coords="292,5,429,47"/>
-<area shape="rect" id="node3" href="$classlucid_1_1Vector.html" title="lucid::Vector\&lt; std\l::array \&gt;" alt="" coords="292,71,429,112"/>
-<area shape="rect" id="node4" href="$classlucid_1_1ImmutableVectorOperators.html" title="lucid::ImmutableVectorOperators\l\&lt; std::array, N, std::array,\l Vector \&gt;" alt="" coords="5,23,243,79"/>
-<area shape="rect" id="node5" href="$classlucid_1_1MutableVectorOperators.html" title="lucid::MutableVectorOperators\l\&lt; std::array, N, std::array,\l Vector \&gt;" alt="" coords="15,103,233,159"/>
+<area shape="rect" id="node2" href="$classlucid_1_1Matrix.html" title="lucid::Matrix\&lt; std\l::array \&gt;" alt="" coords="5,5,143,47"/>
+<area shape="rect" id="node3" href="$classlucid_1_1Vector.html" title="lucid::Vector\&lt; std\l::array \&gt;" alt="" coords="167,5,304,47"/>
 </map>

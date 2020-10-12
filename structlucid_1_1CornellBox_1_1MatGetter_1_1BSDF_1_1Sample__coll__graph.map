@@ -1,4 +1,3 @@
 <map id="lucid::CornellBox::MatGetter::BSDF::Sample" name="lucid::CornellBox::MatGetter::BSDF::Sample">
-<area shape="rect" id="node2" href="$classlucid_1_1NormalN__.html" title="Generic Normal. Its length is supposed to be equal one. " alt="" coords="47,96,201,137"/>
-<area shape="rect" id="node3" href="$classlucid_1_1ImmutableVectorOperators.html" title="lucid::ImmutableVectorOperators\l\&lt; T, N, Container, NormalN_ \&gt;" alt="" coords="5,5,243,47"/>
+<area shape="rect" id="node2" href="$classlucid_1_1Vector.html" title="lucid::Vector\&lt; T, N,\l Container \&gt;" alt="" coords="25,5,171,47"/>
 </map>

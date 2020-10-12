@@ -1,5 +1,3 @@
 <map id="lucid::AABB_&lt; Container &gt;" name="lucid::AABB_&lt; Container &gt;">
-<area shape="rect" id="node2" href="$classlucid_1_1PointN__.html" title="lucid::PointN_\&lt; Container \&gt;" alt="" coords="292,60,496,87"/>
-<area shape="rect" id="node3" href="$classlucid_1_1ImmutableVectorOperators.html" title="lucid::ImmutableVectorOperators\l\&lt; Container, 3, std::array,\l PointN_ \&gt;" alt="" coords="5,5,243,61"/>
-<area shape="rect" id="node4" href="$classlucid_1_1MutableVectorOperators.html" title="lucid::MutableVectorOperators\l\&lt; Container, 3, std::array,\l PointN_ \&gt;" alt="" coords="15,85,233,141"/>
+<area shape="rect" id="node2" href="$classlucid_1_1Vector.html" title="lucid::Vector\&lt; Container \&gt;" alt="" coords="7,5,201,32"/>
 </map>

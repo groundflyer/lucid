@@ -7,13 +7,9 @@ var searchData=
   ['perspective',['perspective',['../structlucid_1_1perspective.html',1,'lucid']]],
   ['pixelreset',['PixelReset',['../structlucid_1_1PixelReset.html',1,'lucid']]],
   ['pixelupdate',['PixelUpdate',['../structlucid_1_1PixelUpdate.html',1,'lucid']]],
-  ['point_2ehpp',['point.hpp',['../point_8hpp.html',1,'']]],
-  ['pointn_5f',['PointN_',['../classlucid_1_1PointN__.html',1,'lucid']]],
-  ['pointn_5f_3c_20container_20_3e',['PointN_&lt; Container &gt;',['../classlucid_1_1PointN__.html',1,'lucid']]],
-  ['pointn_5f_3c_20std_3a_3aarray_20_3e',['PointN_&lt; std::array &gt;',['../classlucid_1_1PointN__.html',1,'lucid']]],
   ['positional',['Positional',['../structlucid_1_1argparse_1_1Positional.html',1,'lucid::argparse']]],
   ['positionalbinding',['PositionalBinding',['../classlucid_1_1argparse_1_1PositionalBinding.html',1,'lucid::argparse']]],
   ['positionalbinding_3c_20converter_2c_201_20_3e',['PositionalBinding&lt; Converter, 1 &gt;',['../classlucid_1_1argparse_1_1PositionalBinding_3_01Converter_00_011_01_4.html',1,'lucid::argparse']]],
-  ['pow',['pow',['../vector__operators_8hpp.html#a012a7d078f096b399100971d7f9ba33b',1,'lucid::pow(const VectorType&lt; T, N, Container &gt; &amp;v) noexcept'],['../math_8hpp.html#a45c04cf8fb86621c17e6c5786a312542',1,'lucid::pow(const T value) noexcept']]],
-  ['product',['product',['../vector__operators_8hpp.html#a38ae3103f34d6e6f9fc39aa82ff3d1d7',1,'lucid']]]
+  ['pow',['pow',['../vector_8hpp.html#a30f2cf3cadb0a1d44295d42f20327a50',1,'lucid::pow(const Vector&lt; T, N, Container &gt; &amp;v) noexcept'],['../math_8hpp.html#a45c04cf8fb86621c17e6c5786a312542',1,'lucid::pow(const T value) noexcept']]],
+  ['product',['product',['../vector_8hpp.html#a6b7fb022f86e87d07cc84c8dfa89981e',1,'lucid']]]
 ];

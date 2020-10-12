@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['clamp',['clamp',['../vector__operators_8hpp.html#a92881f82e8206a5fd75b2b35620d3ec1',1,'lucid']]],
-  ['cross',['cross',['../vector__operators_8hpp.html#abcf268bdff1bb79f947c0608b96ea887',1,'lucid']]]
+  ['clamp',['clamp',['../vector_8hpp.html#a0ccf02ef8b67980d6482b8f3818a5533',1,'lucid']]],
+  ['cross',['cross',['../vector_8hpp.html#a2bbd3921a41de74329996e3c976d2d27',1,'lucid']]]
 ];

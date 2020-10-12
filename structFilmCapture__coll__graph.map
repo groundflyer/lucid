@@ -1,7 +1,5 @@
 <map id="FilmCapture" name="FilmCapture">
-<area shape="rect" id="node2" href="$structlucid_1_1Film.html" title="lucid::Film\&lt; Image \&gt;" alt="" coords="527,45,685,71"/>
-<area shape="rect" id="node3" href="$classlucid_1_1ScanlineImage.html" title="lucid::ScanlineImage\l\&lt; float, 4 \&gt;" alt="" coords="292,5,449,47"/>
-<area shape="rect" id="node4" href="$classlucid_1_1Vector.html" title="lucid::Vector\&lt; std\l::array \&gt;" alt="" coords="302,71,439,112"/>
-<area shape="rect" id="node5" href="$classlucid_1_1ImmutableVectorOperators.html" title="lucid::ImmutableVectorOperators\l\&lt; std::array, N, std::array,\l Vector \&gt;" alt="" coords="5,23,243,79"/>
-<area shape="rect" id="node6" href="$classlucid_1_1MutableVectorOperators.html" title="lucid::MutableVectorOperators\l\&lt; std::array, N, std::array,\l Vector \&gt;" alt="" coords="15,103,233,159"/>
+<area shape="rect" id="node2" href="$structlucid_1_1Film.html" title="lucid::Film\&lt; Image \&gt;" alt="" coords="90,109,249,136"/>
+<area shape="rect" id="node3" href="$classlucid_1_1ScanlineImage.html" title="lucid::ScanlineImage\l\&lt; float, 4 \&gt;" alt="" coords="5,5,163,47"/>
+<area shape="rect" id="node4" href="$classlucid_1_1Vector.html" title="lucid::Vector\&lt; std\l::array \&gt;" alt="" coords="187,5,325,47"/>
 </map>

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['normal_2ehpp',['normal.hpp',['../normal_8hpp.html',1,'']]]
+  ['transforms_2ehpp',['transforms.hpp',['../transforms_8hpp.html',1,'']]],
+  ['triangle_2ehpp',['triangle.hpp',['../triangle_8hpp.html',1,'']]]
 ];

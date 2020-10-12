@@ -61,7 +61,6 @@ var annotated_dup =
       [ "ElapsedTimer", "classlucid_1_1ElapsedTimer.html", "classlucid_1_1ElapsedTimer" ],
       [ "Film", "structlucid_1_1Film.html", "structlucid_1_1Film" ],
       [ "identity", "structlucid_1_1identity.html", "structlucid_1_1identity" ],
-      [ "ImmutableVectorOperators", "classlucid_1_1ImmutableVectorOperators.html", "classlucid_1_1ImmutableVectorOperators" ],
       [ "Intersection_", "structlucid_1_1Intersection__.html", "structlucid_1_1Intersection__" ],
       [ "join", "structlucid_1_1join.html", null ],
       [ "join< std::integer_sequence< Int, Ints1... >, std::integer_sequence< Int, Ints2... > >", "structlucid_1_1join_3_01std_1_1integer__sequence_3_01Int_00_01Ints1_8_8_8_01_4_00_01std_1_1integba06621a7292dceeb543aaccf5f7d012.html", "structlucid_1_1join_3_01std_1_1integer__sequence_3_01Int_00_01Ints1_8_8_8_01_4_00_01std_1_1integba06621a7292dceeb543aaccf5f7d012" ],
@@ -69,8 +68,6 @@ var annotated_dup =
       [ "LogFile", "structlucid_1_1LogFile.html", "structlucid_1_1LogFile" ],
       [ "Logger", "classlucid_1_1Logger.html", "classlucid_1_1Logger" ],
       [ "Matrix", "classlucid_1_1Matrix.html", "classlucid_1_1Matrix" ],
-      [ "MutableVectorOperators", "classlucid_1_1MutableVectorOperators.html", "classlucid_1_1MutableVectorOperators" ],
-      [ "NormalN_", "classlucid_1_1NormalN__.html", "classlucid_1_1NormalN__" ],
       [ "out_of_range", "structlucid_1_1out__of__range.html", "structlucid_1_1out__of__range" ],
       [ "PathTracer_", "structlucid_1_1PathTracer__.html", "structlucid_1_1PathTracer__" ],
       [ "perspective", "structlucid_1_1perspective.html", [
@@ -78,7 +75,6 @@ var annotated_dup =
       ] ],
       [ "PixelReset", "structlucid_1_1PixelReset.html", "structlucid_1_1PixelReset" ],
       [ "PixelUpdate", "structlucid_1_1PixelUpdate.html", "structlucid_1_1PixelUpdate" ],
-      [ "PointN_", "classlucid_1_1PointN__.html", "classlucid_1_1PointN__" ],
       [ "RandomDistribution", "classlucid_1_1RandomDistribution.html", "classlucid_1_1RandomDistribution" ],
       [ "RandomDistribution< bool >", "classlucid_1_1RandomDistribution_3_01bool_01_4.html", "classlucid_1_1RandomDistribution_3_01bool_01_4" ],
       [ "Ray_", "structlucid_1_1Ray__.html", "structlucid_1_1Ray__" ],
@@ -99,13 +95,9 @@ var annotated_dup =
     ] ],
     [ "std", null, [
       [ "tuple_element< I, lucid::Matrix< T, M, N, Container > >", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1Matrix_3_01T_00_01M_00_01N_00_01Container_01_4_01_4.html", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1Matrix_3_01T_00_01M_00_01N_00_01Container_01_4_01_4" ],
-      [ "tuple_element< I, lucid::NormalN_< T, N, Container > >", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1NormalN___3_01T_00_01N_00_01Container_01_4_01_4.html", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1NormalN___3_01T_00_01N_00_01Container_01_4_01_4" ],
-      [ "tuple_element< I, lucid::PointN_< T, N, Container > >", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1PointN___3_01T_00_01N_00_01Container_01_4_01_4.html", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1PointN___3_01T_00_01N_00_01Container_01_4_01_4" ],
       [ "tuple_element< I, lucid::StaticSpan< T, N > >", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1StaticSpan_3_01T_00_01N_01_4_01_4.html", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1StaticSpan_3_01T_00_01N_01_4_01_4" ],
       [ "tuple_element< I, lucid::Vector< T, N, Container > >", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1Vector_3_01T_00_01N_00_01Container_01_4_01_4.html", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1Vector_3_01T_00_01N_00_01Container_01_4_01_4" ],
       [ "tuple_size< lucid::Matrix< T, M, N, Container > >", "classstd_1_1tuple__size_3_01lucid_1_1Matrix_3_01T_00_01M_00_01N_00_01Container_01_4_01_4.html", null ],
-      [ "tuple_size< lucid::NormalN_< T, N, Container > >", "classstd_1_1tuple__size_3_01lucid_1_1NormalN___3_01T_00_01N_00_01Container_01_4_01_4.html", null ],
-      [ "tuple_size< lucid::PointN_< T, N, Container > >", "classstd_1_1tuple__size_3_01lucid_1_1PointN___3_01T_00_01N_00_01Container_01_4_01_4.html", null ],
       [ "tuple_size< lucid::StaticSpan< T, N > >", "classstd_1_1tuple__size_3_01lucid_1_1StaticSpan_3_01T_00_01N_01_4_01_4.html", null ],
       [ "tuple_size< lucid::Vector< T, N, Container > >", "classstd_1_1tuple__size_3_01lucid_1_1Vector_3_01T_00_01N_00_01Container_01_4_01_4.html", null ]
     ] ],

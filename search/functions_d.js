@@ -2,7 +2,6 @@ var searchData=
 [
   ['scale',['scale',['../transforms_8hpp.html#a1e34135d36e7f7b50adbf093579d4d0f',1,'lucid']]],
   ['sgn',['sgn',['../math_8hpp.html#a2f39cbeb372685f38885191f09231d63',1,'lucid']]],
-  ['sqrt',['sqrt',['../vector__operators_8hpp.html#aa257ad63b097388cc40e2ea1daa6eca3',1,'lucid']]],
-  ['srgb_5fluminance',['srgb_luminance',['../vector__operators_8hpp.html#a4e9833485239859a448f6e76293443dd',1,'lucid']]],
-  ['sum',['sum',['../vector__operators_8hpp.html#a4cba4d1f1126d8cbd1a21e91972074c1',1,'lucid']]]
+  ['sqrt',['sqrt',['../vector_8hpp.html#a0bc21ad727e4fed41bfdbb4fe3f4690c',1,'lucid']]],
+  ['sum',['sum',['../vector_8hpp.html#a968dd1e2ed48c2eb811529add8570f1d',1,'lucid']]]
 ];
