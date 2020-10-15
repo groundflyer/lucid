@@ -14,6 +14,8 @@ endif()
 
 file(GLOB test_srcs RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cpp")
 
+add_custom_target(benchmarks)
+
 foreach(src ${test_srcs})
   string(REPLACE ".cpp" "" name ${src})
   string(PREPEND name "bm_")
@@ -22,4 +24,5 @@ foreach(src ${test_srcs})
 
   target_link_libraries(${name} PRIVATE fmt-header-only)
   target_compile_definitions(${name} PRIVATE -DREPO_HASH="${REPO_HASH}")
+  add_dependencies(benchmarks ${name})
 endforeach()

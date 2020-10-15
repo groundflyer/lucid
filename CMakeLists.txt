@@ -43,8 +43,6 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "")
 add_compile_options($<$<CONFIG:RelWithDebInfo>:-march=native>)
 add_compile_options($<$<CONFIG:RelWithDebInfo>:-ffast-math>)
 add_compile_options($<$<CONFIG:RelWithDebInfo>:-O3>)
-# Colored output from Clang
-add_compile_options($<$<CXX_COMPILER_ID:Clang>:-fcolor-diagnostics>)
 
 # Link-time optimization
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -111,12 +109,15 @@ if(BUILD_DOC)
     set(DOXYGEN_GENERATE_TREEVIEW YES)
     set(DOXYGEN_INCLUDE_GRAPH NO)
     set(DOXYGEN_INCLUDED_BY_GRAPH NO)
+    set(DOXYGEN_VERBATIM_HEADERS NO)
     set(DOXYGEN_DIRECTORY_GRAPH NO)
     set(DOXYGEN_DOT_IMAGE_FORMAT svg)
     set(DOXYGEN_INTERACTIVE_SVG YES)
     set(DOXYGEN_TOC_EXPAND YES)
     set(DOXYGEN_USE_MATHJAX YES)
-    set(DOXYGEN_CITE_BIB_FILES ${BIB_DIR}/Duff2017Basis.bib ${BIB_DIR}/other.bib)
+    set(DOXYGEN_CITE_BIB_FILES
+      ${BIB_DIR}/Duff2017Basis.bib
+      ${BIB_DIR}/other.bib)
     doxygen_add_docs(doc ${_SRC_DIR} ${DOC_DIR} ALL
       COMMENT "Generating documentation with Doxygen"
       WORKING_DIRECTORY ${_SRC_DIR})

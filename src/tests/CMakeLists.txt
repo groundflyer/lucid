@@ -2,6 +2,8 @@ include(CTest)
 
 file(GLOB test_srcs RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.cpp")
 
+add_custom_target(tests)
+
 foreach(src ${test_srcs})
   string(REPLACE ".cpp" "" name ${src})
   string(PREPEND name "test_")
@@ -20,5 +22,5 @@ foreach(src ${test_srcs})
   endif()
 
   target_link_libraries(${name} PRIVATE fmt-header-only)
-
+  add_dependencies(tests ${name})
 endforeach()
