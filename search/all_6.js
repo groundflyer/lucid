@@ -5,6 +5,7 @@ var searchData=
   ['film',['Film',['../structlucid_1_1Film.html',1,'lucid']]],
   ['filmcapture',['FilmCapture',['../structFilmCapture.html',1,'']]],
   ['fit',['fit',['../vector_8hpp.html#a369c6cdc225062bcbee280eb2bf38b55',1,'lucid::fit(const Vector&lt; T, N, Container &gt; &amp;v, const T minval, const T maxval) noexcept'],['../math_8hpp.html#a9d835ff4968e4fee75b5b1665e874920',1,'lucid::fit(const T val, const T minval, const T maxval)']]],
+  ['flat_5fref',['flat_ref',['../matrix_8hpp.html#ab90ad25462ef4f205690b54af1551abd',1,'lucid']]],
   ['flush',['Flush',['../structlucid_1_1Logger_1_1Flush.html',1,'lucid::Logger']]],
   ['fmt_5fdata',['fmt_data',['../structlucid_1_1argparse_1_1detail_1_1fmt__data.html',1,'lucid::argparse::detail']]],
   ['fold_5fwrapper',['fold_wrapper',['../structlucid_1_1detail_1_1fold__wrapper.html',1,'lucid::detail']]],

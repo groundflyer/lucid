@@ -6,6 +6,7 @@ var searchData=
   ['ray_5f',['Ray_',['../structlucid_1_1Ray__.html',1,'lucid']]],
   ['ray_5f_3c_20std_3a_3aarray_20_3e',['Ray_&lt; std::array &gt;',['../structlucid_1_1Ray__.html',1,'lucid']]],
   ['reduce',['reduce',['../vector_8hpp.html#a5030df94ec53c81081b818256eef356f',1,'lucid']]],
+  ['ref',['ref',['../matrix_8hpp.html#a7b861882b3e5b75ee50e11a846231bc9',1,'lucid::ref(const Matrix&lt; T, M, N, Container &gt; &amp;m) noexcept'],['../vector_8hpp.html#ab922bb281177049859d5c7397420e166',1,'lucid::ref(const Vector&lt; T, N, Container &gt; &amp;v)']]],
   ['repeat_5finteger',['repeat_integer',['../structlucid_1_1repeat__integer.html',1,'lucid']]],
   ['repeat_5finteger_3c_201_2c_20int_2c_20vals_2e_2e_2e_20_3e',['repeat_integer&lt; 1, Int, Vals... &gt;',['../structlucid_1_1repeat__integer_3_011_00_01Int_00_01Vals_8_8_8_01_4.html',1,'lucid']]],
   ['repeat_5ftype',['repeat_type',['../structlucid_1_1repeat__type.html',1,'lucid']]],

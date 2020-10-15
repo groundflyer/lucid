@@ -19,7 +19,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="classlucid_1_1Vector.html" target="_top" xlink:title="lucid::Vector\&lt; T, N,\l Container \&gt;">
+<g id="a_node2"><a xlink:href="classlucid_1_1Vector.html" target="_top" xlink:title="Generic N&#45;dimnsional euclidian vector. ">
 <polygon fill="#ffffff" stroke="#000000" points="14.5,-78.5 14.5,-108.5 124.5,-108.5 124.5,-78.5 14.5,-78.5"/>
 <text text-anchor="start" x="22.5" y="-96.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">lucid::Vector&lt; T, N,</text>
 <text text-anchor="middle" x="69.5" y="-85.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000"> Container &gt;</text>

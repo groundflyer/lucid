@@ -7,6 +7,7 @@ var transforms_8hpp =
     [ "basis_matrix", "transforms_8hpp.html#a86d725a2bec9c6858b5ce4002dee0d9e", null ],
     [ "dehomogenize", "transforms_8hpp.html#a8d03f36d7ae83bc1f860ffd321dbd313", null ],
     [ "look_at", "transforms_8hpp.html#af88ff1372dea042a9f54cd5bf5bb9caf", null ],
+    [ "make_normal", "transforms_8hpp.html#adee39b5ad2dc515d58cf1ccdbb359dad", null ],
     [ "rotate", "transforms_8hpp.html#a0c816ada31a4b5d75d50d3275afb1395", null ],
     [ "scale", "transforms_8hpp.html#a1e34135d36e7f7b50adbf093579d4d0f", null ],
     [ "translate", "transforms_8hpp.html#ab7c25cc1f3cf85b61811f4086b18a3c8", null ]

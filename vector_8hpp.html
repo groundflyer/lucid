@@ -94,7 +94,7 @@ $(document).ready(function(){initNavTree('vector_8hpp.html','');});
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;utils/debug.hpp&gt;</code><br />
-<code>#include &lt;<a class="el" href="math_8hpp_source.html">utils/math.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="math_8hpp.html">utils/math.hpp</a>&gt;</code><br />
 <code>#include &lt;utils/static_span.hpp&gt;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;array&gt;</code><br />
@@ -103,12 +103,11 @@ $(document).ready(function(){initNavTree('vector_8hpp.html','');});
 <code>#include &lt;numeric&gt;</code><br />
 <code>#include &lt;type_traits&gt;</code><br />
 <code>#include &lt;utility&gt;</code><br />
-</div>
-<p><a href="vector_8hpp_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1Vector.html">lucid::Vector&lt; T, N, Container &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic N-dimnsional euclidian vector.  <a href="classlucid_1_1Vector.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstd_1_1tuple__size_3_01lucid_1_1Vector_3_01T_00_01N_00_01Container_01_4_01_4.html">std::tuple_size&lt; lucid::Vector&lt; T, N, Container &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,9 +120,9 @@ Functions</h2></td></tr>
 template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
 <tr class="memitem:ada0fc8d4a7ff9d3e6ff441360045400c"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::Vector</b> (Container&lt; T, N &gt; &amp;&amp;) -&gt; Vector&lt; T, N, Container &gt;</td></tr>
 <tr class="separator:ada0fc8d4a7ff9d3e6ff441360045400c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab922bb281177049859d5c7397420e166"><td class="memTemplParams" colspan="2"><a id="ab922bb281177049859d5c7397420e166"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:ab922bb281177049859d5c7397420e166"><td class="memTemplItemLeft" align="right" valign="top">constexpr const Vector&lt; T, N, StaticSpan &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::ref</b> (const Vector&lt; T, N, Container &gt; &amp;v)</td></tr>
+<tr class="memitem:ab922bb281177049859d5c7397420e166"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:ab922bb281177049859d5c7397420e166"><td class="memTemplItemLeft" align="right" valign="top">constexpr const Vector&lt; T, N, StaticSpan &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#ab922bb281177049859d5c7397420e166">lucid::ref</a> (const Vector&lt; T, N, Container &gt; &amp;v)</td></tr>
+<tr class="memdesc:ab922bb281177049859d5c7397420e166"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create reference to input vector, e.g. vector view.  <a href="vector_8hpp.html#ab922bb281177049859d5c7397420e166">More...</a><br /></td></tr>
 <tr class="separator:ab922bb281177049859d5c7397420e166"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab75ef3c027430f94c1b647a378af34f6"><td class="memTemplParams" colspan="2">template&lt;typename T1 , typename T2 , size_t N, template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2, typename BinaryOperation &gt; </td></tr>
 <tr class="memitem:ab75ef3c027430f94c1b647a378af34f6"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#ab75ef3c027430f94c1b647a378af34f6">lucid::transform</a> (BinaryOperation binary_op, const Vector&lt; T1, N, Container1 &gt; &amp;a, const Vector&lt; T2, N, Container2 &gt; &amp;b) noexcept</td></tr>
@@ -506,6 +505,29 @@ template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename C
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="file_ab922bb281177049859d5c7397420e166"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_ab922bb281177049859d5c7397420e166">&#9670;&nbsp;</a></span>ref()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const Vector&lt;T, N, StaticSpan&gt; lucid::ref </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1Vector.html">Vector</a>&lt; T, N, Container &gt; &amp;&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create reference to input vector, e.g. vector view. </p>
+<p>Creates a such vector object that data it contains is mapped to other place. </p>
 
 </div>
 </div>
