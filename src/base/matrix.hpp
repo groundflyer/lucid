@@ -2,12 +2,20 @@
 // matrix.hpp --
 //
 
+/// @file
+/// Definition of Matrix.
+
 #pragma once
 
 #include "vector.hpp"
 
 namespace lucid
 {
+/// @brief Generic row-major two-dimensional Matrix of constant size.
+/// @tparam T value type. Must be arithmetic.
+/// @tparam M number of rows.
+/// @tparam N number of columns.
+/// @tparam Container std::array-like container that used to store the data.
 template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
 class Matrix
 {
@@ -327,126 +335,6 @@ class Matrix
         return *this;
     }
 
-    template <template <typename, size_t> typename Container2>
-    constexpr auto
-    operator==(const Matrix<T, M, N, Container2>& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret[i] = at(i) == rhs.at(i);
-
-        return ret;
-    }
-    constexpr auto
-    operator==(const T& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret[i] = at(i) == rhs;
-
-        return ret;
-    }
-
-    template <template <typename, size_t> typename Container2>
-    constexpr auto
-    operator!=(const Matrix<T, M, N, Container2>& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret[i] = at(i) != rhs.at(i);
-
-        return ret;
-    }
-    constexpr auto
-    operator!=(const T& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret[i] = at(i) != rhs;
-
-        return ret;
-    }
-
-    template <template <typename, size_t> typename Container2>
-    constexpr auto
-    operator<(const Matrix<T, M, N, Container2>& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret[i] = at(i) < rhs.at(i);
-
-        return ret;
-    }
-    constexpr auto
-    operator<(const T& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret[i] = at(i) < rhs;
-
-        return ret;
-    }
-
-    template <template <typename, size_t> typename Container2>
-    constexpr auto
-    operator<=(const Matrix<T, M, N, Container2>& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret[i] = at(i) <= rhs.at(i);
-
-        return ret;
-    }
-    constexpr auto
-    operator<=(const T& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret[i] = at(i) <= rhs;
-
-        return ret;
-    }
-
-    template <template <typename, size_t> typename Container2>
-    constexpr auto
-    operator>(const Matrix<T, M, N, Container2>& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret[i] = at(i) > rhs.at(i);
-
-        return ret;
-    }
-    constexpr auto
-    operator>(const T& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret[i] = at(i) > rhs;
-
-        return ret;
-    }
-
-    template <template <typename, size_t> typename Container2>
-    constexpr auto
-    operator>=(const Matrix<T, M, N, Container2>& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret[i] = at(i) >= rhs.at(i);
-
-        return ret;
-    }
-    constexpr auto
-    operator>=(const T& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret[i] = at(i) >= rhs;
-
-        return ret;
-    }
-
     const constexpr Data&
     data() const noexcept
     {
@@ -459,12 +347,13 @@ class Matrix
         Matrix ret{};
 
         for(size_t i = 0; i < M; ++i)
-            for(size_t j = 0; j < N; ++j) ret.at(i, j) = i == j ? 1 : 0;
+            for(size_t j = 0; j < N; ++j) ret.at(i, j) = T(i == j);
 
         return ret;
     }
 };
 
+/// @brief Create reference object of input matrix, e.g. matrix view.
 template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
 constexpr auto
 ref(const Matrix<T, M, N, Container>& m) noexcept
@@ -472,6 +361,7 @@ ref(const Matrix<T, M, N, Container>& m) noexcept
     return Matrix<T, M, N, StaticSpan>(StaticSpan<T, M * N>(m.at(0)));
 }
 
+/// @brief Create reference vector view of size @f$M N@f$ of input matrix.
 template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
 constexpr auto
 flat_ref(const Matrix<T, M, N, Container>& m) noexcept
@@ -479,7 +369,8 @@ flat_ref(const Matrix<T, M, N, Container>& m) noexcept
     return Vector(StaticSpan<T, M * N>(m.at(0)));
 }
 
-template <typename T, size_t M, size_t N, template <typename, size_t> class Container>
+/// @brief Perform matrix transposition.
+template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
 constexpr auto
 transpose(const Matrix<T, M, N, Container>& a) noexcept
 {
@@ -491,6 +382,7 @@ transpose(const Matrix<T, M, N, Container>& a) noexcept
     return ret;
 }
 
+/// @brief Compute product of matrix and column-vector.
 template <typename T,
           size_t M,
           size_t N,
@@ -509,7 +401,7 @@ dot(const Matrix<T, M, N, MContainer>& lhs, const Vector<T, N, VContainer>& rhs)
     return ret;
 }
 
-// Matrix-Matrix mupltiply
+/// @brief Compute matrix product.
 template <typename T,
           size_t M1,
           size_t N1,
@@ -531,8 +423,8 @@ dot(const Matrix<T, M1, N1, Container1>& lhs, const Matrix<T, M2, N2, Container2
     return ret;
 }
 
-// determinant
-template <typename T, size_t M, size_t N, template <typename, size_t> class Container>
+/// @brief Compite matrix determinant.
+template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
 constexpr typename std::enable_if_t<M == N, T>
 det(const Matrix<T, M, N, Container>& a) noexcept
 {
@@ -559,8 +451,8 @@ det(const Matrix<T, M, N, Container>& a) noexcept
     return ret;
 }
 
-// contructs minor matrix by removing I row, J column
-template <typename T, size_t M, size_t N, template <typename, size_t> class Container>
+/// @brief Contructs minor matrix by removing I row, J column.
+template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
 constexpr auto
 minor_matrix(const Matrix<T, M, N, Container>& a, const size_t I, const size_t J) noexcept
 {
@@ -584,8 +476,8 @@ minor_matrix(const Matrix<T, M, N, Container>& a, const size_t I, const size_t J
     return ret;
 }
 
-// cofactor matrix
-template <typename T, size_t M, size_t N, template <typename, size_t> class Container>
+/// @brief Compute cofactor matrix.
+template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
 constexpr auto
 cofactor(const Matrix<T, M, N, Container>& a) noexcept
 {
@@ -597,8 +489,8 @@ cofactor(const Matrix<T, M, N, Container>& a) noexcept
     return ret;
 }
 
-// returns inverse matrix
-template <typename T, size_t M, size_t N, template <typename, size_t> class Container>
+/// @brief Compute inverse matrix.
+template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
 constexpr auto
 inverse(const Matrix<T, M, N, Container>& a) noexcept
 {
@@ -620,25 +512,24 @@ inverse(const Matrix<T, M, N, Container>& a) noexcept
 
 namespace std
 {
-	template <typename T, size_t M, size_t N,
-			  template <typename, size_t> typename Container>
-	class tuple_size<lucid::Matrix<T, M, N, Container>>
-    {
-    public:
-        static const constexpr size_t value = M;
-    };
+template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
+class tuple_size<lucid::Matrix<T, M, N, Container>>
+{
+  public:
+    static const constexpr size_t value = M;
+};
 
-	template <size_t I, typename T, size_t M, size_t N,
-			  template <typename, size_t> typename Container>
-	class tuple_element<I, lucid::Matrix<T, M, N, Container>>
-	{
-    public:
-		using type = decltype(declval<lucid::Matrix<T, M, N, Container>>().template get<I>());
-	};
+template <size_t I, typename T, size_t M, size_t N, template <typename, size_t> typename Container>
+class tuple_element<I, lucid::Matrix<T, M, N, Container>>
+{
+  public:
+    using type = decltype(declval<lucid::Matrix<T, M, N, Container>>().template get<I>());
+};
 
-    template <auto I, typename T, size_t M, size_t N,
-			  template <typename, size_t> typename Container>
-    constexpr decltype(auto)
-    get(const lucid::Matrix<T, M, N, Container>& mat) noexcept
-    { return mat.template get<I>(); }
+template <auto I, typename T, size_t M, size_t N, template <typename, size_t> typename Container>
+constexpr decltype(auto)
+get(const lucid::Matrix<T, M, N, Container>& mat) noexcept
+{
+    return mat.template get<I>();
 }
+} // namespace std

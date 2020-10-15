@@ -397,7 +397,7 @@ class Vector
 template <typename T, size_t N, template <typename, size_t> typename Container>
 Vector(Container<T, N> &&) -> Vector<T, N, Container>;
 
-/// @brief Create reference to input vector.
+/// @brief Create reference to input vector, e.g. vector view.
 ///
 /// Creates a such vector object that data it contains is mapped to
 /// other place.
