@@ -39,7 +39,7 @@ main(int argc, char* argv[])
     RandomDistribution<bool> bern_dist(0.5);
     auto                     sgen   = [&]() { return Vec2{rand<real, 2>(g)}; };
     auto                     posgen = [&]() { return Vec3(big_dist.template operator()<3>(g)); };
-    auto normgen = [&]() { return normalize(Vec3(big_dist.template operator()<3>(g))); };
+    auto normgen = [&]() { return make_normal(big_dist.template operator()<3>(g)); };
 
     static const constexpr auto hit_t_ulp = 10;
 
@@ -69,7 +69,7 @@ main(int argc, char* argv[])
 
     const auto sample_prim = [&](const auto& prim) { return pair(sample(sgen(), prim), posgen()); };
 
-    const auto sample_selfoccluded_prim = [&](const auto& prim) {
+    const auto sample_selfoccluded_prim = [&](const auto& prim) noexcept {
         const auto sampled_point = sample(sgen(), prim);
         const auto offset        = sampled_point - centroid(prim);
         const auto sign = transform([](const real val) { return std::copysign(1_r, val); }, offset);
@@ -78,7 +78,7 @@ main(int argc, char* argv[])
         return pair(sampled_point, Vec3(origin));
     };
 
-    const auto bound_gen = [&](const auto& prim) {
+    const auto bound_gen = [&](const auto& prim) noexcept {
         const AABB bbox   = bound(prim);
         const Vec3 sp     = sample(sgen(), prim);
         const auto tb     = Vector(bern_dist.template operator()<3>(g));
@@ -86,37 +86,37 @@ main(int argc, char* argv[])
                                       tb,
                                       Vec3(rad_dist.template operator()<3>(g)));
         const Vec3 origin(bbox[tb] + offset);
-        return pair{bbox, Ray(origin, normalize(sp - origin))};
+        return pair{bbox, Ray(origin, sp - origin)};
     };
 
-    const auto bound_test_prim = [&](auto&& name, auto&& gen) {
+    const auto bound_test_prim = [&](auto&& name, auto&& gen) noexcept {
         return test_prim(name, gen, bound_gen, bound_property);
     };
 
-    const auto aabb_gen     = [&]() { return AABB(posgen(), posgen()); };
-    const auto sphere_gen   = [&]() { return Sphere(posgen(), rad_dist(g)); };
-    const auto disk_gen     = [&]() { return Disk(posgen(), normgen(), rad_dist(g)); };
-    const auto triangle_gen = [&]() { return Triangle{posgen(), posgen(), posgen()}; };
-    const auto quad_gen     = [&]() {
+    const auto aabb_gen     = [&]() noexcept { return AABB(posgen(), posgen()); };
+    const auto sphere_gen   = [&]() noexcept { return Sphere(posgen(), rad_dist(g)); };
+    const auto disk_gen     = [&]() noexcept { return Disk(posgen(), normgen(), rad_dist(g)); };
+    const auto triangle_gen = [&]() noexcept { return Triangle{posgen(), posgen(), posgen()}; };
+    const auto quad_gen     = [&]() noexcept {
         const Vec3 v00{0, 0, 0};
         const Vec3 v01{0, rad_dist(g), 0};
         const Vec3 v10{rad_dist(g), 0, 0};
-        const auto v11 = v00 + v01 + v10;
+        const Vec3 v11 = v00 + v01 + v10;
         const auto t   = dot(rotate(big_dist(g), normgen()), translate(posgen()));
         return apply_transform(t, Quad{v00, v01, v11, v10});
     };
 
-    const auto aabb_gen_l = [&](const real max_rad, const Vec3&) {
+    const auto aabb_gen_l = [&](const real max_rad, const Vec3&) noexcept {
         return AABB(-Vec3(rand<real, 3>(g)) * max_rad * 0.5_r,
                     Vec3(rand<real, 3>(g)) * max_rad * 0.5_r);
     };
-    const auto sphere_gen_l = [&](const real max_rad, const Vec3&) {
+    const auto sphere_gen_l = [&](const real max_rad, const Vec3&) noexcept {
         return Sphere(Vec3(0), rand<real>(g) * max_rad);
     };
-    const auto disk_gen_l = [&](const real, const Vec3& n) {
+    const auto disk_gen_l = [&](const real, const Vec3& n) noexcept {
         return Disk(Vec3(0), n, rad_dist(g));
     };
-    const auto triangle_gen_l = [&](const real, const Vec3& n) {
+    const auto triangle_gen_l = [&](const real, const Vec3& n) noexcept {
         const Vec3 v0{-rad_dist(g), -rad_dist(g), 0};
         const Vec3 v1{0, rad_dist(g), 0};
         const Vec3 v2{rad_dist(g), -rad_dist(g), 0};
@@ -124,7 +124,7 @@ main(int argc, char* argv[])
         t[3][3] = 1;
         return apply_transform(t, Triangle{v0, v1, v2});
     };
-    const auto quad_gen_l = [&](const real, const Vec3& n) {
+    const auto quad_gen_l = [&](const real, const Vec3& n) noexcept {
         const real x = rad_dist(g);
         const real y = rad_dist(g);
         const Vec3 v00{-x, -y, 0};
@@ -142,8 +142,8 @@ main(int argc, char* argv[])
     RandomDistribution<size_t> gp_choose(0ul, std::tuple_size_v<decltype(gp_gen)> - 1);
     RandomDistribution<size_t> gp_choose_l(0ul, std::tuple_size_v<decltype(gp_gen_l)> - 1);
 
-    const auto rand_prim_gen   = [&]() { return switcher_func(gp_choose(g), gp_gen); };
-    const auto rand_prim_gen_l = [&](const real m, const Vec3& n) {
+    const auto rand_prim_gen   = [&]() noexcept { return switcher_func(gp_choose(g), gp_gen); };
+    const auto rand_prim_gen_l = [&](const real m, const Vec3& n) noexcept {
         return switcher_func(gp_choose_l(g), gp_gen_l, m, n);
     };
 
@@ -167,9 +167,9 @@ main(int argc, char* argv[])
         num_tests,
         0.05,
         "GenericPrimitive: hider",
-        [&]() {
+        [&]() noexcept {
             const Vec3             o = posgen();
-            const Vec3             d = normalize(Vec3{o - posgen()});
+            const Vec3             d = make_normal(o - posgen());
             const Ray              ray{o, d};
             const constexpr size_t num_prims = 10;
             const auto radiuses              = rad_dist.template operator()<num_prims>(g);
@@ -185,11 +185,11 @@ main(int argc, char* argv[])
 
             return pair{ray, prims};
         },
-        [](const auto& feed) {
+        [](const auto& feed) noexcept {
             const auto& [ray, prims] = feed;
             return hider(ray, prims);
         },
-        [](const auto& testing, const auto) {
+        [](const auto& testing, const auto) noexcept {
             const auto& [pidx, isect] = testing;
             return !isect || pidx != 0ul;
         });

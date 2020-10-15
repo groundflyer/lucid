@@ -20,7 +20,7 @@ main(int argc, char* argv[])
     auto argen = [&]() noexcept { return dist.template operator()<3>(g); };
     auto vgen  = [&]() noexcept { return Vec3(argen()); };
     auto pgen  = [&]() noexcept { return Vec3(argen()); };
-    auto ngen  = [&]() noexcept { return normalize(Vec3(argen())); };
+    auto ngen  = [&]() noexcept { return make_normal(argen()); };
 
     microbench(
         log,
@@ -49,9 +49,9 @@ main(int argc, char* argv[])
         },
         static_cast<Vec3 (*)(const Mat4&, const Vec3&)>(apply_transform_n));
 
-    microbench(log, n, "translate", pgen, [](const Vec3& p) noexcept { return translate(p); });
+    microbench(log, n, "translate", pgen, static_cast<Mat4 (*)(const Vec3&)>(translate));
 
-    microbench(log, n, "scale", vgen, [](const Vec3& v) noexcept { return scale(v); });
+    microbench(log, n, "scale", vgen, static_cast<Mat4 (*)(const Vec3&)>(scale));
 
     microbench(
         log,
@@ -60,7 +60,7 @@ main(int argc, char* argv[])
         [&]() noexcept {
             return pair{dist(g), ngen()};
         },
-        [](const auto a, const Vec3& n) noexcept { return rotate(a, n); });
+        static_cast<Mat4 (*)(const real, const Vec3&)>(rotate));
 
     microbench(
         log,
@@ -69,10 +69,9 @@ main(int argc, char* argv[])
         [&]() noexcept {
             return tuple{pgen(), pgen(), ngen()};
         },
-        [](const Vec3& e, const Vec3& t, const Vec3& u) noexcept { return look_at(e, t, u); });
+        static_cast<Mat4 (*)(const Vec3&, const Vec3&, const Vec3&)>(look_at));
 
-    microbench(
-        log, n, "basis_matrix", ngen, [](const Vec3& n) noexcept { return basis_matrix(n); });
+    microbench(log, n, "basis_matrix", ngen, static_cast<Mat3 (*)(const Vec3&)>(basis_matrix));
 
     return 0;
 }

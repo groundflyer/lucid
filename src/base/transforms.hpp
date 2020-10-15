@@ -13,6 +13,14 @@
 
 namespace lucid
 {
+/// @brief Build a normalized vector.
+template <typename... Args>
+constexpr Vec3
+make_normal(const Args&... args) noexcept
+{
+    return normalize(Vec3(args...));
+}
+
 /// @brief Convert a vector from homogenous coordinates.
 /// @param a homogenous column vector.
 template <template <typename, size_t> typename Container>
@@ -126,8 +134,8 @@ basis(const Vec3_<Container>& n) noexcept
     const real sign          = std::copysign(1_r, nz);
     const real a             = -1_r / (sign + nz);
     const real b             = nx * ny * a;
-    return std::pair(normalize(Vec3{1_r + sign * pow<2>(nx) * a, sign * b, -sign * nx}),
-                     normalize(Vec3{b, sign + pow<2>(ny) * a, -ny}));
+    return std::pair(make_normal(1_r + sign * pow<2>(nx) * a, sign * b, -sign * nx),
+                     make_normal(b, sign + pow<2>(ny) * a, -ny));
 }
 
 /// @brief Build orthonormal basis for a given normal (z axis).

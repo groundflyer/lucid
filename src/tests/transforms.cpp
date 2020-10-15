@@ -17,8 +17,9 @@ main(int argc, char* argv[])
 
     int ret = 0;
 
-    auto test_property_n = [num_tests](auto&&... args) {
-        return test_property(num_tests, 0.01, forward<decltype(args)>(args)...);
+    auto test_property_n = [num_tests]<typename... Args>(Args && ... args)
+    {
+        return test_property(num_tests, 0.01, forward<Args>(args)...);
     };
 
     RandomDistribution<real> dist(-1000_r, 1000_r);
@@ -59,7 +60,7 @@ main(int argc, char* argv[])
     ret += test_property_n(
         "rotate",
         [&]() {
-            return pair{normalize(Vec3{argen()}), Pi * generate_canonical<real, 10>(g)};
+            return pair{make_normal(argen()), Pi * generate_canonical<real, 10>(g)};
         },
         [](const auto& feed) {
             const auto& [axis, angle] = feed;
@@ -95,7 +96,7 @@ main(int argc, char* argv[])
 
     ret += test_property_n(
         "orthonormal basis",
-        [&]() { return normalize(Vec3(argen())); },
+        [&]() { return make_normal(argen()); },
         [](const auto& feed) { return basis(feed); },
         [](const auto& testing, const auto& feed) {
             const auto& [a, b] = testing;
