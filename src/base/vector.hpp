@@ -21,6 +21,10 @@
 
 namespace lucid
 {
+/// @brief Generic N-dimnsional euclidian vector.
+/// @tparam T value type. Must be arithmetic.
+/// @tparam N dimensionality.
+/// @tparam Container std::array-like container that used to store the data.
 template <typename T, size_t N, template <typename, size_t> typename Container>
 class Vector
 {
@@ -393,6 +397,10 @@ class Vector
 template <typename T, size_t N, template <typename, size_t> typename Container>
 Vector(Container<T, N> &&) -> Vector<T, N, Container>;
 
+/// @brief Create reference to input vector.
+///
+/// Creates a such vector object that data it contains is mapped to
+/// other place.
 template <typename T, size_t N, template <typename, size_t> typename Container>
 constexpr const Vector<T, N, StaticSpan>
 ref(const Vector<T, N, Container>& v)
