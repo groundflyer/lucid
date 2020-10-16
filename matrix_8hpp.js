@@ -8,7 +8,7 @@ var matrix_8hpp =
     [ "dot", "matrix_8hpp.html#a564769727e2572c85fc91dbda03e7612", null ],
     [ "dot", "matrix_8hpp.html#a61ea333f7d6cac95a74f0acb4a8a0823", null ],
     [ "flat_ref", "matrix_8hpp.html#ab90ad25462ef4f205690b54af1551abd", null ],
-    [ "get", "matrix_8hpp.html#a5fc3835771479eafd0502e7ce4223d16", null ],
+    [ "get", "matrix_8hpp.html#a903cff1a3cc70fc7c2020dbed174a316", null ],
     [ "inverse", "matrix_8hpp.html#a9d56816e3484f59ce324448a832a7ea0", null ],
     [ "minor_matrix", "matrix_8hpp.html#abe0cee4a66f03fcedfef9d590482b582", null ],
     [ "ref", "matrix_8hpp.html#a7b861882b3e5b75ee50e11a846231bc9", null ],
