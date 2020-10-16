@@ -115,9 +115,7 @@ if(BUILD_DOC)
     set(DOXYGEN_INTERACTIVE_SVG YES)
     set(DOXYGEN_TOC_EXPAND YES)
     set(DOXYGEN_USE_MATHJAX YES)
-    set(DOXYGEN_CITE_BIB_FILES
-      ${BIB_DIR}/Duff2017Basis.bib
-      ${BIB_DIR}/other.bib)
+    set(DOXYGEN_CITE_BIB_FILES ${BIB_DIR}/Duff2017Basis.bib ${BIB_DIR}/other.bib)
     doxygen_add_docs(doc ${_SRC_DIR} ${DOC_DIR} ALL
       COMMENT "Generating documentation with Doxygen"
       WORKING_DIRECTORY ${_SRC_DIR})
