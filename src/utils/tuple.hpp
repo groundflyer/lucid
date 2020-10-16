@@ -54,8 +54,8 @@ template <typename Tuple, std::size_t... Ids>
 decltype(auto)
 enumerate_impl(const Tuple& tuple, std::index_sequence<Ids...>) noexcept
 {
-    return std::tuple{std::pair<std::size_t, const std::tuple_element_t<Ids, Tuple>&>{
-        Ids, std::get<Ids>(tuple)}...};
+    return std::tuple{
+        std::pair<std::size_t, std::tuple_element_t<Ids, Tuple>>{Ids, std::get<Ids>(tuple)}...};
 }
 
 template <typename Ret, std::size_t Idx, typename TupleArgs, typename Func, typename... RestFuncs>

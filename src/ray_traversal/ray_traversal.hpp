@@ -62,8 +62,6 @@ struct Intersection_
     }
 
     constexpr operator bool() const noexcept { return intersect; }
-
-    // static constexpr Intersection_ miss;
 };
 
 template <template <typename, size_t> typename Container>
@@ -78,7 +76,7 @@ static constexpr Intersection miss{};
 template <template <typename, std::size_t> typename Container,
           typename PrimsTuple,
           std::size_t... Ids>
-constexpr auto
+constexpr std::pair<std::size_t, Intersection>
 hider_impl(const Ray_<Container>& ray,
            const PrimsTuple&      prims,
            std::index_sequence<Ids...>) noexcept
@@ -88,17 +86,17 @@ hider_impl(const Ray_<Container>& ray,
 } // namespace detail
 
 template <typename Intersections>
-constexpr decltype(auto)
+constexpr std::pair<std::size_t, Intersection>
 closest(const Intersections& isects) noexcept
 {
     return reduce_tuple(
-        [](const auto& a, const auto& b) noexcept { return a.second.t < b.second.t ? (a) : (b); },
-        std::pair<std::size_t, const Intersection&>{0ul, detail::miss},
+        [](const auto& a, const auto& b) noexcept { return a.second.t < b.second.t ? a : b; },
+        std::pair{0ul, detail::miss},
         enumerate(isects));
 }
 
 template <template <typename, std::size_t> typename Container, typename PrimsTuple>
-constexpr auto
+constexpr std::pair<std::size_t, Intersection>
 hider(const Ray_<Container>& ray, const PrimsTuple& prims) noexcept
 {
     return detail::hider_impl(
