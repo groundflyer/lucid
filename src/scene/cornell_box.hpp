@@ -6,7 +6,7 @@
 
 #include <base/types.hpp>
 #include <cameras/perspective.hpp>
-#include <ray_traversal/primitives/generic.hpp>
+#include <primitives/generic.hpp>
 #include <sampling/common.hpp>
 
 namespace lucid

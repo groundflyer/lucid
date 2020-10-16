@@ -1,23 +1,24 @@
 // -*- C++ -*-
 // primitives.cpp
 #include "property_test.hpp"
-#include <ray_traversal/primitives/aabb.hpp>
-#include <ray_traversal/primitives/disk.hpp>
-#include <ray_traversal/primitives/sphere.hpp>
-#include <ray_traversal/primitives/triangle.hpp>
-#include <ray_traversal/primitives/quad.hpp>
-#include <ray_traversal/primitives/generic.hpp>
 #include <base/rng.hpp>
+#include <primitives/aabb.hpp>
+#include <primitives/disk.hpp>
+#include <primitives/generic.hpp>
+#include <primitives/quad.hpp>
+#include <primitives/sphere.hpp>
+#include <primitives/triangle.hpp>
 
 #include <utils/tuple.hpp>
 
 using namespace std;
 using namespace lucid;
 
-
 constexpr auto
 radius(const Sphere& prim) noexcept
-{ return prim.radius; }
+{
+    return prim.radius;
+}
 
 constexpr auto
 radius(const AABB& prim) noexcept
