@@ -5,58 +5,80 @@ dist: bionic
 notifications:
   email: false
 
-branches:
-  only:
-    - master
-
 cache:
   apt: true
   packages: true
 
-addons:
-  apt:
-    sources:
-      - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main'
-        key_url: https://apt.llvm.org/llvm-snapshot.gpg.key
-      - sourceline: 'deb https://apt.kitware.com/ubuntu/ bionic main'
-        key_url: https://apt.kitware.com/keys/kitware-archive-latest.asc
-    packages:
-      - clang-10
-      - libc++-10-dev
-      - libc++abi-10-dev
-      - xorg-dev
-      - cmake
-      - freeglut3
-      - freeglut3-dev
-      - libglew1.5
-      - libglew1.5-dev
-      - libglu1-mesa
-      - libglu1-mesa-dev
-      - libgl1-mesa-glx
-      - libgl1-mesa-dev
-      - graphviz
-      - doxygen
+jobs:
+  include:
+    # Build with clang and deploy docs
+    - name: Clang-10
+      env: CXX=clang++-10 CC=clang-10
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb https://apt.kitware.com/ubuntu/ bionic main'
+              key_url: https://apt.kitware.com/keys/kitware-archive-latest.asc
+            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main'
+              key_url: https://apt.llvm.org/llvm-snapshot.gpg.key
+          packages:
+            - clang-10
+            - doxygen
+            - graphviz
+            - libc++-10-dev
+            - libc++abi-10-dev
+            - xorg-dev
+            - cmake
+            - freeglut3
+            - freeglut3-dev
+            - libglew1.5
+            - libglew1.5-dev
+            - libglu1-mesa
+            - libglu1-mesa-dev
+            - libgl1-mesa-glx
+            - libgl1-mesa-dev
+      script:
+        - cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_DOC=ON ..
+        - cmake --build . -- -j2
+        - cd src/tests
+        - ctest --output-on-failure -j2
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_TOKEN
+        keep_history: true
+        on:
+          branch: master
+        local_dir: "${TRAVIS_BUILD_DIR:?}/build/html"
 
-env: CXX=clang++-10 CC=clang-10
+    # Test with GCC and don't build the docs
+    - name: GCC-9
+      env: CXX=g++-9
+      addons:
+        apt:
+          sources:
+            - sourceline: 'deb https://apt.kitware.com/ubuntu/ bionic main'
+              key_url: https://apt.kitware.com/keys/kitware-archive-latest.asc
+            - sourceline: ppa:ubuntu-toolchain-r/test
+          packages:
+            - g++-9
+            - cmake
+            - xorg-dev
+            - freeglut3
+            - freeglut3-dev
+            - libglew1.5
+            - libglew1.5-dev
+            - libglu1-mesa
+            - libglu1-mesa-dev
+            - libgl1-mesa-glx
+            - libgl1-mesa-dev
+      script:
+        - cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON ..
+        - cmake --build . -- -j2
+        - cd src/tests
+        - ctest --output-on-failure -j2
 
 before_script:
   - function cmake { command /usr/bin/cmake $@; }
-  - cmake --version
-  - uname -p
   - cd "${TRAVIS_BUILD_DIR:?}"
   - mkdir -p build && cd build
-
-script:
-  - cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_DOC=ON ..
-  - cmake --build . -- -j2
-  - cd src/tests
-  - ctest --output-on-failure -j2
-
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  keep_history: true
-  on:
-    branch: master
-  local_dir: "${TRAVIS_BUILD_DIR:?}/build/html"
