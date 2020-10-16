@@ -42,15 +42,13 @@ main(int argc, char* argv[])
     auto                     posgen = [&]() { return Vec3(big_dist.template operator()<3>(g)); };
     auto normgen = [&]() { return make_normal(big_dist.template operator()<3>(g)); };
 
-    static const constexpr auto hit_t_ulp = 10;
-
     const auto sample_intersect_property = [](const auto& sampled, const auto& prim) noexcept {
         const auto& [target, origin] = sampled;
         const Ray  tohit{origin, target - origin};
         const Ray  tomiss{origin, origin - target};
         const auto hit  = intersect(tohit, prim);
         const auto miss = intersect(tomiss, prim);
-        return !hit || miss || !almost_equal(hit.t, distance(target, origin), hit_t_ulp);
+        return !hit || miss || !almost_equal(hit.t, distance(target, origin), 10);
     };
 
     const auto bound_property = [](const auto& testing, const auto& prim) noexcept {
