@@ -11,7 +11,7 @@ cache:
 
 jobs:
   include:
-    # Build with clang and deploy docs
+    # Test with Clang
     - name: Clang-10
       env: CXX=clang++-10 CC=clang-10
       addons:
@@ -23,8 +23,6 @@ jobs:
               key_url: https://apt.llvm.org/llvm-snapshot.gpg.key
           packages:
             - clang-10
-            - doxygen
-            - graphviz
             - libc++-10-dev
             - libc++abi-10-dev
             - xorg-dev
@@ -38,20 +36,12 @@ jobs:
             - libgl1-mesa-glx
             - libgl1-mesa-dev
       script:
-        - cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DBUILD_DOC=ON ..
+        - cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON ..
         - cmake --build . -- -j2
         - cd src/tests
         - ctest --output-on-failure -j2
-      deploy:
-        provider: pages
-        skip_cleanup: true
-        github_token: $GITHUB_TOKEN
-        keep_history: true
-        on:
-          branch: master
-        local_dir: "${TRAVIS_BUILD_DIR:?}/build/html"
 
-    # Test with GCC and don't build the docs
+    # Test with GCC
     - name: GCC-9
       env: CXX=g++-9
       addons:
