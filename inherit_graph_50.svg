@@ -12,10 +12,10 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="structlucid_1_1detail_1_1ComposeOp_1_1Invoker.html" target="_top" xlink:title="lucid::detail::ComposeOp\l::Invoker\&lt; LHS, RHS \&gt;">
+<g id="a_node1"><a xlink:href="structlucid_1_1CornellBox_1_1MatGetter_1_1BSDF_1_1Sample.html" target="_top" xlink:title="lucid::CornellBox::\lMatGetter::BSDF::Sample">
 <polygon fill="#ffffff" stroke="#000000" points="0,-.5 0,-30.5 139,-30.5 139,-.5 0,-.5"/>
-<text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">lucid::detail::ComposeOp</text>
-<text text-anchor="middle" x="69.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">::Invoker&lt; LHS, RHS &gt;</text>
+<text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">lucid::CornellBox::</text>
+<text text-anchor="middle" x="69.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">MatGetter::BSDF::Sample</text>
 </a>
 </g>
 </g>

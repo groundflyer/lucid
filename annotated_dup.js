@@ -14,7 +14,9 @@ var annotated_dup =
           [ "has_repeating_key_impl< Last >", "structlucid_1_1argparse_1_1detail_1_1has__repeating__key__impl_3_01Last_01_4.html", null ],
           [ "key_index_impl", "structlucid_1_1argparse_1_1detail_1_1key__index__impl.html", null ],
           [ "key_index_impl< Key, Idx >", "structlucid_1_1argparse_1_1detail_1_1key__index__impl_3_01Key_00_01Idx_01_4.html", null ],
-          [ "key_index_impl< Key, Idx, _Option, Rest... >", "structlucid_1_1argparse_1_1detail_1_1key__index__impl_3_01Key_00_01Idx_00_01__Option_00_01Rest_8_8_8_01_4.html", null ]
+          [ "key_index_impl< Key, Idx, _Option, Rest... >", "structlucid_1_1argparse_1_1detail_1_1key__index__impl_3_01Key_00_01Idx_00_01__Option_00_01Rest_8_8_8_01_4.html", null ],
+          [ "State", "structlucid_1_1argparse_1_1detail_1_1State.html", "structlucid_1_1argparse_1_1detail_1_1State" ],
+          [ "State< std::tuple<>, void >", "structlucid_1_1argparse_1_1detail_1_1State_3_01std_1_1tuple_3_4_00_01void_01_4.html", "structlucid_1_1argparse_1_1detail_1_1State_3_01std_1_1tuple_3_4_00_01void_01_4" ]
         ] ],
         [ "ArgsRange", "classlucid_1_1argparse_1_1ArgsRange.html", "classlucid_1_1argparse_1_1ArgsRange" ],
         [ "Binding", "classlucid_1_1argparse_1_1Binding.html", "classlucid_1_1argparse_1_1Binding" ],
