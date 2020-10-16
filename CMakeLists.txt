@@ -6,10 +6,6 @@ project(Lucid CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  message(FATAL_ERROR "Only LLVM Clang is supported")
-endif()
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # Check for required compiler features
@@ -26,7 +22,6 @@ endif()
 message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
 
 # Options
-option(USE_LIBCXX "Use LibC++ when compiling with clang" ON)
 option(USE_DOUBLE_PRECISION "Use double precision floating-point format" OFF)
 option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_BENCHMARKS "Build benchmarks" OFF)

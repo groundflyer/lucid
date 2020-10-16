@@ -128,6 +128,36 @@ struct fmt_data
     {
     }
 };
+
+template <typename Desc, typename Bindings>
+struct State
+{
+    const Desc& desc;
+    Bindings    bindings;
+    std::size_t token;
+    std::size_t remain;
+
+    constexpr State(const Desc& _desc, std::size_t _token, std::size_t _remain) noexcept :
+        desc(_desc), bindings(make_bindings(_desc)), token(_token), remain(_remain)
+    {
+    }
+
+    State()             = delete;
+    State(const State&) = delete;
+    State(State&&)      = delete;
+    State&
+    operator=(const State&) = delete;
+};
+
+// empty state if we have no positional arguments
+template <>
+struct State<std::tuple<>, void>
+{
+    template <typename... Args>
+    constexpr State(Args&&...) noexcept
+    {
+    }
+};
 } // namespace detail
 
 class ArgsRange : public ranges::view_facade<ArgsRange>
@@ -741,49 +771,17 @@ class Visitor
                            std::decay_t<decltype(make_bindings(std::declval<PosDesc>()))>,
                            void>;
 
-    template <typename Desc, typename Bindings>
-    struct State
-    {
-        const Desc& desc;
-        Bindings    bindings;
-        std::size_t token;
-        std::size_t remain;
-
-        constexpr State(const Desc& _desc, std::size_t _token, std::size_t _remain) noexcept :
-            desc(_desc), bindings(make_bindings(_desc)), token(_token), remain(_remain)
-        {
-        }
-
-        State()             = delete;
-        State(const State&) = delete;
-        State(State&&)      = delete;
-        State&
-        operator=(const State&) = delete;
-    };
-
-    // empty state if we have no positional arguments
-    template <>
-    struct State<std::tuple<>, void>
-    {
-        template <typename... Args>
-        constexpr State(Args&&...) noexcept
-        {
-        }
-    };
-
-    State<OptDesc, OptBindings> opt_state;
-    State<PosDesc, PosBindings> pos_state;
-    bool                        is_pos = has_pos;
+    detail::State<OptDesc, OptBindings> opt_state;
+    detail::State<PosDesc, PosBindings> pos_state;
+    bool                                is_pos = has_pos;
 
     template <typename... Ts>
-    static std::size_t
+    static constexpr std::size_t
     get_nvals(const std::size_t _token, const std::tuple<Ts...>& desc)
     {
         if constexpr(sizeof...(Ts) > 0)
             return visit_clamped(
-                _token,
-                [](const auto& desc) noexcept { return std::decay_t<decltype(desc)>::num_vals; },
-                desc);
+                _token, []<typename Desc>(const Desc&) noexcept { return Desc::num_vals; }, desc);
         else
             return 0ul;
     }
@@ -1041,7 +1039,7 @@ template <typename IterOut>
 constexpr IterOut
 copy(IterOut out, const std::string_view word) noexcept
 {
-    return copy_str<char>(word.cbegin(), word.cend(), out);
+    return fmt::detail::copy_str<char>(word.cbegin(), word.cend(), out);
 }
 
 template <std::size_t nvals, typename IterOut, typename Var>
