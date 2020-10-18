@@ -5,7 +5,6 @@
 #pragma once
 
 #include "triangle.hpp"
-#include <base/rng.hpp>
 #include <utils/range.hpp>
 
 namespace lucid

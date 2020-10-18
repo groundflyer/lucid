@@ -1,10 +1,12 @@
 #include "property_test.hpp"
 
-#include <base/rng.hpp>
 #include <base/vector.hpp>
+#include <utils/tuple.hpp>
+#include <utils/typeinfo.hpp>
 #include <utils/typelist.hpp>
 
 #include <cstdlib>
+#include <random>
 
 using namespace std;
 using namespace lucid;
@@ -17,12 +19,15 @@ template <typename T, size_t N, typename RandomEngine>
 auto
 test_t_n(RandomEngine& g, const size_t num_tests) noexcept
 {
-    using Vec                            = Vector<T, N, array>;
-    const auto            t_typestring   = get_typeinfo_string(T{});
-    const auto            vec_typestring = get_typeinfo_string(Vec{});
-    const auto            arr_typestring = get_typeinfo_string(Vec().data());
-    RandomDistribution<T> dist(T{-10000}, T{10000});
-    unsigned              ret = 0;
+    using Dist                = std::conditional_t<std::is_integral_v<T>,
+                                    std::uniform_int_distribution<T>,
+                                    std::uniform_real_distribution<T>>;
+    using Vec                 = Vector<T, N, array>;
+    const auto t_typestring   = get_typeinfo_string(T{});
+    const auto vec_typestring = get_typeinfo_string(Vec{});
+    const auto arr_typestring = get_typeinfo_string(Vec().data());
+    Dist       dist(T{-10000}, T{10000});
+    unsigned   ret = 0;
 
     const constexpr double threshold       = is_floating_point_v<T> ? 0.01 : 0.0;
     const auto             test_property_n = [num_tests, threshold](auto&&... args) {
@@ -36,7 +41,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
         [](const auto& testing, const auto& feed) { return any(testing != feed); });
 
     // array generator
-    auto argen = [&]() { return dist.template operator()<N>(g); };
+    auto argen = [&]() { return generate<N>(dist, g); };
 
     // array assertion
     const auto arass = [](const Vec& testing, const array<T, N>& feed) {
@@ -61,7 +66,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
         const constexpr auto N1 = N - 1;
         ret += test_property_n(
             "{0}({1}, Vector<{1}, {2}>)"_format(vec_typestring, t_typestring, N1),
-            [&]() { return tuple(dist(g), Vector<T, N1, array>(dist.template operator()<N1>(g))); },
+            [&]() { return tuple(dist(g), Vector<T, N1, array>(generate<N1>(dist, g))); },
             [](const auto& feed) { return std::make_from_tuple<Vec>(feed); },
             [](const Vec& testing, const auto& feed) {
                 const auto& [v0, vv] = feed;
@@ -114,10 +119,10 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
         });
 
     // distribution to generate divizor that is guaranteed to be greater than zero
-    RandomDistribution<T> divdist(T{1}, T{10000});
+    Dist divdist(T{1}, T{10000});
 
     // random sign generator
-    auto signgen = [&, bdist = RandomDistribution<bool>(0.5)]() mutable {
+    auto signgen = [&, bdist = std::bernoulli_distribution(0.5)]() mutable {
         return static_cast<T>(minus_one_pow(bdist(g)));
     };
 
@@ -192,9 +197,7 @@ test_t_n(RandomEngine& g, const size_t num_tests) noexcept
         });
 
     // vector and vector-divizor generator
-    auto vvdgen = [&]() {
-        return pair(vgen(), Vec(divdist.template operator()<N>(g)) * signgen());
-    };
+    auto vvdgen = [&]() { return pair(vgen(), Vec(generate<N>(divdist, g)) * signgen()); };
 
     ret += test_property_n(
         "{0} */ {0}"_format(vec_typestring),
@@ -289,9 +292,9 @@ template <size_t N, typename RandomEngine>
 auto
 __boolean_test(RandomEngine& g, const size_t num_tests) noexcept
 {
-    RandomDistribution<bool> dist(0.5);
-    unsigned                 ret            = 0;
-    auto                     vec_typestring = get_typeinfo_string(Vector<bool, N, array>{});
+    std::bernoulli_distribution dist(0.5);
+    unsigned                    ret            = 0;
+    auto                        vec_typestring = get_typeinfo_string(Vector<bool, N, array>{});
 
     static const constexpr double threshold       = 0.0;
     auto                          test_property_n = [num_tests](auto&&... args) {
@@ -300,7 +303,7 @@ __boolean_test(RandomEngine& g, const size_t num_tests) noexcept
 
     ret += test_property_n(
         "any({})"_format(vec_typestring),
-        [&]() { return Vector(dist.template operator()<N>(g)); },
+        [&]() { return Vector(generate<N>(dist, g)); },
         [](const Vector<bool, N, array>& feed) { return any(feed); },
         [](const bool testing, const Vector<bool, N, array>& feed) {
             return testing !=
@@ -309,7 +312,7 @@ __boolean_test(RandomEngine& g, const size_t num_tests) noexcept
 
     ret += test_property_n(
         "all({})"_format(vec_typestring),
-        [&]() { return Vector(dist.template operator()<N>(g)); },
+        [&]() { return Vector(generate<N>(dist, g)); },
         [](const Vector<bool, N, array>& feed) { return all(feed); },
         [](const bool testing, const Vector<bool, N, array>& feed) {
             return testing !=

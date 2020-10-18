@@ -1,7 +1,6 @@
 // -*- C++ -*-
 // primitives.cpp
 #include "property_test.hpp"
-#include <base/rng.hpp>
 #include <primitives/aabb.hpp>
 #include <primitives/disk.hpp>
 #include <primitives/generic.hpp>
@@ -10,6 +9,8 @@
 #include <primitives/triangle.hpp>
 
 #include <utils/tuple.hpp>
+
+#include <random>
 
 using namespace std;
 using namespace lucid;
@@ -34,13 +35,15 @@ main(int argc, char* argv[])
 
     int ret = 0;
 
-    static const real        val_range = 100;
-    RandomDistribution<real> big_dist(-val_range, val_range);
-    RandomDistribution<real> rad_dist(0.1_r, val_range);
-    RandomDistribution<bool> bern_dist(0.5);
-    auto                     sgen   = [&]() { return Vec2{rand<real, 2>(g)}; };
-    auto                     posgen = [&]() { return Vec3(big_dist.template operator()<3>(g)); };
-    auto normgen = [&]() { return make_normal(big_dist.template operator()<3>(g)); };
+    static const constexpr real    val_range = 100;
+    std::uniform_real_distribution big_dist(-val_range, val_range);
+    std::uniform_real_distribution rad_dist(0.1_r, val_range);
+    std::bernoulli_distribution    bern_dist(0.5);
+    auto                           randr =
+        static_cast<real (*)(std::default_random_engine&)>(std::generate_canonical<real, 8>);
+    auto sgen    = [&]() { return Vec2{generate<2>(randr, g)}; };
+    auto posgen  = [&]() { return Vec3(generate<3>(big_dist, g)); };
+    auto normgen = [&]() { return make_normal(generate<3>(big_dist, g)); };
 
     const auto sample_intersect_property = [](const auto& sampled, const auto& prim) noexcept {
         const auto& [target, origin] = sampled;
@@ -72,18 +75,17 @@ main(int argc, char* argv[])
         const auto sampled_point = sample(sgen(), prim);
         const auto offset        = sampled_point - centroid(prim);
         const auto sign = transform([](const real val) { return std::copysign(1_r, val); }, offset);
-        const auto origin =
-            sampled_point + Vec3(rad_dist.template operator()<3>(g)) * sign + offset;
+        const auto origin = sampled_point + Vec3(generate<3>(rad_dist, g)) * sign + offset;
         return pair(sampled_point, Vec3(origin));
     };
 
     const auto bound_gen = [&](const auto& prim) noexcept {
         const AABB bbox   = bound(prim);
         const Vec3 sp     = sample(sgen(), prim);
-        const auto tb     = Vector(bern_dist.template operator()<3>(g));
+        const auto tb     = Vector(generate<3>(bern_dist, g));
         const auto offset = transform([](const auto& a, const auto& b) { return a ? b : -b; },
                                       tb,
-                                      Vec3(rad_dist.template operator()<3>(g)));
+                                      Vec3(generate<3>(rad_dist, g)));
         const Vec3 origin(bbox[tb] + offset);
         return pair{bbox, Ray(origin, sp - origin)};
     };
@@ -106,11 +108,11 @@ main(int argc, char* argv[])
     };
 
     const auto aabb_gen_l = [&](const real max_rad, const Vec3&) noexcept {
-        return AABB(-Vec3(rand<real, 3>(g)) * max_rad * 0.5_r,
-                    Vec3(rand<real, 3>(g)) * max_rad * 0.5_r);
+        return AABB(-Vec3(generate<3>(randr, g)) * max_rad * 0.5_r,
+                    Vec3(generate<3>(randr, g)) * max_rad * 0.5_r);
     };
     const auto sphere_gen_l = [&](const real max_rad, const Vec3&) noexcept {
-        return Sphere(Vec3(0), rand<real>(g) * max_rad);
+        return Sphere(Vec3(0), randr(g) * max_rad);
     };
     const auto disk_gen_l = [&](const real, const Vec3& n) noexcept {
         return Disk(Vec3(0), n, rad_dist(g));
@@ -138,8 +140,10 @@ main(int argc, char* argv[])
     const auto gp_gen   = tuple{sphere_gen, triangle_gen, quad_gen, disk_gen};
     const auto gp_gen_l = tuple{sphere_gen_l, triangle_gen_l, quad_gen_l, disk_gen_l, aabb_gen_l};
 
-    RandomDistribution<size_t> gp_choose(0ul, std::tuple_size_v<decltype(gp_gen)> - 1);
-    RandomDistribution<size_t> gp_choose_l(0ul, std::tuple_size_v<decltype(gp_gen_l)> - 1);
+    std::uniform_int_distribution<std::size_t> gp_choose(0ul,
+                                                         std::tuple_size_v<decltype(gp_gen)> - 1);
+    std::uniform_int_distribution<std::size_t> gp_choose_l(
+        0ul, std::tuple_size_v<decltype(gp_gen_l)> - 1);
 
     const auto rand_prim_gen   = [&]() noexcept { return switcher_func(gp_choose(g), gp_gen); };
     const auto rand_prim_gen_l = [&](const real m, const Vec3& n) noexcept {
@@ -171,8 +175,8 @@ main(int argc, char* argv[])
             const Vec3             d = make_normal(o - posgen());
             const Ray              ray{o, d};
             const constexpr size_t num_prims = 10;
-            const auto radiuses              = rad_dist.template operator()<num_prims>(g);
-            array<Vec3, num_prims>                  positions;
+            const auto             radiuses  = generate<num_prims>(rad_dist, g);
+            array<Vec3, num_prims> positions;
             positions[0] = o + d * radiuses[0];
             for(size_t i = 1; i < num_prims; ++i)
                 positions[i] = positions[i - 1] + d * (radiuses[i - 1] + radiuses[i]);

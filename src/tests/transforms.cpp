@@ -1,8 +1,10 @@
 // -*- C++ -*-
-// transforms.cpp -- 
+// transforms.cpp --
 #include "property_test.hpp"
 #include <base/transforms.hpp>
-#include <base/rng.hpp>
+#include <utils/tuple.hpp>
+
+#include <random>
 
 using namespace lucid;
 using namespace std;
@@ -22,9 +24,9 @@ main(int argc, char* argv[])
         return test_property(num_tests, 0.01, forward<Args>(args)...);
     };
 
-    RandomDistribution<real> dist(-1000_r, 1000_r);
+    std::uniform_real_distribution<real> dist(-1000_r, 1000_r);
 
-    auto                     argen = [&]() { return dist.template operator()<3>(g); };
+    auto                     argen = [&]() { return generate<3>(dist, g); };
     const constexpr unsigned ULP   = 5;
 
     ret += test_property_n(

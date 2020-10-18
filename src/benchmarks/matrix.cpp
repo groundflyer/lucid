@@ -2,10 +2,10 @@
 // matrix.cpp
 #include "benchmark.hpp"
 
-#include <base/rng.hpp>
 #include <base/types.hpp>
+#include <utils/tuple.hpp>
 
-#include <tuple>
+#include <random>
 
 using namespace std;
 using namespace lucid;
@@ -15,11 +15,10 @@ main(int argc, char* argv[])
 {
     INIT_LOG
 
-    random_device         rd;
-    default_random_engine g(rd());
-
-    RandomDistribution<real> dist(-100000_r, 100000_r);
-    auto mgen = [&]() noexcept { return Mat4(dist.template operator()<16>(g)); };
+    random_device                        rd;
+    default_random_engine                g(rd());
+    std::uniform_real_distribution<real> dist(-100000_r, 100000_r);
+    auto mgen = [&]() noexcept { return Mat4(generate<16>(dist, g)); };
     microbench(
         log,
         n,
@@ -33,7 +32,7 @@ main(int argc, char* argv[])
         n,
         "Mat4 dot Vec4",
         [&]() noexcept {
-            return pair{mgen(), Vec4(dist.template operator()<4>(g))};
+            return pair{mgen(), Vec4(generate<4>(dist, g))};
         },
         static_cast<Vec4 (*)(const Mat4&, const Vec4&)>(dot));
 

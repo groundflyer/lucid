@@ -4,8 +4,9 @@
 
 #pragma once
 
-#include <base/rng.hpp>
 #include <base/types.hpp>
+
+#include <random>
 
 namespace lucid
 {
@@ -14,6 +15,9 @@ template <typename Generator>
 Vec2
 sample_pixel(Generator& g, const real _pixel_width, const Vec2& pos) noexcept
 {
-    return (pos - _pixel_width * 0.5_r) + Vec2(rand<real, 2>(g)) * _pixel_width;
+    return (pos - _pixel_width * 0.5_r) +
+           Vec2(generate<3>(static_cast<real (*)(Generator&)>(std::generate_canonical<real, 8>),
+                            g)) *
+               _pixel_width;
 }
 } // namespace lucid

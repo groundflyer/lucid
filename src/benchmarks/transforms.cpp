@@ -1,8 +1,10 @@
 
 #include "benchmark.hpp"
 
-#include <base/rng.hpp>
 #include <base/transforms.hpp>
+#include <utils/tuple.hpp>
+
+#include <random>
 
 using namespace std;
 using namespace lucid;
@@ -12,15 +14,14 @@ main(int argc, char* argv[])
 {
     INIT_LOG
 
-    random_device         rd;
-    default_random_engine g(rd());
-
-    RandomDistribution<real> dist(-100000_r, 100000_r);
-    auto mgen  = [&]() noexcept { return Mat4(dist.template operator()<16>(g)); };
-    auto argen = [&]() noexcept { return dist.template operator()<3>(g); };
-    auto vgen  = [&]() noexcept { return Vec3(argen()); };
-    auto pgen  = [&]() noexcept { return Vec3(argen()); };
-    auto ngen  = [&]() noexcept { return make_normal(argen()); };
+    random_device                   rd;
+    default_random_engine           g(rd());
+    uniform_real_distribution<real> dist(-100000_r, 100000_r);
+    auto                            mgen  = [&]() noexcept { return Mat4(generate<16>(dist, g)); };
+    auto                            argen = [&]() noexcept { return generate<3>(dist, g); };
+    auto                            vgen  = [&]() noexcept { return Vec3(argen()); };
+    auto                            pgen  = [&]() noexcept { return Vec3(argen()); };
+    auto                            ngen  = [&]() noexcept { return make_normal(argen()); };
 
     microbench(
         log,

@@ -298,6 +298,17 @@ repeat_to_array(const T& value) noexcept
         return array_cat(std::array<T, 1>{value}, repeat_to_array<(N - 1)>(value));
 }
 
+template <size_t N, typename G, typename... Args>
+constexpr std::array<std::invoke_result_t<G, Args...>, N>
+generate(G&& g, Args&&... args) noexcept
+{
+    std::array<std::invoke_result_t<G, Args...>, N> ret{};
+
+    for(auto& v: ret) v = std::invoke(g, args...);
+
+    return ret;
+}
+
 template <typename F, typename... Ts, template <typename...> typename Tuple>
 constexpr decltype(auto)
 apply(F&& f, Tuple<Ts...>&& tuple)

@@ -192,4 +192,14 @@ quadratic(const T a, const T b, const T c) noexcept
     const T x      = std::signbit(x1) ? x2 : (std::signbit(x2) ? x1 : std::min(x1, x2));
     return std::pair{!std::signbit(D * x), x};
 }
+
+/// @brief Resample canonical random point.
+template <typename T>
+constexpr T
+resample(const T s) noexcept
+{
+    static_assert(std::is_floating_point_v<T>);
+    const T h{0.5};
+    return T{2} * (s > h ? s - h : h - s);
+}
 } // namespace lucid

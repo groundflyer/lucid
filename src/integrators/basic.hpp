@@ -4,10 +4,11 @@
 
 #pragma once
 
-#include <base/rng.hpp>
 #include <image_reconstruction/filtering.hpp>
 #include <ray_traversal/ray_traversal.hpp>
 #include <utils/tuple.hpp>
+
+#include <random>
 
 namespace lucid
 {
@@ -69,9 +70,13 @@ struct PathTracer_
 
             const auto [eval, sample] = bsdf(n);
 
-            const Vec3 wi       = normalize(sample(wo, Vec2(rand<real, 2>(*g))));
-            const RGB  color    = eval(wi, wo);
-            const RGB  emission = emit_f();
+            const Vec3 wi =
+                normalize(sample(wo,
+                                 Vec2(generate<2>(static_cast<float (*)(RandomEngine&)>(
+                                                      std::generate_canonical<float, 8>),
+                                                  *g))));
+            const RGB color    = eval(wi, wo);
+            const RGB emission = emit_f();
 
             has_rad |= any(emission > 0_r);
 

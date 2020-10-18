@@ -6,8 +6,6 @@
 
 #include <ray_traversal/ray_traversal.hpp>
 
-#include <base/rng.hpp>
-
 #include <utils/identity.hpp>
 
 namespace lucid
@@ -29,9 +27,17 @@ struct AABB_
     {
     }
 
-    constexpr const auto& operator[](const bool i) const noexcept { return i ? vmax : vmin; }
+    constexpr const auto&
+    operator[](const bool i) const noexcept
+    {
+        return i ? vmax : vmin;
+    }
 
-    constexpr auto& operator[](const bool i) noexcept { return i ? vmax : vmin; }
+    constexpr auto&
+    operator[](const bool i) noexcept
+    {
+        return i ? vmax : vmin;
+    }
 
     template <typename Idxs>
     constexpr auto

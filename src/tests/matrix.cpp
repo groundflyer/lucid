@@ -1,8 +1,11 @@
 #include "property_test.hpp"
 
 #include <base/matrix.hpp>
-#include <base/rng.hpp>
+#include <utils/tuple.hpp>
+#include <utils/typeinfo.hpp>
 #include <utils/typelist.hpp>
+
+#include <random>
 
 using namespace std;
 using namespace lucid;
@@ -16,21 +19,21 @@ template <typename T, size_t M, size_t N, typename RandomEngine>
 auto
 test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
 {
-    using Mat                                  = Matrix<T, M, N, array>;
-    using Vec                                  = Vector<T, N, array>;
-    const constexpr auto        t_typestring   = get_typeinfo_string(T{});
-    const auto                  mat_typestring = get_typeinfo_string(Mat{});
-    const auto                  vec_typestring = get_typeinfo_string(Vec{});
-    const auto                  arr_typestring = get_typeinfo_string(Mat().data());
-    RandomDistribution<T>       dist(T{-10000}, T{10000});
-    static const constexpr auto MN              = M * N;
-    auto                        array_mn_gen    = [&]() { return dist.template operator()<MN>(g); };
-    const auto                  array_assertion = [](const Mat& testing, const auto& feed) {
+    using Mat                                        = Matrix<T, M, N, array>;
+    using Vec                                        = Vector<T, N, array>;
+    const constexpr auto              t_typestring   = get_typeinfo_string(T{});
+    const auto                        mat_typestring = get_typeinfo_string(Mat{});
+    const auto                        vec_typestring = get_typeinfo_string(Vec{});
+    const auto                        arr_typestring = get_typeinfo_string(Mat().data());
+    std::uniform_real_distribution<T> dist(T{-10000}, T{10000});
+    static const constexpr auto       MN              = M * N;
+    auto                              array_mn_gen    = [&]() { return generate<MN>(dist, g); };
+    const auto                        array_assertion = [](const Mat& testing, const auto& feed) {
         bool ret = false;
         for(size_t i = 0; i < MN; ++i) ret |= testing.at(i) != feed[i];
         return ret || !all(lucid::isfinite(flat_ref(testing)));
     };
-    auto array_n_gen = [&]() { return dist.template operator()<N>(g); };
+    auto array_n_gen = [&]() { return generate<N>(dist, g); };
     auto vgen        = [&]() { return Vec(array_n_gen()); };
 
     const auto test_property_n = [num_tests](auto&&... args) {
@@ -110,8 +113,8 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
         const constexpr auto MN1 = M1 * N1;
         using sMat               = Matrix<T, M1, N1, array>;
         using sVec               = Vector<T, N1, array>;
-        auto smat_gen            = [&]() { return sMat(dist.template operator()<MN1>(g)); };
-        auto svecgen             = [&]() { return sVec(dist.template operator()<N1>(g)); };
+        auto smat_gen            = [&]() { return sMat(generate<MN1>(dist, g)); };
+        auto svecgen             = [&]() { return sVec(generate<N1>(dist, g)); };
 
         ret += test_property_n(
             "{}(Matrix<{}, {}, {}>)"_format(mat_typestring, t_typestring, M1, N1),
@@ -208,16 +211,16 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
         });
 
     // distribution to generate divizor that is guaranteed to be greater than zero
-    RandomDistribution<T> divdist(T{1}, T{10000});
+    std::uniform_real_distribution<T> divdist(T{1}, T{10000});
 
-    auto sign_gen = [&, bdist = RandomDistribution<bool>(0.5)]() mutable {
+    auto sign_gen = [&, bdist = std::bernoulli_distribution(0.5)]() mutable {
         return static_cast<T>(minus_one_pow(bdist(g)));
     };
 
-    auto div_mat_gen = [&]() { return Mat(divdist.template operator()<MN>(g)) * sign_gen(); };
-    auto div_vec_gen = [&]() { return Vec(divdist.template operator()<N>(g)) * sign_gen(); };
+    auto div_mat_gen = [&]() { return Mat(generate<MN>(divdist, g)) * sign_gen(); };
+    auto div_vec_gen = [&]() { return Vec(generate<N>(divdist, g)) * sign_gen(); };
 
-    RandomDistribution<size_t> rowdist(0, M - 1);
+    std::uniform_int_distribution<size_t> rowdist(0, M - 1);
 
     ret += test_property_n(
         "{}[] = Vector<{}, {}>"_format(mat_typestring, t_typestring, N),
@@ -265,7 +268,7 @@ test_t_r_c(RandomEngine& g, const size_t num_tests) noexcept
         "{}: transpose(A dot B) = transpose(B) dot transpose(A)"_format(mat_typestring),
         [&]() {
             return pair(div_mat_gen(),
-                        Matrix<T, N, M, array>(divdist.template operator()<MN>(g)) * sign_gen());
+                        Matrix<T, N, M, array>(generate<MN>(divdist, g)) * sign_gen());
         },
         [](const auto& feed) {
             const auto& [a, b] = feed;
