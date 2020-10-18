@@ -90,13 +90,17 @@ $(document).ready(function(){initNavTree('classlucid_1_1Dispatcher.html',''); in
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classlucid_1_1Dispatcher-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">lucid::Dispatcher&lt; Tasks &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Lock-free typefull multi-threaded task dispatcher.  
+ <a href="classlucid_1_1Dispatcher.html#details">More...</a></p>
+
+<p><code>#include &lt;dispatcher.hpp&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -112,7 +116,18 @@ template&lt;typename Task &gt; </td></tr>
 <tr class="memitem:a4c7f1c6cba2fa3d8c905b5268030ceb9"><td class="memTemplItemLeft" align="right" valign="top">std::optional&lt; typename result_helper&lt; ResultQueue&lt; Task &gt; &gt;::type &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>fetch_result</b> () noexcept</td></tr>
 <tr class="separator:a4c7f1c6cba2fa3d8c905b5268030ceb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;typename... Tasks&gt;<br />
+class lucid::Dispatcher&lt; Tasks &gt;</h3>
+
+<p>Lock-free typefull multi-threaded task dispatcher. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Tasks</td><td>Default-constructible, copy-assignable callables that don't take arguments and return non-void default-constructible copy-assignable values. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>utils/dispatcher.hpp</li>
 </ul>
 </div><!-- contents -->

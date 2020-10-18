@@ -1,12 +1,6 @@
 var searchData=
 [
-  ['degrees_28',['degrees',['../math_8hpp.html#a247d40d29653cfd26a2ca2c4bf97003d',1,'lucid']]],
-  ['dehomogenize_29',['dehomogenize',['../transforms_8hpp.html#a8d03f36d7ae83bc1f860ffd321dbd313',1,'lucid']]],
-  ['det_30',['det',['../matrix_8hpp.html#a749ee0150d54b0f964fa5a85ca4109f5',1,'lucid']]],
-  ['disk_5f_31',['Disk_',['../structlucid_1_1Disk__.html',1,'lucid']]],
-  ['dispatcher_32',['Dispatcher',['../classlucid_1_1Dispatcher.html',1,'lucid']]],
-  ['distance_33',['distance',['../vector_8hpp.html#ae64471772002652f075c8148ca4ff9b7',1,'lucid']]],
-  ['dot_34',['dot',['../matrix_8hpp.html#a564769727e2572c85fc91dbda03e7612',1,'lucid::dot(const Matrix&lt; T, M, N, MContainer &gt; &amp;lhs, const Vector&lt; T, N, VContainer &gt; &amp;rhs) noexcept'],['../matrix_8hpp.html#a61ea333f7d6cac95a74f0acb4a8a0823',1,'lucid::dot(const Matrix&lt; T, M1, N1, Container1 &gt; &amp;lhs, const Matrix&lt; T, M2, N2, Container2 &gt; &amp;rhs) noexcept'],['../vector_8hpp.html#a63877bb47573991a40b06c406f892d99',1,'lucid::dot(const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept']]],
-  ['dummyaction_35',['DummyAction',['../structDummyAction.html',1,'']]],
-  ['development_20documentation_36',['Development documentation',['../index.html',1,'']]]
+  ['fac_21',['fac',['../math_8hpp.html#a6aa42d17471ba5174fe2d9ee9c5c28de',1,'lucid']]],
+  ['fit_22',['fit',['../vector_8hpp.html#a369c6cdc225062bcbee280eb2bf38b55',1,'lucid::fit(const Vector&lt; T, N, Container &gt; &amp;v, const T minval, const T maxval) noexcept'],['../math_8hpp.html#a9d835ff4968e4fee75b5b1665e874920',1,'lucid::fit(const T val, const T minval, const T maxval)']]],
+  ['flat_5fref_23',['flat_ref',['../matrix_8hpp.html#ab90ad25462ef4f205690b54af1551abd',1,'lucid']]]
 ];

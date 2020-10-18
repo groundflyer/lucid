@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['elapsedtimer_37',['ElapsedTimer',['../classlucid_1_1ElapsedTimer.html',1,'lucid']]],
-  ['eval_38',['Eval',['../structlucid_1_1CornellBox_1_1MatGetter_1_1BSDF_1_1Eval.html',1,'lucid::CornellBox::MatGetter::BSDF']]]
+  ['has_5fequal_24',['has_equal',['../math_8hpp.html#aa6b532d1df69fa2662e5be1c6ef2e1b9',1,'lucid']]]
 ];

@@ -1,10 +1,12 @@
 var searchData=
 [
-  ['identity_60',['identity',['../structlucid_1_1identity.html',1,'lucid']]],
-  ['intersection_5f_61',['Intersection_',['../structlucid_1_1Intersection__.html',1,'lucid']]],
-  ['inverse_62',['inverse',['../matrix_8hpp.html#a9d56816e3484f59ce324448a832a7ea0',1,'lucid']]],
-  ['inversion_5fnumber_63',['inversion_number',['../math_8hpp.html#a3352a58127d45c4962e47ef0db505218',1,'lucid']]],
-  ['invoker_64',['Invoker',['../structlucid_1_1detail_1_1ComposeOp_1_1Invoker.html',1,'lucid::detail::ComposeOp']]],
-  ['is_5feven_65',['is_even',['../math_8hpp.html#a37f3876543b2089193526c0b527fce5a',1,'lucid']]],
-  ['isfinite_66',['isfinite',['../vector_8hpp.html#a97981791933d1697728b8bf976f74943',1,'lucid']]]
+  ['make_5fnormal_33',['make_normal',['../transforms_8hpp.html#adee39b5ad2dc515d58cf1ccdbb359dad',1,'lucid']]],
+  ['math_2ehpp_34',['math.hpp',['../math_8hpp.html',1,'']]],
+  ['matrix_35',['Matrix',['../classlucid_1_1Matrix.html',1,'lucid']]],
+  ['matrix_2ehpp_36',['matrix.hpp',['../matrix_8hpp.html',1,'']]],
+  ['matrix_3c_20std_3a_3aarray_20_3e_37',['Matrix&lt; std::array &gt;',['../classlucid_1_1Matrix.html',1,'lucid']]],
+  ['max_38',['max',['../vector_8hpp.html#a99450ca08fcda2b52f9fca41eb211d11',1,'lucid::max(const Vector&lt; T, N, Container &gt; &amp;a) noexcept'],['../vector_8hpp.html#af168787677e9892f1a043686ea4c8a62',1,'lucid::max(const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept']]],
+  ['min_39',['min',['../vector_8hpp.html#a1c70cc260579e62e983eaf8c0847c811',1,'lucid::min(const Vector&lt; T, N, Container &gt; &amp;a) noexcept'],['../vector_8hpp.html#a96c3b5997b8efa2ef09bfdcd2d535a15',1,'lucid::min(const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept']]],
+  ['minor_5fmatrix_40',['minor_matrix',['../matrix_8hpp.html#abe0cee4a66f03fcedfef9d590482b582',1,'lucid']]],
+  ['minus_5fone_5fpow_41',['minus_one_pow',['../math_8hpp.html#ad057f2dde7a43c7dddb5e154fedf1639',1,'lucid']]]
 ];

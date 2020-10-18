@@ -1,13 +1,9 @@
 var searchData=
 [
-  ['make_5fnormal_85',['make_normal',['../transforms_8hpp.html#adee39b5ad2dc515d58cf1ccdbb359dad',1,'lucid']]],
-  ['matgetter_86',['MatGetter',['../classlucid_1_1CornellBox_1_1MatGetter.html',1,'lucid::CornellBox']]],
-  ['math_2ehpp_87',['math.hpp',['../math_8hpp.html',1,'']]],
-  ['matrix_88',['Matrix',['../classlucid_1_1Matrix.html',1,'lucid']]],
-  ['matrix_2ehpp_89',['matrix.hpp',['../matrix_8hpp.html',1,'']]],
-  ['matrix_3c_20std_3a_3aarray_20_3e_90',['Matrix&lt; std::array &gt;',['../classlucid_1_1Matrix.html',1,'lucid']]],
-  ['max_91',['max',['../vector_8hpp.html#a99450ca08fcda2b52f9fca41eb211d11',1,'lucid::max(const Vector&lt; T, N, Container &gt; &amp;a) noexcept'],['../vector_8hpp.html#af168787677e9892f1a043686ea4c8a62',1,'lucid::max(const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept']]],
-  ['min_92',['min',['../vector_8hpp.html#a1c70cc260579e62e983eaf8c0847c811',1,'lucid::min(const Vector&lt; T, N, Container &gt; &amp;a) noexcept'],['../vector_8hpp.html#a96c3b5997b8efa2ef09bfdcd2d535a15',1,'lucid::min(const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept']]],
-  ['minor_5fmatrix_93',['minor_matrix',['../matrix_8hpp.html#abe0cee4a66f03fcedfef9d590482b582',1,'lucid']]],
-  ['minus_5fone_5fpow_94',['minus_one_pow',['../math_8hpp.html#ad057f2dde7a43c7dddb5e154fedf1639',1,'lucid']]]
+  ['radians_46',['radians',['../math_8hpp.html#a421f21a1ea5335fda34d5c9f823e0229',1,'lucid']]],
+  ['reduce_47',['reduce',['../vector_8hpp.html#a5030df94ec53c81081b818256eef356f',1,'lucid']]],
+  ['ref_48',['ref',['../matrix_8hpp.html#a7b861882b3e5b75ee50e11a846231bc9',1,'lucid::ref(const Matrix&lt; T, M, N, Container &gt; &amp;m) noexcept'],['../vector_8hpp.html#ab922bb281177049859d5c7397420e166',1,'lucid::ref(const Vector&lt; T, N, Container &gt; &amp;v)']]],
+  ['resample_49',['resample',['../math_8hpp.html#a7ed2564cdc28fe9131257b5d5e4ac587',1,'lucid']]],
+  ['roll_50',['roll',['../vector_8hpp.html#ad6876105f459060996bb5d571e5f613b',1,'lucid']]],
+  ['rotate_51',['rotate',['../transforms_8hpp.html#a0c816ada31a4b5d75d50d3275afb1395',1,'lucid']]]
 ];

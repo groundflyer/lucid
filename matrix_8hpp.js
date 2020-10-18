@@ -1,8 +1,6 @@
 var matrix_8hpp =
 [
     [ "Matrix", "classlucid_1_1Matrix.html", "classlucid_1_1Matrix" ],
-    [ "tuple_size< lucid::Matrix< T, M, N, Container > >", "classstd_1_1tuple__size_3_01lucid_1_1Matrix_3_01T_00_01M_00_01N_00_01Container_01_4_01_4.html", null ],
-    [ "tuple_element< I, lucid::Matrix< T, M, N, Container > >", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1Matrix_3_01T_00_01M_00_01N_00_01Container_01_4_01_4.html", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1Matrix_3_01T_00_01M_00_01N_00_01Container_01_4_01_4" ],
     [ "cofactor", "matrix_8hpp.html#a0a9cc497957d8f8dfa72690b74bf7b60", null ],
     [ "det", "matrix_8hpp.html#a749ee0150d54b0f964fa5a85ca4109f5", null ],
     [ "dot", "matrix_8hpp.html#a564769727e2572c85fc91dbda03e7612", null ],

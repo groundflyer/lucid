@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['a_175',['A',['../structA.html',1,'']]],
-  ['aabb_5f_176',['AABB_',['../structlucid_1_1AABB__.html',1,'lucid']]],
-  ['argsrange_177',['ArgsRange',['../classlucid_1_1argparse_1_1ArgsRange.html',1,'lucid::argparse']]],
-  ['argvmock_178',['ArgvMock',['../structArgvMock.html',1,'']]]
+  ['matrix_68',['Matrix',['../classlucid_1_1Matrix.html',1,'lucid']]],
+  ['matrix_3c_20std_3a_3aarray_20_3e_69',['Matrix&lt; std::array &gt;',['../classlucid_1_1Matrix.html',1,'lucid']]]
 ];

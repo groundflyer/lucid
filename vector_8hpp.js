@@ -1,8 +1,6 @@
 var vector_8hpp =
 [
     [ "Vector", "classlucid_1_1Vector.html", "classlucid_1_1Vector" ],
-    [ "tuple_size< lucid::Vector< T, N, Container > >", "classstd_1_1tuple__size_3_01lucid_1_1Vector_3_01T_00_01N_00_01Container_01_4_01_4.html", null ],
-    [ "tuple_element< I, lucid::Vector< T, N, Container > >", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1Vector_3_01T_00_01N_00_01Container_01_4_01_4.html", "classstd_1_1tuple__element_3_01I_00_01lucid_1_1Vector_3_01T_00_01N_00_01Container_01_4_01_4" ],
     [ "abs", "vector_8hpp.html#afafc24fc22bc451c26747dd13e610ecc", null ],
     [ "all", "vector_8hpp.html#ad467f9d466c619e83211a65b9f2796ab", null ],
     [ "almost_equal", "vector_8hpp.html#af935cd8ae394ac4feecd682c3999e1e7", null ],
