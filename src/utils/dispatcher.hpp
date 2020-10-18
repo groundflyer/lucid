@@ -14,6 +14,10 @@ namespace lucid
 template <typename T>
 using cqueue = moodycamel::ConcurrentQueue<T>;
 
+/// @brief Lock-free typefull multi-threaded task dispatcher.
+/// @tparam Tasks Default-constructible, copy-assignable callables
+/// that don't take arguments and return non-void default-constructible
+/// copy-assignable values.
 template <typename... Tasks>
 class Dispatcher
 {

@@ -12,5 +12,7 @@ allowing compilers to apply more aggressive optimizations and to group tasks int
 
 # Building
 
+## Prerequisites
+
 * CMake 3.16 or newer
-* LLVM Clang and libc++ version 10 or newer
+* C++20 compatible compiler
