@@ -77,8 +77,6 @@ var annotated_dup =
       ] ],
       [ "PixelReset", "structlucid_1_1PixelReset.html", "structlucid_1_1PixelReset" ],
       [ "PixelUpdate", "structlucid_1_1PixelUpdate.html", "structlucid_1_1PixelUpdate" ],
-      [ "RandomDistribution", "classlucid_1_1RandomDistribution.html", "classlucid_1_1RandomDistribution" ],
-      [ "RandomDistribution< bool >", "classlucid_1_1RandomDistribution_3_01bool_01_4.html", "classlucid_1_1RandomDistribution_3_01bool_01_4" ],
       [ "Ray_", "structlucid_1_1Ray__.html", "structlucid_1_1Ray__" ],
       [ "repeat_integer", "structlucid_1_1repeat__integer.html", "structlucid_1_1repeat__integer" ],
       [ "repeat_integer< 1, Int, Vals... >", "structlucid_1_1repeat__integer_3_011_00_01Int_00_01Vals_8_8_8_01_4.html", "structlucid_1_1repeat__integer_3_011_00_01Int_00_01Vals_8_8_8_01_4" ],

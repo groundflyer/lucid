@@ -12,6 +12,7 @@ var math_8hpp =
     [ "pow", "math_8hpp.html#a45c04cf8fb86621c17e6c5786a312542", null ],
     [ "quadratic", "math_8hpp.html#a8ca423575333e702ac2ee1889e8476bb", null ],
     [ "radians", "math_8hpp.html#a421f21a1ea5335fda34d5c9f823e0229", null ],
+    [ "resample", "math_8hpp.html#a7ed2564cdc28fe9131257b5d5e4ac587", null ],
     [ "sgn", "math_8hpp.html#a2f39cbeb372685f38885191f09231d63", null ],
     [ "Pi_", "math_8hpp.html#a5884f134c495db962a683bd4acd372f7", null ]
 ];

@@ -69,8 +69,6 @@ var hierarchy =
     [ "lucid::argparse::Positional< Converter, nvals >", "structlucid_1_1argparse_1_1Positional.html", null ],
     [ "lucid::argparse::PositionalBinding< Converter, nvals >", "classlucid_1_1argparse_1_1PositionalBinding.html", null ],
     [ "lucid::argparse::PositionalBinding< Converter, 1 >", "classlucid_1_1argparse_1_1PositionalBinding_3_01Converter_00_011_01_4.html", null ],
-    [ "lucid::RandomDistribution< T, Distribution >", "classlucid_1_1RandomDistribution.html", null ],
-    [ "lucid::RandomDistribution< bool >", "classlucid_1_1RandomDistribution_3_01bool_01_4.html", null ],
     [ "lucid::Ray_< Container >", "structlucid_1_1Ray__.html", null ],
     [ "lucid::Ray_< std::array >", "structlucid_1_1Ray__.html", null ],
     [ "lucid::repeat_integer< N, Int, Vals >", "structlucid_1_1repeat__integer.html", null ],
