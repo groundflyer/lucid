@@ -12,15 +12,15 @@
 using namespace std;
 using namespace lucid;
 
-template <typename T, std::size_t N, typename L, typename G>
+template <typename T, std::size_t N, typename G>
 static void
-run_test(L& log, G& g, const std::size_t n) noexcept
+bench(LogFile& log, G& g, const size_t n) noexcept
 {
     using Vec = Vector<T, N, array>;
 
     const auto typestring = get_typeinfo_string(Vec{});
 
-    uniform_real_distribution<T> dist(-100000.f, 100000.f);
+    uniform_real_distribution<T> dist(T{-100000}, T{100000});
     auto                         vv   = [&]() noexcept { return Vec(generate<3>(dist, g)); };
     auto                         vgen = [&]() noexcept { return pair{vv(), vv()}; };
 
@@ -41,10 +41,10 @@ main(int argc, char* argv[])
     random_device         rd;
     default_random_engine g(rd());
 
-    run_test<float, 3>(log, g, n);
-    run_test<float, 4>(log, g, n);
-    run_test<double, 3>(log, g, n);
-    run_test<double, 4>(log, g, n);
+    bench<float, 3>(log, g, n);
+    bench<float, 4>(log, g, n);
+    bench<double, 3>(log, g, n);
+    bench<double, 4>(log, g, n);
 
     return 0;
 }
