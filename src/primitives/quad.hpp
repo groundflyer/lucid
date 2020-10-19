@@ -120,13 +120,9 @@ intersect(const Ray_<RayContainer>& ray, const Quad_<QuadContainer>& prim) noexc
 
 template <template <typename, size_t> typename QuadContainer,
           template <typename, size_t>
-          typename RayContainer,
-          template <typename, size_t>
-          typename IsectContainer>
+          typename PosContainer>
 constexpr Vec3
-normal(const Ray_<RayContainer>&,
-       const Intersection_<IsectContainer>&,
-       const Quad_<QuadContainer>& prim) noexcept
+normal(const Vec3_<PosContainer>&, const Quad_<QuadContainer>& prim) noexcept
 {
     const auto e01 = std::get<3>(prim) - std::get<0>(prim);
     const auto e03 = std::get<1>(prim) - std::get<0>(prim);

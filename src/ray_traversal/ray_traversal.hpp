@@ -102,4 +102,14 @@ hider(const Ray_<Container>& ray, const PrimsTuple& prims) noexcept
     return detail::hider_impl(
         ray, prims, std::make_index_sequence<std::tuple_size_v<PrimsTuple>>{});
 }
+
+template <template <typename, std::size_t> typename RayContainer,
+          template <typename, std::size_t>
+          typename IsectContainer>
+constexpr Vec3
+hit_pos(const Ray_<RayContainer>& ray, const Intersection_<IsectContainer>& isect) noexcept
+{
+    const auto& [o, d] = ray;
+    return o + d * isect.t;
+}
 } // namespace lucid

@@ -76,16 +76,10 @@ intersect(const Ray_<RayContainer>& ray, const AABB_<AABBContainer>& prim) noexc
 
 template <template <typename, size_t> typename AABBContainer,
           template <typename, size_t>
-          typename RayContainer,
-          template <typename, size_t>
-          typename IsectContainer>
+          typename PosContainer>
 constexpr Vec3
-normal(const Ray_<RayContainer>&            ray,
-       const Intersection_<IsectContainer>& isect,
-       const AABB_<AABBContainer>&          prim) noexcept
+normal(const Vec3_<PosContainer>& pos, const AABB_<AABBContainer>& prim) noexcept
 {
-    const auto& [o, d] = ray;
-    const Vec3 pos     = o + d * isect.t;
     const real nsign[2]{-1_r, 1_r};
     Vec3       vd[2]{};
     real       md[2]{};

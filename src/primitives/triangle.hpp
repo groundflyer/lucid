@@ -45,13 +45,9 @@ intersect(const Ray_<RayContainer>& ray, const Triangle_<TriangleContainer>& pri
 
 template <template <typename, size_t> typename TriangleContainer,
           template <typename, size_t>
-          typename RayContainer,
-          template <typename, size_t>
-          typename IsectContainer>
+          typename PosContainer>
 constexpr Vec3
-normal(const Ray_<RayContainer>&,
-       const Intersection_<IsectContainer>&,
-       const Triangle_<TriangleContainer>& prim) noexcept
+normal(const Vec3_<PosContainer>&, const Triangle_<TriangleContainer>& prim) noexcept
 {
     const auto& [v0, v1, v2] = prim;
     const Vec3 edge1         = v1 - v0;

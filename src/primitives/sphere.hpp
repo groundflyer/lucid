@@ -47,16 +47,10 @@ intersect(const Ray_<RayContainer>& ray, const Sphere_<SphereContainer>& prim) n
 
 template <template <typename, size_t> typename SphereContainer,
           template <typename, size_t>
-          typename RayContainer,
-          template <typename, size_t>
-          typename IsectContainer>
+          typename PosContainer>
 constexpr Vec3
-normal(const Ray_<RayContainer>&            ray,
-       const Intersection_<IsectContainer>& isect,
-       const Sphere_<SphereContainer>&      prim) noexcept
+normal(const Vec3_<PosContainer>& pos, const Sphere_<SphereContainer>& prim) noexcept
 {
-    const auto& [o, d] = ray;
-    const Vec3 pos     = o + d * isect.t;
     return normalize(pos - prim.center);
 }
 

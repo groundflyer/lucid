@@ -34,17 +34,11 @@ intersect(const Ray_<RayContainer>& ray, const std::variant<Prims...>& prim) noe
                       prim);
 }
 
-template <template <typename, size_t> typename RayContainer,
-          template <typename, size_t>
-          typename IsectContainer,
-          typename... Prims>
+template <template <typename, size_t> typename PosContainer, typename... Prims>
 constexpr Vec3
-normal(const Ray_<RayContainer>&            ray,
-       const Intersection_<IsectContainer>& isect,
-       const std::variant<Prims...>&        prim) noexcept
+normal(const Vec3_<PosContainer>& pos, const std::variant<Prims...>& prim) noexcept
 {
-    return std::visit([&](const auto& held_prim) noexcept { return normal(ray, isect, held_prim); },
-                      prim);
+    return std::visit([&](const auto& held_prim) noexcept { return normal(pos, held_prim); }, prim);
 }
 
 template <template <typename, size_t> typename SContainer, typename... Prims>

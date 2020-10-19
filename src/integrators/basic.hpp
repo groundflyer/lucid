@@ -25,10 +25,9 @@ struct Constant
     {
         const auto [pid, isect]    = hider(ray, *scene);
         const auto& [bsdf, emit_f] = (*material_getter)(pid);
+        const Vec3 pos             = hit_pos(ray, isect);
         const Vec3 n               = lucid::visit(
-            pid,
-            [&, &iss = isect](const auto& prim) noexcept { return normal(ray, iss, prim); },
-            *scene);
+            pid, [&](const auto& prim) noexcept { return normal(pos, prim); }, *scene);
         const auto eval     = bsdf(n).first;
         const RGB  color    = eval(n, n);
         const RGB  emission = emit_f();
@@ -62,11 +61,10 @@ struct PathTracer_
             if(!isect) break;
 
             const auto& [bsdf, emit_f] = (*material_getter)(pid);
+            const Vec3 pos             = hit_pos(ray, isect);
 
             const Vec3 n = lucid::visit(
-                pid,
-                [&, &iss = isect](const auto& prim) noexcept { return normal(ray, iss, prim); },
-                *scene);
+                pid, [&](const auto& prim) noexcept { return normal(pos, prim); }, *scene);
 
             const auto [eval, sample] = bsdf(n);
 

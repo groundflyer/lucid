@@ -48,13 +48,9 @@ intersect(const Ray_<RayContainer>& ray, const Disk_<DiskContainer>& prim) noexc
 
 template <template <typename, size_t> typename DiskContainer,
           template <typename, size_t>
-          typename RayContainer,
-          template <typename, size_t>
-          typename IsectContainer>
+          typename PosContainer>
 constexpr Vec3
-normal(const Ray_<RayContainer>&,
-       const Intersection_<IsectContainer>&,
-       const Disk_<DiskContainer>& prim) noexcept
+normal(const Vec3_<PosContainer>&, const Disk_<DiskContainer>& prim) noexcept
 {
     return prim.normal;
 }
