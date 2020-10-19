@@ -37,7 +37,7 @@ template <template <typename, size_t> typename MatContainer,
 constexpr auto
 apply_transform(const Mat4_<MatContainer>& t, const Ray_<RayContainer>& ray) noexcept
 {
-    return Ray(apply_transform(t, ray.origin), apply_transform(t, ray.dir));
+    return Ray(apply_transform_p(t, ray.origin), apply_transform_n(t, ray.dir));
 }
 
 template <template <typename, size_t> typename Container>
