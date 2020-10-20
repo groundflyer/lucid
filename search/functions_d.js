@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['scale_123',['scale',['../transforms_8hpp.html#a1e34135d36e7f7b50adbf093579d4d0f',1,'lucid']]],
-  ['sgn_124',['sgn',['../math_8hpp.html#a2f39cbeb372685f38885191f09231d63',1,'lucid']]],
-  ['sqrt_125',['sqrt',['../vector_8hpp.html#a0bc21ad727e4fed41bfdbb4fe3f4690c',1,'lucid']]],
-  ['sum_126',['sum',['../vector_8hpp.html#a968dd1e2ed48c2eb811529add8570f1d',1,'lucid']]]
+  ['radians_132',['radians',['../math_8hpp.html#a421f21a1ea5335fda34d5c9f823e0229',1,'lucid']]],
+  ['reduce_133',['reduce',['../vector_8hpp.html#a5030df94ec53c81081b818256eef356f',1,'lucid']]],
+  ['ref_134',['ref',['../matrix_8hpp.html#a7b861882b3e5b75ee50e11a846231bc9',1,'lucid::ref(const Matrix&lt; T, M, N, Container &gt; &amp;m) noexcept'],['../vector_8hpp.html#ab922bb281177049859d5c7397420e166',1,'lucid::ref(const Vector&lt; T, N, Container &gt; &amp;v)']]],
+  ['resample_135',['resample',['../math_8hpp.html#a7ed2564cdc28fe9131257b5d5e4ac587',1,'lucid']]],
+  ['roll_136',['roll',['../vector_8hpp.html#ad6876105f459060996bb5d571e5f613b',1,'lucid']]],
+  ['rotate_137',['rotate',['../transforms_8hpp.html#a0c816ada31a4b5d75d50d3275afb1395',1,'lucid']]]
 ];
