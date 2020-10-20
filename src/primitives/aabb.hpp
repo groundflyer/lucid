@@ -2,6 +2,9 @@
 // bbox.hpp --
 //
 
+/// @file
+/// Defenition of Axis-aligned bounding box.
+
 #pragma once
 
 #include <ray_traversal/ray_traversal.hpp>
@@ -10,7 +13,7 @@
 
 namespace lucid
 {
-// axis-aligned bounding box
+/// @brief Axis-aligned bounding box.
 template <template <typename, size_t> typename Container>
 struct AABB_
 {
@@ -39,9 +42,16 @@ struct AABB_
         return i ? vmax : vmin;
     }
 
-    template <typename Idxs>
-    constexpr auto
-    operator[](const Idxs& idxs) const noexcept
+    /// @brief Select vertex components individually.
+    /// @param idxs Vector of indicies (0, 1) to select.
+    ///
+    /// Creates vector containing selected components
+    /// of @p vmin (0) and @p vmax (1).
+    ///
+    /// This used in intersect function.
+    template <template <typename, size_t> typename Container1>
+    constexpr Vec3
+    operator[](const Vector<bool, 3, Container1>& idxs) const noexcept
     {
         Vec3 ret{};
         for(size_t i = 0; i < 3; ++i) ret[i] = (*this)[bool{idxs[i]}][i];
@@ -54,6 +64,9 @@ AABB_(const Vec3_<Container>&, const Vec3_<Container>&) -> AABB_<Container>;
 
 using AABB = AABB_<std::array>;
 
+/// @brief Axis-aligned bounding box intersection function.
+///
+/// Implements @cite 10.1145/1198555.1198748
 template <template <typename, size_t> typename AABBContainer,
           template <typename, size_t>
           typename RayContainer>
@@ -74,6 +87,7 @@ intersect(const Ray_<RayContainer>& ray, const AABB_<AABBContainer>& prim) noexc
     return Intersection{intersected && !std::signbit(tmin2), tmin2, Vec2{}};
 }
 
+/// @brief Compute normal of AABB at @pos.
 template <template <typename, size_t> typename AABBContainer,
           template <typename, size_t>
           typename PosContainer>
@@ -106,6 +120,7 @@ diag(const AABB_<Container>& prim, const unsigned shift, const bool side) noexce
 }
 } // namespace detail
 
+/// @brief Uniformly sample position on AABB surface.
 template <template <typename, size_t> typename SContainer,
           template <typename, size_t>
           typename PContainer>
@@ -119,6 +134,7 @@ sample(const Vec2_<SContainer>& s, const AABB_<PContainer>& prim) noexcept
     return lerp(a, b, roll(Vec3(resample(s1), resample(s2), 0_r), shift));
 }
 
+/// @brief Compute AABB centroid.
 template <template <typename, size_t> typename Container>
 constexpr Vec3
 centroid(const AABB_<Container>& prim) noexcept
@@ -127,6 +143,7 @@ centroid(const AABB_<Container>& prim) noexcept
     return (vmin + vmax) * 0.5_r;
 }
 
+/// @brief Returns copy of itself.
 template <template <typename, size_t> typename Container>
 constexpr AABB
 bound(const AABB_<Container>& prim) noexcept
@@ -134,6 +151,7 @@ bound(const AABB_<Container>& prim) noexcept
     return prim;
 }
 
+/// @brief Apply transformation matrix to AABB.
 template <template <typename, size_t> typename MatContainer,
           template <typename, size_t>
           typename PrimContainer>
