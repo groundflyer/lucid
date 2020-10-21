@@ -2,12 +2,16 @@
 // disk.hpp --
 //
 
+/// @file
+/// Definition of disk primitive.
+
 #pragma once
 
 #include "aabb.hpp"
 
 namespace lucid
 {
+/// @brief Disk.
 template <template <typename, size_t> typename Container>
 struct Disk_
 {
@@ -34,6 +38,7 @@ Disk_(const Vec3_<Container>&, const Vec3_<Container>&, const real) -> Disk_<Con
 
 using Disk = Disk_<std::array>;
 
+/// @brief Compute ray-disk intersection.
 template <template <typename, size_t> typename DiskContainer,
           template <typename, size_t>
           typename RayContainer>
@@ -46,6 +51,7 @@ intersect(const Ray_<RayContainer>& ray, const Disk_<DiskContainer>& prim) noexc
     return Intersection(!std::signbit(t) && distance(o + d * t, p) < r, t, Vec2{});
 }
 
+/// @brief Return disk normal.
 template <template <typename, size_t> typename DiskContainer,
           template <typename, size_t>
           typename PosContainer>
@@ -55,6 +61,7 @@ normal(const Vec3_<PosContainer>&, const Disk_<DiskContainer>& prim) noexcept
     return prim.normal;
 }
 
+/// @brief Sample a point on disk surface.
 template <template <typename, size_t> typename SContainer,
           template <typename, size_t>
           typename PContainer>
@@ -69,6 +76,7 @@ sample(const Vec2_<SContainer>& s, const Disk_<PContainer>& prim) noexcept
     return dot(basis_matrix(zaxis), point) + p;
 }
 
+/// @brief Return disk position.
 template <template <typename, size_t> typename Container>
 constexpr Vec3
 centroid(const Disk_<Container>& prim) noexcept
@@ -76,6 +84,7 @@ centroid(const Disk_<Container>& prim) noexcept
     return prim.position;
 }
 
+/// @brief Compute axis-aligned box bounding a disk.
 template <template <typename, size_t> typename Container>
 constexpr AABB
 bound(const Disk_<Container>& prim) noexcept
@@ -86,6 +95,7 @@ bound(const Disk_<Container>& prim) noexcept
     return AABB{p - offset, p + offset};
 }
 
+/// @brief Transform disk with a transformation matrix.
 template <template <typename, size_t> typename MatContainer,
           template <typename, size_t>
           typename PrimContainer>
@@ -93,6 +103,6 @@ constexpr Disk
 apply_transform(const Mat4_<MatContainer>& t, const Disk_<PrimContainer>& prim) noexcept
 {
     const auto& [p, n, r] = prim;
-    return Disk(apply_transform_p(t, p), apply_transform_p(t, n), r);
+    return Disk(apply_transform_p(t, p), apply_transform_n(t, n), r);
 }
 } // namespace lucid

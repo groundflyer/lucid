@@ -2,6 +2,9 @@
 // quad.hpp
 //
 
+/// @file
+/// Difinition of quadrilateral primitive.
+
 #pragma once
 
 #include "triangle.hpp"
@@ -9,12 +12,18 @@
 
 namespace lucid
 {
-// v00, v01, v11, v10
+/// @brief We define quadrilateral as an array of vertices.
+///
+/// Vertices set in this order:
+/// v00, v01, v11, v10.
 template <template <typename, size_t> typename Container>
 using Quad_ = std::array<Vec3_<Container>, 4>;
 
 using Quad = Quad_<std::array>;
 
+/// @brief Compute ray-quadrilateral intersection.
+///
+/// Implements @cite LD2004AERIT
 template <template <typename, size_t> typename QuadContainer,
           template <typename, size_t>
           typename RayContainer>
@@ -118,6 +127,7 @@ intersect(const Ray_<RayContainer>& ray, const Quad_<QuadContainer>& prim) noexc
     return Intersection{true, t, Vec2(u, v)};
 }
 
+/// @brief Compute normal of a quadrilateral.
 template <template <typename, size_t> typename QuadContainer,
           template <typename, size_t>
           typename PosContainer>
@@ -129,6 +139,7 @@ normal(const Vec3_<PosContainer>&, const Quad_<QuadContainer>& prim) noexcept
     return normalize(cross(e03, e01));
 }
 
+/// @brief Sample a point on a quadrilateral surface.
 template <template <typename, size_t> typename SContainer,
           template <typename, size_t>
           typename PContainer>
@@ -141,6 +152,7 @@ sample(const Vec2_<SContainer>& s, const Quad_<PContainer>& prim) noexcept
     return Vec3(detail::triangle_sample(Vec2(resample(t1), t2), a, b, c));
 }
 
+/// @brief Compute centroid of a quadrilateral.
 template <template <typename, size_t> typename Container>
 constexpr Vec3
 centroid(const Quad_<Container>& prim) noexcept
@@ -148,6 +160,7 @@ centroid(const Quad_<Container>& prim) noexcept
     return centroid(detail::bound(prim));
 }
 
+/// @brief Compute bounding box of quadrilateral.
 template <template <typename, size_t> typename Container>
 constexpr AABB
 bound(const Quad_<Container>& prim) noexcept
@@ -155,6 +168,7 @@ bound(const Quad_<Container>& prim) noexcept
     return detail::bound(prim);
 }
 
+/// @brief Transform a quadrilateral using a transformation matrix.
 template <template <typename, size_t> typename MatContainer,
           template <typename, size_t>
           typename QuadContainer>

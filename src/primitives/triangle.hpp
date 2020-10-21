@@ -12,11 +12,16 @@
 
 namespace lucid
 {
+/// @brief Defining triangle as array of vertices.
 template <template <typename, size_t> typename Container>
 using Triangle_ = std::array<Vec3_<Container>, 3>;
 
 using Triangle = Triangle_<std::array>;
 
+/// @brief Compute ray-triangle intersection.
+///
+/// Implements classic algorithm described in
+/// @cite 10.1080/10867651.1997.10487468
 template <template <typename, size_t> typename TriangleContainer,
           template <typename, size_t>
           typename RayContainer>
@@ -43,6 +48,7 @@ intersect(const Ray_<RayContainer>& ray, const Triangle_<TriangleContainer>& pri
     return Intersection{intersected, t, Vec2{u, v}};
 }
 
+/// @brief Compute triangle normal.
 template <template <typename, size_t> typename TriangleContainer,
           template <typename, size_t>
           typename PosContainer>
@@ -77,10 +83,8 @@ s2t(Vec2& s) noexcept
     return s;
 }
 
-/// @brief Sample triangle.
-/// @cite heitz:hal-02073696
 template <template <typename, size_t> typename Container2>
-constexpr auto
+constexpr Vec3
 triangle_sample(Vec2                     s,
                 const Vec3_<Container2>& v1,
                 const Vec3_<Container2>& v2,
@@ -90,8 +94,9 @@ triangle_sample(Vec2                     s,
     return v1 * t1 + v2 * t2 + v3 * (1_r - t1 - t2);
 }
 
+/// @brief Compute bounding box of primitive defined as array.
 template <typename Prim>
-constexpr auto
+constexpr AABB
 bound(const Prim& prim) noexcept
 {
     const Vec3 vmin(std::apply(
@@ -111,6 +116,9 @@ bound(const Prim& prim) noexcept
 }
 } // namespace detail
 
+/// @brief Sample a point on triangle surface.
+///
+/// Optimized implementation from @cite heitz:hal-02073696
 template <template <typename, size_t> typename SContainer,
           template <typename, size_t>
           typename PContainer>
@@ -121,6 +129,7 @@ sample(const Vec2_<SContainer>& s, const Triangle_<PContainer>& prim) noexcept
         [&](const auto&... verts) { return detail::triangle_sample(s, verts...); }, prim));
 }
 
+/// @brief Compute triangle centroid.
 template <template <typename, size_t> typename Container>
 constexpr Vec3
 centroid(const Triangle_<Container>& prim) noexcept
@@ -128,6 +137,7 @@ centroid(const Triangle_<Container>& prim) noexcept
     return centroid(detail::bound(prim));
 }
 
+/// @brief Compute triangle bounding box.
 template <template <typename, size_t> typename Container>
 constexpr AABB
 bound(const Triangle_<Container>& prim) noexcept
@@ -135,6 +145,7 @@ bound(const Triangle_<Container>& prim) noexcept
     return detail::bound(prim);
 }
 
+/// @brief Transform triangle with a transformation matrix.
 template <template <typename, size_t> typename MatContainer,
           template <typename, size_t>
           typename TriangleContainer>

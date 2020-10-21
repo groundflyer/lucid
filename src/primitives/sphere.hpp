@@ -2,6 +2,9 @@
 // sphere.hpp --
 //
 
+/// @file
+/// Definition of sphere primitive.
+
 #pragma once
 
 #include "aabb.hpp"
@@ -10,6 +13,7 @@
 
 namespace lucid
 {
+/// @brief Defines simple sphere.
 template <template <typename, size_t> typename Container>
 struct Sphere_
 {
@@ -30,6 +34,7 @@ Sphere_(const Vec3_<Container>&, const real&) -> Sphere_<Container>;
 
 using Sphere = Sphere_<std::array>;
 
+/// @brief Compute ray-sphere intersection.
 template <template <typename, size_t> typename SphereContainer,
           template <typename, size_t>
           typename RayContainer>
@@ -45,6 +50,7 @@ intersect(const Ray_<RayContainer>& ray, const Sphere_<SphereContainer>& prim) n
     return Intersection{hit, t, Vec2{}};
 }
 
+/// @brief Compute surface normal at @p pos.
 template <template <typename, size_t> typename SphereContainer,
           template <typename, size_t>
           typename PosContainer>
@@ -54,6 +60,7 @@ normal(const Vec3_<PosContainer>& pos, const Sphere_<SphereContainer>& prim) noe
     return normalize(pos - prim.center);
 }
 
+/// @brief Sample a point on sphere surface.
 template <template <typename, size_t> typename SContainer,
           template <typename, size_t>
           typename PContainer>
@@ -68,6 +75,7 @@ sample(const Vec2_<SContainer>& s, const Sphere_<PContainer>& prim) noexcept
     return Vec3(_u * math::cos(theta), _u * math::sin(theta), u) * r + c;
 }
 
+/// @brief Return sphere position.
 template <template <typename, size_t> typename Container>
 constexpr Vec3
 centroid(const Sphere_<Container>& prim) noexcept
@@ -75,6 +83,7 @@ centroid(const Sphere_<Container>& prim) noexcept
     return prim.center;
 }
 
+/// @brief Compute bounding box of a sphere.
 template <template <typename, size_t> typename Container>
 constexpr AABB
 bound(const Sphere_<Container>& prim) noexcept
@@ -83,6 +92,7 @@ bound(const Sphere_<Container>& prim) noexcept
     return AABB{c - r, c + r};
 }
 
+/// @brief Change sphere position using a transformation matrix.
 template <template <typename, size_t> typename MatContainer,
           template <typename, size_t>
           typename PrimContainer>
