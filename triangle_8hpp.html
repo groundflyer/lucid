@@ -103,7 +103,8 @@ $(document).ready(function(){initNavTree('triangle_8hpp.html',''); initResizable
 Typedefs</h2></td></tr>
 <tr class="memitem:af03f9a55d1801996e6b318d11fcaa30c"><td class="memTemplParams" colspan="2"><a id="af03f9a55d1801996e6b318d11fcaa30c"></a>
 template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:af03f9a55d1801996e6b318d11fcaa30c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::Triangle_</b> = std::array&lt; Vec3_&lt; Container &gt;, 3 &gt;</td></tr>
+<tr class="memitem:af03f9a55d1801996e6b318d11fcaa30c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="triangle_8hpp.html#af03f9a55d1801996e6b318d11fcaa30c">lucid::Triangle_</a> = std::array&lt; Vec3_&lt; Container &gt;, 3 &gt;</td></tr>
+<tr class="memdesc:af03f9a55d1801996e6b318d11fcaa30c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defining triangle as array of vertices. <br /></td></tr>
 <tr class="separator:af03f9a55d1801996e6b318d11fcaa30c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a181764674e0f849b40789b06d7209985"><td class="memItemLeft" align="right" valign="top"><a id="a181764674e0f849b40789b06d7209985"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>lucid::Triangle</b> = Triangle_&lt; std::array &gt;</td></tr>
@@ -111,13 +112,14 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>lucid::Triangle</b> 
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad3f0777b5fe7ff5de4befba02cd8bc6e"><td class="memTemplParams" colspan="2"><a id="ad3f0777b5fe7ff5de4befba02cd8bc6e"></a>
-template&lt;template&lt; typename, size_t &gt; typename TriangleContainer, template&lt; typename, size_t &gt; typename RayContainer&gt; </td></tr>
-<tr class="memitem:ad3f0777b5fe7ff5de4befba02cd8bc6e"><td class="memTemplItemLeft" align="right" valign="top">constexpr Intersection&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::intersect</b> (const Ray_&lt; RayContainer &gt; &amp;ray, const Triangle_&lt; TriangleContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memitem:ad3f0777b5fe7ff5de4befba02cd8bc6e"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename TriangleContainer, template&lt; typename, size_t &gt; typename RayContainer&gt; </td></tr>
+<tr class="memitem:ad3f0777b5fe7ff5de4befba02cd8bc6e"><td class="memTemplItemLeft" align="right" valign="top">constexpr Intersection&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="triangle_8hpp.html#ad3f0777b5fe7ff5de4befba02cd8bc6e">lucid::intersect</a> (const Ray_&lt; RayContainer &gt; &amp;ray, const Triangle_&lt; TriangleContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:ad3f0777b5fe7ff5de4befba02cd8bc6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute ray-triangle intersection.  <a href="triangle_8hpp.html#ad3f0777b5fe7ff5de4befba02cd8bc6e">More...</a><br /></td></tr>
 <tr class="separator:ad3f0777b5fe7ff5de4befba02cd8bc6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ee788b828d7c91079fab3bb6ba0ab7a"><td class="memTemplParams" colspan="2"><a id="a8ee788b828d7c91079fab3bb6ba0ab7a"></a>
 template&lt;template&lt; typename, size_t &gt; typename TriangleContainer, template&lt; typename, size_t &gt; typename PosContainer&gt; </td></tr>
-<tr class="memitem:a8ee788b828d7c91079fab3bb6ba0ab7a"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::normal</b> (const Vec3_&lt; PosContainer &gt; &amp;, const Triangle_&lt; TriangleContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memitem:a8ee788b828d7c91079fab3bb6ba0ab7a"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="triangle_8hpp.html#a8ee788b828d7c91079fab3bb6ba0ab7a">lucid::normal</a> (const Vec3_&lt; PosContainer &gt; &amp;, const Triangle_&lt; TriangleContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:a8ee788b828d7c91079fab3bb6ba0ab7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute triangle normal. <br /></td></tr>
 <tr class="separator:a8ee788b828d7c91079fab3bb6ba0ab7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6d27f7362d6add56747a31e1fe7d0a1"><td class="memItemLeft" align="right" valign="top"><a id="ac6d27f7362d6add56747a31e1fe7d0a1"></a>
 constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>lucid::detail::shift</b> (real &amp;x, real &amp;y) noexcept</td></tr>
@@ -125,35 +127,121 @@ constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>lucid::deta
 <tr class="memitem:a526170aa93e890657d705972b165f657"><td class="memItemLeft" align="right" valign="top"><a id="a526170aa93e890657d705972b165f657"></a>
 constexpr Vec2 &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>lucid::detail::s2t</b> (Vec2 &amp;s) noexcept</td></tr>
 <tr class="separator:a526170aa93e890657d705972b165f657"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88ab6a3068fa00dfb6763357ed7c34e4"><td class="memTemplParams" colspan="2"><a id="a88ab6a3068fa00dfb6763357ed7c34e4"></a>
+<tr class="memitem:a11adfa61809346b1f624068b43b59b8e"><td class="memTemplParams" colspan="2"><a id="a11adfa61809346b1f624068b43b59b8e"></a>
 template&lt;template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
-<tr class="memitem:a88ab6a3068fa00dfb6763357ed7c34e4"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="triangle_8hpp.html#a88ab6a3068fa00dfb6763357ed7c34e4">lucid::detail::triangle_sample</a> (Vec2 s, const Vec3_&lt; Container2 &gt; &amp;v1, const Vec3_&lt; Container2 &gt; &amp;v2, const Vec3_&lt; Container2 &gt; &amp;v3) noexcept</td></tr>
-<tr class="memdesc:a88ab6a3068fa00dfb6763357ed7c34e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sample triangle. <a class="el" href="citelist.html#CITEREF_heitz:hal-02073696">[2]</a>. <br /></td></tr>
-<tr class="separator:a88ab6a3068fa00dfb6763357ed7c34e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17f280e5d84f7316799204999f0c8ba0"><td class="memTemplParams" colspan="2"><a id="a17f280e5d84f7316799204999f0c8ba0"></a>
+<tr class="memitem:a11adfa61809346b1f624068b43b59b8e"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::triangle_sample</b> (Vec2 s, const Vec3_&lt; Container2 &gt; &amp;v1, const Vec3_&lt; Container2 &gt; &amp;v2, const Vec3_&lt; Container2 &gt; &amp;v3) noexcept</td></tr>
+<tr class="separator:a11adfa61809346b1f624068b43b59b8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb253d7143d45733592e0cdd5a8d7afa"><td class="memTemplParams" colspan="2"><a id="aeb253d7143d45733592e0cdd5a8d7afa"></a>
 template&lt;typename Prim &gt; </td></tr>
-<tr class="memitem:a17f280e5d84f7316799204999f0c8ba0"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::bound</b> (const Prim &amp;prim) noexcept</td></tr>
-<tr class="separator:a17f280e5d84f7316799204999f0c8ba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43adfefc0e8110096cfe522f4559d06d"><td class="memTemplParams" colspan="2"><a id="a43adfefc0e8110096cfe522f4559d06d"></a>
-template&lt;template&lt; typename, size_t &gt; typename SContainer, template&lt; typename, size_t &gt; typename PContainer&gt; </td></tr>
-<tr class="memitem:a43adfefc0e8110096cfe522f4559d06d"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::sample</b> (const Vec2_&lt; SContainer &gt; &amp;s, const Triangle_&lt; PContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memitem:aeb253d7143d45733592e0cdd5a8d7afa"><td class="memTemplItemLeft" align="right" valign="top">constexpr AABB&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="triangle_8hpp.html#aeb253d7143d45733592e0cdd5a8d7afa">lucid::detail::bound</a> (const Prim &amp;prim) noexcept</td></tr>
+<tr class="memdesc:aeb253d7143d45733592e0cdd5a8d7afa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute bounding box of primitive defined as array. <br /></td></tr>
+<tr class="separator:aeb253d7143d45733592e0cdd5a8d7afa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43adfefc0e8110096cfe522f4559d06d"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename SContainer, template&lt; typename, size_t &gt; typename PContainer&gt; </td></tr>
+<tr class="memitem:a43adfefc0e8110096cfe522f4559d06d"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="triangle_8hpp.html#a43adfefc0e8110096cfe522f4559d06d">lucid::sample</a> (const Vec2_&lt; SContainer &gt; &amp;s, const Triangle_&lt; PContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:a43adfefc0e8110096cfe522f4559d06d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sample a point on triangle surface.  <a href="triangle_8hpp.html#a43adfefc0e8110096cfe522f4559d06d">More...</a><br /></td></tr>
 <tr class="separator:a43adfefc0e8110096cfe522f4559d06d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a362b8b0f3e18bd4b030f7d57edd68e86"><td class="memTemplParams" colspan="2"><a id="a362b8b0f3e18bd4b030f7d57edd68e86"></a>
 template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a362b8b0f3e18bd4b030f7d57edd68e86"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::centroid</b> (const Triangle_&lt; Container &gt; &amp;prim) noexcept</td></tr>
+<tr class="memitem:a362b8b0f3e18bd4b030f7d57edd68e86"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="triangle_8hpp.html#a362b8b0f3e18bd4b030f7d57edd68e86">lucid::centroid</a> (const Triangle_&lt; Container &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:a362b8b0f3e18bd4b030f7d57edd68e86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute triangle centroid. <br /></td></tr>
 <tr class="separator:a362b8b0f3e18bd4b030f7d57edd68e86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaef53e898eb046e3a0022209cdfb38ed"><td class="memTemplParams" colspan="2"><a id="aaef53e898eb046e3a0022209cdfb38ed"></a>
 template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:aaef53e898eb046e3a0022209cdfb38ed"><td class="memTemplItemLeft" align="right" valign="top">constexpr AABB&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::bound</b> (const Triangle_&lt; Container &gt; &amp;prim) noexcept</td></tr>
+<tr class="memitem:aaef53e898eb046e3a0022209cdfb38ed"><td class="memTemplItemLeft" align="right" valign="top">constexpr AABB&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="triangle_8hpp.html#aaef53e898eb046e3a0022209cdfb38ed">lucid::bound</a> (const Triangle_&lt; Container &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:aaef53e898eb046e3a0022209cdfb38ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute triangle bounding box. <br /></td></tr>
 <tr class="separator:aaef53e898eb046e3a0022209cdfb38ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb6197457376e106d46cf85921298a0f"><td class="memTemplParams" colspan="2"><a id="abb6197457376e106d46cf85921298a0f"></a>
 template&lt;template&lt; typename, size_t &gt; typename MatContainer, template&lt; typename, size_t &gt; typename TriangleContainer&gt; </td></tr>
-<tr class="memitem:abb6197457376e106d46cf85921298a0f"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::apply_transform</b> (const Mat4_&lt; MatContainer &gt; &amp;t, const Triangle_&lt; TriangleContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memitem:abb6197457376e106d46cf85921298a0f"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="triangle_8hpp.html#abb6197457376e106d46cf85921298a0f">lucid::apply_transform</a> (const Mat4_&lt; MatContainer &gt; &amp;t, const Triangle_&lt; TriangleContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:abb6197457376e106d46cf85921298a0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transform triangle with a transformation matrix. <br /></td></tr>
 <tr class="separator:abb6197457376e106d46cf85921298a0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Triangle primitive definitions. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="ad3f0777b5fe7ff5de4befba02cd8bc6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3f0777b5fe7ff5de4befba02cd8bc6e">&#9670;&nbsp;</a></span>intersect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; typename, size_t &gt; typename TriangleContainer, template&lt; typename, size_t &gt; typename RayContainer&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr Intersection lucid::intersect </td>
+          <td>(</td>
+          <td class="paramtype">const Ray_&lt; RayContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ray</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="triangle_8hpp.html#af03f9a55d1801996e6b318d11fcaa30c">Triangle_</a>&lt; TriangleContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>prim</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute ray-triangle intersection. </p>
+<p>Implements classic algorithm described in <a class="el" href="citelist.html#CITEREF_10.1080/10867651.1997.10487468">[4]</a> </p>
+
+</div>
+</div>
+<a id="a43adfefc0e8110096cfe522f4559d06d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43adfefc0e8110096cfe522f4559d06d">&#9670;&nbsp;</a></span>sample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; typename, size_t &gt; typename SContainer, template&lt; typename, size_t &gt; typename PContainer&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr Vec3 lucid::sample </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlucid_1_1Vector.html">Vec2_</a>&lt; SContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="triangle_8hpp.html#af03f9a55d1801996e6b318d11fcaa30c">Triangle_</a>&lt; PContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>prim</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sample a point on triangle surface. </p>
+<p>Optimized implementation from <a class="el" href="citelist.html#CITEREF_heitz:hal-02073696">[2]</a> </p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

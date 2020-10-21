@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['normal_47',['normal',['../aabb_8hpp.html#a5d1e581b5ed68b3b771584cd712b22a1',1,'lucid']]],
-  ['normalize_48',['normalize',['../vector_8hpp.html#af650f4c2a47ccf0bb71d0a96bd0fc99d',1,'lucid']]]
+  ['normal_49',['normal',['../aabb_8hpp.html#a5d1e581b5ed68b3b771584cd712b22a1',1,'lucid::normal(const Vec3_&lt; PosContainer &gt; &amp;pos, const AABB_&lt; AABBContainer &gt; &amp;prim) noexcept'],['../disk_8hpp.html#aada21a8cdcbdd1ba4386974e25404367',1,'lucid::normal(const Vec3_&lt; PosContainer &gt; &amp;, const Disk_&lt; DiskContainer &gt; &amp;prim) noexcept'],['../quad_8hpp.html#a0c0227298d43d096ae0af4fee7f66f3e',1,'lucid::normal(const Vec3_&lt; PosContainer &gt; &amp;, const Quad_&lt; QuadContainer &gt; &amp;prim) noexcept'],['../sphere_8hpp.html#ae3c77df3150a5b3b9ba76d2c4f278d11',1,'lucid::normal(const Vec3_&lt; PosContainer &gt; &amp;pos, const Sphere_&lt; SphereContainer &gt; &amp;prim) noexcept'],['../triangle_8hpp.html#a8ee788b828d7c91079fab3bb6ba0ab7a',1,'lucid::normal(const Vec3_&lt; PosContainer &gt; &amp;, const Triangle_&lt; TriangleContainer &gt; &amp;prim) noexcept']]],
+  ['normalize_50',['normalize',['../vector_8hpp.html#af650f4c2a47ccf0bb71d0a96bd0fc99d',1,'lucid']]]
 ];
