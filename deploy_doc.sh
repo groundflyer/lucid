@@ -16,6 +16,7 @@ fi
 rm -r ${DEPLOY_DIR}/*
 cp -r ${BUILD_DIR}/html/* ${DEPLOY_DIR}
 pushd ${DEPLOY_DIR}
-git commit -am "[auto] updating the docs"
+git add -A
+git commit -m "[auto] updating the docs"
 git push origin gh-pages
 popd
