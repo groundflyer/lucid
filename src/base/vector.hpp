@@ -21,7 +21,7 @@
 
 namespace lucid
 {
-/// @brief Generic N-dimnsional euclidian vector.
+/// @brief Generic N-dimensional euclidian vector.
 /// @tparam T value type. Must be arithmetic.
 /// @tparam N dimensionality.
 /// @tparam Container std::array-like container that used to store the data.
