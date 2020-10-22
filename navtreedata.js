@@ -28,6 +28,7 @@ var NAVTREE =
         [ "Prerequisites", "index.html#autotoc_md1", null ]
       ] ]
     ] ],
+    [ "Test List", "test.html", null ],
     [ "Bibliography", "citelist.html", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -38,7 +39,11 @@ var NAVTREE =
       ] ]
     ] ],
     [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ]
+      [ "File List", "files.html", "files_dup" ],
+      [ "File Members", "globals.html", [
+        [ "All", "globals.html", null ],
+        [ "Functions", "globals_func.html", null ]
+      ] ]
     ] ]
   ] ]
 ];
@@ -46,7 +51,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"vector_8hpp.html#ae4cc5169a55df1aae6cda4ac0f71df52"
+"vector_8hpp.html#a2bbd3921a41de74329996e3c976d2d27"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
