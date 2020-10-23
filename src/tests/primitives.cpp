@@ -15,15 +15,17 @@
 using namespace std;
 using namespace lucid;
 
-constexpr auto
+constexpr real
 radius(const Sphere& prim) noexcept
 {
     return prim.radius;
 }
 
-constexpr auto
+constexpr real
 radius(const AABB& prim) noexcept
-{ return distance(centroid(prim), prim.vmax); }
+{
+    return distance(centroid(prim), prim.vmax);
+}
 
 int
 main(int argc, char* argv[])
@@ -35,57 +37,58 @@ main(int argc, char* argv[])
 
     int ret = 0;
 
-    static const constexpr real    val_range = 100;
+    static const constexpr real    val_range = 1000000_r;
     std::uniform_real_distribution big_dist(-val_range, val_range);
     std::uniform_real_distribution rad_dist(0.1_r, val_range);
     std::bernoulli_distribution    bern_dist(0.5);
     auto                           randr =
         static_cast<real (*)(std::default_random_engine&)>(std::generate_canonical<real, 8>);
-    auto sgen    = [&]() { return Vec2{generate<2>(randr, g)}; };
-    auto posgen  = [&]() { return Vec3(generate<3>(big_dist, g)); };
-    auto normgen = [&]() { return make_normal(generate<3>(big_dist, g)); };
+    auto sgen    = [&]() noexcept { return Vec2{generate<2>(randr, g)}; };
+    auto posgen  = [&]() noexcept { return Vec3(generate<3>(big_dist, g)); };
+    auto normgen = [&]() noexcept { return make_normal(generate<3>(big_dist, g)); };
 
     const auto sample_intersect_property = [](const auto& sampled, const auto& prim) noexcept {
         const auto& [target, origin] = sampled;
-        const Ray  tohit{origin, target - origin};
-        const Ray  tomiss{origin, origin - target};
-        const auto hit  = intersect(tohit, prim);
-        const auto miss = intersect(tomiss, prim);
+        const Ray          tohit{origin, target - origin};
+        const Ray          tomiss{origin, origin - target};
+        const Intersection hit  = intersect(tohit, prim);
+        const Intersection miss = intersect(tomiss, prim);
         return !hit || miss || !almost_equal(hit.t, distance(target, origin), 10);
     };
 
     const auto bound_property = [](const auto& testing, const auto& prim) noexcept {
-        const auto& [bound, ray] = testing;
-        const auto hit_prim      = intersect(ray, prim);
-        const auto hit_bound     = intersect(ray, bound);
+        const auto& [bound, ray]     = testing;
+        const Intersection hit_prim  = intersect(ray, prim);
+        const Intersection hit_bound = intersect(ray, bound);
         return !hit_bound || hit_prim.t < hit_bound.t;
     };
 
-    const auto test_prim = [&](auto&& name, auto&& gen, auto&& sampler, auto&& property) {
+    const auto test_prim = [&](auto&& name, auto&& gen, auto&& sampler, auto&& property) noexcept {
         return test_property(num_tests, 0.05, name, gen, sampler, property);
     };
 
-    const auto intersect_test_prim = [&](auto&& name, auto&& gen, auto&& sampler) {
+    const auto intersect_test_prim = [&](auto&& name, auto&& gen, auto&& sampler) noexcept {
         return test_prim(name, gen, sampler, sample_intersect_property);
     };
 
     const auto sample_prim = [&](const auto& prim) { return pair(sample(sgen(), prim), posgen()); };
 
     const auto sample_selfoccluded_prim = [&](const auto& prim) noexcept {
-        const auto sampled_point = sample(sgen(), prim);
-        const auto offset        = sampled_point - centroid(prim);
+        const Vec3 sampled_point = sample(sgen(), prim);
+        const Vec3 offset        = sampled_point - centroid(prim);
         const auto sign = transform([](const real val) { return std::copysign(1_r, val); }, offset);
-        const auto origin = sampled_point + Vec3(generate<3>(rad_dist, g)) * sign + offset;
+        const Vec3 origin = sampled_point + Vec3(generate<3>(rad_dist, g)) * sign + offset;
         return pair(sampled_point, Vec3(origin));
     };
 
     const auto bound_gen = [&](const auto& prim) noexcept {
-        const AABB bbox   = bound(prim);
-        const Vec3 sp     = sample(sgen(), prim);
-        const auto tb     = Vector(generate<3>(bern_dist, g));
-        const auto offset = transform([](const auto& a, const auto& b) { return a ? b : -b; },
-                                      tb,
-                                      Vec3(generate<3>(rad_dist, g)));
+        const AABB bbox = bound(prim);
+        const Vec3 sp   = sample(sgen(), prim);
+        const auto tb   = Vector(generate<3>(bern_dist, g));
+        const auto offset =
+            transform([](const auto& a, const auto& b) noexcept { return a ? b : -b; },
+                      tb,
+                      Vec3(generate<3>(rad_dist, g)));
         const Vec3 origin(bbox[tb] + offset);
         return pair{bbox, Ray(origin, sp - origin)};
     };
