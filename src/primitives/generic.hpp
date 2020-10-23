@@ -26,6 +26,8 @@ using GenericPrimitive_ = typename AllPrimTypes<Container>::variant;
 
 using GenericPrimitive = GenericPrimitive_<std::array>;
 
+namespace prim_fn
+{
 template <template <typename, size_t> typename RayContainer, typename... Prims>
 constexpr Intersection
 intersect(const Ray_<RayContainer>& ray, const std::variant<Prims...>& prim) noexcept
@@ -72,4 +74,5 @@ apply_transform(const Mat4_<MatContainer>& t, const std::variant<Prims...>& prim
         },
         prim);
 }
+} // namespace prim_fn
 } // namespace lucid

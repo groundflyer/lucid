@@ -42,7 +42,7 @@ bench_prim(LogFile&                         log,
         [&]() noexcept {
             return pair{Ray(vgen(d, g), vgen(d, g)), pg()};
         },
-        static_cast<Intersection (*)(const Ray&, const Prim&)>(intersect));
+        intersect);
 
     microbench(
         log,

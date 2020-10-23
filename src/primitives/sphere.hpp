@@ -34,6 +34,8 @@ Sphere_(const Vec3_<Container>&, const real&) -> Sphere_<Container>;
 
 using Sphere = Sphere_<std::array>;
 
+namespace prim_fn
+{
 /// @brief Compute ray-sphere intersection.
 template <template <typename, size_t> typename SphereContainer,
           template <typename, size_t>
@@ -102,4 +104,5 @@ apply_transform(const Mat4_<MatContainer>& t, const Sphere_<PrimContainer>& prim
     const auto& [c, r] = prim;
     return Sphere(apply_transform_p(t, c), r);
 }
+} // namespace prim_fn
 } // namespace lucid

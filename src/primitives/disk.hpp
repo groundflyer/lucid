@@ -38,6 +38,8 @@ Disk_(const Vec3_<Container>&, const Vec3_<Container>&, const real) -> Disk_<Con
 
 using Disk = Disk_<std::array>;
 
+namespace prim_fn
+{
 /// @brief Compute ray-disk intersection.
 template <template <typename, size_t> typename DiskContainer,
           template <typename, size_t>
@@ -105,4 +107,5 @@ apply_transform(const Mat4_<MatContainer>& t, const Disk_<PrimContainer>& prim) 
     const auto& [p, n, r] = prim;
     return Disk(apply_transform_p(t, p), apply_transform_n(t, n), r);
 }
+} // namespace prim_fn
 } // namespace lucid

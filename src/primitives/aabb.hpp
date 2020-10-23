@@ -64,6 +64,8 @@ AABB_(const Vec3_<Container>&, const Vec3_<Container>&) -> AABB_<Container>;
 
 using AABB = AABB_<std::array>;
 
+namespace prim_fn
+{
 /// @brief Axis-aligned bounding box intersection function.
 ///
 /// Implements @cite 10.1145/1198555.1198748
@@ -161,4 +163,5 @@ apply_transform(const Mat4_<MatContainer>& t, const AABB_<PrimContainer>& prim) 
     const auto& [vmin, vmax] = prim;
     return AABB(apply_transform_p(t, vmin), apply_transform_p(t, vmax));
 }
+} // namespace prim_fn
 } // namespace lucid

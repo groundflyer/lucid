@@ -18,6 +18,8 @@ using Triangle_ = std::array<Vec3_<Container>, 3>;
 
 using Triangle = Triangle_<std::array>;
 
+namespace prim_fn
+{
 /// @brief Compute ray-triangle intersection.
 ///
 /// Implements classic algorithm described in
@@ -155,4 +157,5 @@ apply_transform(const Mat4_<MatContainer>& t, const Triangle_<TriangleContainer>
     return std::apply(
         [&](const auto&... points) { return Triangle{apply_transform_p(t, points)...}; }, prim);
 }
+} // namespace prim_fn
 } // namespace lucid

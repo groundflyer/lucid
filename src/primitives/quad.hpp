@@ -21,6 +21,8 @@ using Quad_ = std::array<Vec3_<Container>, 4>;
 
 using Quad = Quad_<std::array>;
 
+namespace prim_fn
+{
 /// @brief Compute ray-quadrilateral intersection.
 ///
 /// Implements @cite LD2004AERIT
@@ -178,4 +180,5 @@ apply_transform(const Mat4_<MatContainer>& t, const Quad_<QuadContainer>& prim) 
     return std::apply([&](const auto&... points) { return Quad{apply_transform_p(t, points)...}; },
                       prim);
 }
+} // namespace prim_fn
 } // namespace lucid
