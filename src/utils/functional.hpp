@@ -4,7 +4,8 @@
 
 #pragma once
 
-#include "tuple.hpp"
+#include <functional>
+#include <type_traits>
 
 namespace lucid
 {
@@ -64,7 +65,45 @@ struct ComposeOp
         return Invoker(lhs, rhs);
     }
 };
+
+template <typename BinaryOp, typename LeftOperand>
+struct fold_wrapper
+{
+    BinaryOp    op;
+    LeftOperand operand;
+
+    constexpr fold_wrapper(BinaryOp _op, const LeftOperand& _operand) : op(_op), operand(_operand)
+    {
+    }
+
+    constexpr fold_wrapper() = delete;
+
+    constexpr fold_wrapper(const fold_wrapper&) = delete;
+
+    template <typename RightOperand>
+    constexpr decltype(auto)
+    operator%(const fold_wrapper<BinaryOp, RightOperand>& rhs) const noexcept
+    {
+        return fold_wrapper<BinaryOp, std::invoke_result_t<BinaryOp, LeftOperand, RightOperand>>(
+            op, op(operand, rhs.operand));
+    }
+
+    template <typename RightOperand>
+    constexpr decltype(auto)
+    operator%(const fold_wrapper<BinaryOp, RightOperand>& rhs) noexcept
+    {
+        return fold_wrapper<BinaryOp, std::invoke_result_t<BinaryOp, LeftOperand, RightOperand>>(
+            op, op(operand, rhs.operand));
+    }
+};
 } // namespace detail
+
+template <typename BinaryOp, typename Init, typename... Args>
+constexpr decltype(auto)
+reduce(BinaryOp&& op, Init&& init, Args&&... args) noexcept
+{
+    return (detail::fold_wrapper(op, init) % ... % detail::fold_wrapper(op, args)).operand;
+}
 
 // compose(a, b, c) = a(b(c()))
 template <typename F, typename... Fs>

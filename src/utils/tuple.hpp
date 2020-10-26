@@ -4,10 +4,8 @@
 
 #pragma once
 
+#include "functional.hpp"
 #include "typelist.hpp"
-
-#include <functional>
-#include <type_traits>
 
 namespace lucid
 {
@@ -19,37 +17,6 @@ struct out_of_range
 
 namespace detail
 {
-template <typename BinaryOp, typename LeftOperand>
-struct fold_wrapper
-{
-    BinaryOp    op;
-    LeftOperand operand;
-
-    constexpr fold_wrapper(BinaryOp _op, const LeftOperand& _operand) : op(_op), operand(_operand)
-    {
-    }
-
-    constexpr fold_wrapper() = delete;
-
-    constexpr fold_wrapper(const fold_wrapper&) = delete;
-
-    template <typename RightOperand>
-    constexpr decltype(auto)
-    operator%(const fold_wrapper<BinaryOp, RightOperand>& rhs) const noexcept
-    {
-        return fold_wrapper<BinaryOp, std::invoke_result_t<BinaryOp, LeftOperand, RightOperand>>(
-            op, op(operand, rhs.operand));
-    }
-
-    template <typename RightOperand>
-    constexpr decltype(auto)
-    operator%(const fold_wrapper<BinaryOp, RightOperand>& rhs) noexcept
-    {
-        return fold_wrapper<BinaryOp, std::invoke_result_t<BinaryOp, LeftOperand, RightOperand>>(
-            op, op(operand, rhs.operand));
-    }
-};
-
 template <typename Tuple, std::size_t... Ids>
 decltype(auto)
 enumerate_impl(const Tuple& tuple, std::index_sequence<Ids...>) noexcept
@@ -181,16 +148,9 @@ for_each_impl(F&& f, Tuple& tuple, std::index_sequence<I...>)
 }
 } // namespace detail
 
-template <typename BinaryOp, typename Init, typename... Args>
-constexpr decltype(auto)
-reduce(BinaryOp&& op, Init&& init, Args&&... args) noexcept
-{
-    return (detail::fold_wrapper(op, init) % ... % detail::fold_wrapper(op, args)).operand;
-}
-
 template <typename BinaryOp, typename T, typename... Ts>
 constexpr decltype(auto)
-reduce_tuple(BinaryOp&& op, const T& init, const std::tuple<Ts...>& tuple) noexcept
+reduceo_tuple(BinaryOp&& op, const T& init, const std::tuple<Ts...>& tuple) noexcept
 {
     return std::apply([&](const Ts&... args) { return reduce(op, init, args...); }, tuple);
 }
