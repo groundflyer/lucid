@@ -7,6 +7,27 @@
 #include <functional>
 #include <type_traits>
 
+#define MK_FN_OBJ(FUNC)                               \
+    namespace fn                                      \
+    {                                                 \
+    struct FUNC##_fn                                  \
+    {                                                 \
+        template <typename... Args>                   \
+        constexpr decltype(auto)                      \
+        operator()(Args&&... args) const noexcept     \
+        {                                             \
+            return FUNC(std::forward<Args>(args)...); \
+        }                                             \
+        template <typename Rhs>                       \
+        constexpr decltype(auto)                      \
+        operator^(const Rhs& rhs) const noexcept      \
+        {                                             \
+            return lucid::compose(*this, rhs);        \
+        }                                             \
+    };                                                \
+    }                                                 \
+    static constexpr fn::FUNC##_fn FUNC{};
+
 namespace lucid
 {
 namespace detail
