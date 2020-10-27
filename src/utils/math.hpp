@@ -7,6 +7,10 @@
 
 #pragma once
 
+#include "functional.hpp"
+
+#include <static_math/cmath.h>
+
 #include <algorithm>
 #include <cmath>
 #include <iterator>
@@ -16,24 +20,8 @@
 
 namespace lucid
 {
-namespace math
-{
-using std::abs;
-using std::atan;
-using std::ceil;
-using std::cos;
-using std::fabs;
-using std::floor;
-using std::fmod;
-using std::pow;
-using std::round;
-using std::sin;
-using std::sqrt;
-using std::tan;
-
 template <typename T>
 const constexpr T Pi_ = T{3.141592653589793};
-} // namespace math
 
 /// @brief Test whether the value is even.
 template <typename T>
@@ -107,6 +95,73 @@ sgn(const Iterable& numbers) noexcept
     return ret;
 }
 
+/// @brief Rise a number to a constant power.
+///
+/// Fast implementation by Alister Chowdhury.
+///
+/// @tparam exp power exponent.
+template <unsigned exp, typename T>
+constexpr T
+pow(const T value) noexcept
+{
+    if(!exp) { return 1; }
+    else
+    {
+        const T base = pow<exp / 2>(value);
+        if constexpr(is_even(exp))
+            return base * base;
+        else
+            return base * base * value;
+    }
+}
+
+/// @brief Convert radians to degrees.
+template <typename T>
+constexpr T
+degrees(const T _radians)
+{
+    return _radians * T{180} / Pi_<T>;
+}
+
+/// @brief Convert degrees to radians.
+template <typename T>
+constexpr T
+radians(const T _degrees)
+{
+    return _degrees * Pi_<T> / T{180};
+}
+
+/// @brief Solve quadratic equation @f$ax^{2} + bx + c@f$ for non-complex cases.
+/// @return pair of bool and the smallest of two positive roots.
+template <typename T>
+constexpr std::pair<bool, T>
+quadratic(const T a, const T b, const T c) noexcept
+{
+    const T D      = pow<2>(b) - T{4} * a * c;
+    const T factor = T{0.5} * a;
+    T       sqrtD{};
+    if(std::is_constant_evaluated())
+        sqrtD = smath::sqrt(D);
+    else
+        sqrtD = std::sqrt(D);
+    const T  x1 = (-b + sqrtD) * factor;
+    const T  x2 = (-b - sqrtD) * factor;
+    const T& x  = std::signbit(x1) ? x2 : (std::signbit(x2) ? x1 : std::min(x1, x2));
+    return std::pair{!std::signbit(D * x), x};
+}
+
+/// @brief Resample canonical random point.
+template <typename T>
+constexpr T
+resample(const T s) noexcept
+{
+    static_assert(std::is_floating_point_v<T>);
+    const T h{0.5};
+    return T{2} * (s > h ? s - h : h - s);
+}
+
+namespace fn
+{
 /// @brief Perform linear interpolation between two values.
 /// @param bias interpolation bias.
 template <typename T, typename Bias>
@@ -133,73 +188,5 @@ almost_equal(const T a, const T b, const ULP ulp)
     return amb <= std::numeric_limits<T>::epsilon() * abs(a + b) * ulp ||
            amb < std::numeric_limits<T>::min();
 }
-
-/// @brief Shift value into a new range.
-template <typename T>
-constexpr T
-fit(const T val, const T minval, const T maxval)
-{
-    return (val - minval) / (maxval - minval);
-}
-
-/// @brief Rise a number to a constant power.
-///
-/// Fast implementation by Alister Chowdhury.
-///
-/// @tparam exp power exponent.
-template <unsigned exp, typename T>
-constexpr T
-pow(const T value) noexcept
-{
-    if(!exp) { return 1; }
-    else
-    {
-        const T base = pow<exp / 2>(value);
-        if constexpr(is_even(exp))
-            return base * base;
-        else
-            return base * base * value;
-    }
-}
-
-/// @brief Convert radians to degrees.
-template <typename T>
-constexpr T
-degrees(const T _radians)
-{
-    return _radians * T{180} / math::Pi_<T>;
-}
-
-/// @brief Convert degrees to radians.
-template <typename T>
-constexpr T
-radians(const T _degrees)
-{
-    return _degrees * math::Pi_<T> / T{180};
-}
-
-/// @brief Solve quadratic equation @f$ax^{2} + bx + c@f$ for non-complex cases.
-/// @return pair of bool and the smallest of two positive roots.
-template <typename T>
-constexpr std::pair<bool, T>
-quadratic(const T a, const T b, const T c) noexcept
-{
-    const T D      = pow<2>(b) - T{4} * a * c;
-    const T factor = T{0.5} * a;
-    const T sqrtD  = math::sqrt(D);
-    const T x1     = (-b + sqrtD) * factor;
-    const T x2     = (-b - sqrtD) * factor;
-    const T x      = std::signbit(x1) ? x2 : (std::signbit(x2) ? x1 : std::min(x1, x2));
-    return std::pair{!std::signbit(D * x), x};
-}
-
-/// @brief Resample canonical random point.
-template <typename T>
-constexpr T
-resample(const T s) noexcept
-{
-    static_assert(std::is_floating_point_v<T>);
-    const T h{0.5};
-    return T{2} * (s > h ? s - h : h - s);
-}
+} // namespace fn
 } // namespace lucid

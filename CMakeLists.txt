@@ -89,6 +89,9 @@ include_directories(concurrentqueue)
 # range-v3
 include_directories(range-v3/include)
 
+# static_math
+include_directories(static_math/include)
+
 # docs
 if(BUILD_DOC)
   find_package(Doxygen REQUIRED dot)
