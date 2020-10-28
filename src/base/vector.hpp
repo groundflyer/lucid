@@ -8,6 +8,7 @@
 #pragma once
 
 #include <utils/debug.hpp>
+#include <utils/functional.hpp>
 #include <utils/math.hpp>
 #include <utils/static_span.hpp>
 
@@ -397,7 +398,7 @@ class Vector
 template <typename T, size_t N, template <typename, size_t> typename Container>
 Vector(Container<T, N> &&) -> Vector<T, N, Container>;
 
-/// @brief Create reference to input vector, e.g. vector view.
+/// @brief Create reference to input vector, i.e. vector view.
 ///
 /// Creates a such vector object that data it contains is mapped to
 /// other place.
@@ -408,44 +409,99 @@ ref(const Vector<T, N, Container>& v)
     return Vector<T, N, StaticSpan>(StaticSpan<T, N>(v.template get<0>()));
 }
 
-/// @brief Apply binary operator to the corresponding elements of input vectors.
-/// @return @p vector of VectorType1 with dimensionality @p N and element type @p c.
-template <typename T1,
-          typename T2,
-          size_t N,
-          template <typename, size_t>
-          typename Container1,
-          template <typename, size_t>
-          typename Container2,
-          typename BinaryOperation>
-constexpr auto
-transform(BinaryOperation                  binary_op,
-          const Vector<T1, N, Container1>& a,
-          const Vector<T2, N, Container2>& b) noexcept
+namespace detail
 {
-    Vector<std::decay_t<std::invoke_result_t<BinaryOperation, T1, T2>>, N, std::array> ret{};
+template <typename T>
+struct vector_val_type
+{
+    using type = T;
+};
 
-    for(size_t i = 0; i < N; ++i) ret[i] = binary_op(a[i], b[i]);
+template <typename T, std::size_t N, template <typename, size_t> typename Container>
+struct vector_val_type<Vector<T, N, Container>>
+{
+    using type = T;
+};
+
+template <typename T, std::size_t N, template <typename, size_t> typename Container>
+constexpr const T&
+elem(const Vector<T, N, Container>& v, const std::size_t i) noexcept
+{
+    return v[i];
+}
+
+template <typename T>
+constexpr const T&
+elem(const T& v, const std::size_t) noexcept
+{
+    return v;
+}
+
+template <std::size_t I, typename... Args>
+constexpr decltype(auto)
+elem(const std::size_t i, const Args&... vectors) noexcept
+{
+    return elem(select<I>(vectors...), i);
+}
+
+template <typename... Vectors>
+struct vector_dim;
+
+template <typename T,
+          std::size_t N,
+          template <typename, size_t>
+          typename Container,
+          typename... Rest>
+struct vector_dim<Vector<T, N, Container>, Rest...>
+{
+    static constexpr std::size_t n = N;
+};
+
+template <std::size_t N, typename T>
+struct check_dim
+{
+    static constexpr bool value = true;
+};
+
+template <std::size_t N1,
+          typename T,
+          std::size_t N2,
+          template <typename, size_t>
+          typename Container>
+struct check_dim<N1, Vector<T, N2, Container>>
+{
+    static constexpr bool value = N1 == N2;
+};
+
+template <typename F, std::size_t... Idxs, typename... Vectors>
+constexpr auto
+transform_impl(const F& f, std::index_sequence<Idxs...>, const Vectors&... vs)
+{
+    using val_type          = std::decay_t<std::invoke_result_t<
+        F,
+        typename vector_val_type<std::tuple_element_t<Idxs, std::tuple<Vectors...>>>::type...>>;
+    constexpr std::size_t N = vector_dim<Vectors...>::n;
+    static_assert((true && ... && check_dim<N, Vectors>::value),
+                  "Vectors should have the same dimensionality");
+    using ret_type = Vector<val_type, N, std::array>;
+
+    ret_type ret{};
+
+    for(std::size_t i = 0; i < N; ++i) ret[i] = std::invoke(f, elem<Idxs>(i, vs...)...);
 
     return ret;
 }
+} // namespace detail
 
-/// @brief Apply unary operator to the elements of a vector.
-/// @return vector of @p VectorType, dimensionality @p N and element type derived from applying the
-/// operator @p unary_op.
-template <typename T,
-          size_t N,
-          template <typename, size_t>
-          typename Container,
-          typename UnaryOperation>
+/// @brief Apply function to corresponding elements of input vectors.
+///
+/// @p f accepts as many arguments as the number of input vectors @p vs.
+/// @p Vectors should have the same dimensionality.
+template <typename F, typename... Vectors>
 constexpr auto
-transform(UnaryOperation unary_op, const Vector<T, N, Container>& a) noexcept
+transform(const F& f, const Vectors&... vs) noexcept
 {
-    Vector<std::decay_t<std::invoke_result_t<UnaryOperation, T>>, N, std::array> ret{};
-
-    for(size_t i = 0; i < N; ++i) ret[i] = unary_op(a[i]);
-
-    return ret;
+    return detail::transform_impl(f, std::index_sequence_for<Vectors...>{}, vs...);
 }
 
 /// @brief Perform left fold on a given vector.
@@ -560,7 +616,7 @@ template <typename T, size_t N, template <typename, size_t> typename Container>
 constexpr T
 length(const Vector<T, N, Container>& a) noexcept
 {
-    return math::sqrt(length2(a));
+    return std::sqrt(length2(a));
 }
 
 /// @brief Normalize vector.
@@ -698,20 +754,12 @@ almost_equal(const Vector<T, N, Container1>& va, const T b, const ULP ulp)
     return transform([ulp, b](const T a) { return almost_equal(a, b, ulp); }, va);
 }
 
-/// @brief Shift vector values into a new range.
-template <typename T, size_t N, template <typename, size_t> typename Container>
-constexpr auto
-fit(const Vector<T, N, Container>& v, const T minval, const T maxval) noexcept
-{
-    return transform([minval, maxval](const T& val) { return fit(minval, maxval, val); }, v);
-}
-
 /// @brief Compute absolute values of vector elements.
 template <typename T, size_t N, template <typename, size_t> typename Container>
 constexpr auto
 abs(const Vector<T, N, Container>& v) noexcept
 {
-    return transform(static_cast<T (*)(T)>(math::abs), v);
+    return transform(static_cast<T (*)(T)>(std::abs), v);
 }
 
 /// @brief Compute square root of vector elements.
@@ -719,7 +767,7 @@ template <typename T, std::size_t N, template <typename, std::size_t> typename C
 constexpr auto
 sqrt(const Vector<T, N, Container>& v) noexcept
 {
-    return transform(static_cast<T (*)(T)>(math::sqrt), v);
+    return transform(static_cast<T (*)(T)>(std::sqrt), v);
 }
 
 /// @brief Rise vector elements to a constant power.

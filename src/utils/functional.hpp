@@ -177,8 +177,8 @@ maker() noexcept
 }
 
 template <std::size_t Idx, typename Head, typename... Tail>
-constexpr auto
-select(const Head& head, const Tail&... tail) noexcept
+constexpr decltype(auto)
+select(Head&& head, Tail&&... tail) noexcept
 {
     static_assert(Idx <= sizeof...(tail), "Index is too big");
 
