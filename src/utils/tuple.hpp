@@ -150,7 +150,7 @@ for_each_impl(F&& f, Tuple& tuple, std::index_sequence<I...>)
 
 template <typename BinaryOp, typename T, typename... Ts>
 constexpr decltype(auto)
-reduceo_tuple(BinaryOp&& op, const T& init, const std::tuple<Ts...>& tuple) noexcept
+reduce_tuple(BinaryOp&& op, const T& init, const std::tuple<Ts...>& tuple) noexcept
 {
     return std::apply([&](const Ts&... args) { return reduce(op, init, args...); }, tuple);
 }

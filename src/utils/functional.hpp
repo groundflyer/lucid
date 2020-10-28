@@ -119,6 +119,28 @@ struct fold_wrapper
 };
 } // namespace detail
 
+namespace fn
+{
+struct identity_fn
+{
+    template <typename T>
+    constexpr T&
+    operator()(T& t) const noexcept
+    {
+        return t;
+    }
+
+    template <typename T>
+    constexpr const T&
+    operator()(const T& t) const noexcept
+    {
+        return t;
+    }
+};
+} // namespace fn
+
+static constexpr fn::identity_fn identity;
+
 template <typename BinaryOp, typename Init, typename... Args>
 constexpr decltype(auto)
 reduce(BinaryOp&& op, Init&& init, Args&&... args) noexcept
@@ -152,5 +174,17 @@ maker() noexcept
         else
             return T(std::forward<Args>(args)...);
     };
+}
+
+template <std::size_t Idx, typename Head, typename... Tail>
+constexpr auto
+select(const Head& head, const Tail&... tail) noexcept
+{
+    static_assert(Idx <= sizeof...(tail), "Index is too big");
+
+    if constexpr(Idx == 0ul)
+        return head;
+    else
+        return select<Idx - 1ul>(tail...);
 }
 } // namespace lucid

@@ -9,8 +9,6 @@
 
 #include <ray_traversal/ray_traversal.hpp>
 
-#include <utils/identity.hpp>
-
 namespace lucid
 {
 /// @brief Axis-aligned bounding box.
