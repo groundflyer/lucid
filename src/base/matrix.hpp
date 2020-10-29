@@ -382,6 +382,8 @@ transpose(const Matrix<T, M, N, Container>& a) noexcept
     return ret;
 }
 
+namespace fn
+{
 /// @brief Compute product of matrix and column-vector.
 template <typename T,
           size_t M,
@@ -422,6 +424,7 @@ dot(const Matrix<T, M1, N1, Container1>& lhs, const Matrix<T, M2, N2, Container2
 
     return ret;
 }
+} // namespace fn
 
 /// @brief Compite matrix determinant.
 template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>

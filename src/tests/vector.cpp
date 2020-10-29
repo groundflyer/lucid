@@ -106,12 +106,11 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
     // vector and scalar value generator
     auto vsgen = [&]() { return pair(vgen(), dist(g)); };
 
-    const auto assertion = [](auto&& a, auto&& b) noexcept {
+    const auto assertion = [](const auto& a, const auto& b) noexcept {
         if constexpr(is_floating_point_v<T>)
         {
-            static const constexpr unsigned ULP = 200;
-            return any(!almost_equal(forward<decltype(a)>(a), forward<decltype(b)>(b), ULP)) ||
-                   !all(lucid::isfinite(a)) || !all(lucid::isfinite(b));
+            return any(!almost_equal(a, b, 200)) || !all(lucid::isfinite(a)) ||
+                   !all(lucid::isfinite(b));
         }
         else
             return any(a != b);

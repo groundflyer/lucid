@@ -7,10 +7,10 @@
 #include <functional>
 #include <type_traits>
 
-#define MK_FN_OBJ(FUNC)                               \
+#define MK_NAMED_FN_OBJ(NAME, FUNC)                   \
     namespace fn                                      \
     {                                                 \
-    struct FUNC##_fn                                  \
+    struct NAME##_fn                                  \
     {                                                 \
         template <typename... Args>                   \
         constexpr decltype(auto)                      \
@@ -26,7 +26,9 @@
         }                                             \
     };                                                \
     }                                                 \
-    static constexpr fn::FUNC##_fn FUNC{};
+    static constexpr fn::NAME##_fn NAME{};
+
+#define MK_FN_OBJ(FUNC) MK_NAMED_FN_OBJ(FUNC, FUNC)
 
 namespace lucid
 {
@@ -124,15 +126,8 @@ namespace fn
 struct identity_fn
 {
     template <typename T>
-    constexpr T&
-    operator()(T& t) const noexcept
-    {
-        return t;
-    }
-
-    template <typename T>
-    constexpr const T&
-    operator()(const T& t) const noexcept
+    constexpr decltype(auto)
+    operator()(T&& t) const noexcept
     {
         return t;
     }
