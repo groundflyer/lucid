@@ -20,6 +20,62 @@
 #include <type_traits>
 #include <utility>
 
+#define MAKE_BINARY_OP(FUNC, OP)                                                                  \
+    namespace fn                                                                                  \
+    {                                                                                             \
+    struct FUNC##_fn                                                                              \
+    {                                                                                             \
+        template <typename T1,                                                                    \
+                  size_t N,                                                                       \
+                  template <typename, size_t>                                                     \
+                  typename Container,                                                             \
+                  typename T2>                                                                    \
+        constexpr auto                                                                            \
+        operator()(const Vector<T1, N, Container>& lhs, const T2& rhs) const noexcept             \
+        {                                                                                         \
+            return transform(std::FUNC<T1>(), lhs, rhs);                                          \
+        }                                                                                         \
+        template <typename Rhs>                                                                   \
+        constexpr decltype(auto)                                                                  \
+        operator^(const Rhs& rhs) const noexcept                                                  \
+        {                                                                                         \
+            return lucid::compose(*this, rhs);                                                    \
+        }                                                                                         \
+    };                                                                                            \
+    }                                                                                             \
+    static constexpr fn::FUNC##_fn FUNC{};                                                        \
+    template <typename T1, size_t N, template <typename, size_t> typename Container, typename T2> \
+    constexpr auto OP(const Vector<T1, N, Container>& lhs, const T2& rhs) noexcept                \
+    {                                                                                             \
+        return FUNC(lhs, rhs);                                                                    \
+    }
+
+#define MAKE_UNARY_OP(FUNC, OP)                                                         \
+    namespace fn                                                                        \
+    {                                                                                   \
+    struct FUNC##_fn                                                                    \
+    {                                                                                   \
+        template <typename T, size_t N, template <typename, size_t> typename Container> \
+        constexpr auto                                                                  \
+        operator()(const Vector<T, N, Container>& lhs) const noexcept                   \
+        {                                                                               \
+            return transform(std::FUNC<T>(), lhs);                                      \
+        }                                                                               \
+        template <typename Rhs>                                                         \
+        constexpr decltype(auto)                                                        \
+        operator^(const Rhs& rhs) const noexcept                                        \
+        {                                                                               \
+            return lucid::compose(*this, rhs);                                          \
+        }                                                                               \
+    };                                                                                  \
+    }                                                                                   \
+    static constexpr fn::FUNC##_fn FUNC{};                                              \
+    template <typename T, size_t N, template <typename, size_t> typename Container>     \
+    constexpr auto OP(const Vector<T, N, Container>& lhs) noexcept                      \
+    {                                                                                   \
+        return FUNC(lhs);                                                               \
+    }
+
 namespace lucid
 {
 /// @brief Generic N-dimensional euclidian vector.
@@ -193,59 +249,6 @@ class Vector
     }
 
     template <template <typename, size_t> typename Container2>
-    constexpr auto
-    operator+(const Vector<T, N, Container2>& rhs) const noexcept
-    {
-        return transform(std::plus<T>(), *this, rhs);
-    }
-    constexpr auto
-    operator+(const T& rhs) const noexcept
-    {
-        return transform([&rhs](const T& a) { return a + rhs; }, *this);
-    }
-
-    template <template <typename, size_t> typename Container2>
-    constexpr auto
-    operator-(const Vector<T, N, Container2>& rhs) const noexcept
-    {
-        return transform(std::minus<T>(), *this, rhs);
-    }
-    constexpr auto
-    operator-(const T& rhs) const noexcept
-    {
-        return transform([&rhs](const T& a) { return a - rhs; }, *this);
-    }
-    constexpr auto
-    operator-() const noexcept
-    {
-        return transform(std::negate<T>(), *this);
-    }
-
-    template <template <typename, size_t> typename Container2>
-    constexpr auto
-    operator*(const Vector<T, N, Container2>& rhs) const noexcept
-    {
-        return transform(std::multiplies<T>(), *this, rhs);
-    }
-    constexpr auto
-    operator*(const T& rhs) const noexcept
-    {
-        return transform([&rhs](const T& a) { return a * rhs; }, *this);
-    }
-
-    template <template <typename, size_t> typename Container2>
-    constexpr auto
-    operator/(const Vector<T, N, Container2>& rhs) const noexcept
-    {
-        return transform(std::divides<T>(), *this, rhs);
-    }
-    constexpr auto
-    operator/(const T& rhs) const noexcept
-    {
-        return transform([&rhs](const T& a) { return a / rhs; }, *this);
-    }
-
-    template <template <typename, size_t> typename Container2>
     constexpr Vector&
     operator+=(const Vector<T, N, Container2>& rhs) noexcept
     {
@@ -308,84 +311,6 @@ class Vector
         for(size_t i = 0; i < N; ++i) m_data[i] /= rhs;
 
         return *this;
-    }
-
-    template <template <typename, size_t> typename Container2>
-    friend constexpr auto
-    operator==(const Vector& lhs, const Vector<T, N, Container2>& rhs) noexcept
-    {
-        return transform(std::equal_to<T>(), lhs, rhs);
-    }
-    friend constexpr auto
-    operator==(const Vector& lhs, const T& rhs) noexcept
-    {
-        return transform([&rhs](const T& elem) { return elem == rhs; }, lhs);
-    }
-
-    template <template <typename, size_t> typename Container2>
-    friend constexpr auto
-    operator!=(const Vector& lhs, const Vector<T, N, Container2>& rhs) noexcept
-    {
-        return transform(std::not_equal_to<T>(), lhs, rhs);
-    }
-    friend constexpr auto
-    operator!=(const Vector& lhs, const T& rhs) noexcept
-    {
-        return transform([&rhs](const T& elem) { return elem != rhs; }, lhs);
-    }
-
-    template <template <typename, size_t> typename Container2>
-    friend constexpr auto
-    operator>(const Vector& lhs, const Vector<T, N, Container2>& rhs) noexcept
-    {
-        return transform(std::greater<T>(), lhs, rhs);
-    }
-    friend constexpr auto
-    operator>(const Vector& lhs, const T& rhs) noexcept
-    {
-        return transform([&rhs](const T& elem) { return elem > rhs; }, lhs);
-    }
-
-    template <template <typename, size_t> typename Container2>
-    friend constexpr auto
-    operator<(const Vector& lhs, const Vector<T, N, Container2>& rhs) noexcept
-    {
-        return transform(std::less<T>(), lhs, rhs);
-    }
-    friend constexpr auto
-    operator<(const Vector& lhs, const T& rhs) noexcept
-    {
-        return transform([&rhs](const T& elem) { return elem < rhs; }, lhs);
-    }
-
-    template <template <typename, size_t> typename Container2>
-    friend constexpr auto
-    operator>=(const Vector& lhs, const Vector<T, N, Container2>& rhs) noexcept
-    {
-        return transform(std::greater_equal<T>(), lhs, rhs);
-    }
-    friend constexpr auto
-    operator>=(const Vector& lhs, const T& rhs) noexcept
-    {
-        return transform([&rhs](const T& elem) { return elem >= rhs; }, lhs);
-    }
-
-    template <template <typename, size_t> typename Container2>
-    friend constexpr auto
-    operator<=(const Vector& lhs, const Vector<T, N, Container2>& rhs) noexcept
-    {
-        return transform(std::less_equal<T>(), lhs, rhs);
-    }
-    friend constexpr auto
-    operator<=(const Vector& lhs, const T& rhs) noexcept
-    {
-        return transform([&rhs](const T& elem) { return elem <= rhs; }, lhs);
-    }
-
-    constexpr auto
-    operator!() const noexcept
-    {
-        return transform(std::logical_not<T>(), *this);
     }
 
     constexpr std::size_t
@@ -913,6 +838,19 @@ get_w(Vector<T, N, Container>& v) noexcept
 {
     return v.template get<3>();
 }
+
+MAKE_UNARY_OP(negate, operator-)
+MAKE_UNARY_OP(logical_not, operator!)
+MAKE_BINARY_OP(plus, operator+)
+MAKE_BINARY_OP(minus, operator-)
+MAKE_BINARY_OP(multiplies, operator*)
+MAKE_BINARY_OP(divides, operator/)
+MAKE_BINARY_OP(equal_to, operator==)
+MAKE_BINARY_OP(not_equal_to, operator!=)
+MAKE_BINARY_OP(greater, operator>)
+MAKE_BINARY_OP(less, operator<)
+MAKE_BINARY_OP(greater_equal, operator>=)
+MAKE_BINARY_OP(less_equal, operator<=)
 } // namespace lucid
 
 namespace std
