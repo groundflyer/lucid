@@ -113,6 +113,40 @@
 
 #define VEC_FN_OBJ(FUNC) VEC_NAMED_FN_OBJ(FUNC, FUNC)
 
+#define VEC_NAMED_FN_OBJ_SMATH(FUNC)                                                     \
+    namespace fn                                                                         \
+    {                                                                                    \
+    struct FUNC##_fn                                                                     \
+    {                                                                                    \
+        template <typename T,                                                            \
+                  std::size_t N,                                                         \
+                  template <typename, std::size_t>                                       \
+                  typename Container,                                                    \
+                  typename... Args>                                                      \
+        constexpr decltype(auto)                                                         \
+        operator()(const Vector<T, N, Container>& v, const Args&... args) const noexcept \
+        {                                                                                \
+            return transform(*this, v, args...);                                         \
+        }                                                                                \
+        template <typename... Args>                                                      \
+        constexpr decltype(auto)                                                         \
+        operator()(const Args&... args) const noexcept                                   \
+        {                                                                                \
+            if(std::is_constant_evaluated())                                             \
+                return smath::FUNC(args...);                                             \
+            else                                                                         \
+                return std::FUNC(args...);                                               \
+        }                                                                                \
+        template <typename Rhs>                                                          \
+        constexpr decltype(auto)                                                         \
+        operator^(const Rhs& rhs) const noexcept                                         \
+        {                                                                                \
+            return lucid::compose(*this, rhs);                                           \
+        }                                                                                \
+    };                                                                                   \
+    }                                                                                    \
+    static constexpr fn::FUNC##_fn FUNC{};
+
 namespace lucid
 {
 /// @brief Generic N-dimensional euclidian vector.
@@ -581,8 +615,8 @@ VEC_FN_OBJ(almost_equal)
 VEC_FN_OBJ(lerp)
 VEC_NAMED_FN_OBJ(isfinite, std::isfinite)
 VEC_NAMED_FN_OBJ(clamp, std::clamp)
-VEC_NAMED_FN_OBJ(sqrt, std::sqrt)
-VEC_NAMED_FN_OBJ(abs, std::abs)
+VEC_NAMED_FN_OBJ_SMATH(sqrt)
+VEC_NAMED_FN_OBJ_SMATH(abs)
 
 namespace fn
 {

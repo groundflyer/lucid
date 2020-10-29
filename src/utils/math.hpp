@@ -137,16 +137,12 @@ template <typename T>
 constexpr std::pair<bool, T>
 quadratic(const T a, const T b, const T c) noexcept
 {
-    const T D      = pow<2>(b) - T{4} * a * c;
-    const T factor = T{0.5} * a;
-    T       sqrtD{};
-    if(std::is_constant_evaluated())
-        sqrtD = smath::sqrt(D);
-    else
-        sqrtD = std::sqrt(D);
-    const T  x1 = (-b + sqrtD) * factor;
-    const T  x2 = (-b - sqrtD) * factor;
-    const T& x  = std::signbit(x1) ? x2 : (std::signbit(x2) ? x1 : std::min(x1, x2));
+    const T  D      = pow<2>(b) - T{4} * a * c;
+    const T  factor = T{0.5} * a;
+    const T  sqrtD  = std::is_constant_evaluated() ? smath::sqrt(D) : std::sqrt(D);
+    const T  x1     = (-b + sqrtD) * factor;
+    const T  x2     = (-b - sqrtD) * factor;
+    const T& x      = std::signbit(x1) ? x2 : (std::signbit(x2) ? x1 : std::min(x1, x2));
     return std::pair{!std::signbit(D * x), x};
 }
 
@@ -184,8 +180,19 @@ almost_equal(const T a, const T b, const ULP ulp)
     // the machine epsilon has to be scaled to the magnitude of the values used
     // and multiplied by the desired precision in ULPs (units in the last place)
     // unless the result is subnormal
-    const T amb = abs(a - b);
-    return amb <= std::numeric_limits<T>::epsilon() * abs(a + b) * ulp ||
+    T amb{a - b};
+    T apb{a + b};
+    if(std::is_constant_evaluated())
+    {
+        amb = smath::abs(amb);
+        apb = smath::abs(apb);
+    }
+    else
+    {
+        amb = std::abs(amb);
+        apb = std::abs(apb);
+    }
+    return amb <= std::numeric_limits<T>::epsilon() * apb * ulp ||
            amb < std::numeric_limits<T>::min();
 }
 } // namespace fn

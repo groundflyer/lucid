@@ -269,7 +269,7 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
             vgen,
             [](const Vec& feed) noexcept { return dot(feed, feed); },
             [](const T testing, const Vec& feed) noexcept {
-                return !almost_equal(std::sqrt(testing), length(feed), 5) ||
+                return !almost_equal(lucid::sqrt(testing), length(feed), 5) ||
                        !std::isfinite(testing);
             });
 
