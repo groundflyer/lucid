@@ -398,17 +398,6 @@ class Vector
 template <typename T, size_t N, template <typename, size_t> typename Container>
 Vector(Container<T, N> &&) -> Vector<T, N, Container>;
 
-/// @brief Create reference to input vector, i.e. vector view.
-///
-/// Creates a such vector object that data it contains is mapped to
-/// other place.
-template <typename T, size_t N, template <typename, size_t> typename Container>
-constexpr const Vector<T, N, StaticSpan>
-ref(const Vector<T, N, Container>& v)
-{
-    return Vector<T, N, StaticSpan>(StaticSpan<T, N>(v.template get<0>()));
-}
-
 namespace detail
 {
 template <typename T>
@@ -473,28 +462,84 @@ struct check_dim<N1, Vector<T, N2, Container>>
     static constexpr bool value = N1 == N2;
 };
 
+template <typename T>
+struct promote_tuple
+{
+    template <std::size_t N>
+    using ret_type = Vector<std::decay_t<T>, N, std::array>;
+
+    template <std::size_t N>
+    static constexpr void
+    assign(ret_type<N>& v, const std::size_t i, const T& val) noexcept
+    {
+        v[i] = val;
+    }
+};
+
+template <typename T1, typename T2>
+struct promote_tuple<std::pair<T1, T2>>
+{
+    template <std::size_t N>
+    using ret_type =
+        std::pair<Vector<std::decay_t<T1>, N, std::array>, Vector<std::decay_t<T2>, N, std::array>>;
+
+    template <std::size_t N>
+    static constexpr void
+    assign(ret_type<N>& v, const std::size_t i, const std::pair<T1, T2>& val) noexcept
+    {
+        std::tie(v.first[i], v.second[i]) = val;
+    }
+};
+
+template <typename... Ts>
+struct promote_tuple<std::tuple<Ts...>>
+{
+    template <std::size_t N>
+    using ret_type = std::tuple<Vector<std::decay_t<Ts>, N, std::array>...>;
+
+    template <std::size_t N>
+    static constexpr void
+    assign(ret_type<N>& v, const std::size_t i, const std::tuple<Ts...>& val) noexcept
+    {
+        std::apply([&val, &i](Ts&... vv) noexcept { std::tie(vv[i]...) = val; }, v);
+    }
+};
+
 template <typename F, std::size_t... Idxs, typename... Vectors>
 constexpr auto
-transform_impl(const F& f, std::index_sequence<Idxs...>, const Vectors&... vs)
+transform_impl(const F& f, std::index_sequence<Idxs...>, const Vectors&... vs) noexcept
 {
-    using val_type          = std::decay_t<std::invoke_result_t<
+    using val_type = std::invoke_result_t<
         F,
-        typename vector_val_type<std::tuple_element_t<Idxs, std::tuple<Vectors...>>>::type...>>;
+        typename vector_val_type<std::tuple_element_t<Idxs, std::tuple<Vectors...>>>::type...>;
     constexpr std::size_t N = vector_dim<Vectors...>::n;
     static_assert((true && ... && check_dim<N, Vectors>::value),
                   "Vectors should have the same dimensionality");
-    using ret_type = Vector<val_type, N, std::array>;
+    using pt       = promote_tuple<val_type>;
+    using ret_type = typename pt::template ret_type<N>;
 
     ret_type ret{};
 
-    for(std::size_t i = 0; i < N; ++i) ret[i] = std::invoke(f, elem<Idxs>(i, vs...)...);
+    for(std::size_t i = 0; i < N; ++i) pt::assign(ret, i, std::invoke(f, elem<Idxs>(i, vs...)...));
 
     return ret;
 }
 } // namespace detail
 
-/// @brief Apply function to corresponding elements of input vectors.
+/// @brief Create reference to input vector, i.e. vector view.
 ///
+/// Creates a such vector object that data it contains is mapped to
+/// other place.
+template <typename T, size_t N, template <typename, size_t> typename Container>
+constexpr const Vector<T, N, StaticSpan>
+ref(const Vector<T, N, Container>& v) noexcept
+{
+    return Vector<T, N, StaticSpan>(StaticSpan<T, N>(v.template get<0>()));
+}
+
+/// @brief Apply function to corresponding elements of input vectors.
+/// @return Vector containing results of applycation @f to the elements of input vectors
+/// or pair or tuple of vectors if @f returns such.
 /// @p f accepts as many arguments as the number of input vectors @p vs.
 /// @p Vectors should have the same dimensionality.
 template <typename F, typename... Vectors>
