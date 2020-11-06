@@ -617,6 +617,7 @@ VEC_NAMED_FN_OBJ(isfinite, std::isfinite)
 VEC_NAMED_FN_OBJ(clamp, std::clamp)
 VEC_NAMED_FN_OBJ_SMATH(sqrt)
 VEC_NAMED_FN_OBJ_SMATH(abs)
+VEC_NAMED_FN_OBJ_SMATH(pow)
 
 namespace fn
 {
@@ -658,7 +659,7 @@ template <typename T, std::size_t N, template <typename, std::size_t> typename C
 constexpr T
 length2(const Vector<T, N, Container>& a) noexcept
 {
-    return transform_reduce(pow<2, T>, std::plus<T>(), a, T{0});
+    return transform_reduce(static_pow<2, T>, std::plus<T>(), a, T{0});
 }
 
 /// @brief Compute length of a vector.
@@ -733,7 +734,30 @@ avg(const Vector<T, N, Container>& a) noexcept
 {
     return sum(a) / N;
 }
+
+/// @brief Rise vector elements to a constant power.
+/// @tparam exp power exponent.
+template <unsigned exp>
+struct static_pow_fn
+{
+    template <typename T>
+    constexpr T
+    operator()(const T& value) const noexcept
+    {
+        return static_pow<exp>(value);
+    }
+
+    template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
+    constexpr Vector<T, N, Container>
+    operator()(const Vector<T, N, Container>& v) const noexcept
+    {
+        return transform(*this, v);
+    }
+};
 } // namespace fn
+
+template <unsigned exp>
+static constexpr fn::static_pow_fn<exp> static_pow;
 
 MK_FN_OBJ(dot)
 MK_FN_OBJ(cross)
@@ -789,19 +813,6 @@ constexpr auto
 min(const Vector<T, N, Container1>& a, const Vector<T, N, Container2>& b) noexcept
 {
     return transform(static_cast<const T& (*)(const T&, const T&)>(std::min), a, b);
-}
-
-/// @brief Rise vector elements to a constant power.
-/// @tparam exp power exponent.
-template <unsigned exp,
-          typename T,
-          std::size_t N,
-          template <typename, std::size_t>
-          typename Container>
-constexpr auto
-pow(const Vector<T, N, Container>& v) noexcept
-{
-    return transform(pow<exp, T>, v);
 }
 
 /// @brief Roll vector elements.

@@ -95,26 +95,6 @@ sgn(const Iterable& numbers) noexcept
     return ret;
 }
 
-/// @brief Rise a number to a constant power.
-///
-/// Fast implementation by Alister Chowdhury.
-///
-/// @tparam exp power exponent.
-template <unsigned exp, typename T>
-constexpr T
-pow(const T value) noexcept
-{
-    if(!exp) { return 1; }
-    else
-    {
-        const T base = pow<exp / 2>(value);
-        if constexpr(is_even(exp))
-            return base * base;
-        else
-            return base * base * value;
-    }
-}
-
 /// @brief Convert radians to degrees.
 template <typename T>
 constexpr T
@@ -158,6 +138,26 @@ resample(const T s) noexcept
 
 namespace fn
 {
+/// @brief Rise a number to a constant power.
+///
+/// Fast implementation by Alister Chowdhury.
+///
+/// @tparam exp power exponent.
+template <unsigned exp, typename T>
+constexpr T
+static_pow(const T value) noexcept
+{
+    if(!exp) { return 1; }
+    else
+    {
+        const T base = static_pow<exp / 2>(value);
+        if constexpr(is_even(exp))
+            return base * base;
+        else
+            return base * base * value;
+    }
+}
+
 /// @brief Perform linear interpolation between two values.
 /// @param bias interpolation bias.
 template <typename T, typename Bias>

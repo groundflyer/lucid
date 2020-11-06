@@ -294,10 +294,11 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
                     return cross(a, b);
                 },
                 [](const Vec& testing, const auto& feed) noexcept {
-                    const auto& [a, b]       = feed;
-                    const T              at  = dot(a, testing);
-                    const T              bt  = dot(b, testing);
-                    const constexpr auto ulp = pow<sizeof(T)>(is_same_v<T, double> ? 100ul : 55u);
+                    const auto& [a, b]      = feed;
+                    const T              at = dot(a, testing);
+                    const T              bt = dot(b, testing);
+                    const constexpr auto ulp =
+                        static_pow<sizeof(T)>(is_same_v<T, double> ? 100ul : 55u);
                     return !(almost_equal(at, T{0}, ulp) || almost_equal(bt, T{0}, ulp)) ||
                            !all(lucid::isfinite(testing));
                 });
