@@ -71,28 +71,31 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
                !all(lucid::isfinite(testing));
     };
 
-    /// @test @f$\mathrm{V}(a,b,c\dots) = \mathrm{V}(a, b, c\dots)@f$
+    /// @test Standard vector constructor.
+    ///
+    ///@f$\mathrm{V}(a,b,c\dots) = \mathrm{V}(a, b, c\dots)@f$
     ret += test_property_n(
         "{}({})"_format(vec_typestring, arr_typestring),
         argen,
-        [](const array<T, N>& feed) noexcept { return std::make_from_tuple<Vec>(feed); },
+        [](const auto& feed) noexcept { return std::make_from_tuple<Vec>(feed); },
         arass);
 
-    /// @test @f$\mathrm{V}([a,b,c\dots]) = \mathrm{V}(a, b, c\dots)@f$
+    /// @test Array vector constructor.
+    ///
+    ///@f$\mathrm{V}([a,b,c\dots]) = \mathrm{V}(a, b, c\dots)@f$
     ret += test_property_n(
-        "{}({})"_format(vec_typestring, arr_typestring),
-        argen,
-        [](const array<T, N>& feed) noexcept { return Vec(feed); },
-        arass);
+        "{}({})"_format(vec_typestring, arr_typestring), argen, maker<Vec>(), arass);
 
     if constexpr(N > 2)
     {
         const constexpr std::size_t N1 = N - 1;
-        /// @test @f$\mathrm{V}_N(a, \mathrm{V}_{N-1}(b, c\dots)) = \mathrm{V}_{N}(a, b, c\dots)@f$
+        /// @test Construct vector from scalar and smaller vector.
+        ///
+        /// @f$\mathrm{V}_N(a, \mathrm{V}_{N-1}(b, c\dots)) = \mathrm{V}_{N}(a, b, c\dots)@f$
         ret += test_property_n(
             "{0}({1}, Vector<{1}, {2}>)"_format(vec_typestring, t_typestring, N1),
-            [&]() noexcept { return tuple(dist(g), Vector<T, N1, array>(generate<N1>(dist, g))); },
-            [](const auto& feed) noexcept { return std::make_from_tuple<Vec>(feed); },
+            [&]() noexcept { return pair(dist(g), Vector<T, N1, array>(generate<N1>(dist, g))); },
+            [](const T& val, const auto& vec) noexcept { return Vec(val, vec); },
             [](const Vec& testing, const auto& feed) noexcept {
                 const auto& [v0, vv] = feed;
                 bool ret             = testing[0] != v0;
@@ -104,7 +107,7 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
     auto vgen = [&]() noexcept { return Vec(argen()); };
 
     // vector and scalar value generator
-    auto vsgen = [&]() { return pair(vgen(), dist(g)); };
+    auto vsgen = [&]() noexcept { return pair(vgen(), dist(g)); };
 
     const auto assertion = [](const auto& a, const auto& b) noexcept {
         if constexpr(is_floating_point_v<T>)
@@ -116,25 +119,24 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
             return any(a != b);
     };
 
-    /// @test @f$\mathbf{v} + s = \mathbf{v} + s - s@f$
-    ret += test_property_n(
-        "{} +- {}"_format(vec_typestring, t_typestring),
-        vsgen,
-        [](const auto feed) noexcept {
-            const auto& [vec, val] = feed;
-            return vec + val;
-        },
-        [&](const auto& testing, const auto feed) noexcept {
-            const auto& [vec, val] = feed;
-            return assertion(testing - val, vec);
-        });
+    /// @test Vector-scalar addition and subtraction.
+    ///
+    /// @f$\mathbf{v} + s = \mathbf{v} + s - s@f$
+    ret += test_property_n("{} +- {}"_format(vec_typestring, t_typestring),
+                           vsgen,
+                           lucid::plus,
+                           [&](const auto& testing, const auto feed) noexcept {
+                               const auto& [vec, val] = feed;
+                               return assertion(testing - val, vec);
+                           });
 
-    /// @test mutable @f$\mathbf{v} + s = \mathbf{v} + s - s@f$
+    /// @test Mutable vector-scalar addition and subtraction.
+    ///
+    /// @f$\mathbf{v} + s = \mathbf{v} + s - s@f$
     ret += test_property_n(
         "{} +-= {}"_format(vec_typestring, t_typestring),
         vsgen,
-        [](const auto& feed) noexcept {
-            auto [vec, val] = feed;
+        [](Vec vec, const T& val) noexcept {
             vec += val;
             return vec;
         },
@@ -155,25 +157,24 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
     // vector and divisor generator
     auto vdgen = [&]() noexcept { return pair(vgen(), divdist(g) * signgen()); };
 
-    /// @test @f$\mathbf{v} s = \frac{\mathbf{v} s}{s}@f$.
-    ret += test_property_n(
-        "{} */ {}"_format(vec_typestring, t_typestring),
-        vdgen,
-        [](const auto& feed) noexcept {
-            const auto& [vec, val] = feed;
-            return vec * val;
-        },
-        [&](const auto& testing, const auto& feed) noexcept {
-            const auto& [vec, val] = feed;
-            return assertion(testing / val, vec);
-        });
+    /// @test Vector-scalar multiplication and division.
+    ///
+    /// @f$\mathbf{v} s = \frac{\mathbf{v} s}{s}@f$.
+    ret += test_property_n("{} */ {}"_format(vec_typestring, t_typestring),
+                           vdgen,
+                           lucid::multiplies,
+                           [&](const auto& testing, const auto& feed) noexcept {
+                               const auto& [vec, val] = feed;
+                               return assertion(testing / val, vec);
+                           });
 
-    /// @test mutable @f$\mathbf{v} s = \frac{\mathbf{v} s}{s}@f$
+    /// @test Mutable vector-scalar multiplication and division.
+    ///
+    /// @f$\mathbf{v} s = \frac{\mathbf{v} s}{s}@f$
     ret += test_property_n(
         "{} */= {}"_format(vec_typestring, t_typestring),
         vdgen,
-        [](const auto& feed) noexcept {
-            auto [vec, val] = feed;
+        [](Vec vec, const T& val) noexcept {
             vec *= val;
             return vec;
         },
@@ -186,26 +187,25 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
     // pair of vectors generator
     auto vvgen = [&]() noexcept { return pair(vgen(), vgen()); };
 
-    /// @test @f$\mathbf{v}_0 + \mathbf{v}_1 = \mathbf{v}_0 + \mathbf{v}_1 - \mathbf{v}_1@f$
-    ret += test_property_n(
-        "{0} +- {0}"_format(vec_typestring),
-        vvgen,
-        [](const auto& feed) noexcept {
-            const auto& [vec1, vec2] = feed;
-            return vec1 + vec2;
-        },
-        [&](const auto& testing, const auto& feed) noexcept {
-            const auto& [vec1, vec2] = feed;
-            return assertion(testing - vec2, vec1);
-        });
+    /// @test Vector-vector addition and subtraction.
+    ///
+    /// @f$\mathbf{v}_0 + \mathbf{v}_1 = \mathbf{v}_0 + \mathbf{v}_1 - \mathbf{v}_1@f$
+    ret += test_property_n("{0} +- {0}"_format(vec_typestring),
+                           vvgen,
+                           lucid::plus,
+                           [&](const auto& testing, const auto& feed) noexcept {
+                               const auto& [vec1, vec2] = feed;
+                               return assertion(testing - vec2, vec1);
+                           });
 
-    /// @test mutable @f$\mathbf{v}_0 + \mathbf{v}_1 = \mathbf{v}_0 + \mathbf{v}_1 -
+    /// @test Mutable vector-vector addition and subtraction.
+    ///
+    /// @f$\mathbf{v}_0 + \mathbf{v}_1 = \mathbf{v}_0 + \mathbf{v}_1 -
     /// \mathbf{v}_1@f$
     ret += test_property_n(
         "{0} +-= {0}"_format(vec_typestring),
         vvgen,
-        [](const auto& feed) noexcept {
-            auto [vec1, vec2] = feed;
+        [](Vec vec1, const Vec& vec2) noexcept {
             vec1 += vec2;
             return vec1;
         },
@@ -215,43 +215,45 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
             return assertion(testing, vec1);
         });
 
-    /// @test @f$\mathrm{min}(\mathbf{v}_0, \mathbf{v}_1) < \mathrm{max}(\mathbf{v}_0,
+    /// @test Vector minmax.
+    ///
+    /// @f$\mathrm{min}(\mathbf{v}_0, \mathbf{v}_1) < \mathrm{max}(\mathbf{v}_0,
     /// \mathbf{v}_1)@f$
-    ret += test_property_n(
-        "min({0}, {0}), max({0}, {0})"_format(vec_typestring),
-        vvgen,
-        [](const auto& feed) noexcept {
-            const auto& [vec1, vec2] = feed;
-            return pair{lucid::min(vec1, vec2), lucid::max(vec1, vec2)};
-        },
-        [&](const auto& testing, const auto&) noexcept {
-            const auto& [vmin, vmax] = testing;
-            return any(vmin > vmax) || !all(lucid::isfinite(vmin)) || !all(lucid::isfinite(vmax));
-        });
+    ret += test_property_n("min({0}, {0}), max({0}, {0})"_format(vec_typestring),
+                           vvgen,
+                           lucid::minmax,
+                           // [](const auto& feed) noexcept {
+                           //     const auto& [vec1, vec2] = feed;
+                           //     return pair{lucid::min(vec1, vec2), lucid::max(vec1, vec2)};
+                           // },
+                           [&](const auto& testing, const auto&) noexcept {
+                               const auto& [vmin, vmax] = testing;
+                               return any(vmin > vmax) || !all(lucid::isfinite(vmin)) ||
+                                      !all(lucid::isfinite(vmax));
+                           });
 
     // vector and vector-divizor generator
     auto vvdgen = [&]() noexcept { return pair(vgen(), Vec(generate<N>(divdist, g)) * signgen()); };
 
-    /// @test @f$\mathbf{v}_0 \mathbf{v}_1 = \frac{\mathbf{v}_0 \mathbf{v}_1}{\mathbf{v}_1}@f$
-    ret += test_property_n(
-        "{0} */ {0}"_format(vec_typestring),
-        vvdgen,
-        [](const auto& feed) noexcept {
-            const auto& [vec1, vec2] = feed;
-            return vec1 * vec2;
-        },
-        [&](const auto& testing, const auto& feed) noexcept {
-            const auto& [vec1, vec2] = feed;
-            return assertion(testing / vec2, vec1);
-        });
+    /// @test Vector-vector multiplication and division.
+    ///
+    /// @f$\mathbf{v}_0 \mathbf{v}_1 = \frac{\mathbf{v}_0 \mathbf{v}_1}{\mathbf{v}_1}@f$
+    ret += test_property_n("{0} */ {0}"_format(vec_typestring),
+                           vvdgen,
+                           lucid::multiplies,
+                           [&](const auto& testing, const auto& feed) noexcept {
+                               const auto& [vec1, vec2] = feed;
+                               return assertion(testing / vec2, vec1);
+                           });
 
-    /// @test mutable @f$\mathbf{v}_0 \mathbf{v}_1 = \frac{\mathbf{v}_0
+    /// @test Mutable vector-vector multiplication and division.
+    ///
+    /// @f$\mathbf{v}_0 \mathbf{v}_1 = \frac{\mathbf{v}_0
     /// \mathbf{v}_1}{\mathbf{v}_1}@f$
     ret += test_property_n(
         "{0} */= {0}"_format(vec_typestring),
         vvdgen,
-        [](const auto& feed) noexcept {
-            auto [vec1, vec2] = feed;
+        [](Vec vec1, const Vec& vec2) noexcept {
             vec1 *= vec2;
             return vec1;
         },
@@ -263,7 +265,9 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
 
     if constexpr(is_floating_point_v<T>)
     {
-        /// @test @f$\mathbf{v} \cdot \mathbf{v} = \mathrm{length}(\mathbf{v})@f$
+        /// @test Check if dot product of the same vector is equal its length.
+        ///
+        /// @f$\mathbf{v} \cdot \mathbf{v} = \mathrm{length}(\mathbf{v})@f$
         ret += test_property_n(
             "{}: A dot A = length A"_format(vec_typestring),
             vgen,
@@ -273,26 +277,27 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
                        !std::isfinite(testing);
             });
 
-        /// @test @f$\mathrm{length}(\mathrm{normalize}(\mathbf{v})) = 1@f$
-        ret += test_property_n(
-            "normalize({}) = 1"_format(vec_typestring),
-            vgen,
-            [](const Vec& feed) noexcept { return normalize(feed); },
-            [](const Vec& testing, Vec) noexcept {
-                return !almost_equal(length(testing), T{1}, 5) || !all(lucid::isfinite(testing));
-            });
+        /// @test Check if length of normalized vector is equal to one.
+        ///
+        /// @f$\mathrm{length}(\mathrm{normalize}(\mathbf{v})) = 1@f$
+        ret += test_property_n("normalize({}) = 1"_format(vec_typestring),
+                               vgen,
+                               normalize,
+                               [](const Vec& testing, Vec) noexcept {
+                                   return !almost_equal(length(testing), T{1}, 5) ||
+                                          !all(lucid::isfinite(testing));
+                               });
 
         if constexpr(N > 2)
-            /// @test @f$(\mathbf{v}_0 \times \mathbf{v}_1) \bot \mathbf{v}_0 \bot \mathbf{v}_1@f$
+            /// @test Check if cross product of two vectors is perpendicular vector.
+            ///
+            /// @f$(\mathbf{v}_0 \times \mathbf{v}_1) \bot \mathbf{v}_0 \bot \mathbf{v}_1@f$
             ret += test_property(
                 num_tests,
                 0.01,
                 "{}: C <- cross A B | A dot C = B dot C = 0"_format(vec_typestring),
                 [&]() noexcept { return pair(normalize(vgen()), normalize(vgen())); },
-                [](const auto& feed) {
-                    const auto& [a, b] = feed;
-                    return cross(a, b);
-                },
+                cross,
                 [](const Vec& testing, const auto& feed) noexcept {
                     const auto& [a, b]      = feed;
                     const T              at = dot(a, testing);

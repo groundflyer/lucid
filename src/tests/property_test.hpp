@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <utils/functional.hpp>
+
 #include <fmt/format.h>
 
 #include <string_view>
@@ -38,6 +40,10 @@
 ///
 /// @p testing is the function we'd like to test.
 ///
+/// If @p testing accepts more then one value,
+/// @p generator should return either a tuple or a pair.
+/// @p test_property will decide automatically how to call @p testing.
+///
 /// @p property checks if the property is preserved.
 /// It accepts the output of @p testing as the first argument
 /// and the output of @p generator as the second argument.
@@ -57,10 +63,8 @@ test_property(const std::size_t n,
     std::size_t sum = 0;
     for(std::size_t i = 0; i < n; ++i)
     {
-        auto&& feed    = generator();
-        using FeedType = std::decay_t<decltype(feed)>;
-        const bool result =
-            property(testing(std::forward<FeedType>(feed)), std::forward<FeedType>(feed));
+        const auto feed   = generator();
+        const bool result = property(lucid::maybe_apply(testing, feed), feed);
         sum += static_cast<size_t>(result);
     }
 

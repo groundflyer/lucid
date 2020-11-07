@@ -119,6 +119,24 @@ struct fold_wrapper
             op, op(operand, rhs.operand));
     }
 };
+
+template <typename T>
+struct is_tuple
+{
+    static constexpr bool value = false;
+};
+
+template <typename T1, typename T2>
+struct is_tuple<std::pair<T1, T2>>
+{
+    static constexpr bool value = true;
+};
+
+template <typename... Ts>
+struct is_tuple<std::tuple<Ts...>>
+{
+    static constexpr bool value = true;
+};
 } // namespace detail
 
 namespace fn
@@ -146,7 +164,7 @@ reduce(BinaryOp&& op, Init&& init, Args&&... args) noexcept
 // compose(a, b, c) = a(b(c()))
 template <typename F, typename... Fs>
 constexpr decltype(auto)
-compose(F&& f, Fs&&... fs)
+compose(const F& f, Fs&&... fs)
 {
     return reduce(detail::ComposeOp{}, std::forward<F>(f), std::forward<Fs>(fs)...);
 }
@@ -181,5 +199,15 @@ select(Head&& head, Tail&&... tail) noexcept
         return head;
     else
         return select<Idx - 1ul>(tail...);
+}
+
+template <typename F, typename Arg>
+constexpr decltype(auto)
+maybe_apply(F&& f, Arg&& arg)
+{
+    if constexpr(detail::is_tuple<std::decay_t<Arg>>::value)
+        return std::apply(f, arg);
+    else
+        return std::invoke(f, arg);
 }
 } // namespace lucid
