@@ -83,8 +83,8 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
     /// @test Array vector constructor.
     ///
     ///@f$\mathrm{V}([a,b,c\dots]) = \mathrm{V}(a, b, c\dots)@f$
-    ret += test_property_n(
-        "{}({})"_format(vec_typestring, arr_typestring), argen, maker<Vec>(), arass);
+    ret +=
+        test_property_n("{}({})"_format(vec_typestring, arr_typestring), argen, maker<Vec>, arass);
 
     if constexpr(N > 2)
     {
@@ -95,7 +95,7 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
         ret += test_property_n(
             "{0}({1}, Vector<{1}, {2}>)"_format(vec_typestring, t_typestring, N1),
             [&]() noexcept { return pair(dist(g), Vector<T, N1, array>(generate<N1>(dist, g))); },
-            [](const T& val, const auto& vec) noexcept { return Vec(val, vec); },
+            maker<Vec>,
             [](const Vec& testing, const auto& feed) noexcept {
                 const auto& [v0, vv] = feed;
                 bool ret             = testing[0] != v0;

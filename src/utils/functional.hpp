@@ -150,9 +150,26 @@ struct identity_fn
         return t;
     }
 };
+
+template <typename T, bool list_init = true>
+struct maker_fn
+{
+    template <typename... Args>
+    constexpr T
+    operator()(Args&&... args) const
+    {
+        if constexpr(list_init)
+            return T{args...};
+        else
+            return T(args...);
+    }
+};
 } // namespace fn
 
 static constexpr fn::identity_fn identity;
+
+template <typename T, bool list_init = false>
+static constexpr fn::maker_fn<T, list_init> maker;
 
 template <typename BinaryOp, typename Init, typename... Args>
 constexpr decltype(auto)
@@ -174,19 +191,6 @@ constexpr decltype(auto)
 flip(BinaryF f) noexcept
 {
     return [=](auto&& rhs, auto&& lhs) constexpr { return std::invoke(f, lhs, rhs); };
-}
-
-template <typename T, bool list_init = false>
-constexpr auto
-maker() noexcept
-{
-    return []<typename... Args>(Args && ... args) constexpr
-    {
-        if constexpr(list_init)
-            return T{std::forward<Args>(args)...};
-        else
-            return T(std::forward<Args>(args)...);
-    };
 }
 
 template <std::size_t Idx, typename Head, typename... Tail>
