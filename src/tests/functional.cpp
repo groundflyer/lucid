@@ -90,7 +90,7 @@ main()
             explicit constexpr MakeDouble(const MakeFloat& f) : d(f.f) {}
         };
 
-        constexpr auto cc = compose(maker<MakeDouble>(), maker<MakeFloat>(), maker<MakeInt>());
+        constexpr auto cc = compose(maker<MakeDouble>, maker<MakeFloat>, maker<MakeInt>);
         auto           dd = cc(10);
         static_assert(std::is_same_v<decltype(dd), MakeDouble>);
         bool ok = dd.d == 10.0;

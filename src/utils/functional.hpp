@@ -164,12 +164,26 @@ struct maker_fn
             return T(args...);
     }
 };
+
+template <typename T>
+struct tuple_maker_fn
+{
+    template <typename Tuple>
+    constexpr T
+    operator()(Tuple&& t) const
+    {
+        return std::make_from_tuple<T>(t);
+    }
+};
 } // namespace fn
 
 static constexpr fn::identity_fn identity;
 
 template <typename T, bool list_init = false>
 static constexpr fn::maker_fn<T, list_init> maker;
+
+template <typename T>
+static constexpr fn::tuple_maker_fn<T> tuple_maker;
 
 template <typename BinaryOp, typename Init, typename... Args>
 constexpr decltype(auto)
@@ -179,11 +193,11 @@ reduce(BinaryOp&& op, Init&& init, Args&&... args) noexcept
 }
 
 // compose(a, b, c) = a(b(c()))
-template <typename F, typename... Fs>
+template <typename... Fs>
 constexpr decltype(auto)
-compose(const F& f, Fs&&... fs)
+compose(Fs&&... fs)
 {
-    return reduce(detail::ComposeOp{}, std::forward<F>(f), std::forward<Fs>(fs)...);
+    return reduce(detail::ComposeOp{}, std::forward<Fs>(fs)...);
 }
 
 template <typename BinaryF>

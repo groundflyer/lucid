@@ -55,11 +55,15 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
         return test_property(num_tests, threshold, forward<decltype(args)>(args)...);
     };
 
-    /// @test @f$\mathrm{V}(a) = \mathrm{V}(a, a, a\dots)@f$
+    constexpr auto vmaker = maker<Vec>;
+
+    /// @test Construct @p Vector with a single scalar.
+    ///
+    /// @f$\mathrm{V}(a) = \mathrm{V}(a, a, a\dots)@f$
     ret += test_property_n(
         "{}({})"_format(vec_typestring, t_typestring),
         [&]() noexcept { return dist(g); },
-        [](const auto& feed) noexcept { return Vec(feed); },
+        vmaker,
         [](const auto& testing, const auto& feed) noexcept { return any(testing != feed); });
 
     // array generator
@@ -73,18 +77,14 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
 
     /// @test Standard vector constructor.
     ///
-    ///@f$\mathrm{V}(a,b,c\dots) = \mathrm{V}(a, b, c\dots)@f$
+    /// @f$\mathrm{V}(a,b,c\dots) = \mathrm{V}(a, b, c\dots)@f$
     ret += test_property_n(
-        "{}({})"_format(vec_typestring, arr_typestring),
-        argen,
-        [](const auto& feed) noexcept { return std::make_from_tuple<Vec>(feed); },
-        arass);
+        "{}({})"_format(vec_typestring, arr_typestring), argen, tuple_maker<Vec>, arass);
 
     /// @test Array vector constructor.
     ///
     ///@f$\mathrm{V}([a,b,c\dots]) = \mathrm{V}(a, b, c\dots)@f$
-    ret +=
-        test_property_n("{}({})"_format(vec_typestring, arr_typestring), argen, maker<Vec>, arass);
+    ret += test_property_n("{}({})"_format(vec_typestring, arr_typestring), argen, vmaker, arass);
 
     if constexpr(N > 2)
     {
@@ -95,7 +95,7 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
         ret += test_property_n(
             "{0}({1}, Vector<{1}, {2}>)"_format(vec_typestring, t_typestring, N1),
             [&]() noexcept { return pair(dist(g), Vector<T, N1, array>(generate<N1>(dist, g))); },
-            maker<Vec>,
+            vmaker,
             [](const Vec& testing, const auto& feed) noexcept {
                 const auto& [v0, vv] = feed;
                 bool ret             = testing[0] != v0;
@@ -130,7 +130,7 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
                                return assertion(testing - val, vec);
                            });
 
-    /// @test Mutable vector-scalar addition and subtraction.
+    /// @test Inplace vector-scalar addition and subtraction.
     ///
     /// @f$\mathbf{v} + s = \mathbf{v} + s - s@f$
     ret += test_property_n(
@@ -168,7 +168,7 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
                                return assertion(testing / val, vec);
                            });
 
-    /// @test Mutable vector-scalar multiplication and division.
+    /// @test Inplace vector-scalar multiplication and division.
     ///
     /// @f$\mathbf{v} s = \frac{\mathbf{v} s}{s}@f$
     ret += test_property_n(
@@ -198,7 +198,7 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
                                return assertion(testing - vec2, vec1);
                            });
 
-    /// @test Mutable vector-vector addition and subtraction.
+    /// @test Inplace vector-vector addition and subtraction.
     ///
     /// @f$\mathbf{v}_0 + \mathbf{v}_1 = \mathbf{v}_0 + \mathbf{v}_1 -
     /// \mathbf{v}_1@f$
@@ -246,7 +246,7 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
                                return assertion(testing / vec2, vec1);
                            });
 
-    /// @test Mutable vector-vector multiplication and division.
+    /// @test Inplace vector-vector multiplication and division.
     ///
     /// @f$\mathbf{v}_0 \mathbf{v}_1 = \frac{\mathbf{v}_0
     /// \mathbf{v}_1}{\mathbf{v}_1}@f$
