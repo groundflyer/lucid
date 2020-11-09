@@ -64,32 +64,37 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
     auto mat_gen1 = [&]() noexcept { return pair{mat_gen(), dist(g)}; };
     auto mat_gen2 = [&]() noexcept { return pair{mat_gen(), mat_gen()}; };
 
+    constexpr auto mmaker = maker<Mat>;
+    constexpr auto tmaker = tuple_maker<Mat>;
+
     unsigned ret = 0u;
 
-    /// @test @f$\mathrm{M}(a) = \mathrm{M}(a, a, a\dots)@f$
+    /// @test Construct Matrix with a single scalar.
+    ///
+    /// @f$\mathrm{M}(a) = \mathrm{M}(a, a, a\dots)@f$
     ret += test_property_n(
         "flat_ref({}({}))"_format(mat_typestring, t_typestring),
         [&]() noexcept { return dist(g); },
-        [](const auto feed) noexcept { return Mat(feed); },
+        mmaker,
         [](const auto& testing, const auto& feed) noexcept {
             return any(flat_ref(testing) != feed) || !all(lucid::isfinite(flat_ref(testing)));
         });
 
-    /// @test @f$\mathrm{M}(a,b,c\dots) = \mathrm{M}(a, b, c\dots)@f$
+    /// @test Standard matrix constructor.
+    ///
+    /// @f$\mathrm{M}(a,b,c\dots) = \mathrm{M}(a, b, c\dots)@f$
     ret += test_property_n(
-        "{}({})"_format(mat_typestring, arr_typestring),
-        array_mn_gen,
-        [](const auto& feed) noexcept { return std::make_from_tuple<Mat>(feed); },
-        array_assertion);
+        "{}({})"_format(mat_typestring, arr_typestring), array_mn_gen, tmaker, array_assertion);
 
-    /// @test @f$\mathrm{M}([a,b,c\dots]) = \mathrm{M}(a, b, c\dots)@f$
+    /// @test Construct Matrix with an array.
+    ///
+    /// @f$\mathrm{M}([a,b,c\dots]) = \mathrm{M}(a, b, c\dots)@f$
     ret += test_property_n(
-        "{}({})"_format(mat_typestring, arr_typestring),
-        array_mn_gen,
-        [](const auto& feed) noexcept { return Mat(feed); },
-        array_assertion);
+        "{}({})"_format(mat_typestring, arr_typestring), array_mn_gen, mmaker, array_assertion);
 
-    /// @test @f$\mathrm{M}_{m,n}(\mathrm{V}_n(a_{1,1},a_{1,2},\dotsc,a_{1,n}),
+    /// @test Construct Matrix from few vectors.
+    ///
+    /// @f$\mathrm{M}_{m,n}(\mathrm{V}_n(a_{1,1},a_{1,2},\dotsc,a_{1,n}),
     /// \mathrm{V}_n(a_{2,1},a_{2,2},\dotsc,a_{2,n}),\dotsc,
     /// \mathrm{V}_n(a_{m,1},a_{m,2},\dotsc,a_{m,n})) =
     /// \begin{pmatrix}
@@ -100,13 +105,13 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
     /// \end{pmatrix}@f$
     ret += test_property_n(
         "{}({})"_format(mat_typestring, get_typeinfo_string(array<Vec, M>{})),
-        [&]() {
+        [&]() noexcept {
             array<Vec, M> ret;
             for(size_t i = 0; i < M; ++i) ret[i] = vgen();
             return ret;
         },
-        [](const auto& feed) { return std::make_from_tuple<Mat>(feed); },
-        [](const Mat& testing, const auto& feed) {
+        tmaker,
+        [](const Mat& testing, const array<Vec, M>& feed) noexcept {
             bool ret = false;
             for(size_t i = 0; i < M; ++i) ret |= any(testing[i] != feed[i]);
             return ret || !all(lucid::isfinite(flat_ref(testing)));
@@ -114,7 +119,10 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
 
     array<string, M> strs;
     std::fill(strs.begin(), strs.end(), "{}"_format(get_typeinfo_string(Vec().data())));
-    /// @test @f$\mathrm{M}_{m,n}([a_{1,1},a_{1,2},\dotsc,a_{1,n}],
+
+    /// @test Construct Matrix with few arrays.
+    ///
+    /// @f$\mathrm{M}_{m,n}([a_{1,1},a_{1,2},\dotsc,a_{1,n}],
     /// [a_{2,1},a_{2,2},\dotsc,a_{2,n}],\dotsc,
     /// [a_{m,1},a_{m,2},\dotsc,a_{m,n}]) =
     /// \begin{pmatrix}
@@ -130,8 +138,8 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
             for(size_t i = 0; i < M; ++i) ret[i] = array_n_gen();
             return ret;
         },
-        [](const auto& feed) noexcept { return std::make_from_tuple<Mat>(feed); },
-        [](const Mat& testing, const auto& feed) noexcept {
+        tmaker,
+        [](const Mat& testing, const array<array<T, N>, M>& feed) noexcept {
             bool ret = false;
             for(size_t i = 0; i < M; ++i)
                 for(size_t j = 0; j < N; ++j) ret |= testing[i][j] != feed[i][j];
@@ -148,7 +156,9 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
         auto smat_gen                   = [&]() noexcept { return sMat(generate<MN1>(dist, g)); };
         auto svecgen                    = [&]() noexcept { return sVec(generate<N1>(dist, g)); };
 
-        /// @test @f$\mathrm{M}_{m,n}\left(
+        /// @test Construct Matrix with a smaller matrix.
+        ///
+        /// @f$\mathrm{M}_{m,n}\left(
         /// \mathrm{M}_{m-1,n-1}
         /// \begin{pmatrix}
         /// a_{1,1} & \cdots & a_{1,n-1} \\
@@ -162,18 +172,21 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
         /// \vdots  & \vdots  & \vdots & \vdots & \ddots & \vdots \\
         /// 0 & 0 & \cdots & 0 & \cdots & 0
         /// \end{pmatrix}@f$
-        ret += test_property_n(
-            "{}(Matrix<{}, {}, {}>)"_format(mat_typestring, t_typestring, M1, N1),
-            smat_gen,
-            [](const sMat& feed) noexcept { return Mat(feed); },
-            [](const Mat& testing, const sMat& feed) noexcept {
-                bool ret = false;
-                for(size_t i = 0; i < M1; ++i)
-                    for(size_t j = 0; j < N1; ++j) ret |= feed.at(i, j) != testing.at(i, j);
-                return ret || !all(lucid::isfinite(flat_ref(testing)));
-            });
+        ret +=
+            test_property_n("{}(Matrix<{}, {}, {}>)"_format(mat_typestring, t_typestring, M1, N1),
+                            smat_gen,
+                            mmaker,
+                            [](const Mat& testing, const sMat& feed) noexcept {
+                                bool ret = false;
+                                for(size_t i = 0; i < M1; ++i)
+                                    for(size_t j = 0; j < N1; ++j)
+                                        ret |= feed.at(i, j) != testing.at(i, j);
+                                return ret || !all(lucid::isfinite(flat_ref(testing)));
+                            });
 
-        /// @test @f$\mathrm{M}_{m,n}\left(a, \mathrm{V}_{n-1}(b_1,\cdots,b_{n-1}),
+        /// @test Construct Matrix from a scalar, a vector and a smaller matrix.
+        ///
+        /// @f$\mathrm{M}_{m,n}\left(a, \mathrm{V}_{n-1}(b_1,\cdots,b_{n-1}),
         /// \mathrm{M}_{m-1,n-1}
         /// \begin{pmatrix}
         /// c_{1,1} & \cdots & c_{1,n-1} \\
@@ -190,7 +203,7 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
             "{0}({1}, Vector<{1}, {2}>, Matrix<{1}, {3}, {2}>)"_format(
                 mat_typestring, t_typestring, N1, M1),
             [&]() noexcept { return tuple(dist(g), svecgen(), smat_gen()); },
-            [](const auto& feed) noexcept { return std::make_from_tuple<Mat>(feed); },
+            mmaker,
             [](const Mat& testing, const auto& feed) noexcept {
                 const auto& [scalar, vec, mat] = feed;
                 bool ret                       = testing.at(0) != scalar;
@@ -200,42 +213,43 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
                 return ret;
             });
 
-        /// @test @f$\mathbf{A}^T\mathbf{A} = \mathbf{I}_n@f$
+        /// @test Matrix inversion.
+        ///
+        /// @f$\mathbf{A}^T\mathbf{A} = \mathbf{I}_n@f$
         if constexpr(M == N && is_floating_point_v<T>)
             ret += test_property_n(
                 "{0}: inverse(A) dot A = {0}::identity()"_format(mat_typestring),
                 [&]() noexcept { return mat_gen(); },
-                [](const auto& feed) noexcept { return inverse(feed); },
-                [](const auto& testing, const auto& feed) noexcept {
+                inverse,
+                [](const Mat& testing, const Mat& feed) noexcept {
                     // identity matrix elements have different magnitude
                     // equalizing them as ulp is same for all of them
                     const auto           zero = Mat::identity() - dot(feed, testing);
-                    const constexpr auto ulp  = pow<sizeof(T)>(100ul);
+                    const constexpr auto ulp  = static_pow<sizeof(T)>(100ul);
                     return any(!almost_equal(flat_ref(zero), T{0}, ulp)) ||
                            !all(lucid::isfinite(flat_ref(testing)));
                 });
     }
 
-    /// @test @f$\mathbf{A} + b = \mathbf{A} + b - b@f$
-    ret += test_property_n(
-        "{} +- {}"_format(mat_typestring, t_typestring),
-        mat_gen1,
-        [](const auto& feed) noexcept {
-            const auto& [mat, scalar] = feed;
-            return mat + scalar;
-        },
-        [&](const Mat& testing, const auto& feed) noexcept {
-            const auto& [mat, scalar] = feed;
-            const auto mm             = testing - scalar;
-            return assertion(mm, mat);
-        });
+    /// @test Matrix-scalar addition and subtraction.
+    ///
+    /// @f$\mathbf{A} + b = \mathbf{A} + b - b@f$
+    ret += test_property_n("{} +- {}"_format(mat_typestring, t_typestring),
+                           mat_gen1,
+                           lucid::plus,
+                           [&](const Mat& testing, const auto& feed) noexcept {
+                               const auto& [mat, scalar] = feed;
+                               const auto mm             = testing - scalar;
+                               return assertion(mm, mat);
+                           });
 
-    /// @test mutable @f$\mathbf{A} + b = \mathbf{A} + b - b@f$
+    /// @test Inplace matrix-scalar addition and subtraction.
+    ///
+    /// @f$\mathbf{A} + b = \mathbf{A} + b - b@f$
     ret += test_property_n(
         "{} +-= {}"_format(mat_typestring, t_typestring),
         mat_gen1,
-        [](const auto& feed) noexcept {
-            auto [mat, scalar] = feed;
+        [](Mat mat, const T& scalar) noexcept {
             mat += scalar;
             return mat;
         },
@@ -245,26 +259,25 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
             return assertion(testing, mat);
         });
 
-    /// @test @f$\mathbf{A} + \mathbf{B} = \mathbf{A} + \mathbf{B} - \mathbf{B}@f$
-    ret += test_property_n(
-        "{0} +- {0}"_format(mat_typestring),
-        mat_gen2,
-        [](const auto& feed) noexcept {
-            const auto& [mat1, mat2] = feed;
-            return mat1 + mat2;
-        },
-        [&](const Mat& testing, const auto& feed) noexcept {
-            const auto& [mat1, mat2] = feed;
-            const auto mm            = testing - mat2;
-            return assertion(mm, mat1);
-        });
+    /// @test Matrix-matrix addition and subtraction.
+    ///
+    /// @f$\mathbf{A} + \mathbf{B} = \mathbf{A} + \mathbf{B} - \mathbf{B}@f$
+    ret += test_property_n("{0} +- {0}"_format(mat_typestring),
+                           mat_gen2,
+                           lucid::plus,
+                           [&](const Mat& testing, const auto& feed) noexcept {
+                               const auto& [mat1, mat2] = feed;
+                               const auto mm            = testing - mat2;
+                               return assertion(mm, mat1);
+                           });
 
-    /// @test mutable @f$\mathbf{A} + \mathbf{B} = \mathbf{A} + \mathbf{B} - \mathbf{B}@f$
+    /// @test Inplace matrix-matrix addition and subtraction.
+    ///
+    /// @f$\mathbf{A} + \mathbf{B} = \mathbf{A} + \mathbf{B} - \mathbf{B}@f$
     ret += test_property_n(
         "{0} +-= {0}"_format(mat_typestring),
         mat_gen2,
-        [](const auto& feed) noexcept {
-            auto [mat1, mat2] = feed;
+        [](Mat mat1, const Mat& mat2) noexcept {
             mat1 += mat2;
             return mat1;
         },
@@ -285,7 +298,9 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
 
     std::uniform_int_distribution<size_t> rowdist(0, M - 1);
 
-    /// @test @f$\mathbf{M}_{m,n}[i] \gets \mathbf{V}_n(a_1,\cdots,a_n) =
+    /// @test Assignment to Matrix row from a vector.
+    ///
+    /// @f$\mathbf{M}_{m,n}[i] \gets \mathbf{V}_n(a_1,\cdots,a_n) =
     /// \begin{pmatrix}
     /// \cdots & \cdots & \cdots \\
     /// a_{i,1} & \cdots & a_{i,n} \\
@@ -294,9 +309,8 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
     ret += test_property_n(
         "{}[] = Vector<{}, {}>"_format(mat_typestring, t_typestring, N),
         [&]() noexcept { return tuple(mat_gen(), vgen(), rowdist(g)); },
-        [](auto feed) noexcept {
-            auto& [mat, vec, idx] = feed;
-            mat[idx]              = vec;
+        [](Mat mat, const Vec& vec, const std::size_t idx) noexcept {
+            mat[idx] = vec;
             return mat;
         },
         [](const Mat& testing, const auto& feed) noexcept {
@@ -305,12 +319,13 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
             return any(testing[idx] != vec) || !all(lucid::isfinite(flat_ref(testing)));
         });
 
-    /// @test @f$\mathbf{M}_{m,n}[i] \gets \mathbf{M}_{m,n}[i] \pm \mathbf{V}_n(a_1,\cdots,a_n)@f$
+    /// @test Matrix row assignment-addition-subtraction
+    ///
+    /// @f$\mathbf{M}_{m,n}[i] \gets \mathbf{M}_{m,n}[i] \pm \mathbf{V}_n(a_1,\cdots,a_n)@f$
     ret += test_property_n(
         "{}[] +-= {}"_format(mat_typestring, vec_typestring),
         [&]() noexcept { return tuple(mat_gen(), vgen(), rowdist(g)); },
-        [](auto feed) noexcept {
-            auto& [mat, vec, idx] = feed;
+        [](Mat mat, const Vec& vec, const std::size_t idx) noexcept {
             mat[idx] += vec;
             return mat;
         },
@@ -320,13 +335,14 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
             return assertion(testing, mat);
         });
 
-    /// @test @f$\mathbf{M}_{m,n}[i] \gets \mathbf{M}_{m,n}[i] \ast\div
+    /// @test Matrix row assignment-multuply-subtraction
+    ///
+    /// @f$\mathbf{M}_{m,n}[i] \gets \mathbf{M}_{m,n}[i] \ast\div
     /// \mathbf{V}_n(a_1,\cdots,a_n)@f$
     ret += test_property_n(
         "{}[] */= {}"_format(mat_typestring, vec_typestring),
         [&]() noexcept { return tuple(mat_gen(), div_vec_gen(), rowdist(g)); },
-        [](auto feed) noexcept {
-            auto& [mat, vec, idx] = feed;
+        [](Mat mat, const Vec& vec, const std::size_t idx) noexcept {
             mat[idx] *= vec;
             return mat;
         },
@@ -336,17 +352,16 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
             return assertion(testing, mat);
         });
 
-    /// @test @f$(\mathbf{AB})^T = \mathbf{B}^T\mathbf{A}@f$
+    /// @test Matrix transposition and multiplication.
+    ///
+    /// @f$(\mathbf{AB})^T = \mathbf{B}^T\mathbf{A}@f$
     ret += test_property_n(
         "{}: transpose(A dot B) = transpose(B) dot transpose(A)"_format(mat_typestring),
         [&]() noexcept {
             return pair(Mat(generate<MN>(divdist, g)) * sign_gen(),
                         Matrix<T, N, M, array>(generate<MN>(divdist, g)) * sign_gen());
         },
-        [](const auto& feed) noexcept {
-            const auto& [a, b] = feed;
-            return transpose(dot(a, b));
-        },
+        transpose ^ dot,
         [&](const auto& testing, const auto& feed) noexcept {
             const auto& ab_t   = testing;
             const auto& [a, b] = feed;

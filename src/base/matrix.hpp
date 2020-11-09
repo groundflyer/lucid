@@ -16,37 +16,41 @@ namespace lucid
 /// @tparam M number of rows.
 /// @tparam N number of columns.
 /// @tparam Container std::array-like container that used to store the data.
-template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
+template <typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
 class Matrix
 {
     static_assert(std::is_arithmetic<T>::value, "T is not an arithmetic type.");
     static_assert(M > 1 && N > 1, "One-dimensional matrices are not supported.");
 
-    static const constexpr size_t MN = M * N;
+    static const constexpr std::size_t MN = M * N;
 
     using Data = Container<T, MN>;
     Data m_data{};
 
     static constexpr auto
-    pos(const size_t i, const size_t j, const size_t J = N) noexcept
+    pos(const std::size_t i, const std::size_t j, const std::size_t J = N) noexcept
     {
         return i * J + j;
     }
 
     static constexpr auto
-    indices(const size_t pos) noexcept
+    indices(const std::size_t pos) noexcept
     {
         return std::pair(pos / N, pos % N);
     }
 
     // variyng template sink
-    template <size_t>
+    template <std::size_t>
     constexpr void
     unpack() const noexcept
     {
     }
 
-    template <size_t idx, typename... Ts>
+    template <std::size_t idx, typename... Ts>
     constexpr void
     unpack(const T& head, Ts&&... tail) noexcept
     {
@@ -61,9 +65,9 @@ class Matrix
     }
 
     // unpack vector arguments
-    template <size_t idx,
-              size_t MN1,
-              template <typename, size_t>
+    template <std::size_t idx,
+              std::size_t MN1,
+              template <typename, std::size_t>
               typename Container2,
               typename... Ts>
     constexpr void
@@ -73,25 +77,25 @@ class Matrix
 
         const constexpr auto end = std::min(MN - idx, MN1);
 
-        for(size_t i = 0; i < end; ++i) m_data[idx + i] = head[i];
+        for(std::size_t i = 0; i < end; ++i) m_data[idx + i] = head[i];
 
         unpack<idx + end>(std::forward<Ts>(tail)...);
     }
 
-    template <size_t idx, size_t MN1, typename... Ts>
+    template <std::size_t idx, std::size_t MN1, typename... Ts>
     constexpr void
     unpack(const Container<T, MN1>& head, Ts&&... tail) noexcept
     {
         static_assert(idx < MN, "Too many elements.");
         const constexpr auto end = std::min(MN - idx, MN1);
-        for(size_t i = 0; i < end; ++i) m_data[idx + i] = head[i];
+        for(std::size_t i = 0; i < end; ++i) m_data[idx + i] = head[i];
         unpack<idx + end>(std::forward<Ts>(tail)...);
     }
 
-    template <size_t idx,
-              size_t M1,
-              size_t N1,
-              template <typename, size_t>
+    template <std::size_t idx,
+              std::size_t M1,
+              std::size_t N1,
+              template <typename, std::size_t>
               typename Container1,
               typename... Ts>
     constexpr void
@@ -103,8 +107,9 @@ class Matrix
         const constexpr auto I       = std::min(M - shift_i, M1);
         const constexpr auto J       = std::min(N - shift_j, N1);
 
-        for(size_t i = 0; i < I; ++i)
-            for(size_t j = 0; j < J; ++j) m_data[pos(shift_i + i, shift_j + j)] = head.at(i, j);
+        for(std::size_t i = 0; i < I; ++i)
+            for(std::size_t j = 0; j < J; ++j)
+                m_data[pos(shift_i + i, shift_j + j)] = head.at(i, j);
 
         unpack<pos(I, J, J) + 1>(std::forward<Ts>(tail)...);
     }
@@ -148,7 +153,7 @@ class Matrix
         return *this;
     }
 
-    template <template <typename, size_t> typename Container2>
+    template <template <typename, std::size_t> typename Container2>
     constexpr Matrix&
     operator=(const Matrix<T, M, N, Container2>& rhs) noexcept
     {
@@ -164,26 +169,26 @@ class Matrix
     }
 
     constexpr decltype(auto)
-    operator[](const size_t i) const noexcept
+    operator[](const std::size_t i) const noexcept
     {
         CHECK_INDEX(i, M);
         return Vector(StaticSpan<T, N>(at(i, 0)));
     }
     constexpr auto
-    operator[](const size_t i) noexcept
+    operator[](const std::size_t i) noexcept
     {
         CHECK_INDEX(i, M);
         return Vector(StaticSpan<T, N>(at(i, 0)));
     }
 
-    template <size_t I>
+    template <std::size_t I>
     constexpr auto
     get() const noexcept
     {
         return Vector(StaticSpan<T, N>(std::get<pos(I, 0)>(m_data)));
     }
 
-    template <size_t I>
+    template <std::size_t I>
     constexpr auto
     get() noexcept
     {
@@ -191,27 +196,27 @@ class Matrix
     }
 
     const constexpr T&
-    at(const size_t i) const noexcept
+    at(const std::size_t i) const noexcept
     {
         CHECK_INDEX(i, MN);
         return m_data[i];
     }
     constexpr T&
-    at(const size_t i) noexcept
+    at(const std::size_t i) noexcept
     {
         CHECK_INDEX(i, MN);
         return m_data[i];
     }
 
     const constexpr T&
-    at(const size_t i, const size_t j) const noexcept
+    at(const std::size_t i, const std::size_t j) const noexcept
     {
         CHECK_INDEX(i, M);
         CHECK_INDEX(j, N);
         return m_data[pos(i, j)];
     }
     constexpr T&
-    at(const size_t i, const size_t j) noexcept
+    at(const std::size_t i, const std::size_t j) noexcept
     {
         CHECK_INDEX(i, M);
         CHECK_INDEX(j, N);
@@ -239,98 +244,63 @@ class Matrix
         return m_data.cend();
     }
 
-    template <template <typename, size_t> typename Container2>
-    constexpr Matrix
-    operator+(const Matrix<T, M, N, Container2>& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret.at(i) = at(i) + rhs.at(i);
-
-        return ret;
-    }
-    constexpr Matrix
-    operator+(const T& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret.at(i) = at(i) + rhs;
-
-        return ret;
-    }
-    template <template <typename, size_t> typename Container2>
+    template <template <typename, std::size_t> typename Container2>
     constexpr Matrix&
     operator+=(const Matrix<T, M, N, Container2>& rhs)
     {
-        for(size_t i = 0; i < MN; ++i) at(i) += rhs.at(i);
+        for(std::size_t i = 0; i < MN; ++i) at(i) += rhs.at(i);
 
         return *this;
     }
     constexpr Matrix&
     operator+=(const T& rhs) noexcept
     {
-        for(size_t i = 0; i < MN; ++i) at(i) += rhs;
+        for(std::size_t i = 0; i < MN; ++i) at(i) += rhs;
 
         return *this;
     }
 
-    template <template <typename, size_t> typename Container2>
-    constexpr Matrix
-    operator-(const Matrix<T, M, N, Container2>& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret.at(i) = at(i) - rhs.at(i);
-
-        return ret;
-    }
-    constexpr Matrix
-    operator-(const T& rhs) const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret.at(i) = at(i) - rhs;
-
-        return ret;
-    }
-    constexpr Matrix
-    operator-() const noexcept
-    {
-        Matrix ret{};
-
-        for(size_t i = 0; i < MN; ++i) ret.at(i) = -at(i);
-
-        return ret;
-    }
-    template <template <typename, size_t> typename Container2>
+    template <template <typename, std::size_t> typename Container2>
     constexpr Matrix&
     operator-=(const Matrix<T, M, N, Container2>& rhs)
     {
-        for(size_t i = 0; i < MN; ++i) at(i) -= rhs.at(i);
+        for(std::size_t i = 0; i < MN; ++i) at(i) -= rhs.at(i);
 
         return *this;
     }
     constexpr Matrix&
     operator-=(const T& rhs) noexcept
     {
-        for(size_t i = 0; i < MN; ++i) at(i) -= rhs;
+        for(std::size_t i = 0; i < MN; ++i) at(i) -= rhs;
 
         return *this;
     }
 
+    template <template <typename, std::size_t> typename VContainer>
+    constexpr Vector<T, N, std::array>
+    operator*(const Vector<T, N, VContainer>& vec) const noexcept
+    {
+        return dot(*this, vec);
+    }
+    template <std::size_t M2, std::size_t N2, template <typename, std::size_t> typename Container2>
+    constexpr typename std::enable_if_t<N == M2, Matrix<T, M, N2, std::array>>
+    operator*(const Matrix<T, M2, N2, Container2>& rhs) const noexcept
+    {
+        return dot(*this, rhs);
+    }
     constexpr Matrix
     operator*(const T& rhs) const noexcept
     {
         Matrix ret{};
 
-        for(size_t i = 0; i < MN; ++i) ret.at(i) = at(i) * rhs;
+        for(std::size_t i = 0; i < MN; ++i) ret.at(i) = at(i) * rhs;
 
         return ret;
     }
     constexpr Matrix&
     operator*=(const T& rhs) noexcept
     {
-        for(size_t i = 0; i < MN; ++i) at(i) *= rhs;
+        for(std::size_t i = 0; i < MN; ++i) at(i) *= rhs;
 
         return *this;
     }
@@ -346,97 +316,112 @@ class Matrix
     {
         Matrix ret{};
 
-        for(size_t i = 0; i < M; ++i)
-            for(size_t j = 0; j < N; ++j) ret.at(i, j) = T(i == j);
+        for(std::size_t i = 0; i < M; ++i)
+            for(std::size_t j = 0; j < N; ++j) ret.at(i, j) = T(i == j);
 
         return ret;
     }
 };
 
-/// @brief Create reference object of input matrix, e.g. matrix view.
-template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
-constexpr auto
+/// @brief Create reference object of input matrix, i.e. matrix view.
+template <typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
+constexpr Matrix<T, M, N, StaticSpan>
 ref(const Matrix<T, M, N, Container>& m) noexcept
 {
     return Matrix<T, M, N, StaticSpan>(StaticSpan<T, M * N>(m.at(0)));
 }
 
-/// @brief Create reference vector view of size @f$M N@f$ of input matrix.
-template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
-constexpr auto
+/// @brief Create vector view of size @f$M N@f$ of input matrix.
+template <typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
+constexpr Vector<T, M * N, StaticSpan>
 flat_ref(const Matrix<T, M, N, Container>& m) noexcept
 {
     return Vector(StaticSpan<T, M * N>(m.at(0)));
 }
 
+namespace fn
+{
 /// @brief Perform matrix transposition.
-template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
+template <typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
 constexpr auto
 transpose(const Matrix<T, M, N, Container>& a) noexcept
 {
     Matrix<T, N, M, std::array> ret{};
 
-    for(size_t i = 0; i < N; ++i)
-        for(size_t j = 0; j < M; ++j) ret[i][j] = a[j][i];
+    for(std::size_t i = 0; i < N; ++i)
+        for(std::size_t j = 0; j < M; ++j) ret[i][j] = a[j][i];
 
     return ret;
 }
 
-namespace fn
-{
 /// @brief Compute product of matrix and column-vector.
 template <typename T,
-          size_t M,
-          size_t N,
-          template <typename, size_t>
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
           typename MContainer,
-          template <typename, size_t>
+          template <typename, std::size_t>
           typename VContainer>
 constexpr Vector<T, N, std::array>
 dot(const Matrix<T, M, N, MContainer>& lhs, const Vector<T, N, VContainer>& rhs) noexcept
 {
     Vector<T, N, std::array> ret{};
 
-    for(size_t i = 0; i < M; ++i)
-        for(size_t j = 0; j < N; ++j) ret[i] += lhs.at(i, j) * rhs[j];
+    for(std::size_t i = 0; i < M; ++i)
+        for(std::size_t j = 0; j < N; ++j) ret[i] += lhs.at(i, j) * rhs[j];
 
     return ret;
 }
 
 /// @brief Compute matrix product.
 template <typename T,
-          size_t M1,
-          size_t N1,
-          size_t M2,
-          size_t N2,
-          template <typename, size_t>
+          std::size_t M1,
+          std::size_t N1,
+          std::size_t M2,
+          std::size_t N2,
+          template <typename, std::size_t>
           typename Container1,
-          template <typename, size_t>
+          template <typename, std::size_t>
           typename Container2>
-constexpr typename std::enable_if_t<N1 == M2, Matrix<T, M1, N2, Container2>>
+constexpr typename std::enable_if_t<N1 == M2, Matrix<T, M1, N2, std::array>>
 dot(const Matrix<T, M1, N1, Container1>& lhs, const Matrix<T, M2, N2, Container2>& rhs) noexcept
 {
-    Matrix<T, M1, N2, std::array> ret(0);
+    Matrix<T, M1, N2, std::array> ret{};
 
-    for(size_t i = 0; i < M1; ++i)
-        for(size_t j = 0; j < N2; ++j)
-            for(size_t r = 0; r < N1; ++r) ret.at(i, j) += lhs.at(i, r) * rhs.at(r, j);
+    for(std::size_t i = 0; i < M1; ++i)
+        for(std::size_t j = 0; j < N2; ++j)
+            for(std::size_t r = 0; r < N1; ++r) ret.at(i, j) += lhs.at(i, r) * rhs.at(r, j);
 
     return ret;
 }
-} // namespace fn
 
 /// @brief Compite matrix determinant.
-template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
+template <typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
 constexpr typename std::enable_if_t<M == N, T>
 det(const Matrix<T, M, N, Container>& a) noexcept
 {
-    std::array<size_t, M> idxs{};
+    std::array<std::size_t, M> idxs{};
     std::iota(idxs.begin(), idxs.end(), 0);
 
     auto product = [&idxs, &a]() noexcept {
         T ret{1};
-        for(size_t i = 0; i < M; ++i) ret *= a.at(i, idxs[i]);
+        for(std::size_t i = 0; i < M; ++i) ret *= a.at(i, idxs[i]);
         return ret;
     };
 
@@ -444,8 +429,8 @@ det(const Matrix<T, M, N, Container>& a) noexcept
 
     T ret = get_elem();
 
-    const constexpr size_t rank = fac(M) - 1;
-    for(size_t _ = 0; _ < rank; ++_)
+    const constexpr std::size_t rank = fac(M) - 1;
+    for(std::size_t _ = 0; _ < rank; ++_)
     {
         std::next_permutation(idxs.begin(), idxs.end());
         ret += get_elem();
@@ -455,19 +440,23 @@ det(const Matrix<T, M, N, Container>& a) noexcept
 }
 
 /// @brief Contructs minor matrix by removing I row, J column.
-template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
+template <typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
 constexpr auto
-minor_matrix(const Matrix<T, M, N, Container>& a, const size_t I, const size_t J) noexcept
+minor_matrix(const Matrix<T, M, N, Container>& a, const std::size_t I, const std::size_t J) noexcept
 {
     ASSERT(I < M || J < N, "Indicies out of range");
 
     Matrix<T, (M - 1), (N - 1), std::array> ret{};
 
-    for(size_t i = 0; i < M - 1; ++i)
-        for(size_t j = 0; j < N - 1; ++j)
+    for(std::size_t i = 0; i < M - 1; ++i)
+        for(std::size_t j = 0; j < N - 1; ++j)
         {
-            size_t idx = i;
-            size_t jdx = j;
+            std::size_t idx = i;
+            std::size_t jdx = j;
 
             if(i >= I) idx = i + 1;
 
@@ -480,20 +469,29 @@ minor_matrix(const Matrix<T, M, N, Container>& a, const size_t I, const size_t J
 }
 
 /// @brief Compute cofactor matrix.
-template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
+template <typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
 constexpr auto
 cofactor(const Matrix<T, M, N, Container>& a) noexcept
 {
     Matrix<T, M, N, std::array> ret{};
 
-    for(size_t i = 0; i < M; ++i)
-        for(size_t j = 0; j < N; ++j) ret[i][j] = minus_one_pow(i + j) * det(minor_matrix(a, i, j));
+    for(std::size_t i = 0; i < M; ++i)
+        for(std::size_t j = 0; j < N; ++j)
+            ret[i][j] = minus_one_pow(i + j) * det(minor_matrix(a, i, j));
 
     return ret;
 }
 
 /// @brief Compute inverse matrix.
-template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
+template <typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
 constexpr auto
 inverse(const Matrix<T, M, N, Container>& a) noexcept
 {
@@ -511,6 +509,11 @@ inverse(const Matrix<T, M, N, Container>& a) noexcept
     else
         return a;
 }
+} // namespace fn
+
+MK_FN_OBJ(transpose)
+MK_FN_OBJ(det)
+MK_FN_OBJ(inverse)
 } // namespace lucid
 
 namespace std

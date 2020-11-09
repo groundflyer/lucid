@@ -20,38 +20,78 @@
 #include <type_traits>
 #include <utility>
 
-#define MAKE_BINARY_OP(FUNC, OP)                                                      \
-    namespace fn                                                                      \
-    {                                                                                 \
-    struct FUNC##_fn                                                                  \
-    {                                                                                 \
-        template <typename T1,                                                        \
-                  std::size_t N,                                                      \
-                  template <typename, std::size_t>                                    \
-                  typename Container,                                                 \
-                  typename T2>                                                        \
-        constexpr auto                                                                \
-        operator()(const Vector<T1, N, Container>& lhs, const T2& rhs) const noexcept \
-        {                                                                             \
-            return transform(std::FUNC<T1>(), lhs, rhs);                              \
-        }                                                                             \
-        template <typename Rhs>                                                       \
-        constexpr decltype(auto)                                                      \
-        operator^(const Rhs& rhs) const noexcept                                      \
-        {                                                                             \
-            return lucid::compose(*this, rhs);                                        \
-        }                                                                             \
-    };                                                                                \
-    }                                                                                 \
-    static constexpr fn::FUNC##_fn FUNC{};                                            \
-    template <typename T1,                                                            \
-              std::size_t N,                                                          \
-              template <typename, std::size_t>                                        \
-              typename Container,                                                     \
-              typename T2>                                                            \
-    constexpr auto OP(const Vector<T1, N, Container>& lhs, const T2& rhs) noexcept    \
-    {                                                                                 \
-        return FUNC(lhs, rhs);                                                        \
+// Generates code for arithmetic binary operators both for Vector and Matrix.
+#define MAKE_BINARY_OP(FUNC, OP)                                                           \
+    namespace fn                                                                           \
+    {                                                                                      \
+    struct FUNC##_fn                                                                       \
+    {                                                                                      \
+        template <typename T1,                                                             \
+                  std::size_t N,                                                           \
+                  template <typename, std::size_t>                                         \
+                  typename Container,                                                      \
+                  typename T2>                                                             \
+        constexpr auto                                                                     \
+        operator()(const Vector<T1, N, Container>& lhs, const T2& rhs) const noexcept      \
+        {                                                                                  \
+            return transform(std::FUNC<T1>{}, lhs, rhs);                                   \
+        }                                                                                  \
+        template <typename T,                                                              \
+                  std::size_t M,                                                           \
+                  std::size_t N,                                                           \
+                  template <typename, std::size_t>                                         \
+                  typename Container1,                                                     \
+                  template <typename, std::size_t>                                         \
+                  typename Container2>                                                     \
+        constexpr Matrix<T, M, N, std::array>                                              \
+        operator()(const Matrix<T, M, N, Container1>& lhs,                                 \
+                   const Matrix<T, M, N, Container2>& rhs) const noexcept                  \
+        {                                                                                  \
+            constexpr std::FUNC<T>      op{};                                              \
+            Matrix<T, M, N, std::array> ret{};                                             \
+            for(std::size_t i = 0; i < (M * N); ++i) ret.at(i) = op(lhs.at(i), rhs.at(i)); \
+            return ret;                                                                    \
+        }                                                                                  \
+        template <typename T,                                                              \
+                  std::size_t M,                                                           \
+                  std::size_t N,                                                           \
+                  template <typename, std::size_t>                                         \
+                  typename Container>                                                      \
+        constexpr Matrix<T, M, N, std::array>                                              \
+        operator()(const Matrix<T, M, N, Container>& lhs, const T& rhs) const noexcept     \
+        {                                                                                  \
+            constexpr std::FUNC<T>      op{};                                              \
+            Matrix<T, M, N, std::array> ret{};                                             \
+            for(std::size_t i = 0; i < (M * N); ++i) ret.at(i) = op(lhs.at(i), rhs);       \
+            return ret;                                                                    \
+        }                                                                                  \
+        template <typename Rhs>                                                            \
+        constexpr decltype(auto)                                                           \
+        operator^(const Rhs& rhs) const noexcept                                           \
+        {                                                                                  \
+            return compose(*this, rhs);                                                    \
+        }                                                                                  \
+    };                                                                                     \
+    }                                                                                      \
+    static constexpr fn::FUNC##_fn FUNC{};                                                 \
+    template <typename T1,                                                                 \
+              std::size_t N,                                                               \
+              template <typename, std::size_t>                                             \
+              typename Container,                                                          \
+              typename T2>                                                                 \
+    constexpr auto OP(const Vector<T1, N, Container>& lhs, const T2& rhs) noexcept         \
+    {                                                                                      \
+        return FUNC(lhs, rhs);                                                             \
+    }                                                                                      \
+    template <typename T1,                                                                 \
+              std::size_t M,                                                               \
+              std::size_t N,                                                               \
+              template <typename, std::size_t>                                             \
+              typename Container,                                                          \
+              typename T2>                                                                 \
+    constexpr auto OP(const Matrix<T1, M, N, Container>& lhs, const T2& rhs) noexcept      \
+    {                                                                                      \
+        return FUNC(lhs, rhs);                                                             \
     }
 
 #define MAKE_UNARY_OP(FUNC, OP)                                                                   \
@@ -60,22 +100,41 @@
     struct FUNC##_fn                                                                              \
     {                                                                                             \
         template <typename T, std::size_t N, template <typename, std::size_t> typename Container> \
-        constexpr auto                                                                            \
+        constexpr Vector<T, N, std::array>                                                        \
         operator()(const Vector<T, N, Container>& lhs) const noexcept                             \
         {                                                                                         \
             return transform(std::FUNC<T>(), lhs);                                                \
+        }                                                                                         \
+        template <typename T,                                                                     \
+                  std::size_t M,                                                                  \
+                  std::size_t N,                                                                  \
+                  template <typename, std::size_t>                                                \
+                  typename Container>                                                             \
+        constexpr Matrix<T, M, N, std::array>                                                     \
+        operator()(const Matrix<T, M, N, Container>& lhs) const noexcept                          \
+        {                                                                                         \
+            return Matrix<T, M, N, std::array>(transform(std::FUNC<T>(), flat_ref(lhs)));         \
         }                                                                                         \
         template <typename Rhs>                                                                   \
         constexpr decltype(auto)                                                                  \
         operator^(const Rhs& rhs) const noexcept                                                  \
         {                                                                                         \
-            return lucid::compose(*this, rhs);                                                    \
+            return compose(*this, rhs);                                                           \
         }                                                                                         \
     };                                                                                            \
     }                                                                                             \
     static constexpr fn::FUNC##_fn FUNC{};                                                        \
     template <typename T, std::size_t N, template <typename, std::size_t> typename Container>     \
-    constexpr auto OP(const Vector<T, N, Container>& lhs) noexcept                                \
+    constexpr Vector<T, N, std::array> OP(const Vector<T, N, Container>& lhs) noexcept            \
+    {                                                                                             \
+        return FUNC(lhs);                                                                         \
+    }                                                                                             \
+    template <typename T,                                                                         \
+              std::size_t M,                                                                      \
+              std::size_t N,                                                                      \
+              template <typename, std::size_t>                                                    \
+              typename Container>                                                                 \
+    constexpr Matrix<T, M, N, std::array> OP(const Matrix<T, M, N, Container>& lhs) noexcept      \
     {                                                                                             \
         return FUNC(lhs);                                                                         \
     }
@@ -105,7 +164,7 @@
         constexpr decltype(auto)                                                         \
         operator^(const Rhs& rhs) const noexcept                                         \
         {                                                                                \
-            return lucid::compose(*this, rhs);                                           \
+            return compose(*this, rhs);                                                  \
         }                                                                                \
     };                                                                                   \
     }                                                                                    \
@@ -141,7 +200,7 @@
         constexpr decltype(auto)                                                         \
         operator^(const Rhs& rhs) const noexcept                                         \
         {                                                                                \
-            return lucid::compose(*this, rhs);                                           \
+            return compose(*this, rhs);                                                  \
         }                                                                                \
     };                                                                                   \
     }                                                                                    \
@@ -149,6 +208,9 @@
 
 namespace lucid
 {
+template <typename T, size_t M, size_t N, template <typename, size_t> typename Container>
+class Matrix;
+
 /// @brief Generic N-dimensional euclidian vector.
 /// @tparam T value type. Must be arithmetic.
 /// @tparam N dimensionality.
@@ -533,6 +595,14 @@ ref(const Vector<T, N, Container>& v) noexcept
     return Vector<T, N, StaticSpan>(StaticSpan<T, N>(v.template get<0>()));
 }
 
+template <typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
+constexpr Vector<T, M * N, StaticSpan>
+flat_ref(const Matrix<T, M, N, Container>& m) noexcept;
+
 /// @brief Apply function to corresponding elements of input vectors.
 /// @return Vector containing results of applycation @f to the elements of input vectors
 /// or pair or tuple of vectors if @f returns such.
@@ -622,6 +692,28 @@ VEC_NAMED_FN_OBJ_SMATH(pow)
 
 namespace fn
 {
+/// we define multiplies and operator* separately because we don't want to override Matrix
+/// multiplication
+struct multiplies_fn
+{
+    template <typename T1,
+              std::size_t N,
+              template <typename, std::size_t>
+              typename Container,
+              typename T2>
+    constexpr auto
+    operator()(const Vector<T1, N, Container>& lhs, const T2& rhs) const noexcept
+    {
+        return transform(std::multiplies<T1>(), lhs, rhs);
+    }
+    template <typename Rhs>
+    constexpr decltype(auto)
+    operator^(const Rhs& rhs) const noexcept
+    {
+        return compose(*this, rhs);
+    }
+};
+
 /// @brief Compute dot product of the given vectors.
 template <typename T,
           std::size_t N,
@@ -634,6 +726,28 @@ dot(const Vector<T, N, Container1>& a, const Vector<T, N, Container2>& b) noexce
 {
     return transform_reduce(std::multiplies<T>(), std::plus<T>(), a, b, T{0});
 }
+
+template <typename T,
+          size_t M,
+          size_t N,
+          template <typename, size_t>
+          typename MContainer,
+          template <typename, size_t>
+          typename VContainer>
+constexpr Vector<T, N, std::array>
+dot(const Matrix<T, M, N, MContainer>& lhs, const Vector<T, N, VContainer>& rhs) noexcept;
+
+template <typename T,
+          size_t M1,
+          size_t N1,
+          size_t M2,
+          size_t N2,
+          template <typename, size_t>
+          typename Container1,
+          template <typename, size_t>
+          typename Container2>
+constexpr typename std::enable_if_t<N1 == M2, Matrix<T, M1, N2, std::array>>
+dot(const Matrix<T, M1, N1, Container1>& lhs, const Matrix<T, M2, N2, Container2>& rhs) noexcept;
 
 /// @brief Compute cross product of the given vectors.
 template <typename T,
@@ -885,11 +999,23 @@ get_w(Vector<T, N, Container>& v) noexcept
     return v.template get<3>();
 }
 
+static constexpr fn::multiplies_fn multiplies;
+
+template <typename T1,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container,
+          typename T2>
+constexpr auto
+operator*(const Vector<T1, N, Container>& lhs, const T2& rhs) noexcept
+{
+    return multiplies(lhs, rhs);
+}
+
 MAKE_UNARY_OP(negate, operator-)
 MAKE_UNARY_OP(logical_not, operator!)
 MAKE_BINARY_OP(plus, operator+)
 MAKE_BINARY_OP(minus, operator-)
-MAKE_BINARY_OP(multiplies, operator*)
 MAKE_BINARY_OP(divides, operator/)
 MAKE_BINARY_OP(equal_to, operator==)
 MAKE_BINARY_OP(not_equal_to, operator!=)
