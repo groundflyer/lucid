@@ -74,5 +74,7 @@ using RGBA  = RGBA_<std::array>;
 using RGB8  = RGB8_<std::array>;
 using RGBA8 = RGBA8_<std::array>;
 
-static const constexpr real Pi = math::Pi_<real>;
+static constexpr real Pi      = Pi_<real>;
+static constexpr Mat3 Mat3_id = Mat3::identity();
+static constexpr Mat4 Mat4_id = Mat4::identity();
 } // namespace lucid

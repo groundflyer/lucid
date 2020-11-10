@@ -13,6 +13,50 @@
 
 namespace lucid
 {
+template <template <typename, size_t> typename Container>
+struct Ray_;
+template <template <typename, size_t> typename Container>
+struct AABB_;
+template <template <typename, size_t> typename Container>
+struct Disk_;
+template <template <typename, size_t> typename Container>
+struct Sphere_;
+
+namespace fn
+{
+template <template <typename, size_t> typename MatContainer,
+          template <typename, size_t>
+          typename RayContainer>
+constexpr Ray_<std::array>
+apply_transform(const Mat4_<MatContainer>& t, const Ray_<RayContainer>& ray) noexcept;
+template <template <typename, size_t> typename MatContainer,
+          template <typename, size_t>
+          typename PrimContainer>
+constexpr AABB_<std::array>
+apply_transform(const Mat4_<MatContainer>& t, const AABB_<PrimContainer>& prim) noexcept;
+template <template <typename, size_t> typename MatContainer,
+          template <typename, size_t>
+          typename PrimContainer>
+constexpr Disk_<std::array>
+apply_transform(const Mat4_<MatContainer>& t, const Disk_<PrimContainer>& prim) noexcept;
+template <template <typename, size_t> typename MatContainer,
+          template <typename, size_t>
+          typename QuadContainer>
+constexpr std::array<Vec3, 4>
+apply_transform(const Mat4_<MatContainer>&                 t,
+                const std::array<Vec3_<QuadContainer>, 4>& prim) noexcept;
+template <template <typename, size_t> typename MatContainer,
+          template <typename, size_t>
+          typename QuadContainer>
+constexpr std::array<Vec3, 3>
+apply_transform(const Mat4_<MatContainer>&                 t,
+                const std::array<Vec3_<QuadContainer>, 3>& prim) noexcept;
+template <template <typename, size_t> typename MatContainer,
+          template <typename, size_t>
+          typename PrimContainer>
+constexpr Sphere_<std::array>
+apply_transform(const Mat4_<MatContainer>& t, const Sphere_<PrimContainer>& prim) noexcept;
+
 /// @brief Build a normalized vector.
 template <typename... Args>
 constexpr Vec3
@@ -42,7 +86,7 @@ template <template <typename, size_t> typename MatContainer,
 constexpr Vec3
 apply_transform(const Mat4_<MatContainer>& t, const Vec3_<VecContainer>& v) noexcept
 {
-    return dehomogenize(dot(t, Vec4(v)));
+    return dehomogenize(t * Vec4(v));
 }
 
 /// @brief Apply transform to a point.
@@ -54,7 +98,7 @@ template <template <typename, size_t> typename MatContainer,
 constexpr Vec3
 apply_transform_p(const Mat4_<MatContainer>& t, const Vec3_<Vec3Container>& p) noexcept
 {
-    return dehomogenize(dot(t, Vec4(p, 1)));
+    return dehomogenize(t * Vec4(p, 1));
 }
 
 /// @brief Apply transform to a normal.
@@ -66,7 +110,7 @@ template <template <typename, size_t> typename MatContainer,
 constexpr Vec3
 apply_transform_n(const Mat4_<MatContainer>& t, const Vec3_<NormalContainer>& n) noexcept
 {
-    return normalize(dehomogenize(dot(transpose(inverse(t)), (Vec4(n)))));
+    return normalize(dehomogenize(transpose(inverse(t)) * (Vec4(n))));
 }
 
 /// @brief Create translation transform.
@@ -100,7 +144,7 @@ rotate(const real angle, const Vec3_<Container>& axis) noexcept
 
     const Mat3 K{0, -z, y, z, 0, -x, -y, x, 0};
 
-    return Mat4(Mat3::identity() + K * math::sin(angle) + dot(K, K) * (1_r - math::cos(angle)));
+    return Mat4(Mat3_id + K * sin(angle) + K * K * (1_r - cos(angle)));
 }
 
 /// @brief Create Look-At transform.
@@ -120,10 +164,10 @@ look_at(const Vec3_<EyeContainer>& eye,
     const Vec3 f = normalize(eye - target);
     const Vec3 r = normalize(cross(up, f));
     const Vec3 u = normalize(cross(f, r));
-    return inverse(dot(Mat4(r, 0_r, u, 0_r, f, 0_r, 0_r, 0_r, 0_r, 1_r), (translate(-eye))));
+    return inverse(Mat4(r, 0_r, u, 0_r, f, 0_r, 0_r, 0_r, 0_r, 1_r) * translate(-eye));
 }
 
-/// @brief Build orthonormal basis for a given normal (z axis).
+/// @brief Build orthonormal basis for given normal (z axis).
 /// @cite Duff2017Basis
 /// @return a pair of normals representing x and y axes.
 template <template <typename, size_t> typename Container>
@@ -134,11 +178,11 @@ basis(const Vec3_<Container>& n) noexcept
     const real sign          = std::copysign(1_r, nz);
     const real a             = -1_r / (sign + nz);
     const real b             = nx * ny * a;
-    return std::pair(make_normal(1_r + sign * pow<2>(nx) * a, sign * b, -sign * nx),
-                     make_normal(b, sign + pow<2>(ny) * a, -ny));
+    return std::pair(make_normal(1_r + sign * static_pow<2>(nx) * a, sign * b, -sign * nx),
+                     make_normal(b, sign + static_pow<2>(ny) * a, -ny));
 }
 
-/// @brief Build orthonormal basis for a given normal (z axis).
+/// @brief Build orthonormal basis for given normal (z axis).
 /// @cite Duff2017Basis
 /// @return 3x3 rotation matrix.
 template <template <typename, size_t> typename Container>
@@ -148,4 +192,16 @@ basis_matrix(const Vec3_<Container>& z) noexcept
     const auto [x, y] = basis(z);
     return transpose(Mat3(x, y, z));
 }
+} // namespace fn
+
+MK_FN_OBJ(make_normal)
+MK_FN_OBJ(apply_transform)
+MK_FN_OBJ(apply_transform_p)
+MK_FN_OBJ(apply_transform_n)
+MK_FN_OBJ(translate)
+MK_FN_OBJ(scale)
+MK_FN_OBJ(rotate)
+MK_FN_OBJ(look_at)
+MK_FN_OBJ(basis)
+MK_FN_OBJ(basis_matrix)
 } // namespace lucid

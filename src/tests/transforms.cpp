@@ -19,26 +19,24 @@ main(int argc, char* argv[])
 
     int ret = 0;
 
-    auto test_property_n = [num_tests]<typename... Args>(Args && ... args)
+    auto test_property_n = [num_tests]<typename... Args>(Args && ... args) noexcept
     {
         return test_property(num_tests, 0.01, forward<Args>(args)...);
     };
 
     std::uniform_real_distribution<real> dist(-1000_r, 1000_r);
 
-    auto                     argen = [&]() { return generate<3>(dist, g); };
-    const constexpr unsigned ULP   = 5;
+    auto argen  = [&]() noexcept { return generate<3>(dist, g); };
+    auto mkpair = [&]() noexcept { return pair{Vec3{argen()}, Vec3{argen()}}; };
+    static const constexpr unsigned ULP = 5;
 
     ret += test_property_n(
         "translate",
-        [&]() {
-            return pair{Vec3{argen()}, Vec3{argen()}};
-        },
-        [](const auto& feed) {
-            const auto& [origin, delta] = feed;
+        mkpair,
+        [](const Vec3& origin, const Vec3& delta) noexcept {
             return apply_transform_p(translate(delta), origin);
         },
-        [](const auto& testing, const auto& feed) {
+        [](const Vec3& testing, const auto& feed) noexcept {
             const auto& [origin, delta] = feed;
             const auto origin2          = testing - delta;
             return any(!almost_equal(origin2, origin, ULP)) || !all(lucid::isfinite(origin2));
@@ -46,14 +44,11 @@ main(int argc, char* argv[])
 
     ret += test_property_n(
         "scale",
-        [&]() {
-            return pair{Vec3{argen()}, Vec3{argen()}};
-        },
-        [](const auto& feed) {
-            const auto& [origin, delta] = feed;
+        mkpair,
+        [](const Vec3& origin, const Vec3& delta) noexcept {
             return apply_transform(scale(delta), origin);
         },
-        [](const auto& testing, const auto& feed) {
+        [](const Vec3& testing, const auto& feed) noexcept {
             const auto& [origin, delta] = feed;
             const auto& origin2         = testing / delta;
             return any(!almost_equal(origin2, origin, ULP)) || !all(lucid::isfinite(origin2));
@@ -61,14 +56,11 @@ main(int argc, char* argv[])
 
     ret += test_property_n(
         "rotate",
-        [&]() {
-            return pair{make_normal(argen()), Pi * generate_canonical<real, 10>(g)};
+        [&]() noexcept {
+            return pair{Pi * generate_canonical<real, 10>(g), make_normal(argen())};
         },
-        [](const auto& feed) {
-            const auto& [axis, angle] = feed;
-            return rotate(angle, axis);
-        },
-        [&](const auto& testing, const auto&) {
+        lucid::rotate,
+        [&](const Mat4& testing, const auto&) noexcept {
             const Vec3 o{argen()};
             const Vec3 ot = apply_transform(testing, o);
             const real l  = length(o);
@@ -79,18 +71,15 @@ main(int argc, char* argv[])
 
     ret += test_property(
         num_tests,
-        // fails in 7% of cases
+        // fails in 7% of cases with clang
         0.071,
         "look at",
-        [&]() {
-            return pair{Vec3{argen()}, Vec3{argen()}};
-        },
-        [&](const auto& feed) {
-            const auto& [eye, target] = feed;
+        mkpair,
+        [&](const Vec3& eye, const Vec3& target) noexcept {
             return apply_transform_n(look_at(eye, target, Vec3(0_r, 1_r, 0_r)),
                                      Vec3(0_r, 0_r, 1_r));
         },
-        [](const Vec3& testing, const auto& feed) {
+        [](const Vec3& testing, const auto& feed) noexcept {
             const auto& [eye, target] = feed;
             const Vec3 expected       = normalize(target - eye);
             return any(!almost_equal(expected, testing, ULP)) || !all(lucid::isfinite(testing));
@@ -98,13 +87,13 @@ main(int argc, char* argv[])
 
     ret += test_property_n(
         "orthonormal basis",
-        [&]() { return make_normal(argen()); },
-        [](const auto& feed) { return basis(feed); },
-        [](const auto& testing, const auto& feed) {
+        [&]() noexcept { return make_normal(argen()); },
+        basis,
+        [](const auto& testing, const auto& feed) noexcept {
             const auto& [a, b] = testing;
-            const Mat3           mm{a, b, feed};
-            const auto           zero = Mat3::identity() - dot(mm, transpose(mm));
-            const constexpr auto ulp  = pow<sizeof(real)>(60ul);
+            const Mat3             mm{a, b, feed};
+            const Mat3             zero = Mat3::identity() - mm * transpose(mm);
+            const constexpr size_t ulp  = static_pow<sizeof(real)>(60ul);
             return any(!almost_equal(flat_ref(zero), 0_r, ulp));
         });
 

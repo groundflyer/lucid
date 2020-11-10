@@ -689,6 +689,8 @@ VEC_NAMED_FN_OBJ(minmax, std::minmax)
 VEC_NAMED_FN_OBJ_SMATH(sqrt)
 VEC_NAMED_FN_OBJ_SMATH(abs)
 VEC_NAMED_FN_OBJ_SMATH(pow)
+VEC_NAMED_FN_OBJ_SMATH(sin)
+VEC_NAMED_FN_OBJ_SMATH(cos)
 
 namespace fn
 {
