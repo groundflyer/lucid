@@ -218,14 +218,14 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
         /// @f$\mathbf{A}^T\mathbf{A} = \mathbf{I}_n@f$
         if constexpr(M == N && is_floating_point_v<T>)
             ret += test_property_n(
-                "{0}: inverse(A) dot A = {0}::identity()"_format(mat_typestring),
+                "{0}: inverse(A) * A = {0}::identity()"_format(mat_typestring),
                 [&]() noexcept { return mat_gen(); },
                 inverse,
                 [](const Mat& testing, const Mat& feed) noexcept {
                     // identity matrix elements have different magnitude
                     // equalizing them as ulp is same for all of them
-                    const auto           zero = Mat::identity() - dot(feed, testing);
-                    const constexpr auto ulp  = static_pow<sizeof(T)>(100ul);
+                    const Mat              zero = Mat::identity() - feed * testing;
+                    const constexpr size_t ulp  = static_pow<sizeof(T)>(100ul);
                     return any(!almost_equal(flat_ref(zero), T{0}, ulp)) ||
                            !all(lucid::isfinite(flat_ref(testing)));
                 });
@@ -365,7 +365,7 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
         [&](const auto& testing, const auto& feed) noexcept {
             const auto& ab_t   = testing;
             const auto& [a, b] = feed;
-            const auto bt_at   = dot(transpose(b), transpose(a));
+            const auto bt_at   = transpose(b) * transpose(a);
             return assertion(ab_t, bt_at);
         });
 
