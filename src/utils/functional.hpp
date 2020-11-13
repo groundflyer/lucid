@@ -22,7 +22,7 @@
         constexpr decltype(auto)                      \
         operator^(const Rhs& rhs) const noexcept      \
         {                                             \
-            return lucid::compose(*this, rhs);        \
+            return compose(*this, rhs);               \
         }                                             \
     };                                                \
     }                                                 \
@@ -153,6 +153,13 @@ struct identity_fn
     {
         return t;
     }
+
+    template <typename Rhs>
+    constexpr decltype(auto)
+    operator^(const Rhs& rhs) const noexcept
+    {
+        return compose(*this, rhs);
+    }
 };
 
 template <typename T, bool list_init = true>
@@ -167,6 +174,13 @@ struct maker_fn
         else
             return T(args...);
     }
+
+    template <typename Rhs>
+    constexpr decltype(auto)
+    operator^(const Rhs& rhs) const noexcept
+    {
+        return compose(*this, rhs);
+    }
 };
 
 template <typename T>
@@ -177,6 +191,13 @@ struct tuple_maker_fn
     operator()(Tuple&& t) const noexcept
     {
         return std::make_from_tuple<T>(t);
+    }
+
+    template <typename Rhs>
+    constexpr decltype(auto)
+    operator^(const Rhs& rhs) const noexcept
+    {
+        return compose(*this, rhs);
     }
 };
 } // namespace fn
