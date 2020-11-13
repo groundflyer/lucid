@@ -70,14 +70,14 @@ struct ComposeOp
         constexpr decltype(auto)
         operator()(Args&&... args) const
         {
-            return std::invoke(lhs, std::invoke(rhs, args...));
+            return lhs(rhs(std::forward<Args>(args)...));
         }
 
         template <typename... Args>
         constexpr decltype(auto)
         operator()(Args&&... args)
         {
-            return std::invoke(lhs, std::invoke(rhs, args...));
+            return lhs(rhs(std::forward<Args>(args)...));
         }
     };
 
@@ -110,32 +110,36 @@ struct fold_wrapper
         return fold_wrapper<BinaryOp, std::invoke_result_t<BinaryOp, LeftOperand, RightOperand>>(
             op, op(operand, rhs.operand));
     }
-
-    template <typename RightOperand>
-    constexpr decltype(auto)
-    operator%(const fold_wrapper<BinaryOp, RightOperand>& rhs) noexcept
-    {
-        return fold_wrapper<BinaryOp, std::invoke_result_t<BinaryOp, LeftOperand, RightOperand>>(
-            op, op(operand, rhs.operand));
-    }
 };
 
 template <typename T>
-struct is_tuple
+struct maybe_apply_helper
 {
-    static constexpr bool value = false;
+    static constexpr bool is_tuple = false;
+
+    template <typename F>
+    static constexpr bool is_invocable =
+        std::is_invocable_v<F, T> || std::is_nothrow_invocable_v<F, T>;
 };
 
 template <typename T1, typename T2>
-struct is_tuple<std::pair<T1, T2>>
+struct maybe_apply_helper<std::pair<T1, T2>>
 {
-    static constexpr bool value = true;
+    static constexpr bool is_tuple = true;
+
+    template <typename F>
+    static constexpr bool is_invocable =
+        std::is_invocable_v<F, T1, T2> || std::is_nothrow_invocable_v<F, T1, T2>;
 };
 
 template <typename... Ts>
-struct is_tuple<std::tuple<Ts...>>
+struct maybe_apply_helper<std::tuple<Ts...>>
 {
-    static constexpr bool value = true;
+    static constexpr bool is_tuple = true;
+
+    template <typename F>
+    static constexpr bool is_invocable =
+        std::is_invocable_v<F, Ts...> || std::is_nothrow_invocable_v<F, Ts...>;
 };
 } // namespace detail
 
@@ -156,7 +160,7 @@ struct maker_fn
 {
     template <typename... Args>
     constexpr T
-    operator()(Args&&... args) const
+    operator()(Args&&... args) const noexcept
     {
         if constexpr(list_init)
             return T{args...};
@@ -170,7 +174,7 @@ struct tuple_maker_fn
 {
     template <typename Tuple>
     constexpr T
-    operator()(Tuple&& t) const
+    operator()(Tuple&& t) const noexcept
     {
         return std::make_from_tuple<T>(t);
     }
@@ -187,7 +191,7 @@ static constexpr fn::tuple_maker_fn<T> tuple_maker;
 
 template <typename BinaryOp, typename Init, typename... Args>
 constexpr decltype(auto)
-reduce(BinaryOp&& op, Init&& init, Args&&... args) noexcept
+fold(BinaryOp&& op, Init&& init, Args&&... args) noexcept
 {
     return (detail::fold_wrapper(op, init) % ... % detail::fold_wrapper(op, args)).operand;
 }
@@ -197,7 +201,7 @@ template <typename... Fs>
 constexpr decltype(auto)
 compose(Fs&&... fs)
 {
-    return reduce(detail::ComposeOp{}, std::forward<Fs>(fs)...);
+    return fold(detail::ComposeOp{}, std::forward<Fs>(fs)...);
 }
 
 template <typename BinaryF>
@@ -223,9 +227,10 @@ template <typename F, typename Arg>
 constexpr decltype(auto)
 maybe_apply(F&& f, Arg&& arg)
 {
-    if constexpr(detail::is_tuple<std::decay_t<Arg>>::value)
+    using helper = detail::maybe_apply_helper<std::decay_t<Arg>>;
+    if constexpr(helper::is_tuple && helper::template is_invocable<F>)
         return std::apply(f, arg);
     else
-        return std::invoke(f, arg);
+        return f(std::forward<Arg>(arg));
 }
 } // namespace lucid

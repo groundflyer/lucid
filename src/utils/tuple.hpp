@@ -150,9 +150,16 @@ for_each_impl(F&& f, Tuple& tuple, std::index_sequence<I...>)
 
 template <typename BinaryOp, typename T, typename... Ts>
 constexpr decltype(auto)
-reduce_tuple(BinaryOp&& op, const T& init, const std::tuple<Ts...>& tuple) noexcept
+fold_tuple(BinaryOp&& op, const T& init, const std::tuple<Ts...>& tuple) noexcept
 {
-    return std::apply([&](const Ts&... args) { return reduce(op, init, args...); }, tuple);
+    return std::apply([&](const Ts&... args) noexcept { return fold(op, init, args...); }, tuple);
+}
+
+template <typename BinaryOp, typename Tuple>
+constexpr decltype(auto)
+fold_tuple(BinaryOp&& op, const Tuple& tuple) noexcept
+{
+    return std::apply([&](const auto&... args) noexcept { return fold(op, args...); }, tuple);
 }
 
 template <typename... Ts>

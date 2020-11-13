@@ -13,11 +13,19 @@ main()
     auto to_s = [](bool ok) { return ok ? "OK" : "FAIL"; };
     int  ret  = 0;
 
+    // fold
+    {
+        const int  r  = fold(std::plus<int>{}, 1, 2, 3, 4);
+        const bool ok = r == 10;
+        fmt::print("Fold: {}\n", to_s(ok));
+        ret += !ok;
+    }
+
     // composition with constant passing
     {
-        const auto                a = [](const int n) { return n + 10; };
+        const auto                a = [](const int& n) { return n + 10; };
         const auto                b = [](const int n) { return n * 2; };
-        const auto                c = [](const int n) { return n / 5; };
+        const auto                c = [](const int& n) { return n / 5; };
         const auto                f = compose(a, b, c);
         std::decay_t<decltype(f)> f1;
         f1            = f;
