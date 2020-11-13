@@ -117,12 +117,16 @@ template <typename T>
 constexpr std::pair<bool, T>
 quadratic(const T a, const T b, const T c) noexcept
 {
-    const T  D      = pow<2>(b) - T{4} * a * c;
-    const T  factor = T{0.5} * a;
-    const T  sqrtD  = std::is_constant_evaluated() ? smath::sqrt(D) : std::sqrt(D);
-    const T  x1     = (-b + sqrtD) * factor;
-    const T  x2     = (-b - sqrtD) * factor;
-    const T& x      = std::signbit(x1) ? x2 : (std::signbit(x2) ? x1 : std::min(x1, x2));
+    const T D      = b * b - T{4} * a * c;
+    const T factor = T{0.5} * a;
+    T       sqrtD{};
+    if(std::is_constant_evaluated())
+        sqrtD = smath::sqrt(D);
+    else
+        sqrtD = std::sqrt(D);
+    const T  x1 = (-b + sqrtD) * factor;
+    const T  x2 = (-b - sqrtD) * factor;
+    const T& x  = std::signbit(x1) ? x2 : (std::signbit(x2) ? x1 : std::min(x1, x2));
     return std::pair{!std::signbit(D * x), x};
 }
 
