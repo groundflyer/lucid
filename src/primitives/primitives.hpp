@@ -13,62 +13,64 @@
 
 namespace lucid
 {
-namespace prim_fn
-{
-struct intersect_fn
-{
-    template <typename... Args>
-    constexpr Intersection
-    operator()(const Args&... args) const noexcept
-    {
-        return prim_fn::intersect(args...);
-    }
-};
+MK_FN_OBJ(intersect)
+MK_FN_OBJ(normal)
+MK_FN_OBJ(sample)
+MK_FN_OBJ(centroid)
+MK_FN_OBJ(bound)
 
-struct normal_fn
+namespace fn
 {
-    template <typename... Args>
-    constexpr Vec3
-    operator()(const Args&... args) const noexcept
-    {
-        return prim_fn::normal(args...);
-    }
-};
+template <typename Intersections>
+constexpr std::pair<std::size_t, Intersection>
+closest(const Intersections&) noexcept;
 
-struct sample_fn
+namespace detail
 {
-    template <typename... Args>
-    constexpr Vec3
-    operator()(const Args&... args) const noexcept
-    {
-        return prim_fn::sample(args...);
-    }
-};
+static constexpr Intersection miss{};
 
-struct bound_fn
+template <template <typename, std::size_t> typename Container,
+          typename PrimsTuple,
+          std::size_t... Ids>
+constexpr std::pair<std::size_t, Intersection>
+hider_impl(const Ray_<Container>& ray,
+           const PrimsTuple&      prims,
+           std::index_sequence<Ids...>) noexcept
 {
-    template <typename... Args>
-    constexpr AABB
-    operator()(const Args&... args) const noexcept
-    {
-        return prim_fn::bound(args...);
-    }
-};
+    return closest(std::tuple{intersect(ray, std::get<Ids>(prims))...});
+}
+} // namespace detail
 
-struct apply_transform_fn
+template <typename Intersections>
+constexpr std::pair<std::size_t, Intersection>
+closest(const Intersections& isects) noexcept
 {
-    template <typename... Args>
-    constexpr auto
-    operator()(const Args&... args) const noexcept
-    {
-        return prim_fn::apply_transform(args...);
-    }
-};
-} // namespace prim_fn
+    return fold_tuple(
+        [](const auto& a, const auto& b) noexcept { return a.second.t < b.second.t ? a : b; },
+        std::pair{0ul, detail::miss},
+        enumerate(isects));
+}
 
-static constexpr prim_fn::intersect_fn intersect;
-static constexpr prim_fn::normal_fn    normal;
-static constexpr prim_fn::sample_fn    sample;
-static constexpr prim_fn::bound_fn     bound;
-// static constexpr prim_fn::apply_transform_fn apply_transform;
+template <template <typename, std::size_t> typename Container, typename PrimsTuple>
+constexpr std::pair<std::size_t, Intersection>
+hider(const Ray_<Container>& ray, const PrimsTuple& prims) noexcept
+{
+    return detail::hider_impl(
+        ray, prims, std::make_index_sequence<std::tuple_size_v<PrimsTuple>>{});
+}
+
+template <template <typename, std::size_t> typename RayContainer,
+          template <typename, std::size_t>
+          typename IsectContainer>
+constexpr Vec3
+hit_pos(const Ray_<RayContainer>& ray, const Intersection_<IsectContainer>& isect) noexcept
+{
+    const auto& [o, d] = ray;
+    return o + d * isect.t;
+}
+} // namespace fn
+
+MK_FN_OBJ(closest)
+MK_FN_OBJ(hider)
+MK_FN_OBJ(hit_pos)
 } // namespace lucid

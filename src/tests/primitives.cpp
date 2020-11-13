@@ -1,12 +1,7 @@
 // -*- C++ -*-
 // primitives.cpp
 #include "property_test.hpp"
-#include <primitives/aabb.hpp>
-#include <primitives/disk.hpp>
-#include <primitives/generic.hpp>
-#include <primitives/quad.hpp>
-#include <primitives/sphere.hpp>
-#include <primitives/triangle.hpp>
+#include <primitives/primitives.hpp>
 
 #include <utils/tuple.hpp>
 
@@ -24,7 +19,7 @@ radius(const Sphere& prim) noexcept
 constexpr real
 radius(const AABB& prim) noexcept
 {
-    return distance(centroid(prim), prim.vmax);
+    return lucid::distance(centroid(prim), prim.vmax);
 }
 
 int
@@ -53,7 +48,7 @@ main(int argc, char* argv[])
         const Ray          tomiss{origin, origin - target};
         const Intersection hit  = intersect(tohit, prim);
         const Intersection miss = intersect(tomiss, prim);
-        return !hit || miss || !almost_equal(hit.t, distance(target, origin), 10);
+        return !hit || miss || !almost_equal(hit.t, lucid::distance(target, origin), 10);
     };
 
     const auto bound_property = [](const auto& testing, const auto& prim) noexcept {
@@ -71,19 +66,22 @@ main(int argc, char* argv[])
         return test_prim(name, gen, sampler, sample_intersect_property);
     };
 
-    const auto sample_prim = [&](const auto& prim) { return pair(sample(sgen(), prim), posgen()); };
+    const auto sample_prim = [&](const auto& prim) noexcept {
+        return pair(lucid::sample(sgen(), prim), posgen());
+    };
 
     const auto sample_selfoccluded_prim = [&](const auto& prim) noexcept {
-        const Vec3 sampled_point = sample(sgen(), prim);
+        const Vec3 sampled_point = lucid::sample(sgen(), prim);
         const Vec3 offset        = sampled_point - centroid(prim);
-        const auto sign = transform([](const real val) { return std::copysign(1_r, val); }, offset);
+        const auto sign =
+            transform([](const real val) noexcept { return std::copysign(1_r, val); }, offset);
         const Vec3 origin = sampled_point + Vec3(generate<3>(rad_dist, g)) * sign + offset;
         return pair(sampled_point, Vec3(origin));
     };
 
     const auto bound_gen = [&](const auto& prim) noexcept {
         const AABB bbox = bound(prim);
-        const Vec3 sp   = sample(sgen(), prim);
+        const Vec3 sp   = lucid::sample(sgen(), prim);
         const auto tb   = Vector(generate<3>(bern_dist, g));
         const auto offset =
             transform([](const auto& a, const auto& b) noexcept { return a ? b : -b; },
@@ -97,7 +95,9 @@ main(int argc, char* argv[])
         return test_prim(name, gen, bound_gen, bound_property);
     };
 
-    const auto aabb_gen     = [&]() noexcept { return AABB(posgen(), posgen()); };
+    const auto aabb_gen = [&]() noexcept {
+        return tuple_maker<AABB>(lucid::minmax(posgen(), posgen()));
+    };
     const auto sphere_gen   = [&]() noexcept { return Sphere(posgen(), rad_dist(g)); };
     const auto disk_gen     = [&]() noexcept { return Disk(posgen(), normgen(), rad_dist(g)); };
     const auto triangle_gen = [&]() noexcept { return Triangle{posgen(), posgen(), posgen()}; };
@@ -106,7 +106,7 @@ main(int argc, char* argv[])
         const Vec3 v01{0, rad_dist(g), 0};
         const Vec3 v10{rad_dist(g), 0, 0};
         const Vec3 v11 = v00 + v01 + v10;
-        const auto t   = dot(rotate(big_dist(g), normgen()), translate(posgen()));
+        const auto t   = dot(lucid::rotate(big_dist(g), normgen()), translate(posgen()));
         return apply_transform(t, Quad{v00, v01, v11, v10});
     };
 
@@ -160,13 +160,9 @@ main(int argc, char* argv[])
     ret += intersect_test_prim("Quad: sample/trace", quad_gen, sample_prim);
 
     ret += bound_test_prim("Sphere: bound", sphere_gen);
-
     ret += bound_test_prim("Disk: bound", disk_gen);
-
     ret += bound_test_prim("Triangle: bound", triangle_gen);
-
     ret += bound_test_prim("Quad: bound", quad_gen);
-
     ret += bound_test_prim("GenericPrimitive: bound", rand_prim_gen);
 
     ret += test_property(
@@ -191,10 +187,7 @@ main(int argc, char* argv[])
 
             return pair{ray, prims};
         },
-        [](const auto& feed) noexcept {
-            const auto& [ray, prims] = feed;
-            return hider(ray, prims);
-        },
+        hider,
         [](const auto& testing, const auto) noexcept {
             const auto& [pidx, isect] = testing;
             return !isect || pidx != 0ul;

@@ -34,7 +34,7 @@ Sphere_(const Vec3_<Container>&, const real&) -> Sphere_<Container>;
 
 using Sphere = Sphere_<std::array>;
 
-namespace prim_fn
+namespace fn
 {
 /// @brief Compute ray-sphere intersection.
 template <template <typename, size_t> typename SphereContainer,
@@ -47,7 +47,7 @@ intersect(const Ray_<RayContainer>& ray, const Sphere_<SphereContainer>& prim) n
     const real a        = dot(d, d);
     const Vec3 pc       = o - prim.center;
     const real b        = dot(d, pc * 2_r);
-    const real c        = dot(pc, pc) - pow<2>(prim.radius);
+    const real c        = dot(pc, pc) - static_pow<2>(prim.radius);
     const auto [hit, t] = quadratic(a, b, c);
     return Intersection{hit, t, Vec2{}};
 }
@@ -73,8 +73,8 @@ sample(const Vec2_<SContainer>& s, const Sphere_<PContainer>& prim) noexcept
     const auto& [t1, t2] = s;
     const real u         = 2_r * t1 - 1;
     const real theta     = 2_r * Pi * t2;
-    const real _u        = math::sqrt(1_r - pow<2>(u));
-    return Vec3(_u * math::cos(theta), _u * math::sin(theta), u) * r + c;
+    const real _u        = sqrt(1_r - u * u);
+    return Vec3(_u * cos(theta), _u * sin(theta), u) * r + c;
 }
 
 /// @brief Return sphere position.
@@ -104,5 +104,5 @@ apply_transform(const Mat4_<MatContainer>& t, const Sphere_<PrimContainer>& prim
     const auto& [c, r] = prim;
     return Sphere(apply_transform_p(t, c), r);
 }
-} // namespace prim_fn
+} // namespace fn
 } // namespace lucid

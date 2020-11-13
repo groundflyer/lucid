@@ -8,55 +8,15 @@
 #pragma once
 
 #include "types.hpp"
+#include <primitives/transforms.hpp>
+#include <ray_traversal/transforms.hpp>
 
 #include <utility>
 
 namespace lucid
 {
-template <template <typename, size_t> typename Container>
-struct Ray_;
-template <template <typename, size_t> typename Container>
-struct AABB_;
-template <template <typename, size_t> typename Container>
-struct Disk_;
-template <template <typename, size_t> typename Container>
-struct Sphere_;
-
 namespace fn
 {
-template <template <typename, size_t> typename MatContainer,
-          template <typename, size_t>
-          typename RayContainer>
-constexpr Ray_<std::array>
-apply_transform(const Mat4_<MatContainer>& t, const Ray_<RayContainer>& ray) noexcept;
-template <template <typename, size_t> typename MatContainer,
-          template <typename, size_t>
-          typename PrimContainer>
-constexpr AABB_<std::array>
-apply_transform(const Mat4_<MatContainer>& t, const AABB_<PrimContainer>& prim) noexcept;
-template <template <typename, size_t> typename MatContainer,
-          template <typename, size_t>
-          typename PrimContainer>
-constexpr Disk_<std::array>
-apply_transform(const Mat4_<MatContainer>& t, const Disk_<PrimContainer>& prim) noexcept;
-template <template <typename, size_t> typename MatContainer,
-          template <typename, size_t>
-          typename QuadContainer>
-constexpr std::array<Vec3, 4>
-apply_transform(const Mat4_<MatContainer>&                 t,
-                const std::array<Vec3_<QuadContainer>, 4>& prim) noexcept;
-template <template <typename, size_t> typename MatContainer,
-          template <typename, size_t>
-          typename QuadContainer>
-constexpr std::array<Vec3, 3>
-apply_transform(const Mat4_<MatContainer>&                 t,
-                const std::array<Vec3_<QuadContainer>, 3>& prim) noexcept;
-template <template <typename, size_t> typename MatContainer,
-          template <typename, size_t>
-          typename PrimContainer>
-constexpr Sphere_<std::array>
-apply_transform(const Mat4_<MatContainer>& t, const Sphere_<PrimContainer>& prim) noexcept;
-
 /// @brief Build a normalized vector.
 template <typename... Args>
 constexpr Vec3
@@ -178,8 +138,8 @@ basis(const Vec3_<Container>& n) noexcept
     const real sign          = std::copysign(1_r, nz);
     const real a             = -1_r / (sign + nz);
     const real b             = nx * ny * a;
-    return std::pair(make_normal(1_r + sign * static_pow<2>(nx) * a, sign * b, -sign * nx),
-                     make_normal(b, sign + static_pow<2>(ny) * a, -ny));
+    return std::pair(make_normal(1_r + sign * nx * nx * a, sign * b, -sign * nx),
+                     make_normal(b, sign + ny * ny * a, -ny));
 }
 
 /// @brief Build orthonormal basis for given normal (z axis).

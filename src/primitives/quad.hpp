@@ -21,7 +21,7 @@ using Quad_ = std::array<Vec3_<Container>, 4>;
 
 using Quad = Quad_<std::array>;
 
-namespace prim_fn
+namespace fn
 {
 /// @brief Compute ray-quadrilateral intersection.
 ///
@@ -39,7 +39,7 @@ intersect(const Ray_<RayContainer>& ray, const Quad_<QuadContainer>& prim) noexc
     const Vec3 p                     = cross(d, e03);
     const real D                     = dot(e01, p);
 
-    if(math::abs(D) < std::numeric_limits<real>::min()) return Intersection();
+    if(abs(D) < std::numeric_limits<real>::min()) return Intersection();
 
     const Vec3 T     = o - v00;
     const real alpha = dot(T, p) / D;
@@ -59,7 +59,7 @@ intersect(const Ray_<RayContainer>& ray, const Quad_<QuadContainer>& prim) noexc
         const Vec3 p_  = cross(d, e21);
         const real D_  = dot(e23, p_);
 
-        if(math::abs(D_) < std::numeric_limits<real>::min()) return Intersection();
+        if(abs(D_) < std::numeric_limits<real>::min()) return Intersection();
 
         const Vec3 T_     = o - v11;
         const real alpha_ = dot(T_, p_) / D_;
@@ -99,15 +99,15 @@ intersect(const Ray_<RayContainer>& ray, const Quad_<QuadContainer>& prim) noexc
     }
 
     real u{}, v{};
-    if(math::abs(a11 - 1) < std::numeric_limits<real>::min())
+    if(abs(a11 - 1) < std::numeric_limits<real>::min())
     {
         u = alpha;
-        if(math::abs(b11 - 1) < std::numeric_limits<real>::min())
+        if(abs(b11 - 1) < std::numeric_limits<real>::min())
             v = beta;
         else
             v = beta / (u * (b11 - 1) + 1);
     }
-    else if(math::abs(b11 - 1) < std::numeric_limits<real>::min())
+    else if(abs(b11 - 1) < std::numeric_limits<real>::min())
     {
         v = beta;
         u = alpha / (v * (a11 - 1) + 1);
@@ -118,7 +118,7 @@ intersect(const Ray_<RayContainer>& ray, const Quad_<QuadContainer>& prim) noexc
         const real B     = alpha * (b11 - 1) - beta * (a11 - 1) - 1;
         const real C     = alpha;
         const real Delta = B * B - 4 * A * C;
-        const real QQ    = -0.5_r * (B + std::copysign(math::sqrt(Delta), B));
+        const real QQ    = -0.5_r * (B + std::copysign(sqrt(Delta), B));
         u                = QQ / A;
 
         if(!range01(u)) u = C / QQ;
@@ -174,11 +174,12 @@ bound(const Quad_<Container>& prim) noexcept
 template <template <typename, size_t> typename MatContainer,
           template <typename, size_t>
           typename QuadContainer>
-constexpr auto
+constexpr Quad
 apply_transform(const Mat4_<MatContainer>& t, const Quad_<QuadContainer>& prim) noexcept
 {
-    return std::apply([&](const auto&... points) { return Quad{apply_transform_p(t, points)...}; },
-                      prim);
+    return std::apply(
+        [&](const auto&... points) noexcept { return Quad{apply_transform_p(t, points)...}; },
+        prim);
 }
-} // namespace prim_fn
+} // namespace fn
 } // namespace lucid

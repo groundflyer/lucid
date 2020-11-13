@@ -578,7 +578,7 @@ transform_impl(const F& f, std::index_sequence<Idxs...>, const Vectors&... vs) n
 
     ret_type ret{};
 
-    for(std::size_t i = 0; i < N; ++i) pt::assign(ret, i, std::invoke(f, elem<Idxs>(i, vs...)...));
+    for(std::size_t i = 0; i < N; ++i) pt::assign(ret, i, f(elem<Idxs>(i, vs...)...));
 
     return ret;
 }
@@ -686,6 +686,7 @@ VEC_FN_OBJ(lerp)
 VEC_NAMED_FN_OBJ(isfinite, std::isfinite)
 VEC_NAMED_FN_OBJ(clamp, std::clamp)
 VEC_NAMED_FN_OBJ(minmax, std::minmax)
+VEC_NAMED_FN_OBJ(fmod, std::fmod)
 VEC_NAMED_FN_OBJ_SMATH(sqrt)
 VEC_NAMED_FN_OBJ_SMATH(abs)
 VEC_NAMED_FN_OBJ_SMATH(pow)
@@ -852,6 +853,19 @@ avg(const Vector<T, N, Container>& a) noexcept
     return sum(a) / N;
 }
 
+/// @brief Roll vector elements.
+/// @param shift the number of places which elements are shifted.
+template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
+constexpr Vector<T, N, std::array>
+roll(const Vector<T, N, Container>& v, const std::size_t shift) noexcept
+{
+    Vector<T, N, std::array> ret{};
+
+    for(std::size_t i = 0; i < N; ++i) ret[i] = v[(i - shift) % N];
+
+    return ret;
+}
+
 /// @brief Rise vector elements to a constant power.
 /// @tparam exp power exponent.
 template <unsigned exp>
@@ -871,10 +885,52 @@ struct static_pow_fn
         return transform(*this, v);
     }
 };
+
+struct min_fn
+{
+    template <typename T>
+    constexpr decltype(auto)
+    operator()(const T& a, const T& b) const noexcept
+    {
+        if constexpr(std::is_arithmetic_v<T>)
+            return std::min(a, b);
+        else
+            return transform(*this, a, b);
+    }
+
+    template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
+    constexpr T
+    operator()(const Vector<T, N, Container>& a) const noexcept
+    {
+        return reduce(*this, a, std::numeric_limits<T>::max());
+    }
+};
+
+struct max_fn
+{
+    template <typename T>
+    constexpr decltype(auto)
+    operator()(const T& a, const T& b) const noexcept
+    {
+        if constexpr(std::is_arithmetic_v<T>)
+            return std::max(a, b);
+        else
+            return transform(*this, a, b);
+    }
+
+    template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
+    constexpr T
+    operator()(const Vector<T, N, Container>& a) const noexcept
+    {
+        return reduce(*this, a, std::numeric_limits<T>::min());
+    }
+};
 } // namespace fn
 
 template <unsigned exp>
 static constexpr fn::static_pow_fn<exp> static_pow;
+static constexpr fn::min_fn             min;
+static constexpr fn::max_fn             max;
 
 MK_FN_OBJ(dot)
 MK_FN_OBJ(cross)
@@ -887,63 +943,7 @@ MK_FN_OBJ(product)
 MK_FN_OBJ(all)
 MK_FN_OBJ(any)
 MK_FN_OBJ(avg)
-
-/// @brief Get the biggest vector element.
-template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
-constexpr T
-max(const Vector<T, N, Container>& a) noexcept
-{
-    return reduce(
-        static_cast<const T& (*)(const T&, const T&)>(std::max), a, std::numeric_limits<T>::min());
-}
-
-/// @brief Get the smallest vector element.
-template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
-constexpr T
-min(const Vector<T, N, Container>& a) noexcept
-{
-    return reduce(
-        static_cast<const T& (*)(const T&, const T&)>(std::min), a, std::numeric_limits<T>::max());
-}
-
-/// @brief Build a vector consisting of the biggest corresponding elements from the input vectors.
-template <typename T,
-          std::size_t N,
-          template <typename, std::size_t>
-          typename Container1,
-          template <typename, std::size_t>
-          typename Container2>
-constexpr auto
-max(const Vector<T, N, Container1>& a, const Vector<T, N, Container2>& b) noexcept
-{
-    return transform(static_cast<const T& (*)(const T&, const T&)>(std::max), a, b);
-}
-
-/// @brief Build a vector consisting of the smallest corresponding elements from the input vectors.
-template <typename T,
-          std::size_t N,
-          template <typename, std::size_t>
-          typename Container1,
-          template <typename, std::size_t>
-          typename Container2>
-constexpr auto
-min(const Vector<T, N, Container1>& a, const Vector<T, N, Container2>& b) noexcept
-{
-    return transform(static_cast<const T& (*)(const T&, const T&)>(std::min), a, b);
-}
-
-/// @brief Roll vector elements.
-/// @param shift the number of places which elements are shifted.
-template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
-constexpr Vector<T, N, std::array>
-roll(const Vector<T, N, Container>& v, const std::size_t shift) noexcept
-{
-    Vector<T, N, std::array> ret{};
-
-    for(std::size_t i = 0; i < N; ++i) ret[i] = v[(i - shift) % N];
-
-    return ret;
-}
+MK_FN_OBJ(roll)
 
 template <typename T, std::size_t N, template <typename, std::size_t> typename Container>
 constexpr const T&
@@ -1026,6 +1026,12 @@ MAKE_BINARY_OP(less, operator<)
 MAKE_BINARY_OP(greater_equal, operator>=)
 MAKE_BINARY_OP(less_equal, operator<=)
 } // namespace lucid
+
+#undef MAKE_BINARY_OP
+#undef MAKE_UNARY_OP
+#undef VEC_NAMED_FN_OBJ
+#undef VEC_FN_OBJ
+#undef VEC_NAMED_FN_OBJ_SMATH
 
 namespace std
 {

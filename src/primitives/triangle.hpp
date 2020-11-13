@@ -13,19 +13,19 @@
 namespace lucid
 {
 /// @brief Defining triangle as array of vertices.
-template <template <typename, size_t> typename Container>
+template <template <typename, std::size_t> typename Container>
 using Triangle_ = std::array<Vec3_<Container>, 3>;
 
 using Triangle = Triangle_<std::array>;
 
-namespace prim_fn
+namespace fn
 {
 /// @brief Compute ray-triangle intersection.
 ///
 /// Implements classic algorithm described in
 /// @cite 10.1080/10867651.1997.10487468
-template <template <typename, size_t> typename TriangleContainer,
-          template <typename, size_t>
+template <template <typename, std::size_t> typename TriangleContainer,
+          template <typename, std::size_t>
           typename RayContainer>
 constexpr Intersection
 intersect(const Ray_<RayContainer>& ray, const Triangle_<TriangleContainer>& prim) noexcept
@@ -51,8 +51,8 @@ intersect(const Ray_<RayContainer>& ray, const Triangle_<TriangleContainer>& pri
 }
 
 /// @brief Compute triangle normal.
-template <template <typename, size_t> typename TriangleContainer,
-          template <typename, size_t>
+template <template <typename, std::size_t> typename TriangleContainer,
+          template <typename, std::size_t>
           typename PosContainer>
 constexpr Vec3
 normal(const Vec3_<PosContainer>&, const Triangle_<TriangleContainer>& prim) noexcept
@@ -85,7 +85,7 @@ s2t(Vec2& s) noexcept
     return s;
 }
 
-template <template <typename, size_t> typename Container2>
+template <template <typename, std::size_t> typename Container2>
 constexpr Vec3
 triangle_sample(Vec2                     s,
                 const Vec3_<Container2>& v1,
@@ -101,19 +101,8 @@ template <typename Prim>
 constexpr AABB
 bound(const Prim& prim) noexcept
 {
-    const Vec3 vmin(std::apply(
-        [](const auto& v1, const auto&... verts) {
-            return reduce(
-                static_cast<Vec3 (*)(const Vec3&, const Vec3&)>(lucid::min), v1, verts...);
-        },
-        prim));
-
-    const Vec3 vmax(std::apply(
-        [](const auto& v1, const auto&... verts) {
-            return reduce(
-                static_cast<Vec3 (*)(const Vec3&, const Vec3&)>(lucid::max), v1, verts...);
-        },
-        prim));
+    const Vec3 vmin = fold_tuple(lucid::min, prim);
+    const Vec3 vmax = fold_tuple(lucid::max, prim);
     return AABB{vmin, vmax};
 }
 } // namespace detail
@@ -121,18 +110,18 @@ bound(const Prim& prim) noexcept
 /// @brief Sample a point on triangle surface.
 ///
 /// Optimized implementation from @cite heitz:hal-02073696
-template <template <typename, size_t> typename SContainer,
-          template <typename, size_t>
+template <template <typename, std::size_t> typename SContainer,
+          template <typename, std::size_t>
           typename PContainer>
 constexpr Vec3
 sample(const Vec2_<SContainer>& s, const Triangle_<PContainer>& prim) noexcept
 {
     return Vec3(std::apply(
-        [&](const auto&... verts) { return detail::triangle_sample(s, verts...); }, prim));
+        [&](const auto&... verts) noexcept { return detail::triangle_sample(s, verts...); }, prim));
 }
 
 /// @brief Compute triangle centroid.
-template <template <typename, size_t> typename Container>
+template <template <typename, std::size_t> typename Container>
 constexpr Vec3
 centroid(const Triangle_<Container>& prim) noexcept
 {
@@ -140,7 +129,7 @@ centroid(const Triangle_<Container>& prim) noexcept
 }
 
 /// @brief Compute triangle bounding box.
-template <template <typename, size_t> typename Container>
+template <template <typename, std::size_t> typename Container>
 constexpr AABB
 bound(const Triangle_<Container>& prim) noexcept
 {
@@ -148,14 +137,15 @@ bound(const Triangle_<Container>& prim) noexcept
 }
 
 /// @brief Transform triangle with a transformation matrix.
-template <template <typename, size_t> typename MatContainer,
-          template <typename, size_t>
+template <template <typename, std::size_t> typename MatContainer,
+          template <typename, std::size_t>
           typename TriangleContainer>
-constexpr auto
+constexpr Triangle
 apply_transform(const Mat4_<MatContainer>& t, const Triangle_<TriangleContainer>& prim) noexcept
 {
     return std::apply(
-        [&](const auto&... points) { return Triangle{apply_transform_p(t, points)...}; }, prim);
+        [&](const auto&... points) noexcept { return Triangle{apply_transform_p(t, points)...}; },
+        prim);
 }
-} // namespace prim_fn
+} // namespace fn
 } // namespace lucid
