@@ -23,6 +23,7 @@ BENCHMARK=false
 DO_BUILD=true
 CXX=g++
 TARGETS=()
+[ -z "${BM_RUNS:-}" ] && BM_RUNS=4
 
 enable_tests() {
     CMAKE_ARGS+=(-DBUILD_TESTS=ON)
@@ -64,7 +65,10 @@ run_benchmarks() {
         mkdir -p ${logdir}
         for bm in bm_*; do
             log=${logdir}/${bm:3}.csv
-            ./${bm} ${log}
+            for i in `seq 1 ${BM_RUNS}`; do
+                echo "Running ${bm} ${i}/${BM_RUNS}"
+                ./${bm} ${log}
+            done
         done
         popd
     fi
