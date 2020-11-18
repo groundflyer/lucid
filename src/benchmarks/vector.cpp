@@ -24,13 +24,8 @@ bench(LogFile& log, G& g, const size_t n) noexcept
     auto                         vv   = [&]() noexcept { return Vec(generate<3>(dist, g)); };
     auto                         vgen = [&]() noexcept { return pair{vv(), vv()}; };
 
-    microbench(
-        log, n, "{} dot"_format(typestring), vgen, static_cast<T (*)(const Vec&, const Vec&)>(dot));
-    microbench(log,
-               n,
-               "{} cross"_format(typestring),
-               vgen,
-               static_cast<Vec (*)(const Vec&, const Vec&)>(cross));
+    microbench(log, n, "{} dot"_format(typestring), vgen, dot);
+    microbench(log, n, "{} cross"_format(typestring), vgen, cross);
 }
 
 int

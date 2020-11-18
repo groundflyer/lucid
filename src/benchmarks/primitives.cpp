@@ -1,12 +1,7 @@
 // -*- C++ -*-
 // primitives.cpp
 #include "benchmark.hpp"
-#include <primitives/aabb.hpp>
-#include <primitives/disk.hpp>
-#include <primitives/generic.hpp>
-#include <primitives/quad.hpp>
-#include <primitives/sphere.hpp>
-#include <primitives/triangle.hpp>
+#include <primitives/primitives.hpp>
 #include <ray_traversal/ray_traversal.hpp>
 #include <utils/tuple.hpp>
 
@@ -51,7 +46,7 @@ bench_prim(LogFile&                         log,
         [&]() noexcept {
             return pair{vgen(d, g), pg()};
         },
-        static_cast<Vec3 (*)(const Vec3&, const Prim&)>(normal));
+        normal);
 
     microbench(
         log,
@@ -60,12 +55,11 @@ bench_prim(LogFile&                         log,
         [&]() noexcept {
             return pair{Vec2(randr(g), randr(g)), pg()};
         },
-        static_cast<Vec3 (*)(const Vec2&, const Prim&)>(sample));
+        lucid::sample);
 
-    microbench(
-        log, n, "{} centroid"_format(name), pg, static_cast<Vec3 (*)(const Prim&)>(centroid));
+    microbench(log, n, "{} centroid"_format(name), pg, centroid);
 
-    microbench(log, n, "{} bound"_format(name), pg, static_cast<AABB (*)(const Prim&)>(bound));
+    microbench(log, n, "{} bound"_format(name), pg, bound);
 
     microbench(
         log,
@@ -74,7 +68,7 @@ bench_prim(LogFile&                         log,
         [&]() noexcept {
             return pair{Mat4(generate<16>(d, g)), pg()};
         },
-        static_cast<Prim (*)(const Mat4&, const Prim&)>(apply_transform));
+        apply_transform);
 }
 
 int

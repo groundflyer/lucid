@@ -26,7 +26,7 @@ main(int argc, char* argv[])
         [&]() noexcept {
             return pair{mgen(), mgen()};
         },
-        static_cast<Mat4 (*)(const Mat4&, const Mat4&)>(dot));
+        dot);
     microbench(
         log,
         n,
@@ -34,11 +34,11 @@ main(int argc, char* argv[])
         [&]() noexcept {
             return pair{mgen(), Vec4(generate<4>(dist, g))};
         },
-        static_cast<Vec4 (*)(const Mat4&, const Vec4&)>(dot));
+        dot);
 
-    microbench(log, n, "Mat4 transpose", mgen, static_cast<Mat4 (*)(const Mat4&)>(transpose));
-    microbench(log, n, "Mat4 det", mgen, static_cast<real (*)(const Mat4&)>(det));
-    microbench(log, n, "Mat4 inverse", mgen, static_cast<Mat4 (*)(const Mat4&)>(inverse));
+    microbench(log, n, "Mat4 transpose", mgen, transpose);
+    microbench(log, n, "Mat4 det", mgen, det);
+    microbench(log, n, "Mat4 inverse", mgen, inverse);
 
     return 0;
 }

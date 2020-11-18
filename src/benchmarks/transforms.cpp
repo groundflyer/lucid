@@ -30,7 +30,7 @@ main(int argc, char* argv[])
         [&]() noexcept {
             return pair{mgen(), vgen()};
         },
-        static_cast<Vec3 (*)(const Mat4&, const Vec3&)>(apply_transform));
+        apply_transform);
 
     microbench(
         log,
@@ -39,7 +39,7 @@ main(int argc, char* argv[])
         [&]() noexcept {
             return pair{mgen(), pgen()};
         },
-        static_cast<Vec3 (*)(const Mat4&, const Vec3&)>(apply_transform_p));
+        apply_transform_p);
 
     microbench(
         log,
@@ -48,11 +48,11 @@ main(int argc, char* argv[])
         [&]() noexcept {
             return pair{mgen(), ngen()};
         },
-        static_cast<Vec3 (*)(const Mat4&, const Vec3&)>(apply_transform_n));
+        apply_transform_n);
 
-    microbench(log, n, "translate", pgen, static_cast<Mat4 (*)(const Vec3&)>(translate));
+    microbench(log, n, "translate", pgen, translate);
 
-    microbench(log, n, "scale", vgen, static_cast<Mat4 (*)(const Vec3&)>(scale));
+    microbench(log, n, "scale", vgen, scale);
 
     microbench(
         log,
@@ -61,7 +61,7 @@ main(int argc, char* argv[])
         [&]() noexcept {
             return pair{dist(g), ngen()};
         },
-        static_cast<Mat4 (*)(const real, const Vec3&)>(rotate));
+        lucid::rotate);
 
     microbench(
         log,
@@ -70,9 +70,9 @@ main(int argc, char* argv[])
         [&]() noexcept {
             return tuple{pgen(), pgen(), ngen()};
         },
-        static_cast<Mat4 (*)(const Vec3&, const Vec3&, const Vec3&)>(look_at));
+        look_at);
 
-    microbench(log, n, "basis_matrix", ngen, static_cast<Mat3 (*)(const Vec3&)>(basis_matrix));
+    microbench(log, n, "basis_matrix", ngen, basis_matrix);
 
     return 0;
 }
