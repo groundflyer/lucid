@@ -1246,7 +1246,7 @@ longest_head(const Options&     options,
              std::index_sequence<OptIdx...>,
              std::index_sequence<PosIdx...>) noexcept
 {
-    const std::size_t opt_max = lucid::reduce_tuple(
+    const std::size_t opt_max = lucid::fold_tuple(
         [](const std::size_t a, const auto& option2) noexcept -> std::size_t {
             return std::max(a, formatted_size(FMT_STRING("{:l}"), option2));
         },
@@ -1259,7 +1259,7 @@ longest_head(const Options&     options,
     { pos_max = formatted_size(FMT_STRING("{}"), std::get<0>(positionals)); }
     else if constexpr((std::tuple_size_v<Positionals>) > 1)
     {
-        pos_max = lucid::reduce_tuple(
+        pos_max = lucid::fold_tuple(
             [](const std::size_t a, const auto& pos2) noexcept -> std::size_t {
                 return std::max(a, formatted_size(FMT_STRING("{}"), pos2));
             },

@@ -10,13 +10,13 @@ namespace lucid
 real
 convert_fov(const real fov) noexcept
 {
-    return math::tan(fov * 0.5_r);
+    return tan(fov * 0.5_r);
 }
 
 real
 invert_fov(const real f) noexcept
 {
-    return math::atan(f) * 2_r;
+    return atan(f) * 2_r;
 }
 
 struct perspective
@@ -38,8 +38,7 @@ struct perspective
         constexpr Ray
         operator()(const Vec2_<Container>& ndc) const noexcept
         {
-            const Vec3 d(ndc * tan_fov_half, 1_r);
-            return apply_transform(transform, Ray(Vec3(0_r), normalize(d)));
+            return apply_transform(transform, Ray(Vec3(0_r), make_normal(ndc * tan_fov_half, 1_r)));
         }
     };
 };

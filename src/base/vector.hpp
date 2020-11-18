@@ -687,11 +687,15 @@ VEC_NAMED_FN_OBJ(isfinite, std::isfinite)
 VEC_NAMED_FN_OBJ(clamp, std::clamp)
 VEC_NAMED_FN_OBJ(minmax, std::minmax)
 VEC_NAMED_FN_OBJ(fmod, std::fmod)
+VEC_NAMED_FN_OBJ(atan, std::atan)
+// functions that have static_math counterpart
 VEC_NAMED_FN_OBJ_SMATH(sqrt)
 VEC_NAMED_FN_OBJ_SMATH(abs)
 VEC_NAMED_FN_OBJ_SMATH(pow)
 VEC_NAMED_FN_OBJ_SMATH(sin)
 VEC_NAMED_FN_OBJ_SMATH(cos)
+VEC_NAMED_FN_OBJ_SMATH(tan)
+VEC_NAMED_FN_OBJ_SMATH(round)
 
 namespace fn
 {

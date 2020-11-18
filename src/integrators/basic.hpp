@@ -5,6 +5,7 @@
 #pragma once
 
 #include <image_reconstruction/filtering.hpp>
+#include <primitives/primitives.hpp>
 #include <ray_traversal/ray_traversal.hpp>
 #include <utils/tuple.hpp>
 

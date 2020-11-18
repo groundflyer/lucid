@@ -48,8 +48,7 @@ pixel_index(const Vec2& _res, const real _ratio, const Vec2& sample_pos) noexcep
     // normalize sample coordinates
     const real nsx = (sx + _ratio * 0.5_r) / _ratio;
     const real nsy = sy + 0.5_r;
-    return Vec2u(static_cast<unsigned>(math::round(nsx * w)),
-                 static_cast<unsigned>(math::round(nsy * h)));
+    return Vec2u(static_cast<unsigned>(round(nsx * w)), static_cast<unsigned>(round(nsy * h)));
 }
 
 Vec2u
@@ -84,7 +83,7 @@ struct Film
 
     explicit Film(const Vec2u& res_u) noexcept :
         img(res_u), res(res_u), _ratio(ratio(res)), _pixel_width(pixel_width(res)),
-        _pixel_radius(math::sqrt(2_r * pow<2>(_pixel_width)))
+        _pixel_radius(sqrt(2_r * _pixel_width * _pixel_width))
     {
     }
 

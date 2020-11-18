@@ -148,8 +148,8 @@ namespace fn
 struct identity_fn
 {
     template <typename T>
-    constexpr decltype(auto)
-    operator()(T&& t) const noexcept
+    constexpr T
+    operator()(const T& t) const noexcept
     {
         return t;
     }
