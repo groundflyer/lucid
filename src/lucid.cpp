@@ -59,8 +59,8 @@ main(int argc, char* argv[])
     Logger logger(Logger::DEBUG);
 
     const perspective::shoot cam        = CornellBox::camera();
-    const auto               room_geo   = CornellBox::geometry();
-    const auto               mat_getter = CornellBox::mat_getter();
+    const constexpr auto     room_geo   = CornellBox::geometry();
+    const constexpr auto     mat_getter = CornellBox::mat_getter();
 
     const real bias = 0.001_r;
 
@@ -71,7 +71,7 @@ main(int argc, char* argv[])
     try
     {
         FilmRGBA   film{res};
-        auto       da         = [](auto&&...) {};
+        auto       da         = [](auto&&...) noexcept {};
         auto       viewport   = make_viewport(res, da, da, da);
         const real filter_rad = film._pixel_radius * filter_width;
 

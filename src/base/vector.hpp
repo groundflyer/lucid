@@ -789,7 +789,7 @@ template <typename T, std::size_t N, template <typename, std::size_t> typename C
 constexpr T
 length(const Vector<T, N, Container>& a) noexcept
 {
-    return std::sqrt(length2(a));
+    return sqrt(length2(a));
 }
 
 /// @brief Normalize vector.

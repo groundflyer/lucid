@@ -7,13 +7,13 @@
 
 namespace lucid
 {
-real
+constexpr real
 convert_fov(const real fov) noexcept
 {
     return tan(fov * 0.5_r);
 }
 
-real
+constexpr real
 invert_fov(const real f) noexcept
 {
     return atan(f) * 2_r;
