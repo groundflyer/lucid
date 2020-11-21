@@ -29,19 +29,17 @@ main()
 {
     std::random_device                      rd;
     std::default_random_engine              g(rd());
-    std::uniform_int_distribution<unsigned> count_dist(3u, 400u);
+    std::uniform_int_distribution<unsigned> count_dist(10u, 200u);
 
     const auto color_gen = [&]() noexcept {
         return RGB{generate<3>(
             static_cast<float (*)(std::default_random_engine&)>(std::generate_canonical<float, 8>),
             g)};
     };
-    const auto pos_gen = [&](const real _ratio, const real _pixel_width) noexcept {
-        const real                           hratio  = _ratio * 0.5_r;
-        const real                           hpwidth = _pixel_width * 0.5_r;
-        std::uniform_real_distribution<real> hdist(-0.5_r - hpwidth, 0.5_r + hpwidth);
-        std::uniform_real_distribution<real> wdist(-hratio - hpwidth, hratio + hpwidth);
-        return Vec2(wdist(g), hdist(g));
+    const auto rand =
+        static_cast<real (*)(std::default_random_engine&)>(std::generate_canonical<float, 8>);
+    const auto pos_gen = [&](const real _ratio) noexcept {
+        return Vec2{_ratio * (rand(g) - 0.5_r), rand(g) - 0.5_r};
     };
     const auto res_gen = [&]() noexcept { return Vec2u(generate<2>(count_dist, g)); };
 
@@ -49,8 +47,8 @@ main()
 
     ret += test_property(
         1000000ul,
-        .0006,
-        "sample space and pixel position",
+        .01,
+        "Sample space and pixel position",
         [&]() noexcept {
             const Vec2u res{res_gen()};
             const auto [w, h] = res;
@@ -58,26 +56,24 @@ main()
             std::uniform_int_distribution<unsigned> disth(0u, h - 1u);
             return std::pair{Vec2(res), Vec2u(distw(g), disth(g))};
         },
-        [](const auto& res_idx) noexcept {
-            const auto& [res, idx] = res_idx;
-            return sample_space(res, idx);
-        },
+        [](const Vec2& res, const Vec2u& idx) noexcept { return sample_space(res, idx); },
         [](const Vec2& fss, const auto& res_idx) noexcept {
             const auto& [res, idxg] = res_idx;
             const auto& [fsx, fsy]  = fss;
             const Vec2u idxt        = pixel_index(res, fss);
-            // this check fails approximately in 0.0055% cases with -O3 -ffast-math
+            // this check fails in some cases with -O3 -ffast-math
             const bool error_prone = lucid::abs(fsx) > ratio(res) * 0.5_r;
             return any(idxg != idxt) || error_prone || (lucid::abs(fsy) > 0.5_r);
         });
 
     const auto generator = [&]() noexcept {
-        const Vec2u res = res_gen();
+        const Vec2u res    = res_gen();
+        const real  _ratio = ratio(res);
         return std::tuple{res,
                           count_dist(g),
                           views::generate_n(
-                              [&]() noexcept {
-                                  return Sample{pos_gen(ratio(res), pixel_width(res)), color_gen()};
+                              [&, _ratio]() noexcept {
+                                  return Sample{pos_gen(_ratio), color_gen()};
                               },
                               count_dist(g))};
     };
@@ -92,7 +88,7 @@ main()
         });
         return std::pair{std::move(film_test), std::move(film_valid)};
     };
-    const auto property = [](auto&& tested, const auto&) noexcept {
+    const auto property = [](const auto& tested, const auto&) noexcept {
         auto&& [film_test, film_valid] = tested;
         auto iter2                     = film_valid.img.begin();
         int  ret                       = 0;

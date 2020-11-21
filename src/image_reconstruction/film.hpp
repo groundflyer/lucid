@@ -99,10 +99,10 @@ struct Film
     pixel_index(const Vec2& pos) const noexcept
     {
         // we require posx to be in range [-ratio/2, ratio/2]
-        // posy in range [-0.5, 0.5]
-        ASSERT(inclusive_range(-_ratio * 0.5_r, _ratio * 0.5_r)(pos.template get<0>()),
+        // and posy in range [-0.5, 0.5]
+        ASSERT(inclusive_range(-_ratio * 0.5_r, _ratio * 0.5_r)(get_x(pos)),
                "Invalid X sample position");
-        ASSERT(inclusive_range(-0.5_r, 0.5_r)(pos.template get<1>()), "Invalid Y sample position");
+        ASSERT(inclusive_range(-0.5_r, 0.5_r)(get_y(pos)), "Invalid Y sample position");
 
         return lucid::pixel_index(res, _ratio, pos);
     }
