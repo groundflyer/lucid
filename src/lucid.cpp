@@ -84,8 +84,14 @@ main(int argc, char* argv[])
 
         auto it = film.img.begin();
 
+        std::size_t    avg_mrps = 0ul; // average ray per second
+        std::size_t    mnumber  = 0ul; // number of measurements
+        ElapsedTimer<> timer{};
+
         while(viewport.active())
         {
+            std::size_t ray_count = 0ul;
+
             Vec2 sample_pos;
             do
             {
@@ -99,14 +105,23 @@ main(int argc, char* argv[])
 
             while(const auto ret = dispatcher.fetch_result<PathTracer>())
             {
-                const Sample& sample = ret.value();
-                film                 = sample_based_singular_update(film, updater, sample);
+                const auto& [depth, sample] = ret.value();
+                film                        = sample_based_singular_update(film, updater, sample);
+                ray_count += depth;
             }
 
+            const auto elapsed =
+                std::chrono::duration_cast<std::chrono::milliseconds>(timer.restart()).count();
+            const auto mrps = ray_count / elapsed; // MRay/s
+            avg_mrps += mrps;
+            ++mnumber;
             viewport.reload_img(film.img);
             viewport.draw();
             glfwPollEvents();
+            logger.debug(Logger::flush, "{} MRay/s", mrps);
         }
+
+        logger.debug("Average MRay/s: {}", avg_mrps / mnumber);
     }
     catch(const GLenum& er)
     {

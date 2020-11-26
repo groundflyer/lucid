@@ -48,13 +48,14 @@ struct PathTracer_
     real                  bias;
     Vec2                  sample_pos;
 
-    Sample
+    std::pair<std::size_t, Sample>
     operator()() noexcept
     {
         RGB  radiance{1};
         bool has_rad = false;
 
-        for(std::size_t depth = 0; depth < max_depth; ++depth)
+        std::size_t depth = 0ul;
+        for(; depth < max_depth; ++depth)
         {
             const auto& [ro, wo]    = ray;
             const auto [pid, isect] = hider(ray, *scene);
@@ -92,7 +93,7 @@ struct PathTracer_
             ray = Ray(p + wi * bias, wi);
         }
 
-        return Sample{sample_pos, radiance * has_rad};
+        return {depth + 1ul, Sample{sample_pos, radiance * has_rad}};
     }
 };
 } // namespace lucid
