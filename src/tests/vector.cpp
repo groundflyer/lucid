@@ -83,7 +83,7 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
 
     /// @test Array vector constructor.
     ///
-    ///@f$\mathrm{V}([a,b,c\dots]) = \mathrm{V}(a, b, c\dots)@f$
+    /// @f$\mathrm{V}([a,b,c\dots]) = \mathrm{V}(a, b, c\dots)@f$
     ret += test_property_n("{}({})"_format(vec_typestring, arr_typestring), argen, vmaker, arass);
 
     if constexpr(N > 2)
