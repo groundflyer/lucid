@@ -78,6 +78,21 @@ add_subdirectory(glfw)
 set(GL_LIBS ${OPENGL_gl_LIBRARY} glfw)
 set(GL_DEFS "-DGLFW_INCLUDE_GLCOREARB -DGLFW_INCLUDE_GLEXT -DGL_GLEXT_PROTOTYPES")
 
+# GLEW - need for ImGui
+find_package(GLEW REQUIRED)
+
+# ImGui
+include_directories(imgui)
+set(IMGUI_SRCS
+  "imgui/backends/imgui_impl_glfw.cpp"
+  "imgui/backends/imgui_impl_opengl3.cpp"
+  "imgui/imgui.cpp"
+  "imgui/imgui_draw.cpp"
+  "imgui/imgui_widgets.cpp"
+  "imgui/imgui_tables.cpp"
+  "imgui/imgui_demo.cpp")
+add_library(imgui STATIC ${IMGUI_SRCS})
+
 # fmt
 set(BUILD_SHARED_LIBS FALSE)
 add_definitions(-DFMT_USE_GRISU=1)

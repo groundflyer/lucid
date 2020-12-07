@@ -9,6 +9,12 @@
 
 #include <GLFW/glfw3.h>
 
+// ImGui
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
+#include <imgui.h>
+
+#include <cstdio>
 #include <type_traits>
 
 namespace lucid
@@ -20,40 +26,11 @@ static inline int _gl_initialized = false;
 template <typename ResizeReaction, typename KeyReaction, typename MouseReaction>
 class _Viewport
 {
-    static const constexpr char* vertex_shader_src = "#version 330 core\n"
-                                                     "layout (location = 0) in vec3 inP;"
-                                                     "layout (location = 1) in vec2 inUV;"
-                                                     "out vec2 UV;"
-                                                     "void main(){"
-                                                     "gl_Position = vec4(inP, 1.0);"
-                                                     "UV = inUV;}";
+    static inline GLFWwindow* window = nullptr;
+    static inline Vec2i       window_size{1280, 768};
 
-    static const constexpr char* fragment_shader_src = "#version 330 core\n"
-                                                       "out vec4 Cf;"
-                                                       "in vec2 UV;"
-                                                       "uniform sampler2D img;"
-                                                       "void main(){Cf = texture(img, UV);}";
-
-    static const constexpr float vertex_data[] = {
-        // positions    // texture coordinates
-        -1.f, 1.f, 0, 0, 0, 1.f, 1.f, 0, 1.f, 0, 1.f, -1.f, 0, 1.f, 1.f, -1.f, -1.f, 0, 0, 1.f};
-
-    static const constexpr unsigned indices[] = {
-        0,
-        1,
-        2, // first triangle
-        2,
-        3,
-        0 // second triangle
-    };
-
-    static inline GLFWwindow* window         = nullptr;
-    static inline unsigned    shader_program = -1u;
-    static inline unsigned    VBO            = -1u;
-    static inline unsigned    VAO            = -1u;
-    static inline unsigned    EBO            = -1u;
-    static inline unsigned    texture        = -1u;
-    static inline Vec2i       res{640, 480};
+    static inline unsigned texture = -1u;
+    static inline Vec2i    texture_size{640, 480};
 
     static inline ResizeReaction resize_reaction;
     static inline KeyReaction    key_reaction;
@@ -62,30 +39,20 @@ class _Viewport
     static void
     resize_callback(GLFWwindow*, int width, int height) noexcept
     {
-        res = Vec2i(width, height);
+        window_size = Vec2i(width, height);
         glViewport(0, 0, width, height);
-        if constexpr(std::is_void_v<std::invoke_result_t<ResizeReaction, Vec2i>>)
-            resize_reaction(res);
-        else
-            load_img(resize_reaction(res));
     }
 
     static void
     key_callback(GLFWwindow*, int key, int /*scancode*/, int action, int mods) noexcept
     {
-        if constexpr(std::is_void_v<std::invoke_result_t<KeyReaction, int, int, int>>)
-            key_reaction(key, action, mods);
-        else
-            reload_img(key_reaction(key, action, mods));
+        key_reaction(key, action, mods);
     }
 
     static void
     mouse_button_callback(GLFWwindow*, int button, int action, int mods) noexcept
     {
-        if constexpr(std::is_void_v<std::invoke_result_t<MouseReaction, int, bool, int>>)
-            mouse_reaction(button, action == GLFW_PRESS, mods);
-        else
-            reload_img(mouse_reaction(button, action == GLFW_PRESS, mods));
+        mouse_reaction(button, action == GLFW_PRESS, mods);
     }
 
     static void
@@ -110,10 +77,9 @@ class _Viewport
          KeyReaction&&    _key_reaction,
          MouseReaction&&  _mouse_reaction)
     {
-
-        const auto [iwidth, iheight] = _res;
-        window                       = glfwCreateWindow(
-            static_cast<int>(iwidth), static_cast<int>(iheight), "Lucid", nullptr, nullptr);
+        window_size        = Vec2i{_res};
+        const auto& [w, h] = window_size;
+        window             = glfwCreateWindow(w, h, "Lucid", nullptr, nullptr);
 
         if(!window)
         {
@@ -125,81 +91,12 @@ class _Viewport
         mouse_reaction  = _mouse_reaction;
         key_reaction    = _key_reaction;
 
+        glfwSwapInterval(1);
         glfwMakeContextCurrent(window);
-        glfwSetFramebufferSizeCallback(window, resize_callback);
-        glfwSetKeyCallback(window, key_callback);
-        glfwSetMouseButtonCallback(window, mouse_button_callback);
-        glfwSetCursorPosCallback(window, cursor_position_callback);
-
-        auto& [width, height] = res;
-        glfwGetFramebufferSize(window, &width, &height);
-        glViewport(0, 0, width, height);
-
-        int    shader_status;
-        GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertex_shader, 1, &vertex_shader_src, nullptr);
-        glCompileShader(vertex_shader);
-        glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &shader_status);
-        if(!shader_status)
-        {
-            char info_log[512];
-            glGetShaderInfoLog(vertex_shader, 512, nullptr, info_log);
-            glfwTerminate();
-            throw std::runtime_error(info_log);
-        }
-
-        GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragment_shader, 1, &fragment_shader_src, nullptr);
-        glCompileShader(fragment_shader);
-        glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &shader_status);
-        if(!shader_status)
-        {
-            char info_log[512];
-            glGetShaderInfoLog(fragment_shader, 512, nullptr, info_log);
-            glfwTerminate();
-            throw std::runtime_error(info_log);
-        }
-
-        shader_program = glCreateProgram();
-        glAttachShader(shader_program, vertex_shader);
-        glAttachShader(shader_program, fragment_shader);
-        glLinkProgram(shader_program);
-        glGetProgramiv(shader_program, GL_LINK_STATUS, &shader_status);
-        if(!shader_status)
-        {
-            char info_log[512];
-            glGetProgramInfoLog(shader_program, 512, nullptr, info_log);
-            glfwTerminate();
-            throw std::runtime_error(info_log);
-        }
-
-        glDeleteShader(vertex_shader);
-        glDeleteShader(fragment_shader);
-
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
-        glGenBuffers(1, &EBO);
-        // glGenBuffers(1, &PBO);
-
-        glBindVertexArray(VAO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-        // position
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), static_cast<void*>(0));
-        glEnableVertexAttribArray(0);
-
-        // uv
-        glVertexAttribPointer(1,
-                              2,
-                              GL_FLOAT,
-                              GL_FALSE,
-                              5 * sizeof(float),
-                              reinterpret_cast<void*>(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
+        // glfwSetFramebufferSizeCallback(window, resize_callback);
+        // glfwSetKeyCallback(window, key_callback);
+        // glfwSetMouseButtonCallback(window, mouse_button_callback);
+        // glfwSetCursorPosCallback(window, cursor_position_callback);
 
         // texture
         glGenTextures(1, &texture);
@@ -209,13 +106,34 @@ class _Viewport
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        glUseProgram(shader_program);
+        // ImGui
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        std::printf("Context created\n");
+        // ImGuiIO& io = ImGui::GetIO();
+        // (void)io;
+        // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
+        ImGui::StyleColorsDark();
+        std::printf("Style applied\n");
+
+        // ImGuiStyle& style = ImGui::GetStyle();
+        // if(io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        // {
+        //     style.WindowRounding              = 0.0f;
+        //     style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+        // }
+
+        ImGui_ImplGlfw_InitForOpenGL(window, true);
+        ImGui_ImplOpenGL3_Init("#version 130");
     }
 
     static const Vec2i&
     get_res() noexcept
     {
-        return res;
+        return window_size;
     }
 
     template <typename Format>
@@ -226,7 +144,8 @@ class _Viewport
             std::is_same_v<Format, unsigned char> ?
                 GL_UNSIGNED_BYTE :
                 (std::is_same_v<Format, float> ? GL_FLOAT : GL_UNSIGNED_INT);
-        const auto [width, height] = img.res();
+        texture_size               = Vec2i{img.res()};
+        const auto [width, height] = texture_size;
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, type_flag, img.data());
     }
 
@@ -253,15 +172,36 @@ class _Viewport
     static void
     draw() noexcept
     {
-        if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(window, true);
+        glfwPollEvents();
 
-        // glClearColor(0.2f, 0.3f, 0.5f, 1.0f);
-        // glClear(GL_COLOR_BUFFER_BIT);
+        // const auto& [width, height] = texture_size;
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        std::printf("foo\n");
+        ImGui_ImplOpenGL3_NewFrame();
+        std::printf("gl3 newframe\n");
+        ImGui_ImplGlfw_NewFrame();
+        std::printf("glfw newframe\n");
+
+        ImGui::NewFrame();
+        std::printf("imgui new frame\n");
+        ImGui::Begin("Viewport texture test");
+        ImGui::Text("This is some useful text.");
+        // ImGui::Text("size = %d x %d", width, height);
+        // // ImGui::Image(static_cast<void*>(&texture), ImVec2(width, height));
+        ImGui::End();
+
+        ImGui::Render();
+        auto& [width, height] = window_size;
+        glfwGetFramebufferSize(window, &width, &height);
+        glViewport(0, 0, width, height);
+        std::printf("Imgui render\n");
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        std::printf("renderdrawdata\n");
 
         glfwSwapBuffers(window);
+
+        if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+            glfwSetWindowShouldClose(window, true);
     }
 
     static void
@@ -274,13 +214,11 @@ class _Viewport
     static void
     cleanup() noexcept
     {
-        if(window) glfwDestroyWindow(window);
+        ImGui_ImplGlfw_Shutdown();
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui::DestroyContext();
 
-        glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
-        glDeleteBuffers(1, &EBO);
-        // glDeleteBuffers(1, &PBO);
-
+        glfwDestroyWindow(window);
         glfwTerminate();
     }
 

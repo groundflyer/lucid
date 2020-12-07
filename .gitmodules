@@ -13,3 +13,6 @@
 [submodule "static_math"]
 	path = static_math
 	url = https://github.com/Morwenn/static_math.git
+[submodule "imgui"]
+	path = imgui
+	url = https://github.com/ocornut/imgui

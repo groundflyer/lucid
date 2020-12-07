@@ -127,7 +127,7 @@ main()
 
     perspective::shoot cam = CornellBox::camera();
 
-    const Vec2u res{320, 240};
+    const Vec2u res{1280, 720};
     FilmRGBA    film(res);
 
     CameraCapture cc{cam};
@@ -138,11 +138,8 @@ main()
     render(film, cam);
     viewport.load_img(film.img);
 
-    while(viewport.active())
-    {
-        viewport.draw();
-        glfwPollEvents();
-    }
+    logger.debug("Start main loop");
+    while(viewport.active()) { viewport.draw(); }
 
     return 0;
 }
