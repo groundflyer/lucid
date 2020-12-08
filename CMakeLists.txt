@@ -28,7 +28,7 @@ option(BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(BUILD_DOC "Build documentation" OFF)
 option(ENABLE_IPO "Enable interprocedural optimization" OFF)
 
-add_compile_options(-Wall -Wpedantic -Wextra -fno-rtti)
+add_compile_options(-Wall -Wpedantic -Wextra)
 # Optimize for the host machine
 add_compile_options($<$<CONFIG:Release>:-march=native>)
 add_compile_options($<$<CONFIG:Release>:-ffast-math>)
@@ -66,17 +66,14 @@ set(CMAKE_THREAD_PREFER_PTHREAD 1)
 set(THREADS_PREFER_PTHREAD_FLAG 1)
 find_package(Threads REQUIRED)
 
-# OpenGL
-set(OpenGL_GL_PREFERENCE LEGACY)
-find_package(OpenGL REQUIRED)
-
-# GLFW3
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-add_subdirectory(glfw)
-set(GL_LIBS ${OPENGL_gl_LIBRARY} glfw)
-set(GL_DEFS "-DGLFW_INCLUDE_GLCOREARB -DGLFW_INCLUDE_GLEXT -DGL_GLEXT_PROTOTYPES")
+# NanoGUI
+set(NANOGUI_BUILD_SHARED  OFF CACHE BOOL "" FORCE)
+set(NANOGUI_BUILD_EXAMPLE ON CACHE BOOL "" FORCE)
+set(NANOGUI_BUILD_PYTHON  OFF CACHE BOOL "" FORCE)
+set(NANOGUI_INSTALL       OFF CACHE BOOL "" FORCE)
+add_subdirectory(nanogui EXCLUDE_FROM_ALL)
+add_definitions(${NANOGUI_EXTRA_DEFS})
+include_directories(${NANOGUI_EXTRA_INCS})
 
 # fmt
 set(BUILD_SHARED_LIBS FALSE)
