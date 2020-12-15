@@ -74,14 +74,14 @@ find_package(OpenGL REQUIRED)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-add_subdirectory(glfw)
+add_subdirectory(ext/glfw)
 set(GL_LIBS ${OPENGL_gl_LIBRARY} glfw)
 set(GL_DEFS "-DGLFW_INCLUDE_GLCOREARB -DGLFW_INCLUDE_GLEXT -DGL_GLEXT_PROTOTYPES")
 
 # fmt
 set(BUILD_SHARED_LIBS FALSE)
 add_definitions(-DFMT_USE_GRISU=1)
-add_subdirectory(fmt EXCLUDE_FROM_ALL)
+add_subdirectory(ext/fmt EXCLUDE_FROM_ALL)
 
 # External includes
 # Concurrent Queue: concurrentqueue.h

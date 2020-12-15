@@ -1,6 +1,6 @@
 [submodule "fmt"]
-	path = fmt
+	path = ext/fmt
 	url = https://github.com/fmtlib/fmt.git
 [submodule "glfw"]
-	path = glfw
+	path = ext/glfw
 	url = https://github.com/glfw/glfw.git
