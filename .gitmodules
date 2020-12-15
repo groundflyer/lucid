@@ -1,15 +1,6 @@
 [submodule "fmt"]
 	path = fmt
 	url = https://github.com/fmtlib/fmt.git
-[submodule "concurrentqueue"]
-	path = concurrentqueue
-	url = https://github.com/cameron314/concurrentqueue.git
 [submodule "glfw"]
 	path = glfw
 	url = https://github.com/glfw/glfw.git
-[submodule "range-v3"]
-	path = range-v3
-	url = https://github.com/ericniebler/range-v3.git
-[submodule "static_math"]
-	path = static_math
-	url = https://github.com/Morwenn/static_math.git

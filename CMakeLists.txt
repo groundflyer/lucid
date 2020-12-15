@@ -83,14 +83,11 @@ set(BUILD_SHARED_LIBS FALSE)
 add_definitions(-DFMT_USE_GRISU=1)
 add_subdirectory(fmt EXCLUDE_FROM_ALL)
 
-# Concurrent Queue
-include_directories(concurrentqueue)
-
-# range-v3
-include_directories(range-v3/include)
-
-# static_math
-include_directories(static_math/include)
+# External includes
+# Concurrent Queue: concurrentqueue.h
+# range-v3: concept, meta, range, std
+# static math: static_math
+include_directories(ext/include)
 
 # docs
 if(BUILD_DOC)
