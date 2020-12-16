@@ -171,7 +171,7 @@ lerp(const T a, const T b, const Bias bias)
     return b * bias + a * (T{1} - bias);
 }
 
-/// @brief Compare floating-point values for equality using maching epsilon.
+/// @brief Compare floating-point values for equality using epsilon.
 ///
 /// The implementation is taken from https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon
 ///

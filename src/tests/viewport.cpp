@@ -1,6 +1,7 @@
 // -*- C++ -*-
 // viewport.cpp
 #include <gui/viewport.hpp>
+#include <image/io.hpp>
 #include <image_reconstruction/film.hpp>
 #include <integrators/basic.hpp>
 #include <sampling/film.hpp>
@@ -143,6 +144,8 @@ main()
         viewport.draw();
         glfwPollEvents();
     }
+
+    write_ppm(film.img, "viewport.ppm");
 
     return 0;
 }

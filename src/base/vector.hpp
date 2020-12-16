@@ -696,6 +696,7 @@ VEC_NAMED_FN_OBJ_SMATH(sin)
 VEC_NAMED_FN_OBJ_SMATH(cos)
 VEC_NAMED_FN_OBJ_SMATH(tan)
 VEC_NAMED_FN_OBJ_SMATH(round)
+VEC_NAMED_FN_OBJ_SMATH(floor)
 
 namespace fn
 {
@@ -888,6 +889,13 @@ struct static_pow_fn
     {
         return transform(*this, v);
     }
+
+    template <typename Rhs>
+    constexpr decltype(auto)
+    operator^(const Rhs& rhs) const noexcept
+    {
+        return compose(*this, rhs);
+    }
 };
 
 struct min_fn
@@ -907,6 +915,13 @@ struct min_fn
     operator()(const Vector<T, N, Container>& a) const noexcept
     {
         return reduce(*this, a, std::numeric_limits<T>::max());
+    }
+
+    template <typename Rhs>
+    constexpr decltype(auto)
+    operator^(const Rhs& rhs) const noexcept
+    {
+        return compose(*this, rhs);
     }
 };
 
@@ -928,6 +943,42 @@ struct max_fn
     {
         return reduce(*this, a, std::numeric_limits<T>::min());
     }
+
+    template <typename Rhs>
+    constexpr decltype(auto)
+    operator^(const Rhs& rhs) const noexcept
+    {
+        return compose(*this, rhs);
+    }
+};
+
+template <typename Integer>
+struct downsample_fn
+{
+    static_assert(std::is_integral_v<Integer>);
+
+    template <typename Float>
+    constexpr std::enable_if_t<std::is_floating_point_v<Float>, Integer>
+    operator()(const Float& value) const noexcept
+    {
+        Float clamped = std::clamp(value, Float{0}, Float{1});
+        clamped *= Float{std::numeric_limits<Integer>::max()};
+        return static_cast<Integer>(lucid::floor(value));
+    }
+
+    template <typename Float, std::size_t N, template <typename, std::size_t> typename Container>
+    constexpr std::enable_if_t<std::is_floating_point_v<Float>, Vector<Integer, N, std::array>>
+    operator()(const Vector<Float, N, Container>& vec) const noexcept
+    {
+        return transform(*this, vec);
+    }
+
+    template <typename Rhs>
+    constexpr decltype(auto)
+    operator^(const Rhs& rhs) const noexcept
+    {
+        return compose(*this, rhs);
+    }
 };
 } // namespace fn
 
@@ -935,6 +986,11 @@ template <unsigned exp>
 static constexpr fn::static_pow_fn<exp> static_pow;
 static constexpr fn::min_fn             min;
 static constexpr fn::max_fn             max;
+
+/// @brief Downsample floating point value to integer value with maximum integer equal to 1.0 of
+/// floating point value.
+template <typename Integer>
+static constexpr fn::downsample_fn<Integer> downsample;
 
 MK_FN_OBJ(dot)
 MK_FN_OBJ(cross)

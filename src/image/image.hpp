@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// film.hpp --
+// image.hpp --
 //
 
 #pragma once
@@ -21,7 +21,11 @@ struct scanline_iterator
     {
     }
 
-    constexpr Vec2u operator*() const noexcept { return Vec2u{pos % width, pos / width}; }
+    constexpr Vec2u
+    operator*() const noexcept
+    {
+        return Vec2u{pos % width, pos / width};
+    }
 
     constexpr scanline_iterator&
     operator++() noexcept
@@ -79,9 +83,7 @@ class ScanlineImage
 
       public:
         _iterator() = delete;
-
         _iterator(ImageRef _img, const unsigned pos) : img(&_img), iter(_img.res(), pos) {}
-
         _iterator(const _iterator& rhs) : img(rhs.img), iter(rhs.iter) {}
 
         _iterator&
@@ -119,7 +121,8 @@ class ScanlineImage
             return iter != rhs.iter;
         }
 
-        decltype(auto) operator*() const noexcept
+        decltype(auto)
+        operator*() const noexcept
         {
             CHECK_INDEX(iter.pos, img->size());
             return (*img)[*iter];
@@ -246,13 +249,15 @@ class ScanlineImage
         return const_iterator(*this, num_pixels());
     }
 
-    decltype(auto) operator[](const Vec2u& pos) noexcept
+    decltype(auto)
+    operator[](const Vec2u& pos) noexcept
     {
         const auto& [x, y] = pos;
         return at(x, y);
     }
 
-    decltype(auto) operator[](const Vec2u& pos) const noexcept
+    decltype(auto)
+    operator[](const Vec2u& pos) const noexcept
     {
         const auto& [x, y] = pos;
         return at(x, y);
