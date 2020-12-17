@@ -962,8 +962,8 @@ struct downsample_fn
     operator()(const Float& value) const noexcept
     {
         Float clamped = std::clamp(value, Float{0}, Float{1});
-        clamped *= Float{std::numeric_limits<Integer>::max()};
-        return static_cast<Integer>(lucid::floor(value));
+        clamped *= std::numeric_limits<Integer>::max();
+        return static_cast<Integer>(clamped);
     }
 
     template <typename Float, std::size_t N, template <typename, std::size_t> typename Container>
