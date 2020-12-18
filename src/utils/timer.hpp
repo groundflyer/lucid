@@ -113,7 +113,7 @@ class ElapsedTimer
 
 template <typename F, typename Clock = std::chrono::steady_clock, typename... Args>
 decltype(auto)
-measure(F&& f, Args&&... args)
+time_it(F&& f, Args&&... args)
 {
     ElapsedTimer<Clock> timer;
 
