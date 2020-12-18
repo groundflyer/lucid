@@ -67,7 +67,7 @@ run_benchmarks() {
             log=${logdir}/${bm:3}.csv
             for i in `seq 1 ${BM_RUNS}`; do
                 echo "Running ${bm} ${i}/${BM_RUNS}"
-                ./${bm} ${log}
+                ./${bm} -l ${log}
             done
         done
         popd

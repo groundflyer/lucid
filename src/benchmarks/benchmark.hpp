@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <utils/argparse.hpp>
 #include <utils/timer.hpp>
 
 #include <range/v3/algorithm/for_each.hpp>
@@ -15,9 +16,10 @@
 #include <fmt/format.h>
 #include <fmt/ranges.h>
 
-#include <vector>
-
 #include <cstdio>
+#include <cstdlib>
+#include <string_view>
+#include <vector>
 
 #ifdef REPO_HASH
 const constexpr char repo_hash[] = REPO_HASH;
@@ -25,10 +27,20 @@ const constexpr char repo_hash[] = REPO_HASH;
 const constexpr char repo_hash[] = "nonrepo";
 #endif
 
-#define INIT_LOG                     \
-    LogFile log;                     \
-    if(argc >= 2) log.open(argv[1]); \
-    const size_t n = argc == 3 ? atoi(argv[2]) : 10000000;
+#define INIT_LOG                                                                               \
+    constexpr std::tuple opts{                                                                 \
+        lucid::argparse::option<'l'>(identity, "/dev/null", "log", "File to log to", "FILE"),  \
+        lucid::argparse::option<'n'>(                                                          \
+            [](std::string_view word) noexcept { return std::atoi(word.data()); },             \
+            10000000,                                                                          \
+            "runs",                                                                            \
+            "Number of runs",                                                                  \
+            "N")};                                                                             \
+    lucid::argparse::ArgsRange args(argc, argv);                                               \
+    const auto                 pr =                                                            \
+        lucid::argparse::parse(opts, args, lucid::argparse::StandardErrorHandler(args, opts)); \
+    LogFile      log(pr.get_opt<'l'>());                                                       \
+    const size_t n = pr.get_opt<'n'>();
 
 namespace lucid
 {
@@ -41,7 +53,7 @@ struct LogFile
     operator=(const LogFile&) = delete;
 
     LogFile(){};
-    LogFile(const char* path) : file(std::fopen(path, "a")) {}
+    LogFile(const std::string_view path) : file(std::fopen(path.data(), "a")) {}
     LogFile(LogFile&& other)
     {
         file       = other.file;
@@ -62,11 +74,11 @@ struct LogFile
     }
 
     void
-    open(const char* path)
+    open(const std::string_view path)
     {
         if(file) std::fclose(file);
 
-        file = std::fopen(path, "a");
+        file = std::fopen(path.data(), "a");
     }
 
     template <typename... Args>
