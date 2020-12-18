@@ -23,6 +23,10 @@ foreach(src ${test_srcs})
   add_executable(${name} ${src})
 
   target_link_libraries(${name} PRIVATE fmt-header-only)
+
+  if(${name} MATCHES "bm_mp_.+")
+    target_link_libraries(${name} PRIVATE Threads::Threads)
+  endif()
   target_compile_definitions(${name} PRIVATE -DREPO_HASH="${REPO_HASH}")
   add_dependencies(benchmarks ${name})
 endforeach()
