@@ -582,6 +582,84 @@ transform_impl(const F& f, std::index_sequence<Idxs...>, const Vectors&... vs) n
 
     return ret;
 }
+
+template <int         _Sgn,
+          std::size_t J,
+          std::size_t K,
+          typename T,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container1,
+          template <typename, std::size_t>
+          typename Container2>
+constexpr T
+cross_impl_factor_ab(const Vector<T, N, Container1>& a, const Vector<T, N, Container2>& b) noexcept
+{
+    return _Sgn * a.template get<J>() * b.template get<K>();
+}
+
+template <std::size_t I,
+          std::size_t J,
+          std::size_t K,
+          typename T,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container1,
+          template <typename, std::size_t>
+          typename Container2>
+constexpr T
+cross_impl_factor(const Vector<T, N, Container1>& a, const Vector<T, N, Container2>& b) noexcept
+{
+    return cross_impl_factor_ab<sgn(std::array<std::size_t, 3>{I, J, K}), J, K>(a, b);
+}
+
+template <std::size_t I,
+          std::size_t J,
+          std::size_t... Ks,
+          typename T,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container1,
+          template <typename, std::size_t>
+          typename Container2>
+constexpr T
+cross_impl_ks(const Vector<T, N, Container1>& a,
+              const Vector<T, N, Container2>& b,
+              std::index_sequence<Ks...>) noexcept
+{
+    return (T{0} + ... + cross_impl_factor<I, J, Ks>(a, b));
+}
+
+template <std::size_t I,
+          std::size_t... Js,
+          typename T,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container1,
+          template <typename, std::size_t>
+          typename Container2>
+constexpr T
+cross_impl_js(const Vector<T, N, Container1>& a,
+              const Vector<T, N, Container2>& b,
+              std::index_sequence<Js...>) noexcept
+{
+    return (T{0} + ... + cross_impl_ks<I, Js>(a, b, std::make_index_sequence<N>{}));
+}
+
+template <std::size_t... Is,
+          typename T,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container1,
+          template <typename, std::size_t>
+          typename Container2>
+constexpr Vector<T, N, std::array>
+cross_impl(const Vector<T, N, Container1>& a,
+           const Vector<T, N, Container2>& b,
+           std::index_sequence<Is...>) noexcept
+{
+    return Vector<T, N, std::array>(cross_impl_js<Is>(a, b, std::make_index_sequence<N>{})...);
+}
 } // namespace detail
 
 /// @brief Create reference to input vector, i.e. vector view.
@@ -767,14 +845,14 @@ template <typename T,
 constexpr auto
 cross(const Vector<T, N, Container1>& a, const Vector<T, N, Container2>& b) noexcept
 {
-    Vector<T, N, std::array> ret;
+    // Vector<T, N, std::array> ret;
 
-    for(std::size_t i = 0; i < N; ++i)
-        for(std::size_t j = 0; j < N; ++j)
-            for(std::size_t k = 0; k < N; ++k)
-                ret[i] += sgn(std::array<std::size_t, 3>{i, j, k}) * a[j] * b[k];
+    // for(std::size_t i = 0; i < N; ++i)
+    //     for(std::size_t j = 0; j < N; ++j)
+    //         for(std::size_t k = 0; k < N; ++k)
+    //             ret[i] += sgn(std::array<std::size_t, 3>{i, j, k}) * a[j] * b[k];
 
-    return ret;
+    return detail::cross_impl(a, b, std::make_index_sequence<N>{});
 }
 
 /// @brief Compute squared length of a vector.
