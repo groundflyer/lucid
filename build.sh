@@ -1,7 +1,7 @@
 #!/bin/bash
 
 showhelp() {
-    echo "Usage: $0 [-t] [-b] [-d] [-e] [-a] [-c] [-clang]"
+    echo "Usage: $0 [-h] [-t] [-b] [-d] [-e] [-a] [-c] [-clang]"
     echo -e "\t-t\tbuild and run tests"
     echo -e "\t-b\tbuild and run benchmarks"
     echo -e "\t-d\tbuild documentation"
@@ -9,6 +9,7 @@ showhelp() {
     echo -e "\t-a\tbuild all, then run benchmarks and tests"
     echo -e "\t-c\trun cmake only, don't build"
     echo -e "\t-clang\tuse clang"
+    echo -e "\t-h\tshow this help message and exit"
 }
 
 SRC_DIR=`realpath $(dirname "${BASH_SOURCE[0]}")`
@@ -43,6 +44,7 @@ enable_docs() {
 }
 
 use_clang() {
+    BUILD_DIR+="_clang"
     CXX=clang++
     CMAKE_ARGS+=(-DCMAKE_CXX_COMPILER=${CXX})
 }
