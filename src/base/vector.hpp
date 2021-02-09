@@ -835,7 +835,16 @@ template <typename T,
 constexpr typename std::enable_if_t<N1 == M2, Matrix<T, M1, N2, std::array>>
 dot(const Matrix<T, M1, N1, Container1>& lhs, const Matrix<T, M2, N2, Container2>& rhs) noexcept;
 
-/// @brief Compute cross product of the given vectors.
+/// @brief Implements efficient generic N-dimensional cross product.
+///
+/// Naive implementation would be:
+/// @code{.cpp}
+/// Vector<T, N, std::array> ret;
+/// for(std::size_t i = 0; i < N; ++i)
+///     for(std::size_t j = 0; j < N; ++j)
+///         for(std::size_t k = 0; k < N; ++k)
+///             ret[i] += sgn(std::array<std::size_t, 3>{i, j, k}) * a[j] * b[k];
+/// @endcode
 template <typename T,
           std::size_t N,
           template <typename, std::size_t>
@@ -845,13 +854,6 @@ template <typename T,
 constexpr auto
 cross(const Vector<T, N, Container1>& a, const Vector<T, N, Container2>& b) noexcept
 {
-    // Vector<T, N, std::array> ret;
-
-    // for(std::size_t i = 0; i < N; ++i)
-    //     for(std::size_t j = 0; j < N; ++j)
-    //         for(std::size_t k = 0; k < N; ++k)
-    //             ret[i] += sgn(std::array<std::size_t, 3>{i, j, k}) * a[j] * b[k];
-
     return detail::cross_impl(a, b, std::make_index_sequence<N>{});
 }
 
