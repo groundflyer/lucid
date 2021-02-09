@@ -610,6 +610,7 @@ template <std::size_t I,
 constexpr T
 cross_impl_factor(const Vector<T, N, Container1>& a, const Vector<T, N, Container2>& b) noexcept
 {
+    // passing sgn as template parameter to force compile-time evaluation
     return cross_impl_factor_ab<sgn(std::array<std::size_t, 3>{I, J, K}), J, K>(a, b);
 }
 
