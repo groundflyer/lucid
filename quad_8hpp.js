@@ -1,11 +1,11 @@
 var quad_8hpp =
 [
-    [ "Quad", "quad_8hpp.html#ad1ec1e0e283e8ed71d1db9f06bfb1d16", null ],
+    [ "Quad", "quad_8hpp.html#a87902705ba4d214f73ab0f1d97f0f97a", null ],
     [ "Quad_", "quad_8hpp.html#a59cca5ed97f9924b4545499da5683f38", null ],
-    [ "apply_transform", "quad_8hpp.html#a665aa3ad70c6b7802539503e727c9ee6", null ],
-    [ "bound", "quad_8hpp.html#a87ed562ba3baeeb7cf9f584e82fd30f6", null ],
-    [ "centroid", "quad_8hpp.html#ac4f08d08a6dc998ef29abb1ffaf22c97", null ],
-    [ "intersect", "quad_8hpp.html#aeb0ff0a068ff1a29ee7e50e881b0d299", null ],
-    [ "normal", "quad_8hpp.html#a0c0227298d43d096ae0af4fee7f66f3e", null ],
-    [ "sample", "quad_8hpp.html#ad848a1a5159c154876fbac6ac0b96bbe", null ]
+    [ "apply_transform", "quad_8hpp.html#aba2ef414f5b126e01fcd7ece515ebb37", null ],
+    [ "bound", "quad_8hpp.html#a9ffd3b81704e80e5a0bc635e780b52bf", null ],
+    [ "centroid", "quad_8hpp.html#aa21dfa5fd08c0dfd2f8805e8dc7bafb6", null ],
+    [ "intersect", "quad_8hpp.html#ac9ad907b833666ba4217fef512037e77", null ],
+    [ "normal", "quad_8hpp.html#a80efbb64aa2de6104e4f3a5ca1cb8d2d", null ],
+    [ "sample", "quad_8hpp.html#a09cd761e569db8938e4ebc41a7e0a54e", null ]
 ];

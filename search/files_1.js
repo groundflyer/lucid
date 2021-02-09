@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['disk_2ehpp_99',['disk.hpp',['../disk_8hpp.html',1,'']]]
+  ['cornell_5fbox_2ehpp_98',['cornell_box.hpp',['../cornell__box_8hpp.html',1,'']]]
 ];

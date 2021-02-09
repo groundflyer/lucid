@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['centroid_121',['centroid',['../aabb_8hpp.html#ab0a57b87d62b69435ed7e95c26c2f427',1,'lucid::centroid(const AABB_&lt; Container &gt; &amp;prim) noexcept'],['../disk_8hpp.html#ae30f93c0de946e43971faeca86bbec6a',1,'lucid::centroid(const Disk_&lt; Container &gt; &amp;prim) noexcept'],['../quad_8hpp.html#ac4f08d08a6dc998ef29abb1ffaf22c97',1,'lucid::centroid(const Quad_&lt; Container &gt; &amp;prim) noexcept'],['../sphere_8hpp.html#a70ab78d69a697fb30fe3ce0b7ffa7ccb',1,'lucid::centroid(const Sphere_&lt; Container &gt; &amp;prim) noexcept'],['../triangle_8hpp.html#a362b8b0f3e18bd4b030f7d57edd68e86',1,'lucid::centroid(const Triangle_&lt; Container &gt; &amp;prim) noexcept']]],
-  ['clamp_122',['clamp',['../vector_8hpp.html#a0ccf02ef8b67980d6482b8f3818a5533',1,'lucid']]],
-  ['cofactor_123',['cofactor',['../matrix_8hpp.html#a0a9cc497957d8f8dfa72690b74bf7b60',1,'lucid']]],
-  ['cross_124',['cross',['../vector_8hpp.html#a2bbd3921a41de74329996e3c976d2d27',1,'lucid']]]
+  ['centroid_120',['centroid',['../aabb_8hpp.html#ae142e0d43828e0e5f1255fca59b28711',1,'lucid::fn::centroid(const AABB_&lt; Container &gt; &amp;prim) noexcept'],['../disk_8hpp.html#aa300978e343fe2bbbc5effd910ff2855',1,'lucid::fn::centroid(const Disk_&lt; Container &gt; &amp;prim) noexcept'],['../quad_8hpp.html#aa21dfa5fd08c0dfd2f8805e8dc7bafb6',1,'lucid::fn::centroid(const Quad_&lt; Container &gt; &amp;prim) noexcept'],['../sphere_8hpp.html#a013185e07024c97d5d235e7de7d2d9f4',1,'lucid::fn::centroid(const Sphere_&lt; Container &gt; &amp;prim) noexcept'],['../triangle_8hpp.html#a51b0a8d122eafabe9ceddd329982f290',1,'lucid::fn::centroid(const Triangle_&lt; Container &gt; &amp;prim) noexcept']]],
+  ['cofactor_121',['cofactor',['../matrix_8hpp.html#ad0cdd378555edb8e2c380c2213e4ebca',1,'lucid::fn']]],
+  ['cross_122',['cross',['../vector_8hpp.html#a3874ecc27b8d3b42fcf654e5b459828a',1,'lucid::fn']]]
 ];

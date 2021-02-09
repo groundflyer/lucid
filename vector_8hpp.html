@@ -91,12 +91,14 @@ $(document).ready(function(){initNavTree('vector_8hpp.html',''); initResizable()
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">vector.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;utils/debug.hpp&gt;</code><br />
+<code>#include &lt;utils/functional.hpp&gt;</code><br />
 <code>#include &lt;<a class="el" href="math_8hpp.html">utils/math.hpp</a>&gt;</code><br />
 <code>#include &lt;utils/static_span.hpp&gt;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
@@ -109,155 +111,170 @@ $(document).ready(function(){initNavTree('vector_8hpp.html',''); initResizable()
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1Matrix.html">lucid::Matrix&lt; T, M, N, Container &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic row-major two-dimensional <a class="el" href="classlucid_1_1Matrix.html" title="Generic row-major two-dimensional Matrix of constant size.">Matrix</a> of constant size.  <a href="classlucid_1_1Matrix.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlucid_1_1Vector.html">lucid::Vector&lt; T, N, Container &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic N-dimensional euclidian vector.  <a href="classlucid_1_1Vector.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1fn_1_1multiplies__fn.html">lucid::fn::multiplies_fn</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlucid_1_1fn_1_1static__pow__fn.html">lucid::fn::static_pow_fn&lt; exp &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rise vector elements to a constant power.  <a href="structlucid_1_1fn_1_1static__pow__fn.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ae34f2ce6f81c34783eb76bf23f689267"><td class="memItemLeft" align="right" valign="top"><a id="ae34f2ce6f81c34783eb76bf23f689267"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MAKE_BINARY_OP</b>(FUNC,  OP)</td></tr>
+<tr class="separator:ae34f2ce6f81c34783eb76bf23f689267"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7e64ee81e4a8ebb6ff69a756feb27b4"><td class="memItemLeft" align="right" valign="top"><a id="ab7e64ee81e4a8ebb6ff69a756feb27b4"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MAKE_UNARY_OP</b>(FUNC,  OP)</td></tr>
+<tr class="separator:ab7e64ee81e4a8ebb6ff69a756feb27b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1accf3841db814ad4632e5159ef5afa7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>VEC_NAMED_FN_OBJ</b>(NAME,  FUNC)</td></tr>
+<tr class="separator:a1accf3841db814ad4632e5159ef5afa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61b3dbd0556b834116a50b264f85ab69"><td class="memItemLeft" align="right" valign="top"><a id="a61b3dbd0556b834116a50b264f85ab69"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>VEC_FN_OBJ</b>(FUNC)&#160;&#160;&#160;VEC_NAMED_FN_OBJ(FUNC, FUNC)</td></tr>
+<tr class="separator:a61b3dbd0556b834116a50b264f85ab69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedfe7bca218f06da8c63a1905e29601b"><td class="memItemLeft" align="right" valign="top"><a id="aedfe7bca218f06da8c63a1905e29601b"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>VEC_NAMED_FN_OBJ_SMATH</b>(FUNC)</td></tr>
+<tr class="separator:aedfe7bca218f06da8c63a1905e29601b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ada0fc8d4a7ff9d3e6ff441360045400c"><td class="memTemplParams" colspan="2"><a id="ada0fc8d4a7ff9d3e6ff441360045400c"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
 <tr class="memitem:ada0fc8d4a7ff9d3e6ff441360045400c"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::Vector</b> (Container&lt; T, N &gt; &amp;&amp;) -&gt; Vector&lt; T, N, Container &gt;</td></tr>
 <tr class="separator:ada0fc8d4a7ff9d3e6ff441360045400c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab922bb281177049859d5c7397420e166"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:ab922bb281177049859d5c7397420e166"><td class="memTemplItemLeft" align="right" valign="top">constexpr const Vector&lt; T, N, StaticSpan &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#ab922bb281177049859d5c7397420e166">lucid::ref</a> (const Vector&lt; T, N, Container &gt; &amp;v)</td></tr>
-<tr class="memdesc:ab922bb281177049859d5c7397420e166"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create reference to input vector, e.g. vector view.  <a href="vector_8hpp.html#ab922bb281177049859d5c7397420e166">More...</a><br /></td></tr>
-<tr class="separator:ab922bb281177049859d5c7397420e166"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab75ef3c027430f94c1b647a378af34f6"><td class="memTemplParams" colspan="2">template&lt;typename T1 , typename T2 , size_t N, template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2, typename BinaryOperation &gt; </td></tr>
-<tr class="memitem:ab75ef3c027430f94c1b647a378af34f6"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#ab75ef3c027430f94c1b647a378af34f6">lucid::transform</a> (BinaryOperation binary_op, const Vector&lt; T1, N, Container1 &gt; &amp;a, const Vector&lt; T2, N, Container2 &gt; &amp;b) noexcept</td></tr>
-<tr class="memdesc:ab75ef3c027430f94c1b647a378af34f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply binary operator to the corresponding elements of input vectors.  <a href="vector_8hpp.html#ab75ef3c027430f94c1b647a378af34f6">More...</a><br /></td></tr>
-<tr class="separator:ab75ef3c027430f94c1b647a378af34f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81dc40925bdf767c2c20d8cada382b3f"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container, typename UnaryOperation &gt; </td></tr>
-<tr class="memitem:a81dc40925bdf767c2c20d8cada382b3f"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a81dc40925bdf767c2c20d8cada382b3f">lucid::transform</a> (UnaryOperation unary_op, const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
-<tr class="memdesc:a81dc40925bdf767c2c20d8cada382b3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply unary operator to the elements of a vector.  <a href="vector_8hpp.html#a81dc40925bdf767c2c20d8cada382b3f">More...</a><br /></td></tr>
-<tr class="separator:a81dc40925bdf767c2c20d8cada382b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5030df94ec53c81081b818256eef356f"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container, typename BinaryOperation , typename Init &gt; </td></tr>
+<tr class="memitem:ab09ad65782a961cd194a5a9156ee66d5"><td class="memTemplParams" colspan="2"><a id="ab09ad65782a961cd194a5a9156ee66d5"></a>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:ab09ad65782a961cd194a5a9156ee66d5"><td class="memTemplItemLeft" align="right" valign="top">constexpr const T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::elem</b> (const Vector&lt; T, N, Container &gt; &amp;v, const std::size_t i) noexcept</td></tr>
+<tr class="separator:ab09ad65782a961cd194a5a9156ee66d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87b3b23074d1e4b1be07ccd3eb4065b9"><td class="memTemplParams" colspan="2"><a id="a87b3b23074d1e4b1be07ccd3eb4065b9"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a87b3b23074d1e4b1be07ccd3eb4065b9"><td class="memTemplItemLeft" align="right" valign="top">constexpr const T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::elem</b> (const T &amp;v, const std::size_t) noexcept</td></tr>
+<tr class="separator:a87b3b23074d1e4b1be07ccd3eb4065b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb18f8a6b523f7125abc192920a4f450"><td class="memTemplParams" colspan="2"><a id="acb18f8a6b523f7125abc192920a4f450"></a>
+template&lt;std::size_t I, typename... Args&gt; </td></tr>
+<tr class="memitem:acb18f8a6b523f7125abc192920a4f450"><td class="memTemplItemLeft" align="right" valign="top">constexpr decltype(auto)&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::elem</b> (const std::size_t i, const Args &amp;... vectors) noexcept</td></tr>
+<tr class="separator:acb18f8a6b523f7125abc192920a4f450"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9117789c7563222aed249c74cbd454a"><td class="memTemplParams" colspan="2"><a id="ae9117789c7563222aed249c74cbd454a"></a>
+template&lt;typename F , std::size_t... Idxs, typename... Vectors&gt; </td></tr>
+<tr class="memitem:ae9117789c7563222aed249c74cbd454a"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::transform_impl</b> (const F &amp;f, std::index_sequence&lt; Idxs... &gt;, const Vectors &amp;... vs) noexcept</td></tr>
+<tr class="separator:ae9117789c7563222aed249c74cbd454a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab931cbea0bcb063ca424924fcea4e94d"><td class="memTemplParams" colspan="2"><a id="ab931cbea0bcb063ca424924fcea4e94d"></a>
+template&lt;int _Sgn, std::size_t J, std::size_t K, typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container1, template&lt; typename, std::size_t &gt; typename Container2&gt; </td></tr>
+<tr class="memitem:ab931cbea0bcb063ca424924fcea4e94d"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::cross_impl_factor_ab</b> (const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept</td></tr>
+<tr class="separator:ab931cbea0bcb063ca424924fcea4e94d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a645dbbb5aee594f8016cafe7d3aea3cd"><td class="memTemplParams" colspan="2"><a id="a645dbbb5aee594f8016cafe7d3aea3cd"></a>
+template&lt;std::size_t I, std::size_t J, std::size_t K, typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container1, template&lt; typename, std::size_t &gt; typename Container2&gt; </td></tr>
+<tr class="memitem:a645dbbb5aee594f8016cafe7d3aea3cd"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::cross_impl_factor</b> (const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept</td></tr>
+<tr class="separator:a645dbbb5aee594f8016cafe7d3aea3cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2168cd975a14e0228661fd9e21ff9c8c"><td class="memTemplParams" colspan="2"><a id="a2168cd975a14e0228661fd9e21ff9c8c"></a>
+template&lt;std::size_t I, std::size_t J, std::size_t... Ks, typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container1, template&lt; typename, std::size_t &gt; typename Container2&gt; </td></tr>
+<tr class="memitem:a2168cd975a14e0228661fd9e21ff9c8c"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::cross_impl_ks</b> (const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b, std::index_sequence&lt; Ks... &gt;) noexcept</td></tr>
+<tr class="separator:a2168cd975a14e0228661fd9e21ff9c8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b470ff8bca9e2fe4d768a58193ccbaa"><td class="memTemplParams" colspan="2"><a id="a3b470ff8bca9e2fe4d768a58193ccbaa"></a>
+template&lt;std::size_t I, std::size_t... Js, typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container1, template&lt; typename, std::size_t &gt; typename Container2&gt; </td></tr>
+<tr class="memitem:a3b470ff8bca9e2fe4d768a58193ccbaa"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::cross_impl_js</b> (const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b, std::index_sequence&lt; Js... &gt;) noexcept</td></tr>
+<tr class="separator:a3b470ff8bca9e2fe4d768a58193ccbaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a672fefc95c8ad40f54d9aa58d4c985c3"><td class="memTemplParams" colspan="2"><a id="a672fefc95c8ad40f54d9aa58d4c985c3"></a>
+template&lt;std::size_t... Is, typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container1, template&lt; typename, std::size_t &gt; typename Container2&gt; </td></tr>
+<tr class="memitem:a672fefc95c8ad40f54d9aa58d4c985c3"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vector&lt; T, N, std::array &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::cross_impl</b> (const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b, std::index_sequence&lt; Is... &gt;) noexcept</td></tr>
+<tr class="separator:a672fefc95c8ad40f54d9aa58d4c985c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42533e02a80a0c3ed66d023c8a08a3a8"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a42533e02a80a0c3ed66d023c8a08a3a8"><td class="memTemplItemLeft" align="right" valign="top">constexpr const Vector&lt; T, N, StaticSpan &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a42533e02a80a0c3ed66d023c8a08a3a8">lucid::ref</a> (const Vector&lt; T, N, Container &gt; &amp;v) noexcept</td></tr>
+<tr class="memdesc:a42533e02a80a0c3ed66d023c8a08a3a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create reference to input vector, i.e. vector view.  <a href="vector_8hpp.html#a42533e02a80a0c3ed66d023c8a08a3a8">More...</a><br /></td></tr>
+<tr class="separator:a42533e02a80a0c3ed66d023c8a08a3a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b4c3b47247fc9ddb43a1360fcb8d2ef"><td class="memTemplParams" colspan="2"><a id="a9b4c3b47247fc9ddb43a1360fcb8d2ef"></a>
+template&lt;typename T , std::size_t M, std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a9b4c3b47247fc9ddb43a1360fcb8d2ef"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vector&lt; T, M *N, StaticSpan &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="matrix_8hpp.html#a9b4c3b47247fc9ddb43a1360fcb8d2ef">lucid::flat_ref</a> (const Matrix&lt; T, M, N, Container &gt; &amp;m) noexcept</td></tr>
+<tr class="memdesc:a9b4c3b47247fc9ddb43a1360fcb8d2ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create vector view of size \(M N\) of input matrix. <br /></td></tr>
+<tr class="separator:a9b4c3b47247fc9ddb43a1360fcb8d2ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f045a8021ccf1b7ae4fc81fc4a9c497"><td class="memTemplParams" colspan="2">template&lt;typename F , typename... Vectors&gt; </td></tr>
+<tr class="memitem:a3f045a8021ccf1b7ae4fc81fc4a9c497"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a3f045a8021ccf1b7ae4fc81fc4a9c497">lucid::transform</a> (const F &amp;f, const Vectors &amp;... vs) noexcept</td></tr>
+<tr class="memdesc:a3f045a8021ccf1b7ae4fc81fc4a9c497"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply function to corresponding elements of input vectors.  <a href="vector_8hpp.html#a3f045a8021ccf1b7ae4fc81fc4a9c497">More...</a><br /></td></tr>
+<tr class="separator:a3f045a8021ccf1b7ae4fc81fc4a9c497"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5030df94ec53c81081b818256eef356f"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container, typename BinaryOperation , typename Init &gt; </td></tr>
 <tr class="memitem:a5030df94ec53c81081b818256eef356f"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a5030df94ec53c81081b818256eef356f">lucid::reduce</a> (BinaryOperation binary_op, const Vector&lt; T, N, Container &gt; &amp;a, Init init) noexcept</td></tr>
 <tr class="memdesc:a5030df94ec53c81081b818256eef356f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform left fold on a given vector.  <a href="vector_8hpp.html#a5030df94ec53c81081b818256eef356f">More...</a><br /></td></tr>
 <tr class="separator:a5030df94ec53c81081b818256eef356f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f26102008b76d70ad42e6f3e1bf2162"><td class="memTemplParams" colspan="2">template&lt;typename T1 , typename T2 , size_t N, template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2, typename BinaryOperation1 , typename BinaryOperation2 , typename Init &gt; </td></tr>
+<tr class="memitem:a9f26102008b76d70ad42e6f3e1bf2162"><td class="memTemplParams" colspan="2">template&lt;typename T1 , typename T2 , std::size_t N, template&lt; typename, std::size_t &gt; typename Container1, template&lt; typename, std::size_t &gt; typename Container2, typename BinaryOperation1 , typename BinaryOperation2 , typename Init &gt; </td></tr>
 <tr class="memitem:a9f26102008b76d70ad42e6f3e1bf2162"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a9f26102008b76d70ad42e6f3e1bf2162">lucid::transform_reduce</a> (BinaryOperation1 binary_op1, BinaryOperation2 binary_op2, const Vector&lt; T1, N, Container1 &gt; &amp;a, const Vector&lt; T2, N, Container2 &gt; &amp;b, Init init) noexcept</td></tr>
 <tr class="memdesc:a9f26102008b76d70ad42e6f3e1bf2162"><td class="mdescLeft">&#160;</td><td class="mdescRight">Efficient shortcut for.  <a href="vector_8hpp.html#a9f26102008b76d70ad42e6f3e1bf2162">More...</a><br /></td></tr>
 <tr class="separator:a9f26102008b76d70ad42e6f3e1bf2162"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4cc5169a55df1aae6cda4ac0f71df52"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container, typename UnaryOperation , typename BinaryOperation , typename Init &gt; </td></tr>
+<tr class="memitem:ae4cc5169a55df1aae6cda4ac0f71df52"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container, typename UnaryOperation , typename BinaryOperation , typename Init &gt; </td></tr>
 <tr class="memitem:ae4cc5169a55df1aae6cda4ac0f71df52"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#ae4cc5169a55df1aae6cda4ac0f71df52">lucid::transform_reduce</a> (UnaryOperation unary_op, BinaryOperation binary_op, const Vector&lt; T, N, Container &gt; &amp;a, Init init) noexcept</td></tr>
 <tr class="memdesc:ae4cc5169a55df1aae6cda4ac0f71df52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Efficient shortcut for.  <a href="vector_8hpp.html#ae4cc5169a55df1aae6cda4ac0f71df52">More...</a><br /></td></tr>
 <tr class="separator:ae4cc5169a55df1aae6cda4ac0f71df52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63877bb47573991a40b06c406f892d99"><td class="memTemplParams" colspan="2"><a id="a63877bb47573991a40b06c406f892d99"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
-<tr class="memitem:a63877bb47573991a40b06c406f892d99"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a63877bb47573991a40b06c406f892d99">lucid::dot</a> (const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept</td></tr>
-<tr class="memdesc:a63877bb47573991a40b06c406f892d99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute dot product of the given vectors. <br /></td></tr>
-<tr class="separator:a63877bb47573991a40b06c406f892d99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bbd3921a41de74329996e3c976d2d27"><td class="memTemplParams" colspan="2"><a id="a2bbd3921a41de74329996e3c976d2d27"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
-<tr class="memitem:a2bbd3921a41de74329996e3c976d2d27"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a2bbd3921a41de74329996e3c976d2d27">lucid::cross</a> (const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept</td></tr>
-<tr class="memdesc:a2bbd3921a41de74329996e3c976d2d27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute cross product of the given vectors. <br /></td></tr>
-<tr class="separator:a2bbd3921a41de74329996e3c976d2d27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a745aa8c663a3ecaad42ac0c027986706"><td class="memTemplParams" colspan="2"><a id="a745aa8c663a3ecaad42ac0c027986706"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a745aa8c663a3ecaad42ac0c027986706"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a745aa8c663a3ecaad42ac0c027986706">lucid::length2</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
-<tr class="memdesc:a745aa8c663a3ecaad42ac0c027986706"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute squared length of a vector. <br /></td></tr>
-<tr class="separator:a745aa8c663a3ecaad42ac0c027986706"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2929669daf16562b74cc8bd44a96be7f"><td class="memTemplParams" colspan="2"><a id="a2929669daf16562b74cc8bd44a96be7f"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a2929669daf16562b74cc8bd44a96be7f"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a2929669daf16562b74cc8bd44a96be7f">lucid::length</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
-<tr class="memdesc:a2929669daf16562b74cc8bd44a96be7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute length of a vector. <br /></td></tr>
-<tr class="separator:a2929669daf16562b74cc8bd44a96be7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af650f4c2a47ccf0bb71d0a96bd0fc99d"><td class="memTemplParams" colspan="2"><a id="af650f4c2a47ccf0bb71d0a96bd0fc99d"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:af650f4c2a47ccf0bb71d0a96bd0fc99d"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vector&lt; T, N, std::array &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#af650f4c2a47ccf0bb71d0a96bd0fc99d">lucid::normalize</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
-<tr class="memdesc:af650f4c2a47ccf0bb71d0a96bd0fc99d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalize vector. <br /></td></tr>
-<tr class="separator:af650f4c2a47ccf0bb71d0a96bd0fc99d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae64471772002652f075c8148ca4ff9b7"><td class="memTemplParams" colspan="2"><a id="ae64471772002652f075c8148ca4ff9b7"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
-<tr class="memitem:ae64471772002652f075c8148ca4ff9b7"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#ae64471772002652f075c8148ca4ff9b7">lucid::distance</a> (const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept</td></tr>
-<tr class="memdesc:ae64471772002652f075c8148ca4ff9b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute distance between two vectors. <br /></td></tr>
-<tr class="separator:ae64471772002652f075c8148ca4ff9b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a968dd1e2ed48c2eb811529add8570f1d"><td class="memTemplParams" colspan="2"><a id="a968dd1e2ed48c2eb811529add8570f1d"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a968dd1e2ed48c2eb811529add8570f1d"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a968dd1e2ed48c2eb811529add8570f1d">lucid::sum</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
-<tr class="memdesc:a968dd1e2ed48c2eb811529add8570f1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum of all vector elements. <br /></td></tr>
-<tr class="separator:a968dd1e2ed48c2eb811529add8570f1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b7fb022f86e87d07cc84c8dfa89981e"><td class="memTemplParams" colspan="2"><a id="a6b7fb022f86e87d07cc84c8dfa89981e"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a6b7fb022f86e87d07cc84c8dfa89981e"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a6b7fb022f86e87d07cc84c8dfa89981e">lucid::product</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
-<tr class="memdesc:a6b7fb022f86e87d07cc84c8dfa89981e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Product of all vector elements. <br /></td></tr>
-<tr class="separator:a6b7fb022f86e87d07cc84c8dfa89981e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad467f9d466c619e83211a65b9f2796ab"><td class="memTemplParams" colspan="2"><a id="ad467f9d466c619e83211a65b9f2796ab"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:ad467f9d466c619e83211a65b9f2796ab"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#ad467f9d466c619e83211a65b9f2796ab">lucid::all</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
-<tr class="memdesc:ad467f9d466c619e83211a65b9f2796ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether all vector elements evaluate to true. <br /></td></tr>
-<tr class="separator:ad467f9d466c619e83211a65b9f2796ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f7a8f73a355e9e7c219f5ed994fc995"><td class="memTemplParams" colspan="2"><a id="a5f7a8f73a355e9e7c219f5ed994fc995"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a5f7a8f73a355e9e7c219f5ed994fc995"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a5f7a8f73a355e9e7c219f5ed994fc995">lucid::any</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
-<tr class="memdesc:a5f7a8f73a355e9e7c219f5ed994fc995"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether any vector element evaluates to true. <br /></td></tr>
-<tr class="separator:a5f7a8f73a355e9e7c219f5ed994fc995"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87991dd1f2146706a28414d8f146fbad"><td class="memTemplParams" colspan="2"><a id="a87991dd1f2146706a28414d8f146fbad"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a87991dd1f2146706a28414d8f146fbad"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a87991dd1f2146706a28414d8f146fbad">lucid::avg</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
-<tr class="memdesc:a87991dd1f2146706a28414d8f146fbad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute average of all vector elements. <br /></td></tr>
-<tr class="separator:a87991dd1f2146706a28414d8f146fbad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99450ca08fcda2b52f9fca41eb211d11"><td class="memTemplParams" colspan="2"><a id="a99450ca08fcda2b52f9fca41eb211d11"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a99450ca08fcda2b52f9fca41eb211d11"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a99450ca08fcda2b52f9fca41eb211d11">lucid::max</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
-<tr class="memdesc:a99450ca08fcda2b52f9fca41eb211d11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the biggest vector element. <br /></td></tr>
-<tr class="separator:a99450ca08fcda2b52f9fca41eb211d11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c70cc260579e62e983eaf8c0847c811"><td class="memTemplParams" colspan="2"><a id="a1c70cc260579e62e983eaf8c0847c811"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a1c70cc260579e62e983eaf8c0847c811"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a1c70cc260579e62e983eaf8c0847c811">lucid::min</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
-<tr class="memdesc:a1c70cc260579e62e983eaf8c0847c811"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the smallest vector element. <br /></td></tr>
-<tr class="separator:a1c70cc260579e62e983eaf8c0847c811"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af168787677e9892f1a043686ea4c8a62"><td class="memTemplParams" colspan="2"><a id="af168787677e9892f1a043686ea4c8a62"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
-<tr class="memitem:af168787677e9892f1a043686ea4c8a62"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#af168787677e9892f1a043686ea4c8a62">lucid::max</a> (const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept</td></tr>
-<tr class="memdesc:af168787677e9892f1a043686ea4c8a62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a vector consisting of the biggest corresponding elements from the input vectors. <br /></td></tr>
-<tr class="separator:af168787677e9892f1a043686ea4c8a62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96c3b5997b8efa2ef09bfdcd2d535a15"><td class="memTemplParams" colspan="2"><a id="a96c3b5997b8efa2ef09bfdcd2d535a15"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2&gt; </td></tr>
-<tr class="memitem:a96c3b5997b8efa2ef09bfdcd2d535a15"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a96c3b5997b8efa2ef09bfdcd2d535a15">lucid::min</a> (const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept</td></tr>
-<tr class="memdesc:a96c3b5997b8efa2ef09bfdcd2d535a15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a vector consisting of the smallest corresponding elements from the input vectors. <br /></td></tr>
-<tr class="separator:a96c3b5997b8efa2ef09bfdcd2d535a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23016ee23f650676d1ab6ca84cb3de9a"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2, typename ULP &gt; </td></tr>
-<tr class="memitem:a23016ee23f650676d1ab6ca84cb3de9a"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a23016ee23f650676d1ab6ca84cb3de9a">lucid::almost_equal</a> (const Vector&lt; T, N, Container1 &gt; &amp;va, const Vector&lt; T, N, Container2 &gt; &amp;vb, const ULP ulp)</td></tr>
-<tr class="memdesc:a23016ee23f650676d1ab6ca84cb3de9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether corresponding elements of given vectors are equal taking floating point precision into account.  <a href="vector_8hpp.html#a23016ee23f650676d1ab6ca84cb3de9a">More...</a><br /></td></tr>
-<tr class="separator:a23016ee23f650676d1ab6ca84cb3de9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af935cd8ae394ac4feecd682c3999e1e7"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N, typename ULP , template&lt; typename, size_t &gt; typename Container1&gt; </td></tr>
-<tr class="memitem:af935cd8ae394ac4feecd682c3999e1e7"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#af935cd8ae394ac4feecd682c3999e1e7">lucid::almost_equal</a> (const Vector&lt; T, N, Container1 &gt; &amp;va, const T b, const ULP ulp)</td></tr>
-<tr class="memdesc:af935cd8ae394ac4feecd682c3999e1e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether elements of given vectors are equal to <code>b</code> taking floating point precision into account.  <a href="vector_8hpp.html#af935cd8ae394ac4feecd682c3999e1e7">More...</a><br /></td></tr>
-<tr class="separator:af935cd8ae394ac4feecd682c3999e1e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a369c6cdc225062bcbee280eb2bf38b55"><td class="memTemplParams" colspan="2"><a id="a369c6cdc225062bcbee280eb2bf38b55"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a369c6cdc225062bcbee280eb2bf38b55"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a369c6cdc225062bcbee280eb2bf38b55">lucid::fit</a> (const Vector&lt; T, N, Container &gt; &amp;v, const T minval, const T maxval) noexcept</td></tr>
-<tr class="memdesc:a369c6cdc225062bcbee280eb2bf38b55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shift vector values into a new range. <br /></td></tr>
-<tr class="separator:a369c6cdc225062bcbee280eb2bf38b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afafc24fc22bc451c26747dd13e610ecc"><td class="memTemplParams" colspan="2"><a id="afafc24fc22bc451c26747dd13e610ecc"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:afafc24fc22bc451c26747dd13e610ecc"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#afafc24fc22bc451c26747dd13e610ecc">lucid::abs</a> (const Vector&lt; T, N, Container &gt; &amp;v) noexcept</td></tr>
-<tr class="memdesc:afafc24fc22bc451c26747dd13e610ecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute absolute values of vector elements. <br /></td></tr>
-<tr class="separator:afafc24fc22bc451c26747dd13e610ecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0bc21ad727e4fed41bfdbb4fe3f4690c"><td class="memTemplParams" colspan="2"><a id="a0bc21ad727e4fed41bfdbb4fe3f4690c"></a>
+<tr class="memitem:a184bacdb29cbfaf5e7e698abda1b6f54"><td class="memTemplParams" colspan="2"><a id="a184bacdb29cbfaf5e7e698abda1b6f54"></a>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container1, template&lt; typename, std::size_t &gt; typename Container2&gt; </td></tr>
+<tr class="memitem:a184bacdb29cbfaf5e7e698abda1b6f54"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a184bacdb29cbfaf5e7e698abda1b6f54">lucid::fn::dot</a> (const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept</td></tr>
+<tr class="memdesc:a184bacdb29cbfaf5e7e698abda1b6f54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute dot product of the given vectors. <br /></td></tr>
+<tr class="separator:a184bacdb29cbfaf5e7e698abda1b6f54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a237e70669aafdaa41017ae4b0372da12"><td class="memTemplParams" colspan="2"><a id="a237e70669aafdaa41017ae4b0372da12"></a>
+template&lt;typename T , std::size_t M, std::size_t N, template&lt; typename, std::size_t &gt; typename MContainer, template&lt; typename, std::size_t &gt; typename VContainer&gt; </td></tr>
+<tr class="memitem:a237e70669aafdaa41017ae4b0372da12"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vector&lt; T, N, std::array &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="matrix_8hpp.html#a237e70669aafdaa41017ae4b0372da12">lucid::fn::dot</a> (const Matrix&lt; T, M, N, MContainer &gt; &amp;lhs, const Vector&lt; T, N, VContainer &gt; &amp;rhs) noexcept</td></tr>
+<tr class="memdesc:a237e70669aafdaa41017ae4b0372da12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute product of matrix and column-vector. <br /></td></tr>
+<tr class="separator:a237e70669aafdaa41017ae4b0372da12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5df2e27284f68778aef86f0ac4bba48"><td class="memTemplParams" colspan="2"><a id="af5df2e27284f68778aef86f0ac4bba48"></a>
+template&lt;typename T , std::size_t M1, std::size_t N1, std::size_t M2, std::size_t N2, template&lt; typename, std::size_t &gt; typename Container1, template&lt; typename, std::size_t &gt; typename Container2&gt; </td></tr>
+<tr class="memitem:af5df2e27284f68778aef86f0ac4bba48"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::enable_if_t&lt; N1==M2, Matrix&lt; T, M1, N2, std::array &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="matrix_8hpp.html#af5df2e27284f68778aef86f0ac4bba48">lucid::fn::dot</a> (const Matrix&lt; T, M1, N1, Container1 &gt; &amp;lhs, const Matrix&lt; T, M2, N2, Container2 &gt; &amp;rhs) noexcept</td></tr>
+<tr class="memdesc:af5df2e27284f68778aef86f0ac4bba48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute matrix product. <br /></td></tr>
+<tr class="separator:af5df2e27284f68778aef86f0ac4bba48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3874ecc27b8d3b42fcf654e5b459828a"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container1, template&lt; typename, std::size_t &gt; typename Container2&gt; </td></tr>
+<tr class="memitem:a3874ecc27b8d3b42fcf654e5b459828a"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a3874ecc27b8d3b42fcf654e5b459828a">lucid::fn::cross</a> (const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept</td></tr>
+<tr class="memdesc:a3874ecc27b8d3b42fcf654e5b459828a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements efficient generic N-dimensional cross product.  <a href="vector_8hpp.html#a3874ecc27b8d3b42fcf654e5b459828a">More...</a><br /></td></tr>
+<tr class="separator:a3874ecc27b8d3b42fcf654e5b459828a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78c7828a47cc72882aaf92cae53a359e"><td class="memTemplParams" colspan="2"><a id="a78c7828a47cc72882aaf92cae53a359e"></a>
 template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a0bc21ad727e4fed41bfdbb4fe3f4690c"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a0bc21ad727e4fed41bfdbb4fe3f4690c">lucid::sqrt</a> (const Vector&lt; T, N, Container &gt; &amp;v) noexcept</td></tr>
-<tr class="memdesc:a0bc21ad727e4fed41bfdbb4fe3f4690c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute square root of vector elements. <br /></td></tr>
-<tr class="separator:a0bc21ad727e4fed41bfdbb4fe3f4690c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30f2cf3cadb0a1d44295d42f20327a50"><td class="memTemplParams" colspan="2">template&lt;unsigned exp, typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a30f2cf3cadb0a1d44295d42f20327a50"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a30f2cf3cadb0a1d44295d42f20327a50">lucid::pow</a> (const Vector&lt; T, N, Container &gt; &amp;v) noexcept</td></tr>
-<tr class="memdesc:a30f2cf3cadb0a1d44295d42f20327a50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rise vector elements to a constant power.  <a href="vector_8hpp.html#a30f2cf3cadb0a1d44295d42f20327a50">More...</a><br /></td></tr>
-<tr class="separator:a30f2cf3cadb0a1d44295d42f20327a50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ccf02ef8b67980d6482b8f3818a5533"><td class="memTemplParams" colspan="2"><a id="a0ccf02ef8b67980d6482b8f3818a5533"></a>
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a0ccf02ef8b67980d6482b8f3818a5533"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a0ccf02ef8b67980d6482b8f3818a5533">lucid::clamp</a> (const Vector&lt; T, N, Container &gt; &amp;v, const T minval, const T maxval) noexcept</td></tr>
-<tr class="memdesc:a0ccf02ef8b67980d6482b8f3818a5533"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clamp vector elements into a range. <br /></td></tr>
-<tr class="separator:a0ccf02ef8b67980d6482b8f3818a5533"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6876105f459060996bb5d571e5f613b"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:ad6876105f459060996bb5d571e5f613b"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vector&lt; T, N, std::array &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#ad6876105f459060996bb5d571e5f613b">lucid::roll</a> (const Vector&lt; T, N, Container &gt; &amp;v, const size_t shift) noexcept</td></tr>
-<tr class="memdesc:ad6876105f459060996bb5d571e5f613b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Roll vector elements.  <a href="vector_8hpp.html#ad6876105f459060996bb5d571e5f613b">More...</a><br /></td></tr>
-<tr class="separator:ad6876105f459060996bb5d571e5f613b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97981791933d1697728b8bf976f74943"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a97981791933d1697728b8bf976f74943"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a97981791933d1697728b8bf976f74943">lucid::isfinite</a> (const Vector&lt; T, N, Container &gt; &amp;v) noexcept</td></tr>
-<tr class="memdesc:a97981791933d1697728b8bf976f74943"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether vector elements are finite.  <a href="vector_8hpp.html#a97981791933d1697728b8bf976f74943">More...</a><br /></td></tr>
-<tr class="separator:a97981791933d1697728b8bf976f74943"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78c7828a47cc72882aaf92cae53a359e"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a78c7828a47cc72882aaf92cae53a359e">lucid::fn::length2</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
+<tr class="memdesc:a78c7828a47cc72882aaf92cae53a359e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute squared length of a vector. <br /></td></tr>
+<tr class="separator:a78c7828a47cc72882aaf92cae53a359e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbf46a98f92950bbcdf31de18912fb92"><td class="memTemplParams" colspan="2"><a id="abbf46a98f92950bbcdf31de18912fb92"></a>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:abbf46a98f92950bbcdf31de18912fb92"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#abbf46a98f92950bbcdf31de18912fb92">lucid::fn::length</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
+<tr class="memdesc:abbf46a98f92950bbcdf31de18912fb92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute length of a vector. <br /></td></tr>
+<tr class="separator:abbf46a98f92950bbcdf31de18912fb92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9eea57d595cf6aa923a3a6d2a9948bf0"><td class="memTemplParams" colspan="2"><a id="a9eea57d595cf6aa923a3a6d2a9948bf0"></a>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a9eea57d595cf6aa923a3a6d2a9948bf0"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vector&lt; T, N, std::array &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a9eea57d595cf6aa923a3a6d2a9948bf0">lucid::fn::normalize</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
+<tr class="memdesc:a9eea57d595cf6aa923a3a6d2a9948bf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalize vector. <br /></td></tr>
+<tr class="separator:a9eea57d595cf6aa923a3a6d2a9948bf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4473992c4a2e415fa045e8bc13887581"><td class="memTemplParams" colspan="2"><a id="a4473992c4a2e415fa045e8bc13887581"></a>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container1, template&lt; typename, std::size_t &gt; typename Container2&gt; </td></tr>
+<tr class="memitem:a4473992c4a2e415fa045e8bc13887581"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a4473992c4a2e415fa045e8bc13887581">lucid::fn::distance</a> (const Vector&lt; T, N, Container1 &gt; &amp;a, const Vector&lt; T, N, Container2 &gt; &amp;b) noexcept</td></tr>
+<tr class="memdesc:a4473992c4a2e415fa045e8bc13887581"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute distance between two vectors. <br /></td></tr>
+<tr class="separator:a4473992c4a2e415fa045e8bc13887581"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af64cf3335ae4f2875915549af31b0db8"><td class="memTemplParams" colspan="2"><a id="af64cf3335ae4f2875915549af31b0db8"></a>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:af64cf3335ae4f2875915549af31b0db8"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#af64cf3335ae4f2875915549af31b0db8">lucid::fn::sum</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
+<tr class="memdesc:af64cf3335ae4f2875915549af31b0db8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sum of all vector elements. <br /></td></tr>
+<tr class="separator:af64cf3335ae4f2875915549af31b0db8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f7d3f39dae63fde83903f031e3a486d"><td class="memTemplParams" colspan="2"><a id="a7f7d3f39dae63fde83903f031e3a486d"></a>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a7f7d3f39dae63fde83903f031e3a486d"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a7f7d3f39dae63fde83903f031e3a486d">lucid::fn::product</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
+<tr class="memdesc:a7f7d3f39dae63fde83903f031e3a486d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Product of all vector elements. <br /></td></tr>
+<tr class="separator:a7f7d3f39dae63fde83903f031e3a486d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a763973a53d39ed937b782098108bc1b0"><td class="memTemplParams" colspan="2"><a id="a763973a53d39ed937b782098108bc1b0"></a>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a763973a53d39ed937b782098108bc1b0"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a763973a53d39ed937b782098108bc1b0">lucid::fn::all</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
+<tr class="memdesc:a763973a53d39ed937b782098108bc1b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether all vector elements evaluate to true. <br /></td></tr>
+<tr class="separator:a763973a53d39ed937b782098108bc1b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56e7140b3113e63e3a245f9f8ebb7646"><td class="memTemplParams" colspan="2"><a id="a56e7140b3113e63e3a245f9f8ebb7646"></a>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a56e7140b3113e63e3a245f9f8ebb7646"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a56e7140b3113e63e3a245f9f8ebb7646">lucid::fn::any</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
+<tr class="memdesc:a56e7140b3113e63e3a245f9f8ebb7646"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether any vector element evaluates to true. <br /></td></tr>
+<tr class="separator:a56e7140b3113e63e3a245f9f8ebb7646"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a714b22c7dcd84e2fc4ae801cc268c3c7"><td class="memTemplParams" colspan="2"><a id="a714b22c7dcd84e2fc4ae801cc268c3c7"></a>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a714b22c7dcd84e2fc4ae801cc268c3c7"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a714b22c7dcd84e2fc4ae801cc268c3c7">lucid::fn::avg</a> (const Vector&lt; T, N, Container &gt; &amp;a) noexcept</td></tr>
+<tr class="memdesc:a714b22c7dcd84e2fc4ae801cc268c3c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute average of all vector elements. <br /></td></tr>
+<tr class="separator:a714b22c7dcd84e2fc4ae801cc268c3c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0be28e9997c192c8e8cb3ac78833a8d0"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a0be28e9997c192c8e8cb3ac78833a8d0"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vector&lt; T, N, std::array &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="vector_8hpp.html#a0be28e9997c192c8e8cb3ac78833a8d0">lucid::fn::roll</a> (const Vector&lt; T, N, Container &gt; &amp;v, const std::size_t shift) noexcept</td></tr>
+<tr class="memdesc:a0be28e9997c192c8e8cb3ac78833a8d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Roll vector elements.  <a href="vector_8hpp.html#a0be28e9997c192c8e8cb3ac78833a8d0">More...</a><br /></td></tr>
+<tr class="separator:a0be28e9997c192c8e8cb3ac78833a8d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0bfc0f32545fa1bf8418741b3707b4a"><td class="memTemplParams" colspan="2"><a id="af0bfc0f32545fa1bf8418741b3707b4a"></a>
 template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
 <tr class="memitem:af0bfc0f32545fa1bf8418741b3707b4a"><td class="memTemplItemLeft" align="right" valign="top">constexpr const T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::get_x</b> (const Vector&lt; T, N, Container &gt; &amp;v) noexcept</td></tr>
@@ -290,6 +307,10 @@ template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; 
 template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
 <tr class="memitem:ab84877c36ff40615624d3326b65156bb"><td class="memTemplItemLeft" align="right" valign="top">constexpr T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::get_w</b> (Vector&lt; T, N, Container &gt; &amp;v) noexcept</td></tr>
 <tr class="separator:ab84877c36ff40615624d3326b65156bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2985900f0503e4c2c141ef23c3a9634a"><td class="memTemplParams" colspan="2"><a id="a2985900f0503e4c2c141ef23c3a9634a"></a>
+template&lt;typename T1 , std::size_t N, template&lt; typename, std::size_t &gt; typename Container, typename T2 &gt; </td></tr>
+<tr class="memitem:a2985900f0503e4c2c141ef23c3a9634a"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::operator*</b> (const Vector&lt; T1, N, Container &gt; &amp;lhs, const T2 &amp;rhs) noexcept</td></tr>
+<tr class="separator:a2985900f0503e4c2c141ef23c3a9634a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf0e6c238511f1bc2510ef1f84b330bc"><td class="memTemplParams" colspan="2"><a id="adf0e6c238511f1bc2510ef1f84b330bc"></a>
 template&lt;size_t I, typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
 <tr class="memitem:adf0e6c238511f1bc2510ef1f84b330bc"><td class="memTemplItemLeft" align="right" valign="top">constexpr decltype(auto)&#160;</td><td class="memTemplItemRight" valign="bottom"><b>std::get</b> (const <a class="el" href="classlucid_1_1Vector.html">lucid::Vector</a>&lt; T, N, Container &gt; &amp;vec) noexcept</td></tr>
@@ -297,35 +318,24 @@ template&lt;size_t I, typename T , size_t N, template&lt; typename, size_t &gt; 
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Definition of generic N-dimenstional Vector and its functions. </p>
-</div><h2 class="groupheader">Function Documentation</h2>
-<a id="af935cd8ae394ac4feecd682c3999e1e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af935cd8ae394ac4feecd682c3999e1e7">&#9670;&nbsp;</a></span>almost_equal() <span class="overload">[1/2]</span></h2>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a1accf3841db814ad4632e5159ef5afa7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1accf3841db814ad4632e5159ef5afa7">&#9670;&nbsp;</a></span>VEC_NAMED_FN_OBJ</h2>
 
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t N, typename ULP , template&lt; typename, size_t &gt; typename Container1&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto lucid::almost_equal </td>
+          <td class="memname">#define VEC_NAMED_FN_OBJ</td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classlucid_1_1Vector.html">Vector</a>&lt; T, N, Container1 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>va</em>, </td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">NAME, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const T&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ULP&#160;</td>
-          <td class="paramname"><em>ulp</em>&#160;</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">FUNC&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -333,123 +343,67 @@ template&lt;typename T , size_t N, typename ULP , template&lt; typename, size_t 
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-
-<p>Test whether elements of given vectors are equal to <code>b</code> taking floating point precision into account. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">ulp</td><td><a class="el" href="math_8hpp.html#ulp">ulp</a> </td></tr>
-  </table>
-  </dd>
-</dl>
-
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">namespace </span>fn                                                                         \</div>
+<div class="line">    {                                                                                    \</div>
+<div class="line">    struct NAME##_fn                                                                     \</div>
+<div class="line">    {                                                                                    \</div>
+<div class="line">        template &lt;<span class="keyword">typename</span> T,                                                            \</div>
+<div class="line">                  std::size_t N,                                                         \</div>
+<div class="line">                  template &lt;typename, std::size_t&gt;                                       \</div>
+<div class="line">                  typename Container,                                                    \</div>
+<div class="line">                  typename... Args&gt;                                                      \</div>
+<div class="line">        constexpr decltype(<span class="keyword">auto</span>)                                                         \</div>
+<div class="line">        operator()(<span class="keyword">const</span> Vector&lt;T, N, Container&gt;&amp; v, <span class="keyword">const</span> Args&amp;... args) <span class="keyword">const</span> noexcept \</div>
+<div class="line">        {                                                                                \</div>
+<div class="line">            return <a class="code" href="vector_8hpp.html#a3f045a8021ccf1b7ae4fc81fc4a9c497">transform</a>(*<span class="keyword">this</span>, v, args...);                                         \</div>
+<div class="line">        }                                                                                \</div>
+<div class="line">        template &lt;<span class="keyword">typename</span>... Args&gt;                                                      \</div>
+<div class="line">        constexpr decltype(<span class="keyword">auto</span>)                                                         \</div>
+<div class="line">        operator()(<span class="keyword">const</span> Args&amp;... args) <span class="keyword">const</span> noexcept                                   \</div>
+<div class="line">        {                                                                                \</div>
+<div class="line">            return FUNC(args...);                                                        \</div>
+<div class="line">        }                                                                                \</div>
+<div class="line">        template &lt;typename Rhs&gt;                                                          \</div>
+<div class="line">        constexpr decltype(<span class="keyword">auto</span>)                                                         \</div>
+<div class="line">        operator^(<span class="keyword">const</span> Rhs&amp; rhs) <span class="keyword">const</span> noexcept                                         \</div>
+<div class="line">        {                                                                                \</div>
+<div class="line">            return compose(*<span class="keyword">this</span>, rhs);                                                  \</div>
+<div class="line">        }                                                                                \</div>
+<div class="line">    };                                                                                   \</div>
+<div class="line">    }                                                                                    \</div>
+<div class="line">    static constexpr fn::NAME##_fn NAME{};</div>
+</div><!-- fragment -->
 </div>
 </div>
-<a id="a23016ee23f650676d1ab6ca84cb3de9a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a23016ee23f650676d1ab6ca84cb3de9a">&#9670;&nbsp;</a></span>almost_equal() <span class="overload">[2/2]</span></h2>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a3874ecc27b8d3b42fcf654e5b459828a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3874ecc27b8d3b42fcf654e5b459828a">&#9670;&nbsp;</a></span>cross()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2, typename ULP &gt; </div>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container1, template&lt; typename, std::size_t &gt; typename Container2&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto lucid::almost_equal </td>
+          <td class="memname">constexpr auto lucid::fn::cross </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classlucid_1_1Vector.html">Vector</a>&lt; T, N, Container1 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>va</em>, </td>
+          <td class="paramname"><em>a</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classlucid_1_1Vector.html">Vector</a>&lt; T, N, Container2 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>vb</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ULP&#160;</td>
-          <td class="paramname"><em>ulp</em>&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Test whether corresponding elements of given vectors are equal taking floating point precision into account. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">ulp</td><td><a class="el" href="math_8hpp.html#ulp">ulp</a> </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a97981791933d1697728b8bf976f74943"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a97981791933d1697728b8bf976f74943">&#9670;&nbsp;</a></span>isfinite()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto lucid::isfinite </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classlucid_1_1Vector.html">Vector</a>&lt; T, N, Container &gt; &amp;&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Test whether vector elements are finite. </p>
-<dl class="section return"><dt>Returns</dt><dd>vector of bool. </dd></dl>
-
-</div>
-</div>
-<a id="a30f2cf3cadb0a1d44295d42f20327a50"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a30f2cf3cadb0a1d44295d42f20327a50">&#9670;&nbsp;</a></span>pow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;unsigned exp, typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto lucid::pow </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classlucid_1_1Vector.html">Vector</a>&lt; T, N, Container &gt; &amp;&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td></td>
         </tr>
       </table>
   </td>
@@ -459,14 +413,13 @@ template&lt;unsigned exp, typename T , std::size_t N, template&lt; typename, std
 </table>
 </div><div class="memdoc">
 
-<p>Rise vector elements to a constant power. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">exp</td><td>power exponent. </td></tr>
-  </table>
-  </dd>
-</dl>
-
+<p>Implements efficient generic N-dimensional cross product. </p>
+<p>Naive implementation would be: </p><div class="fragment"><div class="line">Vector&lt;T, N, std::array&gt; ret;</div>
+<div class="line"><span class="keywordflow">for</span>(std::size_t i = 0; i &lt; N; ++i)</div>
+<div class="line">    <span class="keywordflow">for</span>(std::size_t j = 0; j &lt; N; ++j)</div>
+<div class="line">        <span class="keywordflow">for</span>(std::size_t k = 0; k &lt; N; ++k)</div>
+<div class="line">            ret[i] += <a class="code" href="math_8hpp.html#a2f39cbeb372685f38885191f09231d63">sgn</a>(std::array&lt;std::size_t, 3&gt;{i, j, k}) * a[j] * b[k];</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a id="a5030df94ec53c81081b818256eef356f"></a>
@@ -475,7 +428,7 @@ template&lt;unsigned exp, typename T , std::size_t N, template&lt; typename, std
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container, typename BinaryOperation , typename Init &gt; </div>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container, typename BinaryOperation , typename Init &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -523,13 +476,13 @@ template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename C
 
 </div>
 </div>
-<a id="ab922bb281177049859d5c7397420e166"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab922bb281177049859d5c7397420e166">&#9670;&nbsp;</a></span>ref()</h2>
+<a id="a42533e02a80a0c3ed66d023c8a08a3a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42533e02a80a0c3ed66d023c8a08a3a8">&#9670;&nbsp;</a></span>ref()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </div>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -544,29 +497,29 @@ template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename C
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+<span class="mlabels"><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Create reference to input vector, e.g. vector view. </p>
+<p>Create reference to input vector, i.e. vector view. </p>
 <p>Creates a such vector object that data it contains is mapped to other place. </p>
 
 </div>
 </div>
-<a id="ad6876105f459060996bb5d571e5f613b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6876105f459060996bb5d571e5f613b">&#9670;&nbsp;</a></span>roll()</h2>
+<a id="a0be28e9997c192c8e8cb3ac78833a8d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0be28e9997c192c8e8cb3ac78833a8d0">&#9670;&nbsp;</a></span>roll()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container&gt; </div>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr Vector&lt;T, N, std::array&gt; lucid::roll </td>
+          <td class="memname">constexpr Vector&lt;T, N, std::array&gt; lucid::fn::roll </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classlucid_1_1Vector.html">Vector</a>&lt; T, N, Container &gt; &amp;&#160;</td>
           <td class="paramname"><em>v</em>, </td>
@@ -574,7 +527,7 @@ template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename C
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramtype">const std::size_t&#160;</td>
           <td class="paramname"><em>shift</em>&#160;</td>
         </tr>
         <tr>
@@ -600,13 +553,13 @@ template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename C
 
 </div>
 </div>
-<a id="ab75ef3c027430f94c1b647a378af34f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab75ef3c027430f94c1b647a378af34f6">&#9670;&nbsp;</a></span>transform() <span class="overload">[1/2]</span></h2>
+<a id="a3f045a8021ccf1b7ae4fc81fc4a9c497"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f045a8021ccf1b7ae4fc81fc4a9c497">&#9670;&nbsp;</a></span>transform()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T1 , typename T2 , size_t N, template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2, typename BinaryOperation &gt; </div>
+template&lt;typename F , typename... Vectors&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -614,20 +567,14 @@ template&lt;typename T1 , typename T2 , size_t N, template&lt; typename, size_t 
         <tr>
           <td class="memname">constexpr auto lucid::transform </td>
           <td>(</td>
-          <td class="paramtype">BinaryOperation&#160;</td>
-          <td class="paramname"><em>binary_op</em>, </td>
+          <td class="paramtype">const F &amp;&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classlucid_1_1Vector.html">Vector</a>&lt; T1, N, Container1 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>a</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classlucid_1_1Vector.html">Vector</a>&lt; T2, N, Container2 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>b</em>&#160;</td>
+          <td class="paramtype">const Vectors &amp;...&#160;</td>
+          <td class="paramname"><em>vs</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -642,49 +589,8 @@ template&lt;typename T1 , typename T2 , size_t N, template&lt; typename, size_t 
 </table>
 </div><div class="memdoc">
 
-<p>Apply binary operator to the corresponding elements of input vectors. </p>
-<dl class="section return"><dt>Returns</dt><dd><code>vector</code> of VectorType1 with dimensionality <code>N</code> and element type <code>c</code>. </dd></dl>
-
-</div>
-</div>
-<a id="a81dc40925bdf767c2c20d8cada382b3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a81dc40925bdf767c2c20d8cada382b3f">&#9670;&nbsp;</a></span>transform() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container, typename UnaryOperation &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto lucid::transform </td>
-          <td>(</td>
-          <td class="paramtype">UnaryOperation&#160;</td>
-          <td class="paramname"><em>unary_op</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classlucid_1_1Vector.html">Vector</a>&lt; T, N, Container &gt; &amp;&#160;</td>
-          <td class="paramname"><em>a</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Apply unary operator to the elements of a vector. </p>
-<dl class="section return"><dt>Returns</dt><dd>vector of <code>VectorType</code>, dimensionality <code>N</code> and element type derived from applying the operator <code>unary_op</code>. </dd></dl>
+<p>Apply function to corresponding elements of input vectors. </p>
+<dl class="section return"><dt>Returns</dt><dd>Vector containing results of applycation @f to the elements of input vectors or pair or tuple of vectors if @f returns such. <code>f</code> accepts as many arguments as the number of input vectors <code>vs</code>. <code>Vectors</code> should have the same dimensionality. </dd></dl>
 
 </div>
 </div>
@@ -694,7 +600,7 @@ template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename C
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T1 , typename T2 , size_t N, template&lt; typename, size_t &gt; typename Container1, template&lt; typename, size_t &gt; typename Container2, typename BinaryOperation1 , typename BinaryOperation2 , typename Init &gt; </div>
+template&lt;typename T1 , typename T2 , std::size_t N, template&lt; typename, std::size_t &gt; typename Container1, template&lt; typename, std::size_t &gt; typename Container2, typename BinaryOperation1 , typename BinaryOperation2 , typename Init &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -743,7 +649,7 @@ template&lt;typename T1 , typename T2 , size_t N, template&lt; typename, size_t 
 </div><div class="memdoc">
 
 <p>Efficient shortcut for. </p>
-<div class="fragment"><div class="line"><a class="code" href="vector_8hpp.html#a5030df94ec53c81081b818256eef356f">reduce</a>(binary_op2, <a class="code" href="vector_8hpp.html#ab75ef3c027430f94c1b647a378af34f6">transform</a>(binary_op1, a, b), init) </div>
+<div class="fragment"><div class="line"><a class="code" href="vector_8hpp.html#a5030df94ec53c81081b818256eef356f">reduce</a>(binary_op2, <a class="code" href="vector_8hpp.html#a3f045a8021ccf1b7ae4fc81fc4a9c497">transform</a>(binary_op1, a, b), init) </div>
 </div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">binary_op1</td><td>operator for transform. </td></tr>
@@ -760,7 +666,7 @@ template&lt;typename T1 , typename T2 , size_t N, template&lt; typename, size_t 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename Container, typename UnaryOperation , typename BinaryOperation , typename Init &gt; </div>
+template&lt;typename T , std::size_t N, template&lt; typename, std::size_t &gt; typename Container, typename UnaryOperation , typename BinaryOperation , typename Init &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -803,7 +709,7 @@ template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename C
 </div><div class="memdoc">
 
 <p>Efficient shortcut for. </p>
-<div class="fragment"><div class="line"><a class="code" href="vector_8hpp.html#a5030df94ec53c81081b818256eef356f">reduce</a>(binary_op, <a class="code" href="vector_8hpp.html#ab75ef3c027430f94c1b647a378af34f6">transform</a>(unary_op, a), init) </div>
+<div class="fragment"><div class="line"><a class="code" href="vector_8hpp.html#a5030df94ec53c81081b818256eef356f">reduce</a>(binary_op, <a class="code" href="vector_8hpp.html#a3f045a8021ccf1b7ae4fc81fc4a9c497">transform</a>(unary_op, a), init) </div>
 </div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">unary_op</td><td>operator for transform. </td></tr>
@@ -816,8 +722,9 @@ template&lt;typename T , size_t N, template&lt; typename, size_t &gt; typename C
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="avector_8hpp_html_a5030df94ec53c81081b818256eef356f"><div class="ttname"><a href="vector_8hpp.html#a5030df94ec53c81081b818256eef356f">lucid::reduce</a></div><div class="ttdeci">constexpr auto reduce(BinaryOperation binary_op, const Vector&lt; T, N, Container &gt; &amp;a, Init init) noexcept</div><div class="ttdoc">Perform left fold on a given vector.</div><div class="ttdef"><b>Definition:</b> vector.hpp:462</div></div>
-<div class="ttc" id="avector_8hpp_html_ab75ef3c027430f94c1b647a378af34f6"><div class="ttname"><a href="vector_8hpp.html#ab75ef3c027430f94c1b647a378af34f6">lucid::transform</a></div><div class="ttdeci">constexpr auto transform(BinaryOperation binary_op, const Vector&lt; T1, N, Container1 &gt; &amp;a, const Vector&lt; T2, N, Container2 &gt; &amp;b) noexcept</div><div class="ttdoc">Apply binary operator to the corresponding elements of input vectors.</div><div class="ttdef"><b>Definition:</b> vector.hpp:422</div></div>
+<div class="ttc" id="amath_8hpp_html_a2f39cbeb372685f38885191f09231d63"><div class="ttname"><a href="math_8hpp.html#a2f39cbeb372685f38885191f09231d63">lucid::sgn</a></div><div class="ttdeci">constexpr int sgn(const Iterable &amp;numbers) noexcept</div><div class="ttdoc">Compute Levi-Civita symbol (signature of permutation).</div><div class="ttdef"><b>Definition:</b> math.hpp:89</div></div>
+<div class="ttc" id="avector_8hpp_html_a5030df94ec53c81081b818256eef356f"><div class="ttname"><a href="vector_8hpp.html#a5030df94ec53c81081b818256eef356f">lucid::reduce</a></div><div class="ttdeci">constexpr auto reduce(BinaryOperation binary_op, const Vector&lt; T, N, Container &gt; &amp;a, Init init) noexcept</div><div class="ttdoc">Perform left fold on a given vector.</div><div class="ttdef"><b>Definition:</b> vector.hpp:708</div></div>
+<div class="ttc" id="avector_8hpp_html_a3f045a8021ccf1b7ae4fc81fc4a9c497"><div class="ttname"><a href="vector_8hpp.html#a3f045a8021ccf1b7ae4fc81fc4a9c497">lucid::transform</a></div><div class="ttdeci">constexpr auto transform(const F &amp;f, const Vectors &amp;... vs) noexcept</div><div class="ttdoc">Apply function to corresponding elements of input vectors.</div><div class="ttdef"><b>Definition:</b> vector.hpp:692</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

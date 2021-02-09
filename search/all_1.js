@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['basis_10',['basis',['../transforms_8hpp.html#a3037877d45d6cdd57eb19c284a06075d',1,'lucid']]],
-  ['basis_5fmatrix_11',['basis_matrix',['../transforms_8hpp.html#a86d725a2bec9c6858b5ce4002dee0d9e',1,'lucid']]],
-  ['bound_12',['bound',['../aabb_8hpp.html#a0753c003c8fc05705c551c7940c4c28e',1,'lucid::bound(const AABB_&lt; Container &gt; &amp;prim) noexcept'],['../disk_8hpp.html#a252522afb668c3286f56df79eb04df1c',1,'lucid::bound(const Disk_&lt; Container &gt; &amp;prim) noexcept'],['../quad_8hpp.html#a87ed562ba3baeeb7cf9f584e82fd30f6',1,'lucid::bound(const Quad_&lt; Container &gt; &amp;prim) noexcept'],['../sphere_8hpp.html#a160125b2360b45ea01aa8ed353624473',1,'lucid::bound(const Sphere_&lt; Container &gt; &amp;prim) noexcept'],['../triangle_8hpp.html#aeb253d7143d45733592e0cdd5a8d7afa',1,'lucid::detail::bound()'],['../triangle_8hpp.html#aaef53e898eb046e3a0022209cdfb38ed',1,'lucid::bound()']]],
-  ['bibliography_13',['Bibliography',['../citelist.html',1,'']]]
+  ['basis_9',['basis',['../base_2transforms_8hpp.html#a617b1749f5bbe262e3b010d65fc958f9',1,'lucid::fn']]],
+  ['basis_5fmatrix_10',['basis_matrix',['../base_2transforms_8hpp.html#a768a0af516db6eeaf0a8cf4ab7edfa31',1,'lucid::fn']]],
+  ['bound_11',['bound',['../aabb_8hpp.html#a6e19180e5300d22f968332d29906488f',1,'lucid::fn::bound(const AABB_&lt; Container &gt; &amp;prim) noexcept'],['../disk_8hpp.html#af823dbf9576c7049b65703801e261781',1,'lucid::fn::bound(const Disk_&lt; Container &gt; &amp;prim) noexcept'],['../quad_8hpp.html#a9ffd3b81704e80e5a0bc635e780b52bf',1,'lucid::fn::bound(const Quad_&lt; Container &gt; &amp;prim) noexcept'],['../sphere_8hpp.html#ac574c3f167f80a97690be3d3c6b1e1e0',1,'lucid::fn::bound(const Sphere_&lt; Container &gt; &amp;prim) noexcept'],['../triangle_8hpp.html#aa60debec36e2e1df45f19449008ed430',1,'lucid::fn::detail::bound()'],['../triangle_8hpp.html#a7c8df35c3580935ca21e3b3c6daee2f6',1,'lucid::fn::bound()']]],
+  ['bibliography_12',['Bibliography',['../citelist.html',1,'']]]
 ];

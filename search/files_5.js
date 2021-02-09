@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['sphere_2ehpp_105',['sphere.hpp',['../sphere_8hpp.html',1,'']]]
+  ['quad_2ehpp_104',['quad.hpp',['../quad_8hpp.html',1,'']]]
 ];

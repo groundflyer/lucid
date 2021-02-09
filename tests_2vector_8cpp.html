@@ -242,22 +242,38 @@ template&lt;typename T , size_t N, typename RandomEngine &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000019">Test:</a></b></dt><dd>\(\mathrm{V}(a) = \mathrm{V}(a, a, a\dots)\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000020">Test:</a></b></dt><dd>\(\mathrm{V}(a,b,c\dots) = \mathrm{V}(a, b, c\dots)\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000021">Test:</a></b></dt><dd>\(\mathrm{V}([a,b,c\dots]) = \mathrm{V}(a, b, c\dots)\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000022">Test:</a></b></dt><dd>\(\mathrm{V}_N(a, \mathrm{V}_{N-1}(b, c\dots)) = \mathrm{V}_{N}(a, b, c\dots)\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000023">Test:</a></b></dt><dd>\(\mathbf{v} + s = \mathbf{v} + s - s\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000024">Test:</a></b></dt><dd>mutable \(\mathbf{v} + s = \mathbf{v} + s - s\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000025">Test:</a></b></dt><dd>\(\mathbf{v} s = \frac{\mathbf{v} s}{s}\). </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000026">Test:</a></b></dt><dd>mutable \(\mathbf{v} s = \frac{\mathbf{v} s}{s}\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000027">Test:</a></b></dt><dd>\(\mathbf{v}_0 + \mathbf{v}_1 = \mathbf{v}_0 + \mathbf{v}_1 - \mathbf{v}_1\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000028">Test:</a></b></dt><dd>mutable \(\mathbf{v}_0 + \mathbf{v}_1 = \mathbf{v}_0 + \mathbf{v}_1 - \mathbf{v}_1\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000029">Test:</a></b></dt><dd>\(\mathrm{min}(\mathbf{v}_0, \mathbf{v}_1) &lt; \mathrm{max}(\mathbf{v}_0, \mathbf{v}_1)\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000030">Test:</a></b></dt><dd>\(\mathbf{v}_0 \mathbf{v}_1 = \frac{\mathbf{v}_0 \mathbf{v}_1}{\mathbf{v}_1}\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000031">Test:</a></b></dt><dd>mutable \(\mathbf{v}_0 \mathbf{v}_1 = \frac{\mathbf{v}_0 \mathbf{v}_1}{\mathbf{v}_1}\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000032">Test:</a></b></dt><dd>\(\mathbf{v} \cdot \mathbf{v} = \mathrm{length}(\mathbf{v})\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000033">Test:</a></b></dt><dd>\(\mathrm{length}(\mathrm{normalize}(\mathbf{v})) = 1\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000034">Test:</a></b></dt><dd>\((\mathbf{v}_0 \times \mathbf{v}_1) \bot \mathbf{v}_0 \bot \mathbf{v}_1\) </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000019">Test:</a></b></dt><dd>Construct <code>Vector</code> with a single scalar.</dd></dl>
+<p>\(\mathrm{V}(a) = \mathrm{V}(a, a, a\dots)\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000020">Test:</a></b></dt><dd>Standard vector constructor.</dd></dl>
+<p>\(\mathrm{V}(a,b,c\dots) = \mathrm{V}(a, b, c\dots)\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000021">Test:</a></b></dt><dd>Array vector constructor.</dd></dl>
+<p>\(\mathrm{V}([a,b,c\dots]) = \mathrm{V}(a, b, c\dots)\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000022">Test:</a></b></dt><dd>Construct vector from scalar and smaller vector.</dd></dl>
+<p>\(\mathrm{V}_N(a, \mathrm{V}_{N-1}(b, c\dots)) = \mathrm{V}_{N}(a, b, c\dots)\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000023">Test:</a></b></dt><dd>Vector-scalar addition and subtraction.</dd></dl>
+<p>\(\mathbf{v} + s = \mathbf{v} + s - s\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000024">Test:</a></b></dt><dd>Inplace vector-scalar addition and subtraction.</dd></dl>
+<p>\(\mathbf{v} + s = \mathbf{v} + s - s\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000025">Test:</a></b></dt><dd>Vector-scalar multiplication and division.</dd></dl>
+<p>\(\mathbf{v} s = \frac{\mathbf{v} s}{s}\).</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000026">Test:</a></b></dt><dd>Inplace vector-scalar multiplication and division.</dd></dl>
+<p>\(\mathbf{v} s = \frac{\mathbf{v} s}{s}\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000027">Test:</a></b></dt><dd>Vector-vector addition and subtraction.</dd></dl>
+<p>\(\mathbf{v}_0 + \mathbf{v}_1 = \mathbf{v}_0 + \mathbf{v}_1 - \mathbf{v}_1\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000028">Test:</a></b></dt><dd>Inplace vector-vector addition and subtraction.</dd></dl>
+<p>\(\mathbf{v}_0 + \mathbf{v}_1 = \mathbf{v}_0 + \mathbf{v}_1 - \mathbf{v}_1\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000029">Test:</a></b></dt><dd>Vector minmax.</dd></dl>
+<p>\(\mathrm{min}(\mathbf{v}_0, \mathbf{v}_1) &lt; \mathrm{max}(\mathbf{v}_0, \mathbf{v}_1)\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000030">Test:</a></b></dt><dd>Vector-vector multiplication and division.</dd></dl>
+<p>\(\mathbf{v}_0 \mathbf{v}_1 = \frac{\mathbf{v}_0 \mathbf{v}_1}{\mathbf{v}_1}\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000031">Test:</a></b></dt><dd>Inplace vector-vector multiplication and division.</dd></dl>
+<p>\(\mathbf{v}_0 \mathbf{v}_1 = \frac{\mathbf{v}_0 \mathbf{v}_1}{\mathbf{v}_1}\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000032">Test:</a></b></dt><dd>Check if dot product of the same vector is equal its length.</dd></dl>
+<p>\(\mathbf{v} \cdot \mathbf{v} = \mathrm{length}(\mathbf{v})\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000033">Test:</a></b></dt><dd>Check if length of normalized vector is equal to one.</dd></dl>
+<p>\(\mathrm{length}(\mathrm{normalize}(\mathbf{v})) = 1\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000034">Test:</a></b></dt><dd>Check if cross product of two vectors is perpendicular vector.</dd></dl>
+<p>\((\mathbf{v}_0 \times \mathbf{v}_1) \bot \mathbf{v}_0 \bot \mathbf{v}_1\)</p>
 
 </div>
 </div>

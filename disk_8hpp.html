@@ -107,46 +107,46 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a8810e244d6ff532b8aa8f37ca08048ed"><td class="memItemLeft" align="right" valign="top"><a id="a8810e244d6ff532b8aa8f37ca08048ed"></a>
+<tr class="memitem:a3c7a781756484d3e0bce64f411c3a6bb"><td class="memItemLeft" align="right" valign="top"><a id="a3c7a781756484d3e0bce64f411c3a6bb"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>lucid::Disk</b> = Disk_&lt; std::array &gt;</td></tr>
-<tr class="separator:a8810e244d6ff532b8aa8f37ca08048ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a3c7a781756484d3e0bce64f411c3a6bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a960b348223bcd9a421add921d4b4bd12"><td class="memTemplParams" colspan="2"><a id="a960b348223bcd9a421add921d4b4bd12"></a>
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
+template&lt;template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
 <tr class="memitem:a960b348223bcd9a421add921d4b4bd12"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::Disk_</b> (const Vec3_&lt; Container &gt; &amp;, const Vec3_&lt; Container &gt; &amp;, const real) -&gt; Disk_&lt; Container &gt;</td></tr>
 <tr class="separator:a960b348223bcd9a421add921d4b4bd12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae89b5435d4f9cfb64d14361c929507ca"><td class="memTemplParams" colspan="2"><a id="ae89b5435d4f9cfb64d14361c929507ca"></a>
-template&lt;template&lt; typename, size_t &gt; typename DiskContainer, template&lt; typename, size_t &gt; typename RayContainer&gt; </td></tr>
-<tr class="memitem:ae89b5435d4f9cfb64d14361c929507ca"><td class="memTemplItemLeft" align="right" valign="top">constexpr Intersection&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="disk_8hpp.html#ae89b5435d4f9cfb64d14361c929507ca">lucid::intersect</a> (const Ray_&lt; RayContainer &gt; &amp;ray, const Disk_&lt; DiskContainer &gt; &amp;prim) noexcept</td></tr>
-<tr class="memdesc:ae89b5435d4f9cfb64d14361c929507ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute ray-disk intersection. <br /></td></tr>
-<tr class="separator:ae89b5435d4f9cfb64d14361c929507ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aada21a8cdcbdd1ba4386974e25404367"><td class="memTemplParams" colspan="2"><a id="aada21a8cdcbdd1ba4386974e25404367"></a>
-template&lt;template&lt; typename, size_t &gt; typename DiskContainer, template&lt; typename, size_t &gt; typename PosContainer&gt; </td></tr>
-<tr class="memitem:aada21a8cdcbdd1ba4386974e25404367"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="disk_8hpp.html#aada21a8cdcbdd1ba4386974e25404367">lucid::normal</a> (const Vec3_&lt; PosContainer &gt; &amp;, const Disk_&lt; DiskContainer &gt; &amp;prim) noexcept</td></tr>
-<tr class="memdesc:aada21a8cdcbdd1ba4386974e25404367"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return disk normal. <br /></td></tr>
-<tr class="separator:aada21a8cdcbdd1ba4386974e25404367"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8e62384b03d44fc5f001d5199117107"><td class="memTemplParams" colspan="2"><a id="ad8e62384b03d44fc5f001d5199117107"></a>
-template&lt;template&lt; typename, size_t &gt; typename SContainer, template&lt; typename, size_t &gt; typename PContainer&gt; </td></tr>
-<tr class="memitem:ad8e62384b03d44fc5f001d5199117107"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="disk_8hpp.html#ad8e62384b03d44fc5f001d5199117107">lucid::sample</a> (const Vec2_&lt; SContainer &gt; &amp;s, const Disk_&lt; PContainer &gt; &amp;prim) noexcept</td></tr>
-<tr class="memdesc:ad8e62384b03d44fc5f001d5199117107"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sample a point on disk surface. <br /></td></tr>
-<tr class="separator:ad8e62384b03d44fc5f001d5199117107"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae30f93c0de946e43971faeca86bbec6a"><td class="memTemplParams" colspan="2"><a id="ae30f93c0de946e43971faeca86bbec6a"></a>
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:ae30f93c0de946e43971faeca86bbec6a"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="disk_8hpp.html#ae30f93c0de946e43971faeca86bbec6a">lucid::centroid</a> (const Disk_&lt; Container &gt; &amp;prim) noexcept</td></tr>
-<tr class="memdesc:ae30f93c0de946e43971faeca86bbec6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return disk position. <br /></td></tr>
-<tr class="separator:ae30f93c0de946e43971faeca86bbec6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a252522afb668c3286f56df79eb04df1c"><td class="memTemplParams" colspan="2"><a id="a252522afb668c3286f56df79eb04df1c"></a>
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a252522afb668c3286f56df79eb04df1c"><td class="memTemplItemLeft" align="right" valign="top">constexpr AABB&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="disk_8hpp.html#a252522afb668c3286f56df79eb04df1c">lucid::bound</a> (const Disk_&lt; Container &gt; &amp;prim) noexcept</td></tr>
-<tr class="memdesc:a252522afb668c3286f56df79eb04df1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute axis-aligned box bounding a disk. <br /></td></tr>
-<tr class="separator:a252522afb668c3286f56df79eb04df1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf5e19dd1e5283988617588ff66bd6f7"><td class="memTemplParams" colspan="2"><a id="adf5e19dd1e5283988617588ff66bd6f7"></a>
-template&lt;template&lt; typename, size_t &gt; typename MatContainer, template&lt; typename, size_t &gt; typename PrimContainer&gt; </td></tr>
-<tr class="memitem:adf5e19dd1e5283988617588ff66bd6f7"><td class="memTemplItemLeft" align="right" valign="top">constexpr Disk&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="disk_8hpp.html#adf5e19dd1e5283988617588ff66bd6f7">lucid::apply_transform</a> (const Mat4_&lt; MatContainer &gt; &amp;t, const Disk_&lt; PrimContainer &gt; &amp;prim) noexcept</td></tr>
-<tr class="memdesc:adf5e19dd1e5283988617588ff66bd6f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transform disk with a transformation matrix. <br /></td></tr>
-<tr class="separator:adf5e19dd1e5283988617588ff66bd6f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14e647ca82168210e4355362dfe3ccba"><td class="memTemplParams" colspan="2"><a id="a14e647ca82168210e4355362dfe3ccba"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename DiskContainer, template&lt; typename, std::size_t &gt; typename RayContainer&gt; </td></tr>
+<tr class="memitem:a14e647ca82168210e4355362dfe3ccba"><td class="memTemplItemLeft" align="right" valign="top">constexpr Intersection&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="disk_8hpp.html#a14e647ca82168210e4355362dfe3ccba">lucid::fn::intersect</a> (const Ray_&lt; RayContainer &gt; &amp;ray, const Disk_&lt; DiskContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:a14e647ca82168210e4355362dfe3ccba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute ray-disk intersection. <br /></td></tr>
+<tr class="separator:a14e647ca82168210e4355362dfe3ccba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8522090fbde045c9868447b57a6fe61"><td class="memTemplParams" colspan="2"><a id="af8522090fbde045c9868447b57a6fe61"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename DiskContainer, template&lt; typename, std::size_t &gt; typename PosContainer&gt; </td></tr>
+<tr class="memitem:af8522090fbde045c9868447b57a6fe61"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="disk_8hpp.html#af8522090fbde045c9868447b57a6fe61">lucid::fn::normal</a> (const Vec3_&lt; PosContainer &gt; &amp;, const Disk_&lt; DiskContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:af8522090fbde045c9868447b57a6fe61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return disk normal. <br /></td></tr>
+<tr class="separator:af8522090fbde045c9868447b57a6fe61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f75bf820f57b4db1806ba197d2e211a"><td class="memTemplParams" colspan="2"><a id="a6f75bf820f57b4db1806ba197d2e211a"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename SContainer, template&lt; typename, std::size_t &gt; typename PContainer&gt; </td></tr>
+<tr class="memitem:a6f75bf820f57b4db1806ba197d2e211a"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="disk_8hpp.html#a6f75bf820f57b4db1806ba197d2e211a">lucid::fn::sample</a> (const Vec2_&lt; SContainer &gt; &amp;s, const Disk_&lt; PContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:a6f75bf820f57b4db1806ba197d2e211a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sample a point on disk surface. <br /></td></tr>
+<tr class="separator:a6f75bf820f57b4db1806ba197d2e211a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa300978e343fe2bbbc5effd910ff2855"><td class="memTemplParams" colspan="2"><a id="aa300978e343fe2bbbc5effd910ff2855"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:aa300978e343fe2bbbc5effd910ff2855"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="disk_8hpp.html#aa300978e343fe2bbbc5effd910ff2855">lucid::fn::centroid</a> (const Disk_&lt; Container &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:aa300978e343fe2bbbc5effd910ff2855"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return disk position. <br /></td></tr>
+<tr class="separator:aa300978e343fe2bbbc5effd910ff2855"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af823dbf9576c7049b65703801e261781"><td class="memTemplParams" colspan="2"><a id="af823dbf9576c7049b65703801e261781"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:af823dbf9576c7049b65703801e261781"><td class="memTemplItemLeft" align="right" valign="top">constexpr AABB&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="disk_8hpp.html#af823dbf9576c7049b65703801e261781">lucid::fn::bound</a> (const Disk_&lt; Container &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:af823dbf9576c7049b65703801e261781"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute axis-aligned box bounding a disk. <br /></td></tr>
+<tr class="separator:af823dbf9576c7049b65703801e261781"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a719660ec2d6947f750009cf6dcfe5466"><td class="memTemplParams" colspan="2"><a id="a719660ec2d6947f750009cf6dcfe5466"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename MatContainer, template&lt; typename, std::size_t &gt; typename PrimContainer&gt; </td></tr>
+<tr class="memitem:a719660ec2d6947f750009cf6dcfe5466"><td class="memTemplItemLeft" align="right" valign="top">constexpr Disk&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="disk_8hpp.html#a719660ec2d6947f750009cf6dcfe5466">lucid::fn::apply_transform</a> (const Mat4_&lt; MatContainer &gt; &amp;t, const Disk_&lt; PrimContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:a719660ec2d6947f750009cf6dcfe5466"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transform disk with a transformation matrix. <br /></td></tr>
+<tr class="separator:a719660ec2d6947f750009cf6dcfe5466"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Definition of disk primitive. </p>

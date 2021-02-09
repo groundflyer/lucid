@@ -96,7 +96,9 @@ $(document).ready(function(){initNavTree('math_8hpp.html',''); initResizable(); 
 <div class="title">math.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;algorithm&gt;</code><br />
+<div class="textblock"><code>#include &quot;functional.hpp&quot;</code><br />
+<code>#include &lt;static_math/cmath.h&gt;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;cmath&gt;</code><br />
 <code>#include &lt;iterator&gt;</code><br />
 <code>#include &lt;limits&gt;</code><br />
@@ -131,23 +133,6 @@ constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a clas
 <tr class="memitem:a2f39cbeb372685f38885191f09231d63"><td class="memTemplItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a2f39cbeb372685f38885191f09231d63">lucid::sgn</a> (const Iterable &amp;numbers) noexcept</td></tr>
 <tr class="memdesc:a2f39cbeb372685f38885191f09231d63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute Levi-Civita symbol (signature of permutation).  <a href="math_8hpp.html#a2f39cbeb372685f38885191f09231d63">More...</a><br /></td></tr>
 <tr class="separator:a2f39cbeb372685f38885191f09231d63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40ba89e564d16a5838090b4bfc2b5d5a"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Bias &gt; </td></tr>
-<tr class="memitem:a40ba89e564d16a5838090b4bfc2b5d5a"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a40ba89e564d16a5838090b4bfc2b5d5a">lucid::lerp</a> (const T a, const T b, const Bias bias)</td></tr>
-<tr class="memdesc:a40ba89e564d16a5838090b4bfc2b5d5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform linear interpolation between two values.  <a href="math_8hpp.html#a40ba89e564d16a5838090b4bfc2b5d5a">More...</a><br /></td></tr>
-<tr class="separator:a40ba89e564d16a5838090b4bfc2b5d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7316764f271b477d77ea9d316132cae"><td class="memTemplParams" colspan="2">template&lt;typename T , typename ULP &gt; </td></tr>
-<tr class="memitem:ac7316764f271b477d77ea9d316132cae"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::enable_if_t&lt; std::is_floating_point_v&lt; T &gt;, bool &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#ac7316764f271b477d77ea9d316132cae">lucid::almost_equal</a> (const T a, const T b, const ULP ulp)</td></tr>
-<tr class="memdesc:ac7316764f271b477d77ea9d316132cae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare floating-point values for equality using maching epsilon.  <a href="math_8hpp.html#ac7316764f271b477d77ea9d316132cae">More...</a><br /></td></tr>
-<tr class="separator:ac7316764f271b477d77ea9d316132cae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d835ff4968e4fee75b5b1665e874920"><td class="memTemplParams" colspan="2"><a id="a9d835ff4968e4fee75b5b1665e874920"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a9d835ff4968e4fee75b5b1665e874920"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a9d835ff4968e4fee75b5b1665e874920">lucid::fit</a> (const T val, const T minval, const T maxval)</td></tr>
-<tr class="memdesc:a9d835ff4968e4fee75b5b1665e874920"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shift value into a new range. <br /></td></tr>
-<tr class="separator:a9d835ff4968e4fee75b5b1665e874920"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45c04cf8fb86621c17e6c5786a312542"><td class="memTemplParams" colspan="2">template&lt;unsigned exp, typename T &gt; </td></tr>
-<tr class="memitem:a45c04cf8fb86621c17e6c5786a312542"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a45c04cf8fb86621c17e6c5786a312542">lucid::pow</a> (const T value) noexcept</td></tr>
-<tr class="memdesc:a45c04cf8fb86621c17e6c5786a312542"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rise a number to a constant power.  <a href="math_8hpp.html#a45c04cf8fb86621c17e6c5786a312542">More...</a><br /></td></tr>
-<tr class="separator:a45c04cf8fb86621c17e6c5786a312542"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a247d40d29653cfd26a2ca2c4bf97003d"><td class="memTemplParams" colspan="2"><a id="a247d40d29653cfd26a2ca2c4bf97003d"></a>
 template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a247d40d29653cfd26a2ca2c4bf97003d"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a247d40d29653cfd26a2ca2c4bf97003d">lucid::degrees</a> (const T _radians)</td></tr>
@@ -167,19 +152,31 @@ template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a7ed2564cdc28fe9131257b5d5e4ac587"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a7ed2564cdc28fe9131257b5d5e4ac587">lucid::resample</a> (const T s) noexcept</td></tr>
 <tr class="memdesc:a7ed2564cdc28fe9131257b5d5e4ac587"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resample canonical random point. <br /></td></tr>
 <tr class="separator:a7ed2564cdc28fe9131257b5d5e4ac587"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad07f6249f034f2e55c4d19e337db9001"><td class="memTemplParams" colspan="2">template&lt;unsigned exp, typename T &gt; </td></tr>
+<tr class="memitem:ad07f6249f034f2e55c4d19e337db9001"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#ad07f6249f034f2e55c4d19e337db9001">lucid::fn::static_pow</a> (const T value) noexcept</td></tr>
+<tr class="memdesc:ad07f6249f034f2e55c4d19e337db9001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rise a number to a constant power.  <a href="math_8hpp.html#ad07f6249f034f2e55c4d19e337db9001">More...</a><br /></td></tr>
+<tr class="separator:ad07f6249f034f2e55c4d19e337db9001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cd1e075fba3d9347dd64b30b063c5e7"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Bias &gt; </td></tr>
+<tr class="memitem:a9cd1e075fba3d9347dd64b30b063c5e7"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a9cd1e075fba3d9347dd64b30b063c5e7">lucid::fn::lerp</a> (const T a, const T b, const Bias bias)</td></tr>
+<tr class="memdesc:a9cd1e075fba3d9347dd64b30b063c5e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform linear interpolation between two values.  <a href="math_8hpp.html#a9cd1e075fba3d9347dd64b30b063c5e7">More...</a><br /></td></tr>
+<tr class="separator:a9cd1e075fba3d9347dd64b30b063c5e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a612bb4180fcb892bbcdfdca6f7ad6073"><td class="memTemplParams" colspan="2">template&lt;typename T , typename ULP &gt; </td></tr>
+<tr class="memitem:a612bb4180fcb892bbcdfdca6f7ad6073"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::enable_if_t&lt; std::is_floating_point_v&lt; T &gt;, bool &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="math_8hpp.html#a612bb4180fcb892bbcdfdca6f7ad6073">lucid::fn::almost_equal</a> (const T a, const T b, const ULP ulp)</td></tr>
+<tr class="memdesc:a612bb4180fcb892bbcdfdca6f7ad6073"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare floating-point values for equality using epsilon.  <a href="math_8hpp.html#a612bb4180fcb892bbcdfdca6f7ad6073">More...</a><br /></td></tr>
+<tr class="separator:a612bb4180fcb892bbcdfdca6f7ad6073"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a5884f134c495db962a683bd4acd372f7"><td class="memTemplParams" colspan="2"><a id="a5884f134c495db962a683bd4acd372f7"></a>
+<tr class="memitem:a66094a869db3e999045e1b07f9e13767"><td class="memTemplParams" colspan="2"><a id="a66094a869db3e999045e1b07f9e13767"></a>
 template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a5884f134c495db962a683bd4acd372f7"><td class="memTemplItemLeft" align="right" valign="top">const constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::math::Pi_</b> = T{3.141592653589793}</td></tr>
-<tr class="separator:a5884f134c495db962a683bd4acd372f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66094a869db3e999045e1b07f9e13767"><td class="memTemplItemLeft" align="right" valign="top">const constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::Pi_</b> = T{3.141592653589793}</td></tr>
+<tr class="separator:a66094a869db3e999045e1b07f9e13767"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Mathematical functions. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="ac7316764f271b477d77ea9d316132cae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7316764f271b477d77ea9d316132cae">&#9670;&nbsp;</a></span>almost_equal()</h2>
+<a id="a612bb4180fcb892bbcdfdca6f7ad6073"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a612bb4180fcb892bbcdfdca6f7ad6073">&#9670;&nbsp;</a></span>almost_equal()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -190,7 +187,7 @@ template&lt;typename T , typename ULP &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr std::enable_if_t&lt;std::is_floating_point_v&lt;T&gt;, bool&gt; lucid::almost_equal </td>
+          <td class="memname">constexpr std::enable_if_t&lt;std::is_floating_point_v&lt;T&gt;, bool&gt; lucid::fn::almost_equal </td>
           <td>(</td>
           <td class="paramtype">const T&#160;</td>
           <td class="paramname"><em>a</em>, </td>
@@ -220,7 +217,7 @@ template&lt;typename T , typename ULP &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Compare floating-point values for equality using maching epsilon. </p>
+<p>Compare floating-point values for equality using epsilon. </p>
 <p>The implementation is taken from <a href="https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon">https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon</a></p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -293,8 +290,8 @@ template&lt;typename Iterable &gt; </div>
 
 </div>
 </div>
-<a id="a40ba89e564d16a5838090b4bfc2b5d5a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40ba89e564d16a5838090b4bfc2b5d5a">&#9670;&nbsp;</a></span>lerp()</h2>
+<a id="a9cd1e075fba3d9347dd64b30b063c5e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cd1e075fba3d9347dd64b30b063c5e7">&#9670;&nbsp;</a></span>lerp()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -305,7 +302,7 @@ template&lt;typename T , typename Bias &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr T lucid::lerp </td>
+          <td class="memname">constexpr T lucid::fn::lerp </td>
           <td>(</td>
           <td class="paramtype">const T&#160;</td>
           <td class="paramname"><em>a</em>, </td>
@@ -339,43 +336,6 @@ template&lt;typename T , typename Bias &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">bias</td><td>interpolation bias. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a45c04cf8fb86621c17e6c5786a312542"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a45c04cf8fb86621c17e6c5786a312542">&#9670;&nbsp;</a></span>pow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;unsigned exp, typename T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr T lucid::pow </td>
-          <td>(</td>
-          <td class="paramtype">const T&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Rise a number to a constant power. </p>
-<p>Fast implementation by Alister Chowdhury.</p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">exp</td><td>power exponent. </td></tr>
   </table>
   </dd>
 </dl>
@@ -457,6 +417,43 @@ template&lt;typename Iterable &gt; </div>
 
 <p>Compute Levi-Civita symbol (signature of permutation). </p>
 <p><a href="https://en.wikipedia.org/wiki/Levi-Civita_symbol">https://en.wikipedia.org/wiki/Levi-Civita_symbol</a> </p>
+
+</div>
+</div>
+<a id="ad07f6249f034f2e55c4d19e337db9001"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad07f6249f034f2e55c4d19e337db9001">&#9670;&nbsp;</a></span>static_pow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;unsigned exp, typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr T lucid::fn::static_pow </td>
+          <td>(</td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Rise a number to a constant power. </p>
+<p>Fast implementation by Alister Chowdhury.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">exp</td><td>power exponent. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

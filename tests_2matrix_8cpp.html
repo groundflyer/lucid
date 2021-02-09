@@ -182,22 +182,38 @@ template&lt;typename T , size_t M, size_t N, typename RandomEngine &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000003">Test:</a></b></dt><dd>\(\mathrm{M}(a) = \mathrm{M}(a, a, a\dots)\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000004">Test:</a></b></dt><dd>\(\mathrm{M}(a,b,c\dots) = \mathrm{M}(a, b, c\dots)\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000005">Test:</a></b></dt><dd>\(\mathrm{M}([a,b,c\dots]) = \mathrm{M}(a, b, c\dots)\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000006">Test:</a></b></dt><dd>\(\mathrm{M}_{m,n}(\mathrm{V}_n(a_{1,1},a_{1,2},\dotsc,a_{1,n}), \mathrm{V}_n(a_{2,1},a_{2,2},\dotsc,a_{2,n}),\dotsc, \mathrm{V}_n(a_{m,1},a_{m,2},\dotsc,a_{m,n})) = \begin{pmatrix} a_{1,1} &amp; a_{1,2} &amp; \cdots &amp; a_{1,n} \\ a_{2,1} &amp; a_{2,2} &amp; \cdots &amp; a_{2,n} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ a_{m,1} &amp; a_{m,2} &amp; \cdots &amp; a_{m,n} \end{pmatrix}\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000007">Test:</a></b></dt><dd>\(\mathrm{M}_{m,n}([a_{1,1},a_{1,2},\dotsc,a_{1,n}], [a_{2,1},a_{2,2},\dotsc,a_{2,n}],\dotsc, [a_{m,1},a_{m,2},\dotsc,a_{m,n}]) = \begin{pmatrix} a_{1,1} &amp; a_{1,2} &amp; \cdots &amp; a_{1,n} \\ a_{2,1} &amp; a_{2,2} &amp; \cdots &amp; a_{2,n} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ a_{m,1} &amp; a_{m,2} &amp; \cdots &amp; a_{m,n} \end{pmatrix}\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000008">Test:</a></b></dt><dd>\(\mathrm{M}_{m,n}\left( \mathrm{M}_{m-1,n-1} \begin{pmatrix} a_{1,1} &amp; \cdots &amp; a_{1,n-1} \\ \vdots &amp; \ddots &amp; \vdots \\ a_{m-1,1} &amp; \cdots &amp; a_{m-1,n-1} \end{pmatrix} \right) = \begin{pmatrix} a_{1,1} &amp; a_{1,2} &amp; \cdots &amp; a_{1,n-1} &amp; \cdots &amp; 0 \\ \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ a_{m-1,1} &amp; a_{m-1,2} &amp; \cdots &amp; a_{m-1,n-1} &amp; \cdots &amp; 0 \\ \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ 0 &amp; 0 &amp; \cdots &amp; 0 &amp; \cdots &amp; 0 \end{pmatrix}\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000009">Test:</a></b></dt><dd>\(\mathrm{M}_{m,n}\left(a, \mathrm{V}_{n-1}(b_1,\cdots,b_{n-1}), \mathrm{M}_{m-1,n-1} \begin{pmatrix} c_{1,1} &amp; \cdots &amp; c_{1,n-1} \\ \vdots &amp; \ddots &amp; \vdots \\ c_{m-1,1} &amp; \cdots &amp; c_{k,n-1} \end{pmatrix} \right) = \begin{pmatrix} a &amp; b_1 &amp; \cdots &amp; b_{n-1} \\ c_{1,1} &amp; \cdots &amp; c_{1,n-1} &amp; 0 \\ \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\ c_{m-1,1} &amp; \cdots &amp; c_{m-1,n-1} &amp; 0 \end{pmatrix}\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000010">Test:</a></b></dt><dd>\(\mathbf{A}^T\mathbf{A} = \mathbf{I}_n\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000011">Test:</a></b></dt><dd>\(\mathbf{A} + b = \mathbf{A} + b - b\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000012">Test:</a></b></dt><dd>mutable \(\mathbf{A} + b = \mathbf{A} + b - b\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000013">Test:</a></b></dt><dd>\(\mathbf{A} + \mathbf{B} = \mathbf{A} + \mathbf{B} - \mathbf{B}\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000014">Test:</a></b></dt><dd>mutable \(\mathbf{A} + \mathbf{B} = \mathbf{A} + \mathbf{B} - \mathbf{B}\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000015">Test:</a></b></dt><dd>\(\mathbf{M}_{m,n}[i] \gets \mathbf{V}_n(a_1,\cdots,a_n) = \begin{pmatrix} \cdots &amp; \cdots &amp; \cdots \\ a_{i,1} &amp; \cdots &amp; a_{i,n} \\ \cdots &amp; \cdots &amp; \cdots \end{pmatrix}\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000016">Test:</a></b></dt><dd>\(\mathbf{M}_{m,n}[i] \gets \mathbf{M}_{m,n}[i] \pm \mathbf{V}_n(a_1,\cdots,a_n)\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000017">Test:</a></b></dt><dd>\(\mathbf{M}_{m,n}[i] \gets \mathbf{M}_{m,n}[i] \ast\div \mathbf{V}_n(a_1,\cdots,a_n)\) </dd></dl>
-<dl class="test"><dt><b><a class="el" href="test.html#_test000018">Test:</a></b></dt><dd>\((\mathbf{AB})^T = \mathbf{B}^T\mathbf{A}\) </dd></dl>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000003">Test:</a></b></dt><dd>Construct Matrix with a single scalar.</dd></dl>
+<p>\(\mathrm{M}(a) = \mathrm{M}(a, a, a\dots)\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000004">Test:</a></b></dt><dd>Standard matrix constructor.</dd></dl>
+<p>\(\mathrm{M}(a,b,c\dots) = \mathrm{M}(a, b, c\dots)\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000005">Test:</a></b></dt><dd>Construct Matrix with an array.</dd></dl>
+<p>\(\mathrm{M}([a,b,c\dots]) = \mathrm{M}(a, b, c\dots)\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000006">Test:</a></b></dt><dd>Construct Matrix from few vectors.</dd></dl>
+<p>\(\mathrm{M}_{m,n}(\mathrm{V}_n(a_{1,1},a_{1,2},\dotsc,a_{1,n}), \mathrm{V}_n(a_{2,1},a_{2,2},\dotsc,a_{2,n}),\dotsc, \mathrm{V}_n(a_{m,1},a_{m,2},\dotsc,a_{m,n})) = \begin{pmatrix} a_{1,1} &amp; a_{1,2} &amp; \cdots &amp; a_{1,n} \\ a_{2,1} &amp; a_{2,2} &amp; \cdots &amp; a_{2,n} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ a_{m,1} &amp; a_{m,2} &amp; \cdots &amp; a_{m,n} \end{pmatrix}\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000007">Test:</a></b></dt><dd>Construct Matrix with few arrays.</dd></dl>
+<p>\(\mathrm{M}_{m,n}([a_{1,1},a_{1,2},\dotsc,a_{1,n}], [a_{2,1},a_{2,2},\dotsc,a_{2,n}],\dotsc, [a_{m,1},a_{m,2},\dotsc,a_{m,n}]) = \begin{pmatrix} a_{1,1} &amp; a_{1,2} &amp; \cdots &amp; a_{1,n} \\ a_{2,1} &amp; a_{2,2} &amp; \cdots &amp; a_{2,n} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ a_{m,1} &amp; a_{m,2} &amp; \cdots &amp; a_{m,n} \end{pmatrix}\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000008">Test:</a></b></dt><dd>Construct Matrix with a smaller matrix.</dd></dl>
+<p>\(\mathrm{M}_{m,n}\left( \mathrm{M}_{m-1,n-1} \begin{pmatrix} a_{1,1} &amp; \cdots &amp; a_{1,n-1} \\ \vdots &amp; \ddots &amp; \vdots \\ a_{m-1,1} &amp; \cdots &amp; a_{m-1,n-1} \end{pmatrix} \right) = \begin{pmatrix} a_{1,1} &amp; a_{1,2} &amp; \cdots &amp; a_{1,n-1} &amp; \cdots &amp; 0 \\ \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ a_{m-1,1} &amp; a_{m-1,2} &amp; \cdots &amp; a_{m-1,n-1} &amp; \cdots &amp; 0 \\ \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ 0 &amp; 0 &amp; \cdots &amp; 0 &amp; \cdots &amp; 0 \end{pmatrix}\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000009">Test:</a></b></dt><dd>Construct Matrix from a scalar, a vector and a smaller matrix.</dd></dl>
+<p>\(\mathrm{M}_{m,n}\left(a, \mathrm{V}_{n-1}(b_1,\cdots,b_{n-1}), \mathrm{M}_{m-1,n-1} \begin{pmatrix} c_{1,1} &amp; \cdots &amp; c_{1,n-1} \\ \vdots &amp; \ddots &amp; \vdots \\ c_{m-1,1} &amp; \cdots &amp; c_{k,n-1} \end{pmatrix} \right) = \begin{pmatrix} a &amp; b_1 &amp; \cdots &amp; b_{n-1} \\ c_{1,1} &amp; \cdots &amp; c_{1,n-1} &amp; 0 \\ \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\ c_{m-1,1} &amp; \cdots &amp; c_{m-1,n-1} &amp; 0 \end{pmatrix}\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000010">Test:</a></b></dt><dd>Matrix inversion.</dd></dl>
+<p>\(\mathbf{A}^T\mathbf{A} = \mathbf{I}_n\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000011">Test:</a></b></dt><dd>Matrix-scalar addition and subtraction.</dd></dl>
+<p>\(\mathbf{A} + b = \mathbf{A} + b - b\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000012">Test:</a></b></dt><dd>Inplace matrix-scalar addition and subtraction.</dd></dl>
+<p>\(\mathbf{A} + b = \mathbf{A} + b - b\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000013">Test:</a></b></dt><dd>Matrix-matrix addition and subtraction.</dd></dl>
+<p>\(\mathbf{A} + \mathbf{B} = \mathbf{A} + \mathbf{B} - \mathbf{B}\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000014">Test:</a></b></dt><dd>Inplace matrix-matrix addition and subtraction.</dd></dl>
+<p>\(\mathbf{A} + \mathbf{B} = \mathbf{A} + \mathbf{B} - \mathbf{B}\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000015">Test:</a></b></dt><dd>Assignment to Matrix row from a vector.</dd></dl>
+<p>\(\mathbf{M}_{m,n}[i] \gets \mathbf{V}_n(a_1,\cdots,a_n) = \begin{pmatrix} \cdots &amp; \cdots &amp; \cdots \\ a_{i,1} &amp; \cdots &amp; a_{i,n} \\ \cdots &amp; \cdots &amp; \cdots \end{pmatrix}\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000016">Test:</a></b></dt><dd>Matrix row assignment-addition-subtraction</dd></dl>
+<p>\(\mathbf{M}_{m,n}[i] \gets \mathbf{M}_{m,n}[i] \pm \mathbf{V}_n(a_1,\cdots,a_n)\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000017">Test:</a></b></dt><dd>Matrix row assignment-multuply-subtraction</dd></dl>
+<p>\(\mathbf{M}_{m,n}[i] \gets \mathbf{M}_{m,n}[i] \ast\div \mathbf{V}_n(a_1,\cdots,a_n)\)</p>
+<dl class="test"><dt><b><a class="el" href="test.html#_test000018">Test:</a></b></dt><dd>Matrix transposition and multiplication.</dd></dl>
+<p>\((\mathbf{AB})^T = \mathbf{B}^T\mathbf{A}\)</p>
 
 </div>
 </div>

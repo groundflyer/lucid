@@ -1,14 +1,14 @@
 var matrix_8hpp =
 [
     [ "Matrix", "classlucid_1_1Matrix.html", "classlucid_1_1Matrix" ],
-    [ "cofactor", "matrix_8hpp.html#a0a9cc497957d8f8dfa72690b74bf7b60", null ],
-    [ "det", "matrix_8hpp.html#a749ee0150d54b0f964fa5a85ca4109f5", null ],
-    [ "dot", "matrix_8hpp.html#a564769727e2572c85fc91dbda03e7612", null ],
-    [ "dot", "matrix_8hpp.html#a61ea333f7d6cac95a74f0acb4a8a0823", null ],
-    [ "flat_ref", "matrix_8hpp.html#ab90ad25462ef4f205690b54af1551abd", null ],
+    [ "cofactor", "matrix_8hpp.html#ad0cdd378555edb8e2c380c2213e4ebca", null ],
+    [ "det", "matrix_8hpp.html#aada29eb9113a6158fd397e52903ad694", null ],
+    [ "dot", "matrix_8hpp.html#a237e70669aafdaa41017ae4b0372da12", null ],
+    [ "dot", "matrix_8hpp.html#af5df2e27284f68778aef86f0ac4bba48", null ],
+    [ "flat_ref", "matrix_8hpp.html#a9b4c3b47247fc9ddb43a1360fcb8d2ef", null ],
     [ "get", "matrix_8hpp.html#a903cff1a3cc70fc7c2020dbed174a316", null ],
-    [ "inverse", "matrix_8hpp.html#a9d56816e3484f59ce324448a832a7ea0", null ],
-    [ "minor_matrix", "matrix_8hpp.html#abe0cee4a66f03fcedfef9d590482b582", null ],
-    [ "ref", "matrix_8hpp.html#a7b861882b3e5b75ee50e11a846231bc9", null ],
-    [ "transpose", "matrix_8hpp.html#a86d022ba2d2db23182bf6671427423a3", null ]
+    [ "inverse", "matrix_8hpp.html#a08e5bd2c82dc0fbe94af845df05549e3", null ],
+    [ "minor_matrix", "matrix_8hpp.html#aaec40a270933277f1e8e588ed5f2077d", null ],
+    [ "ref", "matrix_8hpp.html#a600e940e18a841599fd9c18ff59ac97c", null ],
+    [ "transpose", "matrix_8hpp.html#aab00d76da3f3e4fca7861534f43fea31", null ]
 ];

@@ -98,7 +98,6 @@ $(document).ready(function(){initNavTree('aabb_8hpp.html',''); initResizable(); 
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;ray_traversal/ray_traversal.hpp&gt;</code><br />
-<code>#include &lt;utils/identity.hpp&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -108,66 +107,66 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ac395838782126e06696095ea77f29cb6"><td class="memItemLeft" align="right" valign="top"><a id="ac395838782126e06696095ea77f29cb6"></a>
+<tr class="memitem:a86fccb86843886aeedb423d8bfe05050"><td class="memItemLeft" align="right" valign="top"><a id="a86fccb86843886aeedb423d8bfe05050"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>lucid::AABB</b> = AABB_&lt; std::array &gt;</td></tr>
-<tr class="separator:ac395838782126e06696095ea77f29cb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a86fccb86843886aeedb423d8bfe05050"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:aa8d6dd1d5fb3ea1178ba604fb00c2fe4"><td class="memTemplParams" colspan="2"><a id="aa8d6dd1d5fb3ea1178ba604fb00c2fe4"></a>
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
+template&lt;template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
 <tr class="memitem:aa8d6dd1d5fb3ea1178ba604fb00c2fe4"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::AABB_</b> (const Vec3_&lt; Container &gt; &amp;, const Vec3_&lt; Container &gt; &amp;) -&gt; AABB_&lt; Container &gt;</td></tr>
 <tr class="separator:aa8d6dd1d5fb3ea1178ba604fb00c2fe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af177d30b5367c90854dc68107d1489f4"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, size_t &gt; typename AABBContainer, template&lt; typename, size_t &gt; typename RayContainer&gt; </td></tr>
-<tr class="memitem:af177d30b5367c90854dc68107d1489f4"><td class="memTemplItemLeft" align="right" valign="top">constexpr Intersection&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="aabb_8hpp.html#af177d30b5367c90854dc68107d1489f4">lucid::intersect</a> (const Ray_&lt; RayContainer &gt; &amp;ray, const AABB_&lt; AABBContainer &gt; &amp;prim) noexcept</td></tr>
-<tr class="memdesc:af177d30b5367c90854dc68107d1489f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Axis-aligned bounding box intersection function.  <a href="aabb_8hpp.html#af177d30b5367c90854dc68107d1489f4">More...</a><br /></td></tr>
-<tr class="separator:af177d30b5367c90854dc68107d1489f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d1e581b5ed68b3b771584cd712b22a1"><td class="memTemplParams" colspan="2"><a id="a5d1e581b5ed68b3b771584cd712b22a1"></a>
-template&lt;template&lt; typename, size_t &gt; typename AABBContainer, template&lt; typename, size_t &gt; typename PosContainer&gt; </td></tr>
-<tr class="memitem:a5d1e581b5ed68b3b771584cd712b22a1"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="aabb_8hpp.html#a5d1e581b5ed68b3b771584cd712b22a1">lucid::normal</a> (const Vec3_&lt; PosContainer &gt; &amp;pos, const AABB_&lt; AABBContainer &gt; &amp;prim) noexcept</td></tr>
-<tr class="memdesc:a5d1e581b5ed68b3b771584cd712b22a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute normal of AABB at @pos. <br /></td></tr>
-<tr class="separator:a5d1e581b5ed68b3b771584cd712b22a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad54f64f9ffd31d43e17fde599db2fbee"><td class="memTemplParams" colspan="2"><a id="ad54f64f9ffd31d43e17fde599db2fbee"></a>
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:ad54f64f9ffd31d43e17fde599db2fbee"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::diag</b> (const AABB_&lt; Container &gt; &amp;prim, const unsigned shift, const bool side) noexcept</td></tr>
-<tr class="separator:ad54f64f9ffd31d43e17fde599db2fbee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a595027cef3662681490c27f5a6c29a68"><td class="memTemplParams" colspan="2"><a id="a595027cef3662681490c27f5a6c29a68"></a>
-template&lt;template&lt; typename, size_t &gt; typename SContainer, template&lt; typename, size_t &gt; typename PContainer&gt; </td></tr>
-<tr class="memitem:a595027cef3662681490c27f5a6c29a68"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="aabb_8hpp.html#a595027cef3662681490c27f5a6c29a68">lucid::sample</a> (const Vec2_&lt; SContainer &gt; &amp;s, const AABB_&lt; PContainer &gt; &amp;prim) noexcept</td></tr>
-<tr class="memdesc:a595027cef3662681490c27f5a6c29a68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uniformly sample position on AABB surface. <br /></td></tr>
-<tr class="separator:a595027cef3662681490c27f5a6c29a68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0a57b87d62b69435ed7e95c26c2f427"><td class="memTemplParams" colspan="2"><a id="ab0a57b87d62b69435ed7e95c26c2f427"></a>
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:ab0a57b87d62b69435ed7e95c26c2f427"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="aabb_8hpp.html#ab0a57b87d62b69435ed7e95c26c2f427">lucid::centroid</a> (const AABB_&lt; Container &gt; &amp;prim) noexcept</td></tr>
-<tr class="memdesc:ab0a57b87d62b69435ed7e95c26c2f427"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute AABB centroid. <br /></td></tr>
-<tr class="separator:ab0a57b87d62b69435ed7e95c26c2f427"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0753c003c8fc05705c551c7940c4c28e"><td class="memTemplParams" colspan="2"><a id="a0753c003c8fc05705c551c7940c4c28e"></a>
-template&lt;template&lt; typename, size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:a0753c003c8fc05705c551c7940c4c28e"><td class="memTemplItemLeft" align="right" valign="top">constexpr AABB&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="aabb_8hpp.html#a0753c003c8fc05705c551c7940c4c28e">lucid::bound</a> (const AABB_&lt; Container &gt; &amp;prim) noexcept</td></tr>
-<tr class="memdesc:a0753c003c8fc05705c551c7940c4c28e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns copy of itself. <br /></td></tr>
-<tr class="separator:a0753c003c8fc05705c551c7940c4c28e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24dd137b5813f33722c7ba9c83fba4d2"><td class="memTemplParams" colspan="2"><a id="a24dd137b5813f33722c7ba9c83fba4d2"></a>
-template&lt;template&lt; typename, size_t &gt; typename MatContainer, template&lt; typename, size_t &gt; typename PrimContainer&gt; </td></tr>
-<tr class="memitem:a24dd137b5813f33722c7ba9c83fba4d2"><td class="memTemplItemLeft" align="right" valign="top">constexpr AABB&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="aabb_8hpp.html#a24dd137b5813f33722c7ba9c83fba4d2">lucid::apply_transform</a> (const Mat4_&lt; MatContainer &gt; &amp;t, const AABB_&lt; PrimContainer &gt; &amp;prim) noexcept</td></tr>
-<tr class="memdesc:a24dd137b5813f33722c7ba9c83fba4d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply transformation matrix to AABB. <br /></td></tr>
-<tr class="separator:a24dd137b5813f33722c7ba9c83fba4d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5883228778a0b5d009a8364529510ae1"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename, std::size_t &gt; typename AABBContainer, template&lt; typename, std::size_t &gt; typename RayContainer&gt; </td></tr>
+<tr class="memitem:a5883228778a0b5d009a8364529510ae1"><td class="memTemplItemLeft" align="right" valign="top">constexpr Intersection&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="aabb_8hpp.html#a5883228778a0b5d009a8364529510ae1">lucid::fn::intersect</a> (const Ray_&lt; RayContainer &gt; &amp;ray, const AABB_&lt; AABBContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:a5883228778a0b5d009a8364529510ae1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Axis-aligned bounding box intersection function.  <a href="aabb_8hpp.html#a5883228778a0b5d009a8364529510ae1">More...</a><br /></td></tr>
+<tr class="separator:a5883228778a0b5d009a8364529510ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a6e4daa304a4933ccb9f1d540af4f78"><td class="memTemplParams" colspan="2"><a id="a5a6e4daa304a4933ccb9f1d540af4f78"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename AABBContainer, template&lt; typename, std::size_t &gt; typename PosContainer&gt; </td></tr>
+<tr class="memitem:a5a6e4daa304a4933ccb9f1d540af4f78"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="aabb_8hpp.html#a5a6e4daa304a4933ccb9f1d540af4f78">lucid::fn::normal</a> (const Vec3_&lt; PosContainer &gt; &amp;pos, const AABB_&lt; AABBContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:a5a6e4daa304a4933ccb9f1d540af4f78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute normal of AABB at @pos. <br /></td></tr>
+<tr class="separator:a5a6e4daa304a4933ccb9f1d540af4f78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a380039553cdb2bef2b6af6b5b2f6e521"><td class="memTemplParams" colspan="2"><a id="a380039553cdb2bef2b6af6b5b2f6e521"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a380039553cdb2bef2b6af6b5b2f6e521"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::fn::detail::diag</b> (const AABB_&lt; Container &gt; &amp;prim, const unsigned shift, const bool side) noexcept</td></tr>
+<tr class="separator:a380039553cdb2bef2b6af6b5b2f6e521"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af632e735127d2da5e71cd7a58970be8f"><td class="memTemplParams" colspan="2"><a id="af632e735127d2da5e71cd7a58970be8f"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename SContainer, template&lt; typename, std::size_t &gt; typename PContainer&gt; </td></tr>
+<tr class="memitem:af632e735127d2da5e71cd7a58970be8f"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="aabb_8hpp.html#af632e735127d2da5e71cd7a58970be8f">lucid::fn::sample</a> (const Vec2_&lt; SContainer &gt; &amp;s, const AABB_&lt; PContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:af632e735127d2da5e71cd7a58970be8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uniformly sample position on AABB surface. <br /></td></tr>
+<tr class="separator:af632e735127d2da5e71cd7a58970be8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae142e0d43828e0e5f1255fca59b28711"><td class="memTemplParams" colspan="2"><a id="ae142e0d43828e0e5f1255fca59b28711"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:ae142e0d43828e0e5f1255fca59b28711"><td class="memTemplItemLeft" align="right" valign="top">constexpr Vec3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="aabb_8hpp.html#ae142e0d43828e0e5f1255fca59b28711">lucid::fn::centroid</a> (const AABB_&lt; Container &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:ae142e0d43828e0e5f1255fca59b28711"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute AABB centroid. <br /></td></tr>
+<tr class="separator:ae142e0d43828e0e5f1255fca59b28711"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e19180e5300d22f968332d29906488f"><td class="memTemplParams" colspan="2"><a id="a6e19180e5300d22f968332d29906488f"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a6e19180e5300d22f968332d29906488f"><td class="memTemplItemLeft" align="right" valign="top">constexpr AABB&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="aabb_8hpp.html#a6e19180e5300d22f968332d29906488f">lucid::fn::bound</a> (const AABB_&lt; Container &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:a6e19180e5300d22f968332d29906488f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns copy of itself. <br /></td></tr>
+<tr class="separator:a6e19180e5300d22f968332d29906488f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a913c3c1a7278004ff3dbe33a2cbf492e"><td class="memTemplParams" colspan="2"><a id="a913c3c1a7278004ff3dbe33a2cbf492e"></a>
+template&lt;template&lt; typename, std::size_t &gt; typename MatContainer, template&lt; typename, std::size_t &gt; typename PrimContainer&gt; </td></tr>
+<tr class="memitem:a913c3c1a7278004ff3dbe33a2cbf492e"><td class="memTemplItemLeft" align="right" valign="top">constexpr AABB&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="aabb_8hpp.html#a913c3c1a7278004ff3dbe33a2cbf492e">lucid::fn::apply_transform</a> (const Mat4_&lt; MatContainer &gt; &amp;t, const AABB_&lt; PrimContainer &gt; &amp;prim) noexcept</td></tr>
+<tr class="memdesc:a913c3c1a7278004ff3dbe33a2cbf492e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply transformation matrix to AABB. <br /></td></tr>
+<tr class="separator:a913c3c1a7278004ff3dbe33a2cbf492e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Defenition of Axis-aligned bounding box. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="af177d30b5367c90854dc68107d1489f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af177d30b5367c90854dc68107d1489f4">&#9670;&nbsp;</a></span>intersect()</h2>
+<a id="a5883228778a0b5d009a8364529510ae1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5883228778a0b5d009a8364529510ae1">&#9670;&nbsp;</a></span>intersect()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;template&lt; typename, size_t &gt; typename AABBContainer, template&lt; typename, size_t &gt; typename RayContainer&gt; </div>
+template&lt;template&lt; typename, std::size_t &gt; typename AABBContainer, template&lt; typename, std::size_t &gt; typename RayContainer&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr Intersection lucid::intersect </td>
+          <td class="memname">constexpr Intersection lucid::fn::intersect </td>
           <td>(</td>
           <td class="paramtype">const Ray_&lt; RayContainer &gt; &amp;&#160;</td>
           <td class="paramname"><em>ray</em>, </td>

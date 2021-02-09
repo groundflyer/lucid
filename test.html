@@ -95,44 +95,44 @@ $(document).ready(function(){initNavTree('test.html',''); initResizable(); });
 <div class="contents">
 <div class="textblock"><dl class="reflist">
 <dt>Member <a class="el" href="tests_2matrix_8cpp.html#a6f47da582802f0e40cdb56efd0aa1d0d">matrix_test</a>  (RandomEngine &amp;g, const size_t num_tests) noexcept</dt>
-<dd><p class="startdd"><a class="anchor" id="_test000003"></a> \(\mathrm{M}(a) = \mathrm{M}(a, a, a\dots)\) </p>
-<p class="interdd"><a class="anchor" id="_test000004"></a> \(\mathrm{M}(a,b,c\dots) = \mathrm{M}(a, b, c\dots)\) </p>
-<p class="interdd"><a class="anchor" id="_test000005"></a> \(\mathrm{M}([a,b,c\dots]) = \mathrm{M}(a, b, c\dots)\) </p>
-<p class="interdd"><a class="anchor" id="_test000006"></a> \(\mathrm{M}_{m,n}(\mathrm{V}_n(a_{1,1},a_{1,2},\dotsc,a_{1,n}), \mathrm{V}_n(a_{2,1},a_{2,2},\dotsc,a_{2,n}),\dotsc, \mathrm{V}_n(a_{m,1},a_{m,2},\dotsc,a_{m,n})) = \begin{pmatrix} a_{1,1} &amp; a_{1,2} &amp; \cdots &amp; a_{1,n} \\ a_{2,1} &amp; a_{2,2} &amp; \cdots &amp; a_{2,n} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ a_{m,1} &amp; a_{m,2} &amp; \cdots &amp; a_{m,n} \end{pmatrix}\) </p>
-<p class="interdd"><a class="anchor" id="_test000007"></a> \(\mathrm{M}_{m,n}([a_{1,1},a_{1,2},\dotsc,a_{1,n}], [a_{2,1},a_{2,2},\dotsc,a_{2,n}],\dotsc, [a_{m,1},a_{m,2},\dotsc,a_{m,n}]) = \begin{pmatrix} a_{1,1} &amp; a_{1,2} &amp; \cdots &amp; a_{1,n} \\ a_{2,1} &amp; a_{2,2} &amp; \cdots &amp; a_{2,n} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ a_{m,1} &amp; a_{m,2} &amp; \cdots &amp; a_{m,n} \end{pmatrix}\) </p>
-<p class="interdd"><a class="anchor" id="_test000008"></a> \(\mathrm{M}_{m,n}\left( \mathrm{M}_{m-1,n-1} \begin{pmatrix} a_{1,1} &amp; \cdots &amp; a_{1,n-1} \\ \vdots &amp; \ddots &amp; \vdots \\ a_{m-1,1} &amp; \cdots &amp; a_{m-1,n-1} \end{pmatrix} \right) = \begin{pmatrix} a_{1,1} &amp; a_{1,2} &amp; \cdots &amp; a_{1,n-1} &amp; \cdots &amp; 0 \\ \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ a_{m-1,1} &amp; a_{m-1,2} &amp; \cdots &amp; a_{m-1,n-1} &amp; \cdots &amp; 0 \\ \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ 0 &amp; 0 &amp; \cdots &amp; 0 &amp; \cdots &amp; 0 \end{pmatrix}\) </p>
-<p class="interdd"><a class="anchor" id="_test000009"></a> \(\mathrm{M}_{m,n}\left(a, \mathrm{V}_{n-1}(b_1,\cdots,b_{n-1}), \mathrm{M}_{m-1,n-1} \begin{pmatrix} c_{1,1} &amp; \cdots &amp; c_{1,n-1} \\ \vdots &amp; \ddots &amp; \vdots \\ c_{m-1,1} &amp; \cdots &amp; c_{k,n-1} \end{pmatrix} \right) = \begin{pmatrix} a &amp; b_1 &amp; \cdots &amp; b_{n-1} \\ c_{1,1} &amp; \cdots &amp; c_{1,n-1} &amp; 0 \\ \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\ c_{m-1,1} &amp; \cdots &amp; c_{m-1,n-1} &amp; 0 \end{pmatrix}\) </p>
-<p class="interdd"><a class="anchor" id="_test000010"></a> \(\mathbf{A}^T\mathbf{A} = \mathbf{I}_n\) </p>
-<p class="interdd"><a class="anchor" id="_test000011"></a> \(\mathbf{A} + b = \mathbf{A} + b - b\) </p>
-<p class="interdd"><a class="anchor" id="_test000012"></a>mutable \(\mathbf{A} + b = \mathbf{A} + b - b\) </p>
-<p class="interdd"><a class="anchor" id="_test000013"></a> \(\mathbf{A} + \mathbf{B} = \mathbf{A} + \mathbf{B} - \mathbf{B}\) </p>
-<p class="interdd"><a class="anchor" id="_test000014"></a>mutable \(\mathbf{A} + \mathbf{B} = \mathbf{A} + \mathbf{B} - \mathbf{B}\) </p>
-<p class="interdd"><a class="anchor" id="_test000015"></a> \(\mathbf{M}_{m,n}[i] \gets \mathbf{V}_n(a_1,\cdots,a_n) = \begin{pmatrix} \cdots &amp; \cdots &amp; \cdots \\ a_{i,1} &amp; \cdots &amp; a_{i,n} \\ \cdots &amp; \cdots &amp; \cdots \end{pmatrix}\) </p>
-<p class="interdd"><a class="anchor" id="_test000016"></a> \(\mathbf{M}_{m,n}[i] \gets \mathbf{M}_{m,n}[i] \pm \mathbf{V}_n(a_1,\cdots,a_n)\) </p>
-<p class="interdd"><a class="anchor" id="_test000017"></a> \(\mathbf{M}_{m,n}[i] \gets \mathbf{M}_{m,n}[i] \ast\div \mathbf{V}_n(a_1,\cdots,a_n)\) </p>
-<p class="enddd"><a class="anchor" id="_test000018"></a> \((\mathbf{AB})^T = \mathbf{B}^T\mathbf{A}\)  </p>
+<dd><p class="startdd"><a class="anchor" id="_test000003"></a>Construct Matrix with a single scalar.</p>
+<p class="interdd"><a class="anchor" id="_test000004"></a>Standard matrix constructor.</p>
+<p class="interdd"><a class="anchor" id="_test000005"></a>Construct Matrix with an array.</p>
+<p class="interdd"><a class="anchor" id="_test000006"></a>Construct Matrix from few vectors.</p>
+<p class="interdd"><a class="anchor" id="_test000007"></a>Construct Matrix with few arrays.</p>
+<p class="interdd"><a class="anchor" id="_test000008"></a>Construct Matrix with a smaller matrix.</p>
+<p class="interdd"><a class="anchor" id="_test000009"></a>Construct Matrix from a scalar, a vector and a smaller matrix.</p>
+<p class="interdd"><a class="anchor" id="_test000010"></a>Matrix inversion.</p>
+<p class="interdd"><a class="anchor" id="_test000011"></a>Matrix-scalar addition and subtraction.</p>
+<p class="interdd"><a class="anchor" id="_test000012"></a>Inplace matrix-scalar addition and subtraction.</p>
+<p class="interdd"><a class="anchor" id="_test000013"></a>Matrix-matrix addition and subtraction.</p>
+<p class="interdd"><a class="anchor" id="_test000014"></a>Inplace matrix-matrix addition and subtraction.</p>
+<p class="interdd"><a class="anchor" id="_test000015"></a>Assignment to Matrix row from a vector.</p>
+<p class="interdd"><a class="anchor" id="_test000016"></a>Matrix row assignment-addition-subtraction</p>
+<p class="interdd"><a class="anchor" id="_test000017"></a>Matrix row assignment-multuply-subtraction</p>
+<p class="enddd"><a class="anchor" id="_test000018"></a>Matrix transposition and multiplication. </p>
 </dd>
 <dt>Member <a class="el" href="tests_2vector_8cpp.html#a2ac0bd49dad693be3eae1cfadf7b7e36">vector_bool_test</a>  (RandomEngine &amp;g, const size_t num_tests) noexcept</dt>
 <dd><p class="startdd"><a class="anchor" id="_test000035"></a> \(\mathrm{any}(\mathbf{v}(a,b,c\dots)) = a \vee b \vee \dots \vee c\) </p>
 <p class="enddd"><a class="anchor" id="_test000036"></a> \(\mathrm{all}(\mathbf{v}(a,b,c\dots)) = a \wedge b \wedge \dots \wedge c\)  </p>
 </dd>
 <dt>Member <a class="el" href="tests_2vector_8cpp.html#a5d7b0601be0d172d70844b838d49ce70">vector_test</a>  (RandomEngine &amp;g, const size_t num_tests) noexcept</dt>
-<dd><p class="startdd"><a class="anchor" id="_test000019"></a> \(\mathrm{V}(a) = \mathrm{V}(a, a, a\dots)\) </p>
-<p class="interdd"><a class="anchor" id="_test000020"></a> \(\mathrm{V}(a,b,c\dots) = \mathrm{V}(a, b, c\dots)\) </p>
-<p class="interdd"><a class="anchor" id="_test000021"></a> \(\mathrm{V}([a,b,c\dots]) = \mathrm{V}(a, b, c\dots)\) </p>
-<p class="interdd"><a class="anchor" id="_test000022"></a> \(\mathrm{V}_N(a, \mathrm{V}_{N-1}(b, c\dots)) = \mathrm{V}_{N}(a, b, c\dots)\) </p>
-<p class="interdd"><a class="anchor" id="_test000023"></a> \(\mathbf{v} + s = \mathbf{v} + s - s\) </p>
-<p class="interdd"><a class="anchor" id="_test000024"></a>mutable \(\mathbf{v} + s = \mathbf{v} + s - s\) </p>
-<p class="interdd"><a class="anchor" id="_test000025"></a> \(\mathbf{v} s = \frac{\mathbf{v} s}{s}\). </p>
-<p class="interdd"><a class="anchor" id="_test000026"></a>mutable \(\mathbf{v} s = \frac{\mathbf{v} s}{s}\) </p>
-<p class="interdd"><a class="anchor" id="_test000027"></a> \(\mathbf{v}_0 + \mathbf{v}_1 = \mathbf{v}_0 + \mathbf{v}_1 - \mathbf{v}_1\) </p>
-<p class="interdd"><a class="anchor" id="_test000028"></a>mutable \(\mathbf{v}_0 + \mathbf{v}_1 = \mathbf{v}_0 + \mathbf{v}_1 - \mathbf{v}_1\) </p>
-<p class="interdd"><a class="anchor" id="_test000029"></a> \(\mathrm{min}(\mathbf{v}_0, \mathbf{v}_1) &lt; \mathrm{max}(\mathbf{v}_0, \mathbf{v}_1)\) </p>
-<p class="interdd"><a class="anchor" id="_test000030"></a> \(\mathbf{v}_0 \mathbf{v}_1 = \frac{\mathbf{v}_0 \mathbf{v}_1}{\mathbf{v}_1}\) </p>
-<p class="interdd"><a class="anchor" id="_test000031"></a>mutable \(\mathbf{v}_0 \mathbf{v}_1 = \frac{\mathbf{v}_0 \mathbf{v}_1}{\mathbf{v}_1}\) </p>
-<p class="interdd"><a class="anchor" id="_test000032"></a> \(\mathbf{v} \cdot \mathbf{v} = \mathrm{length}(\mathbf{v})\) </p>
-<p class="interdd"><a class="anchor" id="_test000033"></a> \(\mathrm{length}(\mathrm{normalize}(\mathbf{v})) = 1\) </p>
-<p class="enddd"><a class="anchor" id="_test000034"></a> \((\mathbf{v}_0 \times \mathbf{v}_1) \bot \mathbf{v}_0 \bot \mathbf{v}_1\) </p>
+<dd><p class="startdd"><a class="anchor" id="_test000019"></a>Construct <code>Vector</code> with a single scalar.</p>
+<p class="interdd"><a class="anchor" id="_test000020"></a>Standard vector constructor.</p>
+<p class="interdd"><a class="anchor" id="_test000021"></a>Array vector constructor.</p>
+<p class="interdd"><a class="anchor" id="_test000022"></a>Construct vector from scalar and smaller vector.</p>
+<p class="interdd"><a class="anchor" id="_test000023"></a>Vector-scalar addition and subtraction.</p>
+<p class="interdd"><a class="anchor" id="_test000024"></a>Inplace vector-scalar addition and subtraction.</p>
+<p class="interdd"><a class="anchor" id="_test000025"></a>Vector-scalar multiplication and division.</p>
+<p class="interdd"><a class="anchor" id="_test000026"></a>Inplace vector-scalar multiplication and division.</p>
+<p class="interdd"><a class="anchor" id="_test000027"></a>Vector-vector addition and subtraction.</p>
+<p class="interdd"><a class="anchor" id="_test000028"></a>Inplace vector-vector addition and subtraction.</p>
+<p class="interdd"><a class="anchor" id="_test000029"></a>Vector minmax.</p>
+<p class="interdd"><a class="anchor" id="_test000030"></a>Vector-vector multiplication and division.</p>
+<p class="interdd"><a class="anchor" id="_test000031"></a>Inplace vector-vector multiplication and division.</p>
+<p class="interdd"><a class="anchor" id="_test000032"></a>Check if dot product of the same vector is equal its length.</p>
+<p class="interdd"><a class="anchor" id="_test000033"></a>Check if length of normalized vector is equal to one.</p>
+<p class="enddd"><a class="anchor" id="_test000034"></a>Check if cross product of two vectors is perpendicular vector.</p>
 </dd>
 </dl>
 </div></div><!-- contents -->

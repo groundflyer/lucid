@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['fac_27',['fac',['../math_8hpp.html#a6aa42d17471ba5174fe2d9ee9c5c28de',1,'lucid']]],
-  ['fit_28',['fit',['../vector_8hpp.html#a369c6cdc225062bcbee280eb2bf38b55',1,'lucid::fit(const Vector&lt; T, N, Container &gt; &amp;v, const T minval, const T maxval) noexcept'],['../math_8hpp.html#a9d835ff4968e4fee75b5b1665e874920',1,'lucid::fit(const T val, const T minval, const T maxval)']]],
-  ['flat_5fref_29',['flat_ref',['../matrix_8hpp.html#ab90ad25462ef4f205690b54af1551abd',1,'lucid']]]
+  ['fac_26',['fac',['../math_8hpp.html#a6aa42d17471ba5174fe2d9ee9c5c28de',1,'lucid']]],
+  ['file_27',['File',['../classlucid_1_1File.html',1,'lucid::File'],['../classlucid_1_1File.html#a7f5fe1e6d0c11dba233ea5155e15f497',1,'lucid::File::File()']]],
+  ['flat_5fref_28',['flat_ref',['../matrix_8hpp.html#a9b4c3b47247fc9ddb43a1360fcb8d2ef',1,'lucid']]]
 ];
