@@ -195,6 +195,22 @@ class Matrix
         return Vector(StaticSpan<T, N>(std::get<pos(I, 0)>(m_data)));
     }
 
+    template <std::size_t I, std::size_t J>
+    constexpr const T&
+    get() const noexcept
+    {
+        static_assert(I < M || J < N, "Index out of range");
+        return std::get<pos(I, J)>(m_data);
+    }
+
+    template <std::size_t I, std::size_t J>
+    constexpr T&
+    get() noexcept
+    {
+        static_assert(I < M || J < N, "Index out of range");
+        return std::get<pos(I, J)>(m_data);
+    }
+
     const constexpr T&
     at(const std::size_t i) const noexcept
     {
@@ -323,6 +339,55 @@ class Matrix
     }
 };
 
+namespace detail
+{
+template <std::size_t I,
+          std::size_t J,
+          std::size_t Idx,
+          std::size_t Jdx,
+          typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
+constexpr T
+minor_matrix_op(const Matrix<T, M, N, Container>& m) noexcept
+{
+    constexpr std::size_t idx = Idx >= I ? Idx + 1 : Idx;
+    constexpr std::size_t jdx = Jdx >= J ? Jdx + 1 : Jdx;
+    return m.template get<idx, jdx>();
+}
+
+template <std::size_t I,
+          std::size_t J,
+          std::size_t Idx,
+          std::size_t... Jdxs,
+          typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
+constexpr auto
+minor_matrix_jdxs(const Matrix<T, M, N, Container>& m, std::index_sequence<Jdxs...>) noexcept
+{
+    return std::tuple{minor_matrix_op<I, J, Idx, Jdxs>(m)...};
+}
+
+template <std::size_t I,
+          std::size_t J,
+          std::size_t... Idxs,
+          typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
+constexpr auto
+minor_matrix_impl(const Matrix<T, M, N, Container>& m, std::index_sequence<Idxs...>) noexcept
+{
+    return std::tuple_cat(minor_matrix_jdxs<I, J, Idxs>(m, std::make_index_sequence<N - 1>{})...);
+}
+} // namespace detail
+
 /// @brief Create reference object of input matrix, i.e. matrix view.
 template <typename T,
           std::size_t M,
@@ -440,33 +505,61 @@ det(const Matrix<T, M, N, Container>& a) noexcept
 }
 
 /// @brief Contructs minor matrix by removing I row, J column.
-template <typename T,
+template <std::size_t I,
+          std::size_t J,
+          typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
+constexpr Matrix<T, M - 1, N - 1, std::array>
+minor_matrix(const Matrix<T, M, N, Container>& m) noexcept
+{
+    static_assert(I < M || J < N, "Indicies out of range");
+    return std::make_from_tuple<Matrix<T, M - 1, N - 1, std::array>>(
+        detail::minor_matrix_impl<I, J>(m, std::make_index_sequence<M - 1>{}));
+}
+
+namespace detail
+{
+template <std::size_t I,
+          std::size_t J,
+          typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
+constexpr T
+cofactor_op(const Matrix<T, M, N, Container>& m) noexcept
+{
+    return minus_one_pow(I + J) * det(minor_matrix<I, J>(m));
+}
+
+template <std::size_t I,
+          std::size_t... Js,
+          typename T,
           std::size_t M,
           std::size_t N,
           template <typename, std::size_t>
           typename Container>
 constexpr auto
-minor_matrix(const Matrix<T, M, N, Container>& a, const std::size_t I, const std::size_t J) noexcept
+cofactor_js(const Matrix<T, M, N, Container>& m, std::index_sequence<Js...>) noexcept
 {
-    ASSERT(I < M || J < N, "Indicies out of range");
-
-    Matrix<T, (M - 1), (N - 1), std::array> ret{};
-
-    for(std::size_t i = 0; i < M - 1; ++i)
-        for(std::size_t j = 0; j < N - 1; ++j)
-        {
-            std::size_t idx = i;
-            std::size_t jdx = j;
-
-            if(i >= I) idx = i + 1;
-
-            if(j >= J) jdx = j + 1;
-
-            ret[i][j] = a[idx][jdx];
-        }
-
-    return ret;
+    return std::tuple{cofactor_op<I, Js>(m)...};
 }
+
+template <std::size_t... Is,
+          typename T,
+          std::size_t M,
+          std::size_t N,
+          template <typename, std::size_t>
+          typename Container>
+constexpr auto
+cofactor_impl(const Matrix<T, M, N, Container>& m, std::index_sequence<Is...>) noexcept
+{
+    return std::tuple_cat(cofactor_js<Is>(m, std::make_index_sequence<N>{})...);
+}
+} // namespace detail
 
 /// @brief Compute cofactor matrix.
 template <typename T,
@@ -474,16 +567,11 @@ template <typename T,
           std::size_t N,
           template <typename, std::size_t>
           typename Container>
-constexpr auto
-cofactor(const Matrix<T, M, N, Container>& a) noexcept
+constexpr Matrix<T, M, N, std::array>
+cofactor(const Matrix<T, M, N, Container>& m) noexcept
 {
-    Matrix<T, M, N, std::array> ret{};
-
-    for(std::size_t i = 0; i < M; ++i)
-        for(std::size_t j = 0; j < N; ++j)
-            ret[i][j] = minus_one_pow(i + j) * det(minor_matrix(a, i, j));
-
-    return ret;
+    return std::make_from_tuple<Matrix<T, M, N, std::array>>(
+        detail::cofactor_impl(m, std::make_index_sequence<M>{}));
 }
 
 /// @brief Compute inverse matrix.
