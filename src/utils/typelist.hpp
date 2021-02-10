@@ -23,6 +23,9 @@ index_impl() noexcept
     else
         static_assert(sizeof...(Rest) > 0ul, "There is no such type in the typelist.");
 }
+
+// template <std::size_t I, typename Seq>
+// struct seq_element_impl;
 } // namespace detail
 
 template <typename... Ts>
@@ -111,4 +114,22 @@ struct repeat_integer
     using type = typename join<std::integer_sequence<Int, Vals...>,
                                typename repeat_integer<(N - 1), Int, Vals...>::type>::type;
 };
+
+template <std::size_t I, typename Seq>
+struct seq_element;
+
+template <typename Int, Int Head, Int... Vals>
+struct seq_element<0, std::integer_sequence<Int, Head, Vals...>>
+{
+    static constexpr Int value = Head;
+};
+
+template <std::size_t I, typename Int, Int Head, Int... Vals>
+struct seq_element<I, std::integer_sequence<Int, Head, Vals...>>
+{
+    static_assert(I < (sizeof...(Vals) + 1));
+
+    static constexpr Int value = seq_element<I - 1, std::integer_sequence<Int, Vals...>>::value;
+};
+
 } // namespace lucid
