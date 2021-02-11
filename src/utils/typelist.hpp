@@ -55,7 +55,7 @@ struct typelist
     using front = at<0>;
     using back  = at<size - 1>;
 
-    static const constexpr bool        same = (true && ... && std::is_same_v<front, Ts>);
+    static const constexpr bool same = (true && ... && std::is_same_v<front, Ts>);
 
     using indices = std::make_index_sequence<size>;
 
@@ -78,12 +78,6 @@ struct join<typelist<Ts1...>, typelist<Ts2...>>
     using type = typelist<Ts1..., Ts2...>;
 };
 
-template <typename Int, Int... Ints1, Int... Ints2>
-struct join<std::integer_sequence<Int, Ints1...>, std::integer_sequence<Int, Ints2...>>
-{
-    using type = std::integer_sequence<Int, Ints1..., Ints2...>;
-};
-
 template <std::size_t N, typename... Ts>
 struct repeat_type;
 
@@ -98,38 +92,4 @@ struct repeat_type
 {
     using type = typename join<typelist<Ts...>, typename repeat_type<(N - 1), Ts...>::type>::type;
 };
-
-template <std::size_t N, typename Int, Int... Vals>
-struct repeat_integer;
-
-template <typename Int, Int... Vals>
-struct repeat_integer<1, Int, Vals...>
-{
-    using type = std::integer_sequence<Int, Vals...>;
-};
-
-template <std::size_t N, typename Int, Int... Vals>
-struct repeat_integer
-{
-    using type = typename join<std::integer_sequence<Int, Vals...>,
-                               typename repeat_integer<(N - 1), Int, Vals...>::type>::type;
-};
-
-template <std::size_t I, typename Seq>
-struct seq_element;
-
-template <typename Int, Int Head, Int... Vals>
-struct seq_element<0, std::integer_sequence<Int, Head, Vals...>>
-{
-    static constexpr Int value = Head;
-};
-
-template <std::size_t I, typename Int, Int Head, Int... Vals>
-struct seq_element<I, std::integer_sequence<Int, Head, Vals...>>
-{
-    static_assert(I < (sizeof...(Vals) + 1));
-
-    static constexpr Int value = seq_element<I - 1, std::integer_sequence<Int, Vals...>>::value;
-};
-
 } // namespace lucid
