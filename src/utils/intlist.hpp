@@ -129,6 +129,9 @@ struct nappend<std::integer_sequence<Int, Vals...>, N, Val>
 template <typename List, std::size_t N, auto Val>
 using nappend_t = typename nappend<List, N, Val>::type;
 
+template <typename List, auto Val>
+using append_t = nappend_t<List, 1, Val>;
+
 /// @brief Deletes @p Val from @p List.
 template <typename List, auto Val>
 struct del;
@@ -165,7 +168,7 @@ struct lehmer_code
     static constexpr std::size_t rem  = N % I;
 
   public:
-    using type = join_t<typename lehmer_code<quot, I + 1>::type, std::index_sequence<rem>>;
+    using type = append_t<typename lehmer_code<quot, I + 1>::type, rem>;
 };
 
 template <std::size_t I>
@@ -214,7 +217,8 @@ struct nlperm
     static constexpr std::size_t diff = L - length_v<_lehmer_code>;
 
   public:
-    using type = lehmer_perm_t<std::make_index_sequence<L>, nappend_t<_lehmer_code, diff, 0ul>>;
+    using type = lehmer_perm_t<std::make_index_sequence<L>,
+                               join_t<repeat_t<diff, std::size_t, 0ul>, _lehmer_code>>;
 };
 
 template <std::size_t N, std::size_t L>
