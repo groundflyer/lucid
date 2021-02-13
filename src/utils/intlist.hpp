@@ -223,4 +223,10 @@ struct nlperm
 
 template <std::size_t N, std::size_t L>
 using nlperm_t = typename nlperm<N, L>::type;
+
+template <typename Int, Int... Is>
+constexpr std::array<Int, sizeof...(Is)> to_array(std::integer_sequence<Int, Is...>) noexcept
+{
+    return std::array<Int, sizeof...(Is)>{Is...};
+}
 } // namespace lucid::intlist
