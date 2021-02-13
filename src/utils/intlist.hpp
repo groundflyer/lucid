@@ -75,7 +75,7 @@ struct repeat
 template <std::size_t N, typename Int, Int... Vals>
 using repeat_t = typename repeat<N, Int, Vals...>::type;
 
-/// @brief Extracts the @p <I>th elementh from the @p List.
+/// @brief Extracts the @p Ith elementh from the @p List.
 template <std::size_t I, typename List>
 struct elem;
 
@@ -205,7 +205,7 @@ struct lehmer_perm<Idxs, std::index_sequence<Head, Rest...>>
 template <typename Idxs, typename FacNum>
 using lehmer_perm_t = typename lehmer_perm<Idxs, FacNum>::type;
 
-/// @brief @p <N>th permutation in lexicographical order
+/// @brief @p Nth permutation in lexicographical order
 /// of an index sequence of length @p L.
 template <std::size_t N, std::size_t L>
 struct nlperm
@@ -224,6 +224,7 @@ struct nlperm
 template <std::size_t N, std::size_t L>
 using nlperm_t = typename nlperm<N, L>::type;
 
+/// @brief Converts std::integer_sequence into std::array.
 template <typename Int, Int... Is>
 constexpr std::array<Int, sizeof...(Is)> to_array(std::integer_sequence<Int, Is...>) noexcept
 {
