@@ -8,6 +8,7 @@
 #pragma once
 
 #include "vector.hpp"
+#include <utils/intlist.hpp>
 
 namespace lucid
 {
@@ -386,6 +387,30 @@ minor_matrix_impl(const Matrix<T, M, N, Container>& m, std::index_sequence<Idxs.
 {
     return std::tuple_cat(minor_matrix_jdxs<I, J, Idxs>(m, std::make_index_sequence<N - 1>{})...);
 }
+
+template <typename Idxs,
+          std::size_t... Is,
+          typename T,
+          std::size_t M,
+          template <typename, std::size_t>
+          typename Container>
+constexpr T
+det_elem(const Matrix<T, M, M, Container>& m, std::index_sequence<Is...>) noexcept
+{
+    constexpr auto _sgn = sgn(intlist::to_array(Idxs{}));
+    return _sgn * (T{1} * ... * m.template get<Is, intlist::elem_v<Is, Idxs>>());
+}
+
+template <std::size_t... Ns,
+          typename T,
+          std::size_t M,
+          template <typename, std::size_t>
+          typename Container>
+constexpr T
+det_impl(const Matrix<T, M, M, Container>& m, std::index_sequence<Ns...>) noexcept
+{
+    return (T{0} + ... + det_elem<intlist::nlperm_t<Ns, M>>(m, std::make_index_sequence<M>{}));
+}
 } // namespace detail
 
 /// @brief Create reference object of input matrix, i.e. matrix view.
@@ -472,36 +497,12 @@ dot(const Matrix<T, M1, N1, Container1>& lhs, const Matrix<T, M2, N2, Container2
     return ret;
 }
 
-/// @brief Compite matrix determinant.
-template <typename T,
-          std::size_t M,
-          std::size_t N,
-          template <typename, std::size_t>
-          typename Container>
-constexpr typename std::enable_if_t<M == N, T>
-det(const Matrix<T, M, N, Container>& a) noexcept
+/// @brief Efficient generic matrix determinant.
+template <typename T, std::size_t M, template <typename, std::size_t> typename Container>
+constexpr T
+det(const Matrix<T, M, M, Container>& m) noexcept
 {
-    std::array<std::size_t, M> idxs{};
-    std::iota(idxs.begin(), idxs.end(), 0);
-
-    auto product = [&idxs, &a]() noexcept {
-        T ret{1};
-        for(std::size_t i = 0; i < M; ++i) ret *= a.at(i, idxs[i]);
-        return ret;
-    };
-
-    auto get_elem = [&]() noexcept { return sgn(idxs) * product(); };
-
-    T ret = get_elem();
-
-    const constexpr std::size_t rank = fac(M) - 1;
-    for(std::size_t _ = 0; _ < rank; ++_)
-    {
-        std::next_permutation(idxs.begin(), idxs.end());
-        ret += get_elem();
-    }
-
-    return ret;
+    return detail::det_impl(m, std::make_index_sequence<fac(M)>{});
 }
 
 /// @brief Contructs minor matrix by removing I row, J column.
@@ -590,7 +591,7 @@ inverse(const Matrix<T, M, N, Container>& a) noexcept
             return val == 0;
     };
 
-    const auto d = det(a);
+    const T d = det(a);
 
     if(!is_zero(d))
         return transpose(cofactor(a)) * (T{1} / d);
