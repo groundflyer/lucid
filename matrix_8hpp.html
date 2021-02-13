@@ -97,6 +97,7 @@ $(document).ready(function(){initNavTree('matrix_8hpp.html',''); initResizable()
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="vector_8hpp.html">vector.hpp</a>&quot;</code><br />
+<code>#include &lt;<a class="el" href="intlist_8hpp.html">utils/intlist.hpp</a>&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -106,6 +107,26 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a8fe3187f73c052ae0f8feed1985188fd"><td class="memTemplParams" colspan="2"><a id="a8fe3187f73c052ae0f8feed1985188fd"></a>
+template&lt;std::size_t I, std::size_t J, std::size_t Idx, std::size_t Jdx, typename T , std::size_t M, std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a8fe3187f73c052ae0f8feed1985188fd"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::minor_matrix_op</b> (const Matrix&lt; T, M, N, Container &gt; &amp;m) noexcept</td></tr>
+<tr class="separator:a8fe3187f73c052ae0f8feed1985188fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fec02c97f449fbc7402a315b03cab11"><td class="memTemplParams" colspan="2"><a id="a3fec02c97f449fbc7402a315b03cab11"></a>
+template&lt;std::size_t I, std::size_t J, std::size_t Idx, std::size_t... Jdxs, typename T , std::size_t M, std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a3fec02c97f449fbc7402a315b03cab11"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::minor_matrix_jdxs</b> (const Matrix&lt; T, M, N, Container &gt; &amp;m, std::index_sequence&lt; Jdxs... &gt;) noexcept</td></tr>
+<tr class="separator:a3fec02c97f449fbc7402a315b03cab11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3481f31c84036213dbfbf951d9ff1539"><td class="memTemplParams" colspan="2"><a id="a3481f31c84036213dbfbf951d9ff1539"></a>
+template&lt;std::size_t I, std::size_t J, std::size_t... Idxs, typename T , std::size_t M, std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a3481f31c84036213dbfbf951d9ff1539"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::minor_matrix_impl</b> (const Matrix&lt; T, M, N, Container &gt; &amp;m, std::index_sequence&lt; Idxs... &gt;) noexcept</td></tr>
+<tr class="separator:a3481f31c84036213dbfbf951d9ff1539"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a045c35b2f5ec08fa12490e467ecf6345"><td class="memTemplParams" colspan="2"><a id="a045c35b2f5ec08fa12490e467ecf6345"></a>
+template&lt;typename Idxs , std::size_t... Is, typename T , std::size_t M, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a045c35b2f5ec08fa12490e467ecf6345"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::det_elem</b> (const Matrix&lt; T, M, M, Container &gt; &amp;m, std::index_sequence&lt; Is... &gt;) noexcept</td></tr>
+<tr class="separator:a045c35b2f5ec08fa12490e467ecf6345"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae20c6add6aa8a1c28a84d7eb25ade2e8"><td class="memTemplParams" colspan="2"><a id="ae20c6add6aa8a1c28a84d7eb25ade2e8"></a>
+template&lt;std::size_t... Ns, typename T , std::size_t M, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:ae20c6add6aa8a1c28a84d7eb25ade2e8"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::detail::det_impl</b> (const Matrix&lt; T, M, M, Container &gt; &amp;m, std::index_sequence&lt; Ns... &gt;) noexcept</td></tr>
+<tr class="separator:ae20c6add6aa8a1c28a84d7eb25ade2e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a600e940e18a841599fd9c18ff59ac97c"><td class="memTemplParams" colspan="2"><a id="a600e940e18a841599fd9c18ff59ac97c"></a>
 template&lt;typename T , std::size_t M, std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
 <tr class="memitem:a600e940e18a841599fd9c18ff59ac97c"><td class="memTemplItemLeft" align="right" valign="top">constexpr Matrix&lt; T, M, N, StaticSpan &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="matrix_8hpp.html#a600e940e18a841599fd9c18ff59ac97c">lucid::ref</a> (const Matrix&lt; T, M, N, Container &gt; &amp;m) noexcept</td></tr>
@@ -131,21 +152,33 @@ template&lt;typename T , std::size_t M1, std::size_t N1, std::size_t M2, std::si
 <tr class="memitem:af5df2e27284f68778aef86f0ac4bba48"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::enable_if_t&lt; N1==M2, Matrix&lt; T, M1, N2, std::array &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="matrix_8hpp.html#af5df2e27284f68778aef86f0ac4bba48">lucid::fn::dot</a> (const Matrix&lt; T, M1, N1, Container1 &gt; &amp;lhs, const Matrix&lt; T, M2, N2, Container2 &gt; &amp;rhs) noexcept</td></tr>
 <tr class="memdesc:af5df2e27284f68778aef86f0ac4bba48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute matrix product. <br /></td></tr>
 <tr class="separator:af5df2e27284f68778aef86f0ac4bba48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aada29eb9113a6158fd397e52903ad694"><td class="memTemplParams" colspan="2"><a id="aada29eb9113a6158fd397e52903ad694"></a>
+<tr class="memitem:ac7887bb59a55379cd9141f392cfe562a"><td class="memTemplParams" colspan="2"><a id="ac7887bb59a55379cd9141f392cfe562a"></a>
+template&lt;typename T , std::size_t M, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:ac7887bb59a55379cd9141f392cfe562a"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="matrix_8hpp.html#ac7887bb59a55379cd9141f392cfe562a">lucid::fn::det</a> (const Matrix&lt; T, M, M, Container &gt; &amp;m) noexcept</td></tr>
+<tr class="memdesc:ac7887bb59a55379cd9141f392cfe562a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Efficient generic matrix determinant. <br /></td></tr>
+<tr class="separator:ac7887bb59a55379cd9141f392cfe562a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fda0f81cd2fab62965d16c55c423fd8"><td class="memTemplParams" colspan="2"><a id="a6fda0f81cd2fab62965d16c55c423fd8"></a>
+template&lt;std::size_t I, std::size_t J, typename T , std::size_t M, std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a6fda0f81cd2fab62965d16c55c423fd8"><td class="memTemplItemLeft" align="right" valign="top">constexpr Matrix&lt; T, M - 1, N - 1, std::array &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="matrix_8hpp.html#a6fda0f81cd2fab62965d16c55c423fd8">lucid::fn::minor_matrix</a> (const Matrix&lt; T, M, N, Container &gt; &amp;m) noexcept</td></tr>
+<tr class="memdesc:a6fda0f81cd2fab62965d16c55c423fd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contructs minor matrix by removing I row, J column. <br /></td></tr>
+<tr class="separator:a6fda0f81cd2fab62965d16c55c423fd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1e8bf2773f4a46a47cee281b01e04d5"><td class="memTemplParams" colspan="2"><a id="ad1e8bf2773f4a46a47cee281b01e04d5"></a>
+template&lt;std::size_t I, std::size_t J, typename T , std::size_t M, std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:ad1e8bf2773f4a46a47cee281b01e04d5"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::fn::detail::cofactor_op</b> (const Matrix&lt; T, M, N, Container &gt; &amp;m) noexcept</td></tr>
+<tr class="separator:ad1e8bf2773f4a46a47cee281b01e04d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5ed3844607239f536be464e39a04558"><td class="memTemplParams" colspan="2"><a id="ac5ed3844607239f536be464e39a04558"></a>
+template&lt;std::size_t I, std::size_t... Js, typename T , std::size_t M, std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:ac5ed3844607239f536be464e39a04558"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::fn::detail::cofactor_js</b> (const Matrix&lt; T, M, N, Container &gt; &amp;m, std::index_sequence&lt; Js... &gt;) noexcept</td></tr>
+<tr class="separator:ac5ed3844607239f536be464e39a04558"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0511e4feb5b91828e8dc143923d4a180"><td class="memTemplParams" colspan="2"><a id="a0511e4feb5b91828e8dc143923d4a180"></a>
+template&lt;std::size_t... Is, typename T , std::size_t M, std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
+<tr class="memitem:a0511e4feb5b91828e8dc143923d4a180"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>lucid::fn::detail::cofactor_impl</b> (const Matrix&lt; T, M, N, Container &gt; &amp;m, std::index_sequence&lt; Is... &gt;) noexcept</td></tr>
+<tr class="separator:a0511e4feb5b91828e8dc143923d4a180"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ac2efd0ea7dc69a7984ef9d4f692539"><td class="memTemplParams" colspan="2"><a id="a6ac2efd0ea7dc69a7984ef9d4f692539"></a>
 template&lt;typename T , std::size_t M, std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:aada29eb9113a6158fd397e52903ad694"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::enable_if_t&lt; M==N, T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="matrix_8hpp.html#aada29eb9113a6158fd397e52903ad694">lucid::fn::det</a> (const Matrix&lt; T, M, N, Container &gt; &amp;a) noexcept</td></tr>
-<tr class="memdesc:aada29eb9113a6158fd397e52903ad694"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compite matrix determinant. <br /></td></tr>
-<tr class="separator:aada29eb9113a6158fd397e52903ad694"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaec40a270933277f1e8e588ed5f2077d"><td class="memTemplParams" colspan="2"><a id="aaec40a270933277f1e8e588ed5f2077d"></a>
-template&lt;typename T , std::size_t M, std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:aaec40a270933277f1e8e588ed5f2077d"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="matrix_8hpp.html#aaec40a270933277f1e8e588ed5f2077d">lucid::fn::minor_matrix</a> (const Matrix&lt; T, M, N, Container &gt; &amp;a, const std::size_t I, const std::size_t J) noexcept</td></tr>
-<tr class="memdesc:aaec40a270933277f1e8e588ed5f2077d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contructs minor matrix by removing I row, J column. <br /></td></tr>
-<tr class="separator:aaec40a270933277f1e8e588ed5f2077d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0cdd378555edb8e2c380c2213e4ebca"><td class="memTemplParams" colspan="2"><a id="ad0cdd378555edb8e2c380c2213e4ebca"></a>
-template&lt;typename T , std::size_t M, std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
-<tr class="memitem:ad0cdd378555edb8e2c380c2213e4ebca"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="matrix_8hpp.html#ad0cdd378555edb8e2c380c2213e4ebca">lucid::fn::cofactor</a> (const Matrix&lt; T, M, N, Container &gt; &amp;a) noexcept</td></tr>
-<tr class="memdesc:ad0cdd378555edb8e2c380c2213e4ebca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute cofactor matrix. <br /></td></tr>
-<tr class="separator:ad0cdd378555edb8e2c380c2213e4ebca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ac2efd0ea7dc69a7984ef9d4f692539"><td class="memTemplItemLeft" align="right" valign="top">constexpr Matrix&lt; T, M, N, std::array &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="matrix_8hpp.html#a6ac2efd0ea7dc69a7984ef9d4f692539">lucid::fn::cofactor</a> (const Matrix&lt; T, M, N, Container &gt; &amp;m) noexcept</td></tr>
+<tr class="memdesc:a6ac2efd0ea7dc69a7984ef9d4f692539"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute cofactor matrix. <br /></td></tr>
+<tr class="separator:a6ac2efd0ea7dc69a7984ef9d4f692539"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08e5bd2c82dc0fbe94af845df05549e3"><td class="memTemplParams" colspan="2"><a id="a08e5bd2c82dc0fbe94af845df05549e3"></a>
 template&lt;typename T , std::size_t M, std::size_t N, template&lt; typename, std::size_t &gt; typename Container&gt; </td></tr>
 <tr class="memitem:a08e5bd2c82dc0fbe94af845df05549e3"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="matrix_8hpp.html#a08e5bd2c82dc0fbe94af845df05549e3">lucid::fn::inverse</a> (const Matrix&lt; T, M, N, Container &gt; &amp;a) noexcept</td></tr>

@@ -1,10 +1,11 @@
 var searchData=
 [
-  ['vector_78',['Vector',['../classlucid_1_1Vector.html',1,'lucid']]],
-  ['vector_2ecpp_79',['vector.cpp',['../tests_2vector_8cpp.html',1,'']]],
-  ['vector_2ehpp_80',['vector.hpp',['../vector_8hpp.html',1,'']]],
-  ['vector_3c_20container_20_3e_81',['Vector&lt; Container &gt;',['../classlucid_1_1Vector.html',1,'lucid']]],
-  ['vector_3c_20std_3a_3aarray_20_3e_82',['Vector&lt; std::array &gt;',['../classlucid_1_1Vector.html',1,'lucid']]],
-  ['vector_5fbool_5ftest_83',['vector_bool_test',['../tests_2vector_8cpp.html#a2ac0bd49dad693be3eae1cfadf7b7e36',1,'vector.cpp']]],
-  ['vector_5ftest_84',['vector_test',['../tests_2vector_8cpp.html#a5d7b0601be0d172d70844b838d49ce70',1,'vector.cpp']]]
+  ['sample_73',['sample',['../aabb_8hpp.html#af632e735127d2da5e71cd7a58970be8f',1,'lucid::fn::sample(const Vec2_&lt; SContainer &gt; &amp;s, const AABB_&lt; PContainer &gt; &amp;prim) noexcept'],['../disk_8hpp.html#a6f75bf820f57b4db1806ba197d2e211a',1,'lucid::fn::sample(const Vec2_&lt; SContainer &gt; &amp;s, const Disk_&lt; PContainer &gt; &amp;prim) noexcept'],['../quad_8hpp.html#a09cd761e569db8938e4ebc41a7e0a54e',1,'lucid::fn::sample(const Vec2_&lt; SContainer &gt; &amp;s, const Quad_&lt; PContainer &gt; &amp;prim) noexcept'],['../sphere_8hpp.html#a718a8274af3eabbec4616bcb5e4fc84f',1,'lucid::fn::sample(const Vec2_&lt; SContainer &gt; &amp;s, const Sphere_&lt; PContainer &gt; &amp;prim) noexcept'],['../triangle_8hpp.html#afdd13721c749a81206fd12595cffcb2a',1,'lucid::fn::sample(const Vec2_&lt; SContainer &gt; &amp;s, const Triangle_&lt; PContainer &gt; &amp;prim) noexcept']]],
+  ['scale_74',['scale',['../base_2transforms_8hpp.html#a16b7095f30f06de9bf6ceeb1fb66ee9b',1,'lucid::fn']]],
+  ['sgn_75',['sgn',['../math_8hpp.html#a2f39cbeb372685f38885191f09231d63',1,'lucid']]],
+  ['sphere_2ehpp_76',['sphere.hpp',['../sphere_8hpp.html',1,'']]],
+  ['sphere_5f_77',['Sphere_',['../structlucid_1_1Sphere__.html',1,'lucid']]],
+  ['static_5fpow_78',['static_pow',['../math_8hpp.html#ad07f6249f034f2e55c4d19e337db9001',1,'lucid::fn']]],
+  ['static_5fpow_5ffn_79',['static_pow_fn',['../structlucid_1_1fn_1_1static__pow__fn.html',1,'lucid::fn']]],
+  ['sum_80',['sum',['../vector_8hpp.html#af64cf3335ae4f2875915549af31b0db8',1,'lucid::fn']]]
 ];

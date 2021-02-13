@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['has_5fequal_29',['has_equal',['../math_8hpp.html#aa6b532d1df69fa2662e5be1c6ef2e1b9',1,'lucid']]]
+  ['fac_29',['fac',['../math_8hpp.html#a6aa42d17471ba5174fe2d9ee9c5c28de',1,'lucid']]],
+  ['file_30',['File',['../classlucid_1_1File.html',1,'lucid::File'],['../classlucid_1_1File.html#a7f5fe1e6d0c11dba233ea5155e15f497',1,'lucid::File::File()']]],
+  ['flat_5fref_31',['flat_ref',['../matrix_8hpp.html#a9b4c3b47247fc9ddb43a1360fcb8d2ef',1,'lucid']]]
 ];

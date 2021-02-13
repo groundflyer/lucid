@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['disk_5f_86',['Disk_',['../structlucid_1_1Disk__.html',1,'lucid']]],
-  ['dispatcher_87',['Dispatcher',['../classlucid_1_1Dispatcher.html',1,'lucid']]]
+  ['cons_98',['cons',['../structlucid_1_1intlist_1_1cons.html',1,'lucid::intlist']]]
 ];
