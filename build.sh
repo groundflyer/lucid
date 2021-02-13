@@ -44,7 +44,6 @@ enable_docs() {
 }
 
 use_clang() {
-    BUILD_DIR+="_clang"
     CXX=clang++
     CMAKE_ARGS+=(-DCMAKE_CXX_COMPILER=${CXX})
 }
@@ -113,6 +112,12 @@ for key in $@; do
             ;;
     esac
 done
+
+if [ $CXX = "clang++" ]; then
+    BUILD_DIR+="_clang"
+else
+    BUILD_DIR+="_gcc"
+fi
 
 mkdir -p ${BUILD_DIR}
 pushd ${BUILD_DIR}
