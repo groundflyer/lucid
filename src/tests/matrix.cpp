@@ -17,7 +17,7 @@ using namespace std;
 using namespace lucid;
 
 using Indicies        = index_sequence<3ul, 4ul>;
-using ArithmeticTypes = typelist<float, double>;
+using ArithmeticTypes = type_sequence<float, double>;
 // 5% error threshold, because + and - operations are quite inaccurate
 static const constexpr double threshold = 0.05;
 
@@ -384,7 +384,7 @@ matrix_test(RandomEngine& g, const size_t num_tests) noexcept
 
 template <size_t M, size_t N, typename RandomEngine, typename... Ts>
 unsigned
-test_t(RandomEngine& g, const size_t num_tests, typelist<Ts...>) noexcept
+test_t(RandomEngine& g, const size_t num_tests, type_sequence<Ts...>) noexcept
 {
     return (0u + ... + matrix_test<Ts, M, N>(g, num_tests));
 }

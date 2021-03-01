@@ -15,14 +15,14 @@
 namespace lucid
 {
 template <template <typename, size_t> typename Container>
-using AllPrimTypes = typelist<AABB_<Container>,
-                              Sphere_<Container>,
-                              Triangle_<Container>,
-                              Quad_<Container>,
-                              Disk_<Container>>;
+using AllPrimTypes = type_sequence<AABB_<Container>,
+                                   Sphere_<Container>,
+                                   Triangle_<Container>,
+                                   Quad_<Container>,
+                                   Disk_<Container>>;
 
 template <template <typename, size_t> typename Container>
-using GenericPrimitive_ = typename AllPrimTypes<Container>::variant;
+using GenericPrimitive_ = typelist::as_variant<AllPrimTypes<Container>>;
 
 using GenericPrimitive = GenericPrimitive_<std::array>;
 

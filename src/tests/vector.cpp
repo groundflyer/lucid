@@ -17,7 +17,7 @@ using namespace lucid;
 
 static const constexpr size_t MaxN = 4;
 using Indicies                     = make_index_sequence<MaxN - 1>;
-using ArithmeticTypes              = typelist<int, long, float, double>;
+using ArithmeticTypes              = type_sequence<int, long, float, double>;
 
 template <size_t I, typename A, typename B>
 constexpr bool
@@ -325,7 +325,7 @@ vector_test(RandomEngine& g, const size_t num_tests) noexcept
 
 template <size_t N, typename RandomEngine, typename... Ts>
 unsigned
-test_t(RandomEngine& g, const size_t num_tests, typelist<Ts...>) noexcept
+test_t(RandomEngine& g, const size_t num_tests, type_sequence<Ts...>) noexcept
 {
     return (0u + ... + vector_test<Ts, N>(g, num_tests));
 }

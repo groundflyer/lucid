@@ -42,7 +42,7 @@ struct length<type_sequence<Ts...>>
 };
 
 template <typename List>
-static constexpr std::size_t length_v = length<List>::value;
+constexpr std::size_t length_v = length<List>::value;
 
 /// @brief Appends two lists together.
 template <typename A, typename B>
@@ -139,7 +139,7 @@ struct find<T, Idx, type_sequence<Head, Rest...>>
 
 /// @brief Get the index of type @p T in @p List.
 template <typename T, typename List>
-static constexpr std::size_t find_v = find<T, 0, List>::value;
+constexpr std::size_t find_v = find<T, 0, List>::value;
 
 /// @brief Build type_sequence containing first @p N types from @p List.
 template <std::size_t N, typename List>
@@ -165,5 +165,30 @@ using take_t = typename take<N, List>::type;
 /// @brief Build std::index_sequence for @p List.
 template <typename List>
 using indicies = std::make_index_sequence<length_v<List>>;
+
+/// @brief Build a type_sequence of result types of @p Funcs applied to @p Args.
+template <typename Funcs, typename... Args>
+struct invoke_result
+{
+    template <typename F>
+    using f = std::invoke_result_t<F, Args...>;
+
+    using type = map_t<f, Funcs>;
+};
+
+template <typename Funcs, typename... Args>
+using invoke_result_t = typename invoke_result<Funcs, Args...>::type;
+
+template <typename List>
+struct same_types;
+
+template <typename Head, typename... Ts>
+struct same_types<type_sequence<Head, Ts...>>
+{
+    static constexpr bool value = (true && ... && std::is_same_v<Head, Ts>);
+};
+
+template <typename List>
+constexpr bool same_v = same_types<List>::value;
 } // namespace typelist
 } // namespace lucid

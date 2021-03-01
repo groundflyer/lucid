@@ -34,7 +34,7 @@ struct length<std::integer_sequence<Int, Nums...>>
 };
 
 template <typename List>
-static constexpr std::size_t length_v = length<List>::value;
+constexpr std::size_t length_v = length<List>::value;
 
 /// @brief Appends two lists together.
 template <typename List1, typename List2>
@@ -88,7 +88,7 @@ struct elem<I, std::integer_sequence<Int, Head, Vals...>>
 };
 
 template <std::size_t I, typename List>
-static constexpr auto elem_v = elem<I, List>::value;
+constexpr auto elem_v = elem<I, List>::value;
 
 /// @brief Reverses the order of the elements in @p List.
 template <typename List>
