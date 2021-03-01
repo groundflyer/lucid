@@ -69,7 +69,7 @@ struct repeat
 template <std::size_t N, typename Int, Int... Vals>
 using repeat_t = typename repeat<N, Int, Vals...>::type;
 
-/// @brief Extracts the @p Ith elementh from the @p List.
+/// @brief Extracts the @p Ith element from the @p List.
 template <std::size_t I, typename List>
 struct elem;
 
