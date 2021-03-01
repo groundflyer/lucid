@@ -1,6 +1,6 @@
 // -*- C++ -*-
-// utils.hpp
-//
+/// @file typelist.hpp
+/// @brief Compile-time sequence of types and helper meta-functions.
 
 #pragma once
 
@@ -10,86 +10,160 @@
 
 namespace lucid
 {
-namespace detail
-{
-template <std::size_t idx, typename Sought, typename Head, typename... Rest>
-constexpr std::size_t
-index_impl() noexcept
-{
-    if constexpr(std::is_same_v<Sought, Head>)
-        return idx;
-    else if constexpr(sizeof...(Rest) > 0ul)
-        return index_impl<idx + 1, Sought, Rest...>();
-    else
-        static_assert(sizeof...(Rest) > 0ul, "There is no such type in the typelist.");
-}
-
-// template <std::size_t I, typename Seq>
-// struct seq_element_impl;
-} // namespace detail
-
+/// @brief Sequence of types.
 template <typename... Ts>
-struct typelist
+struct type_sequence
 {
-    template <template <typename...> typename Container>
-    using repack = Container<Ts...>;
-
-    template <template <typename> typename Func, template <typename...> typename Container>
-    using map = Container<Func<Ts>...>;
-
-    using variant = repack<std::variant>;
-    using tuple   = repack<std::tuple>;
-
-    template <std::size_t I>
-    using at = std::tuple_element_t<I, tuple>;
-
-    template <typename Type>
-    static constexpr std::size_t
-    index() noexcept
-    {
-        return detail::index_impl<0, Type, Ts...>();
-    }
-
-    static const constexpr std::size_t size = sizeof...(Ts);
-
-    using front = at<0>;
-    using back  = at<size - 1>;
-
-    static const constexpr bool same = (true && ... && std::is_same_v<front, Ts>);
-
-    using indices = std::make_index_sequence<size>;
-
-    template <typename... Args>
-    using result_of = typelist<std::invoke_result_t<Ts, Args...>...>;
-
-    constexpr explicit typelist(std::tuple<Ts...>) noexcept {}
-
-    constexpr explicit typelist(std::variant<Ts...>) noexcept {}
-
-    constexpr typelist() noexcept {}
 };
 
-template <typename Seq1, typename Seq2>
+namespace typelist
+{
+/// @brief Adds type @p T to the beginning of @p List.
+template <typename T, typename List>
+struct cons;
+
+template <typename T, typename... Ts>
+struct cons<T, type_sequence<Ts...>>
+{
+    using type = type_sequence<T, Ts...>;
+};
+
+template <typename T, typename List>
+using cons_t = typename cons<T, List>::type;
+
+/// @brief Length of an std::integer_sequence.
+template <typename List>
+struct length;
+
+template <typename... Ts>
+struct length<type_sequence<Ts...>>
+{
+    static constexpr std::size_t value = sizeof...(Ts);
+};
+
+template <typename List>
+static constexpr std::size_t length_v = length<List>::value;
+
+/// @brief Appends two lists together.
+template <typename A, typename B>
 struct join;
 
 template <typename... Ts1, typename... Ts2>
-struct join<typelist<Ts1...>, typelist<Ts2...>>
+struct join<type_sequence<Ts1...>, type_sequence<Ts2...>>
 {
-    using type = typelist<Ts1..., Ts2...>;
+    using type = type_sequence<Ts1..., Ts2...>;
 };
 
+template <typename A, typename B>
+using join_t = typename join<A, B>::type;
+
+/// @brief Constructs type_sequence repeating @p Ts @p N times.
 template <std::size_t N, typename... Ts>
-struct repeat_type;
+struct repeat;
 
 template <typename... Ts>
-struct repeat_type<1, Ts...>
+struct repeat<1, Ts...>
 {
-    using type = typelist<Ts...>;
+    using type = type_sequence<Ts...>;
 };
 
 template <std::size_t N, typename... Ts>
-struct repeat_type
+struct repeat
 {
-    using type = typename join<typelist<Ts...>, typename repeat_type<(N - 1), Ts...>::type>::type;
+    using type = join_t<type_sequence<Ts...>, typename repeat<(N - 1), Ts...>::type>;
 };
+
+template <std::size_t N, typename... Ts>
+using repeat_t = typename repeat<N, Ts...>::type;
+
+/// @brief Use types from @p List to build new type from variadic template @p Container.
+template <template <typename...> typename Container, typename List>
+struct repack;
+
+template <template <typename...> typename Container, typename... Ts>
+struct repack<Container, type_sequence<Ts...>>
+{
+    using type = Container<Ts...>;
+};
+
+template <template <typename...> typename Container, typename List>
+using repack_t = typename repack<Container, List>::type;
+
+template <typename List>
+using as_tuple = repack_t<std::tuple, List>;
+
+template <typename List>
+using as_variant = repack_t<std::variant, List>;
+
+/// @brief Apply @p Func to every element of the @p List.
+template <template <typename> typename Func, typename List>
+struct map;
+
+template <template <typename> typename Func, typename... Ts>
+struct map<Func, type_sequence<Ts...>>
+{
+    using type = type_sequence<Func<Ts>...>;
+};
+
+template <template <typename> typename Func, typename List>
+using map_t = typename map<Func, List>::type;
+
+/// @brief Extracts the @p Ith type from the @p List.
+template <std::size_t I, typename List>
+using elem_t = std::tuple_element_t<I, as_tuple<List>>;
+
+/// @brief Extracts the first type from the @p List.
+template <typename List>
+using head = elem_t<0, List>;
+
+/// @brief Extracts the first type from the @p List.
+template <typename List>
+using back = elem_t<length_v<List> - 1, List>;
+
+template <typename T, std::size_t Idx, typename List>
+struct find;
+
+template <typename T, std::size_t Idx, typename Last>
+struct find<T, Idx, type_sequence<Last>>
+{
+    static_assert(!std::is_same_v<T, Last>, "Type not found");
+    static constexpr std::size_t value = Idx;
+};
+
+template <typename T, std::size_t Idx, typename Head, typename... Rest>
+struct find<T, Idx, type_sequence<Head, Rest...>>
+{
+    static constexpr std::size_t value =
+        std::is_same_v<T, Head> ? Idx : find<T, Idx + 1, type_sequence<Rest...>>::value;
+};
+
+/// @brief Get the index of type @p T in @p List.
+template <typename T, typename List>
+static constexpr std::size_t find_v = find<T, 0, List>::value;
+
+/// @brief Build type_sequence containing first @p N types from @p List.
+template <std::size_t N, typename List>
+struct take;
+
+template <typename Head, typename... Rest>
+struct take<1, type_sequence<Head, Rest...>>
+{
+    using type = type_sequence<Head>;
+};
+
+template <std::size_t N, typename Head, typename... Rest>
+struct take<N, type_sequence<Head, Rest...>>
+{
+    static_assert(sizeof...(Rest) > N && N > 0);
+
+    using type = cons_t<Head, typename take<N - 1, type_sequence<Rest...>>::type>;
+};
+
+template <std::size_t N, typename List>
+using take_t = typename take<N, List>::type;
+
+/// @brief Build std::index_sequence for @p List.
+template <typename List>
+using indicies = std::make_index_sequence<length_v<List>>;
+} // namespace typelist
 } // namespace lucid
