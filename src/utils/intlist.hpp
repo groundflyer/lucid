@@ -14,12 +14,6 @@ namespace lucid::intlist
 template <auto Val, typename List>
 struct cons;
 
-template <typename Int, Int Head>
-struct cons<Head, std::integer_sequence<Int>>
-{
-    using type = std::integer_sequence<Int, Head>;
-};
-
 template <typename Int, Int Head, Int... Rest>
 struct cons<Head, std::integer_sequence<Int, Rest...>>
 {
