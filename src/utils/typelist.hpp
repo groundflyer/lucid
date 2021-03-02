@@ -116,9 +116,9 @@ using elem_t = std::tuple_element_t<I, as_tuple<List>>;
 template <typename List>
 using head = elem_t<0, List>;
 
-/// @brief Extracts the first type from the @p List.
+/// @brief Extracts the last type from the @p List.
 template <typename List>
-using back = elem_t<length_v<List> - 1, List>;
+using last = elem_t<length_v<List> - 1, List>;
 
 template <typename T, std::size_t Idx, typename List>
 struct find;
@@ -154,7 +154,7 @@ struct take<1, type_sequence<Head, Rest...>>
 template <std::size_t N, typename Head, typename... Rest>
 struct take<N, type_sequence<Head, Rest...>>
 {
-    static_assert(sizeof...(Rest) > N && N > 0);
+    static_assert(sizeof...(Rest) >= N && N > 0);
 
     using type = cons_t<Head, typename take<N - 1, type_sequence<Rest...>>::type>;
 };
@@ -168,7 +168,7 @@ using indicies = std::make_index_sequence<length_v<List>>;
 
 /// @brief Build a type_sequence of result types of @p Funcs applied to @p Args.
 template <typename Funcs, typename... Args>
-struct invoke_result
+struct funcs_result
 {
     template <typename F>
     using f = std::invoke_result_t<F, Args...>;
@@ -177,8 +177,22 @@ struct invoke_result
 };
 
 template <typename Funcs, typename... Args>
-using invoke_result_t = typename invoke_result<Funcs, Args...>::type;
+using funcs_result_t = typename funcs_result<Funcs, Args...>::type;
 
+/// @brief Deduce result type of @p Func applied to arguments from @p Args typelist.
+template <typename Args, typename Func>
+struct args_result;
+
+template <typename Func, typename... Args>
+struct args_result<type_sequence<Args...>, Func>
+{
+    using type = std::invoke_result_t<Func, Args...>;
+};
+
+template <typename Args, typename Func>
+using args_result_t = typename args_result<Args, Func>::type;
+
+/// @brief Checks if @p List consist of same elements.
 template <typename List>
 struct same_types;
 
@@ -189,6 +203,6 @@ struct same_types<type_sequence<Head, Ts...>>
 };
 
 template <typename List>
-constexpr bool same_v = same_types<List>::value;
+constexpr bool same_types_v = same_types<List>::value;
 } // namespace typelist
 } // namespace lucid
