@@ -1,78 +1,48 @@
 // -*- C++ -*-
 // thread_pool.cpp
 #include <utils/dispatcher.hpp>
-#include <utils/timer.hpp>
-
-#include <chrono>
 
 #include <fmt/format.h>
 
-using namespace std::chrono_literals;
 using namespace lucid;
 
-template <typename Duration, typename Value>
-struct TimerTask
+struct Test
 {
-    Duration pause;
-    Value value;
+    using signature = type_sequence<int, int>;
 
-    TimerTask() noexcept {}
-
-    TimerTask(const Duration& p,
-         const Value& v) noexcept : pause(p), value(v) {}
-
-    Value
-    operator()() const noexcept
+    constexpr int
+    operator()(const int a) const noexcept
     {
-        std::this_thread::sleep_for(pause);
-        return value;
+        return a * 10;
     }
 };
 
-using TestTimerTask = TimerTask<std::chrono::milliseconds, int>;
+constexpr Test test_func;
 
-
-int main()
+int
+main()
 {
-    Dispatcher<TestTimerTask> dispatcher;
+    const int  n = 1000;
+    Dispatcher dispatcher(n, std::thread::hardware_concurrency(), test_func);
 
-    const int N = 64;
+    int expected = 0;
+    int got      = 0;
 
-    ElapsedTimer<> timer;
-
-    auto consumer_worker = [&]()
+    for(int i = 0; i < n; ++i)
     {
-        int sum = 0;
-        while (sum < N)
-        {
-            const auto result = dispatcher.template fetch_result<TestTimerTask>();
-            if(result)
-            {
-                sum += result.value();
-                fmt::print("{} ms; Sum: {}\n",
-                           std::chrono::duration_cast<std::chrono::milliseconds>(timer.elapsed()).count(),
-                           sum);
-            }
-        }
-    };
-
-    std::thread consumer(consumer_worker);
-
-    for (int i = 0; i < N; ++i)
-    {
-        while (!dispatcher.try_submit(TestTimerTask{1s, 1}))
-        {
-            fmt::print("Failed to submit task\n");
-        }
-        fmt::print("Submitted task {}\n", i);
+        if(dispatcher.try_submit(i)) fmt::print("Submitted {}\n", i);
+        expected += test_func(i);
     }
 
-    consumer.join();
+    while(const auto i = dispatcher.fetch_result<Test>())
+    {
+        got += i.value();
+        fmt::print("fetched {}\n", i.value());
+    }
 
-    fmt::print("{} results fetched in {} ms\n",
-               N,
-               std::chrono::duration_cast<std::chrono::milliseconds>(timer.elapsed()).count());
+    const int ret = got != expected;
 
+    if(ret) fmt::print("Expected {}. Got {}\n", expected, got);
 
-    return 0;
+    return ret;
 }

@@ -69,7 +69,7 @@ class steady_tuple_impl<std::index_sequence<Idxs...>, Ts...> : public steady_tup
 
     template <size_t... LeafIdxs, typename... LeafTs, typename... ValueTs>
     constexpr steady_tuple_impl(std::index_sequence<LeafIdxs...>,
-                                typelist<LeafTs...>,
+                                type_sequence<LeafTs...>,
                                 ValueTs&&... values) :
         steady_tuple_leaf<LeafIdxs, LeafTs>(std::forward<ValueTs>(values))...
     {
@@ -77,7 +77,7 @@ class steady_tuple_impl<std::index_sequence<Idxs...>, Ts...> : public steady_tup
 
     template <size_t... LeafIdxs, typename... LeafTs, typename... ValueTs>
     constexpr steady_tuple_impl(std::index_sequence<LeafIdxs...>,
-                                typelist<LeafTs...>,
+                                type_sequence<LeafTs...>,
                                 std::piecewise_construct_t pc,
                                 ValueTs&&... values) :
         steady_tuple_leaf<LeafIdxs, LeafTs>(pc, std::forward<ValueTs>(values))...
@@ -86,7 +86,7 @@ class steady_tuple_impl<std::index_sequence<Idxs...>, Ts...> : public steady_tup
 
     template <size_t... LeafIdxs, typename... LeafTs, typename Val>
     constexpr steady_tuple_impl(std::index_sequence<LeafIdxs...>,
-                                typelist<LeafTs...>,
+                                type_sequence<LeafTs...>,
                                 uniform_init,
                                 Val&& val) :
         steady_tuple_leaf<LeafIdxs, LeafTs>(std::forward<Val>(val))...
@@ -98,8 +98,8 @@ class steady_tuple_impl<std::index_sequence<Idxs...>, Ts...> : public steady_tup
 template <typename... Ts>
 class steady_tuple
 {
-    using Tl   = typelist<Ts...>;
-    using Idxs = typename Tl::indices;
+    using Tl   = type_sequence<Ts...>;
+    using Idxs = typelist::indicies<Tl>;
     using Data = detail::steady_tuple_impl<Idxs, Ts...>;
 
     Data data;
@@ -134,7 +134,7 @@ class steady_tuple
     constexpr decltype(auto)
     get() const noexcept
     {
-        return static_cast<const detail::steady_tuple_leaf<I, typename Tl::template at<I>>&>(data)
+        return static_cast<const detail::steady_tuple_leaf<I, typelist::elem_t<I, Tl>>&>(data)
             .get();
     }
 
@@ -142,21 +142,21 @@ class steady_tuple
     constexpr decltype(auto)
     get() noexcept
     {
-        return static_cast<detail::steady_tuple_leaf<I, typename Tl::template at<I>>&>(data).get();
+        return static_cast<detail::steady_tuple_leaf<I, typelist::elem_t<I, Tl>>&>(data).get();
     }
 
     template <typename T>
     constexpr decltype(auto)
     get() const noexcept
     {
-        return static_cast<detail::steady_tuple_leaf<Tl::template index<T>(), T>&>(data).get();
+        return static_cast<detail::steady_tuple_leaf<typelist::find_v<T, Tl>, T>&>(data).get();
     }
 
     template <typename T>
     constexpr decltype(auto)
     get() noexcept
     {
-        return static_cast<detail::steady_tuple_leaf<Tl::template index<T>(), T>&>(data).get();
+        return static_cast<detail::steady_tuple_leaf<typelist::find_v<T, Tl>, T>&>(data).get();
     }
 };
 } // namespace lucid

@@ -120,26 +120,38 @@ using head = elem_t<0, List>;
 template <typename List>
 using last = elem_t<length_v<List> - 1, List>;
 
-template <typename T, std::size_t Idx, typename List>
+template <std::size_t Idx, typename T, typename List>
 struct find;
 
-template <typename T, std::size_t Idx, typename Last>
-struct find<T, Idx, type_sequence<Last>>
+template <std::size_t Idx, typename T>
+struct find<Idx, T, type_sequence<>>
 {
-    static_assert(!std::is_same_v<T, Last>, "Type not found");
-    static constexpr std::size_t value = Idx;
+    static constexpr std::size_t value = -1ul;
 };
 
-template <typename T, std::size_t Idx, typename Head, typename... Rest>
-struct find<T, Idx, type_sequence<Head, Rest...>>
+template <std::size_t Idx, typename T, typename Head, typename... Rest>
+struct find<Idx, T, type_sequence<Head, Rest...>>
 {
     static constexpr std::size_t value =
-        std::is_same_v<T, Head> ? Idx : find<T, Idx + 1, type_sequence<Rest...>>::value;
+        std::is_same_v<T, Head> ? Idx : find<Idx + 1, T, type_sequence<Rest...>>::value;
 };
 
 /// @brief Get the index of type @p T in @p List.
 template <typename T, typename List>
-constexpr std::size_t find_v = find<T, 0, List>::value;
+constexpr std::size_t find_v = find<0ul, T, List>::value;
+
+/// @brief Count appearances of @p T in @p List.
+template <typename T, typename List>
+struct count;
+
+template <typename T, typename... Ts>
+struct count<T, type_sequence<Ts...>>
+{
+    static constexpr std::size_t value = (0ul + ... + std::is_same_v<T, Ts>);
+};
+
+template <typename T, typename List>
+constexpr std::size_t count_v = count<T, List>::value;
 
 /// @brief Build type_sequence containing first @p N types from @p List.
 template <std::size_t N, typename List>

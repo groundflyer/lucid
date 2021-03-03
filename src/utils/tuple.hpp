@@ -175,7 +175,7 @@ switcher_func(const std::size_t case_, Tuple<Funcs...>&& funcs, Args&&... args)
 {
     return std::apply(
         [case_, args_tuple = std::forward_as_tuple(args...)](Funcs&&... items) mutable {
-            using tpl = funcs_result_t::funcs_result_t<type_sequence<Funcs...>, Args...>;
+            using tpl = typelist::funcs_result_t<type_sequence<Funcs...>, Args...>;
             using ret = std::conditional_t<typelist::same_types_v<tpl>,
                                            typelist::head<tpl>,
                                            typelist::as_variant<tpl>>;
@@ -191,7 +191,7 @@ switcher_func(const std::size_t case_, const Tuple<Funcs...>& funcs, const Args&
 {
     return std::apply(
         [case_, args_tuple = std::tuple{args...}](const Funcs&... items) mutable {
-            using tpl = funcs_result_t::funcs_result_t<type_sequence<Funcs...>, Args...>;
+            using tpl = typelist::funcs_result_t<type_sequence<Funcs...>, Args...>;
             using ret = std::conditional_t<typelist::same_types_v<tpl>,
                                            typelist::head<tpl>,
                                            typelist::as_variant<tpl>>;
